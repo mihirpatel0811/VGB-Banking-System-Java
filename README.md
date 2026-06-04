@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # VGB Banking System
 
 A secure digital banking platform built with Java Servlet, JSP, and MySQL for Vertex Galaxy Bank.
@@ -143,3 +144,7 @@ PIN: 1234
 ## License
 
 Internal project for Vertex Galaxy Bank.
+=======
+# Banking-Management-System
+A secure full-stack digital banking web application for Vertex Galaxy Bank, built with Java Servlets, JSP and MySQL. Features Customer and Admin portals with layered 3-tier architecture, BCrypt password security, fund transfers, loan management, statements, cards, and cheque requests alongside comprehensive admin oversight.
+>>>>>>> 799d3a7d42e13ed9a358e1e565f3f9f317dc46f6
