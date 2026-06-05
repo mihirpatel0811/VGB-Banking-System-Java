@@ -141,6 +141,9 @@ public class AccountServlet extends BaseServlet {
             List<com.vgb.model.Customer> customers = new com.vgb.service.CustomerService().getAllCustomers();
             request.setAttribute("customers", customers);
 
+            // Load administrative statistics for the metrics dashboard
+            loadAdminStatistics(request);
+
             // Identify all customers who have pending or active loans
             try {
                 List<com.vgb.model.Loan> loans = new com.vgb.service.LoanService().getAllLoans();
