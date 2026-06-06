@@ -746,6 +746,9 @@ public class AccountServlet extends BaseServlet {
             List<com.vgb.model.Customer> customers = new com.vgb.service.CustomerService().getAllCustomers();
             request.setAttribute("customers", customers);
 
+            // Load administrative statistics for the metrics dashboard
+            loadAdminStatistics(request);
+
             try {
                 List<com.vgb.model.Loan> loans = new com.vgb.service.LoanService().getAllLoans();
                 java.util.Set<Long> customersWithLoans = new java.util.HashSet<>();
@@ -839,7 +842,7 @@ public class AccountServlet extends BaseServlet {
         String wizardCardType = getParameter(request, "wizardCardType", "debit");
         String wizardCardProvider = getParameter(request, "wizardCardProvider", "visa");
         boolean hasChequeBook = "1".equals(getParameter(request, "hasChequeBook", "0"));
-        boolean hasPassbook = true; // Default locked
+        boolean hasPassbook = "savings".equalsIgnoreCase(accountType); // Default locked/selected for savings
 
         // Subclass fields
         String nomineeName = getParameter(request, "nomineeName", "").trim();
@@ -872,6 +875,17 @@ public class AccountServlet extends BaseServlet {
 
         BigDecimal initialDeposit = new BigDecimal(getParameter(request, "initialDeposit", "500"));
         String ifscCode = getParameter(request, "ifscCode", "VGBK0000001");
+
+        // Enforce minimum funding borders
+        BigDecimal minDeposit = "current".equalsIgnoreCase(accountType) ? new BigDecimal("5000") : new BigDecimal("1000");
+        if (initialDeposit.compareTo(minDeposit) < 0) {
+            String errorMsg = "Initial deposit cannot be less than ₹" + minDeposit.setScale(2) + " for " + accountType + " account.";
+            logger.error("Validation failed during customer account opening: {}", errorMsg);
+            request.setAttribute("error", errorMsg);
+            reloadServletAttributes(request);
+            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
+            return;
+        }
 
         // If current account, copy company details to representative details to avoid empty fields
         if ("current".equalsIgnoreCase(accountType)) {
@@ -1478,6 +1492,19 @@ public class AccountServlet extends BaseServlet {
                 }
             }
 
+            // Auto-generate VGB cheque book request if opted
+            if (hasChequeBook) {
+                try {
+                    com.vgb.service.ChequeBookRequestService chequeService = new com.vgb.service.ChequeBookRequestService();
+                    chequeService.applyForChequeBook(customerId, accountId, 50); // Default to 50 leaves
+                    logger.info("Auto-registered pending VGB cheque book request for Account ID: {}", accountId);
+                    successMsg.append(" Programmatic cheque book application generated successfully (Pending Approval).");
+                } catch (Exception chequeEx) {
+                    logger.error("Failed to auto-generate VGB cheque book request during account setup", chequeEx);
+                    successMsg.append(" (Warning: Cheque book request generation failed: ").append(chequeEx.getMessage()).append(")");
+                }
+            }
+
             session.setAttribute("success", successMsg.toString());
             response.sendRedirect(request.getContextPath() + "/account?action=list");
 
@@ -1946,6 +1973,68 @@ public class AccountServlet extends BaseServlet {
         } catch (Exception e) {
             logger.error("Failed to save and set customer avatar for ID " + customerId, e);
         }
+    }
+
+    private void loadAdminStatistics(HttpServletRequest request) {
+        int totalCustomers = 0;
+        int savingsSingleCustomers = 0;
+        int savingsJointCustomers = 0;
+        int currentCustomers = 0;
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            
+            // 1. Total Customers
+            String sql1 = "SELECT COUNT(*) FROM customer";
+            stmt = conn.prepareStatement(sql1);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalCustomers = rs.getInt(1);
+            }
+            rs.close();
+            stmt.close();
+            
+            // 2. Saving Account (Single User) Customers
+            String sql2 = "SELECT COUNT(DISTINCT customer_id) FROM account_signatory WHERE account_id IN (SELECT account_id FROM account_savings WHERE holding_type = 'single')";
+            stmt = conn.prepareStatement(sql2);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                savingsSingleCustomers = rs.getInt(1);
+            }
+            rs.close();
+            stmt.close();
+            
+            // 3. Saving Account (Joining User) Customers
+            String sql3 = "SELECT COUNT(DISTINCT customer_id) FROM account_signatory WHERE account_id IN (SELECT account_id FROM account_savings WHERE holding_type = 'joint')";
+            stmt = conn.prepareStatement(sql3);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                savingsJointCustomers = rs.getInt(1);
+            }
+            rs.close();
+            stmt.close();
+            
+            // 4. Current Account Customers
+            String sql4 = "SELECT COUNT(DISTINCT customer_id) FROM account_signatory WHERE account_id IN (SELECT account_id FROM account_current)";
+            stmt = conn.prepareStatement(sql4);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                currentCustomers = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to load admin statistics", e);
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, conn);
+        }
+        
+        request.setAttribute("totalCustomers", totalCustomers);
+        request.setAttribute("savingsSingleCustomers", savingsSingleCustomers);
+        request.setAttribute("savingsJointCustomers", savingsJointCustomers);
+        request.setAttribute("currentCustomers", currentCustomers);
     }
 
     private String getSubmittedFileName(Part part) {

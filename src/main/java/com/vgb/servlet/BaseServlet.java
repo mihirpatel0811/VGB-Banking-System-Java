@@ -100,8 +100,27 @@ public abstract class BaseServlet extends HttpServlet {
      */
     protected String getParameter(HttpServletRequest request, String name, String defaultValue) {
         String value = request.getParameter(name);
+        if (value == null && request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+            try {
+                jakarta.servlet.http.Part part = request.getPart(name);
+                if (part != null) {
+                    try (java.io.InputStream is = part.getInputStream();
+                         java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is, java.nio.charset.StandardCharsets.UTF_8))) {
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        value = sb.toString();
+                    }
+                }
+            } catch (Exception e) {
+                // Ignore parsing errors and fallback to default
+            }
+        }
         return value != null ? value.trim() : defaultValue;
     }
+
 
     /**
      * Validate CSRF token
