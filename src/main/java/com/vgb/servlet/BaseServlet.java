@@ -104,18 +104,24 @@ public abstract class BaseServlet extends HttpServlet {
             try {
                 jakarta.servlet.http.Part part = request.getPart(name);
                 if (part != null) {
-                    try (java.io.InputStream is = part.getInputStream();
-                         java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is, java.nio.charset.StandardCharsets.UTF_8))) {
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            sb.append(line);
+                    try (java.io.InputStream is = part.getInputStream()) {
+                        byte[] bytes = is.readAllBytes();
+                        value = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+                    }
+                } else {
+                    // Fallback to iterating through all parts
+                    for (jakarta.servlet.http.Part p : request.getParts()) {
+                        if (name.equals(p.getName())) {
+                            try (java.io.InputStream is = p.getInputStream()) {
+                                byte[] bytes = is.readAllBytes();
+                                value = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+                                break;
+                            }
                         }
-                        value = sb.toString();
                     }
                 }
             } catch (Exception e) {
-                // Ignore parsing errors and fallback to default
+                logger.error("Error parsing multipart parameter: " + name, e);
             }
         }
         return value != null ? value.trim() : defaultValue;
