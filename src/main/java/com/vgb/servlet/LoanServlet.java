@@ -100,6 +100,7 @@ public class LoanServlet extends BaseServlet {
     }
 
     private void listLoans(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
+        generateCSRFToken(request);
         if (adminId != null) {
             request.setAttribute("loans", loanService.getAllLoans());
             request.setAttribute("repayments", loanService.getAllRepayments());
@@ -140,6 +141,7 @@ public class LoanServlet extends BaseServlet {
     }
 
     private void showStatement(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        generateCSRFToken(request);
         long loanId = Long.parseLong(getParameter(request, "id", "0"));
         Loan loan = loanService.getLoanById(loanId);
         

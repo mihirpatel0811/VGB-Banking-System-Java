@@ -461,6 +461,12 @@ body.dark-mode .header {
 .logo {
     display: flex;
     gap: 5px;
+    align-items: center;
+}
+
+.logo img {
+    height: 4rem !important;
+    width: auto !important;
 }
 
 .logo-text {
@@ -3960,9 +3966,9 @@ body.dark-mode ::-webkit-scrollbar-track {
     border-radius: 20px;
     background: linear-gradient(135deg, #131a30 0%, #070b16 100%);
     color: var(--white);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 
-                inset 0 0 20px rgba(255, 255, 255, 0.05),
-                0 0 40px rgba(168, 85, 247, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.05),
+        0 0 40px rgba(168, 85, 247, 0.15);
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -3973,9 +3979,9 @@ body.dark-mode ::-webkit-scrollbar-track {
 }
 
 .bank-card:hover {
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 
-                inset 0 0 25px rgba(255, 255, 255, 0.08),
-                0 0 50px rgba(168, 85, 247, 0.25);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5),
+        inset 0 0 25px rgba(255, 255, 255, 0.08),
+        0 0 50px rgba(168, 85, 247, 0.25);
 }
 
 .card-glare {
@@ -4013,16 +4019,16 @@ body.dark-mode ::-webkit-scrollbar-track {
     font-weight: 600;
     color: #f8fafc;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .vg-orbit-logo {
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     transform: translateZ(15px);
 }
 
 .bank-card-chip {
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     transform: translateZ(25px);
 }
 
@@ -5034,7 +5040,8 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
     left: 0;
     width: 40px;
     height: 2px;
-    background: #b88f14; /* Gold accent line */
+    background: #b88f14;
+    /* Gold accent line */
 }
 
 .ceo-name {
@@ -5078,7 +5085,7 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
     justify-content: center;
     font-size: 0.85rem;
     flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Right Half of Front (Navy Angle) */
@@ -5117,7 +5124,8 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
     height: 0;
     border-top: 135px solid transparent;
     border-bottom: 135px solid transparent;
-    border-right: 24px solid rgba(212, 175, 55, 0.95); /* Gold border line */
+    border-right: 24px solid rgba(212, 175, 55, 0.95);
+    /* Gold border line */
     z-index: 1;
 }
 
@@ -5191,10 +5199,10 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
     width: 42%;
     height: 100%;
     background: #fdfdfd;
-    background-image: 
-        linear-gradient(115deg, rgba(0,0,0,0.01) 23%, transparent 23%), 
-        linear-gradient(290deg, rgba(0,0,0,0.008) 4%, transparent 4%),
-        linear-gradient(115deg, rgba(0,0,0,0.008) 10%, transparent 10%);
+    background-image:
+        linear-gradient(115deg, rgba(0, 0, 0, 0.01) 23%, transparent 23%),
+        linear-gradient(290deg, rgba(0, 0, 0, 0.008) 4%, transparent 4%),
+        linear-gradient(115deg, rgba(0, 0, 0, 0.008) 10%, transparent 10%);
     z-index: 1;
 }
 
@@ -5217,7 +5225,8 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
     left: -44px;
     width: 0;
     height: 0;
-    border-bottom: 270px solid rgba(212, 175, 55, 0.95); /* gold stripe */
+    border-bottom: 270px solid rgba(212, 175, 55, 0.95);
+    /* gold stripe */
     border-left: 44px solid transparent;
     z-index: 1;
 }

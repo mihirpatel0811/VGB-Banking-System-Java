@@ -170,10 +170,8 @@
 
     <!-- Header -->
     <header class="header scrolled">
-        <a href="#" class="logo">
-            <span class="logo-text">V</span>
-            <span class="logo-text">G</span>
-            <span class="logo-text">B</span>
+        <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center;">
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
         </a>
         <div class="nav-actions">
             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>

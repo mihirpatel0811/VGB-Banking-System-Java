@@ -111,57 +111,6 @@ const App = {
         this.setupCursorGlow();
         this.setupParticleSystem();
         this.setupParallaxElements();
-        this.setupCardTilt();
-        this.setupCeoCardFlip();
-    },
-
-    setupCardTilt: function () {
-        const cards = document.querySelectorAll('.bank-card');
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((centerY - y) / centerY) * 15;
-                const rotateY = ((x - centerX) / centerX) * 15;
-                
-                const glareX = (x / rect.width) * 100;
-                const glareY = (y / rect.height) * 100;
-                card.style.setProperty('--glare-x', `${glareX}%`);
-                card.style.setProperty('--glare-y', `${glareY}%`);
-                
-                card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                card.style.transition = 'transform 0.05s ease';
-                card.style.transitionProperty = 'transform';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                card.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-            });
-
-            card.addEventListener('mouseenter', () => {
-                card.style.transition = 'transform 0.1s ease';
-            });
-        });
-    },
-
-    setupCeoCardFlip: function () {
-        const ceoCard = document.getElementById('ceoCard');
-        if (!ceoCard) return;
-
-        ceoCard.addEventListener('click', () => {
-            ceoCard.classList.toggle('flipped');
-            if (ceoCard.classList.contains('flipped')) {
-                ceoCard.classList.add('clicked-flip');
-            } else {
-                ceoCard.classList.remove('clicked-flip');
-            }
-        });
     },
 
     setupCursorGlow: function () {
@@ -1456,62 +1405,32 @@ class VGBAdminAccountManager {
         steps.forEach((step, idx) => {
             const item = document.createElement("div");
             
-            let stateClass = "pending";
-            let statusText = "Pending";
+            let stateClass = "";
+            let colorStyle = "color: var(--gray-400);";
+            let circleBg = "background: var(--gray-200); color: var(--gray-500);";
             
             if (idx < this.currentStepIndex) {
                 stateClass = "completed";
-                statusText = "Completed";
+                colorStyle = "color: #10b981;";
+                circleBg = "background: #10b981; color: white;";
             } else if (idx === this.currentStepIndex) {
                 stateClass = "active";
-                statusText = "In Progress";
+                colorStyle = "color: var(--primary-500); font-weight: bold;";
+                circleBg = "background: var(--primary-500); color: white; box-shadow: 0 0 8px rgba(99,102,241,0.25);";
             }
             
-            item.className = `stepper-item ${stateClass}`;
+            item.style.cssText = `display: flex; align-items: center; gap: 6px; font-size: 0.72rem; ${colorStyle}`;
+            item.className = `step-indicator-item ${stateClass}`;
             
-            // Circle Wrapper
-            const circleWrapper = document.createElement("div");
-            circleWrapper.className = "stepper-circle-wrapper";
-            
-            // Circle
-            const circle = document.createElement("div");
-            circle.className = "stepper-circle";
-            if (stateClass === "completed") {
-                circle.innerHTML = `<i class="bx bx-check"></i>`;
-            }
-            circleWrapper.appendChild(circle);
-            
-            // Line (only draw for non-last steps)
-            if (idx < steps.length - 1) {
-                const line = document.createElement("div");
-                line.className = "stepper-line";
-                circleWrapper.appendChild(line);
-            }
-            
-            item.appendChild(circleWrapper);
-            
-            // Label Wrapper
-            const labelWrapper = document.createElement("div");
-            labelWrapper.className = "stepper-label";
-            
-            const stepLabel = document.createElement("span");
-            stepLabel.className = "stepper-step-label";
-            stepLabel.textContent = `Step ${idx + 1}`;
-            
-            const titleLabel = document.createElement("span");
-            titleLabel.className = "stepper-title";
-            titleLabel.textContent = step.title;
-            
-            const statusLabel = document.createElement("span");
-            statusLabel.className = "stepper-status";
-            statusLabel.textContent = statusText;
-            
-            labelWrapper.appendChild(stepLabel);
-            labelWrapper.appendChild(titleLabel);
-            labelWrapper.appendChild(statusLabel);
-            
-            item.appendChild(labelWrapper);
-            
+            const circleSpan = document.createElement("span");
+            circleSpan.style.cssText = `width: 20px; height: 20px; border-radius: 50%; ${circleBg} display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700;`;
+            circleSpan.textContent = idx + 1;
+
+            const textSpan = document.createElement("span");
+            textSpan.textContent = step.title;
+
+            item.appendChild(circleSpan);
+            item.appendChild(textSpan);
             container.appendChild(item);
         });
     }
@@ -1535,7 +1454,7 @@ class VGBAdminAccountManager {
             const depInput = document.getElementById("wizInitialDeposit");
             const depLabel = document.getElementById("wizMinDepositLabel");
             if (depInput && depLabel) {
-                const minVal = this.activeFlow === "current" ? "1500" : (this.activeFlow === "savings_joint" ? "1000" : "500");
+                const minVal = this.activeFlow === "current" ? "5000" : "1000";
                 depLabel.innerText = `₹${parseFloat(minVal).toLocaleString('en-IN', {minimumFractionDigits: 2})} Minimum Fixed Amount`;
                 depInput.min = minVal;
                 // Only set default value if empty, not a number, or less than minimum
@@ -1624,9 +1543,22 @@ class VGBAdminAccountManager {
             const zip = document.getElementById("wizZipCode")?.value.trim() ?? "";
             const pan = document.getElementById("wizPanCard")?.value.trim() ?? "";
             const aadhaar = document.getElementById("wizAadhaarCard")?.value.trim() ?? "";
+            const dob = document.getElementById("wizDob")?.value ?? "";
 
-            if (!first || !last || !email || !phone || !address || !city || !state || !zip || !pan || !aadhaar) {
+            if (!first || !last || !email || !phone || !address || !city || !state || !zip || !pan || !aadhaar || !dob) {
                 alert("Please fill in all primary holder demographic fields marked with an asterisk (*).");
+                return false;
+            }
+
+            const dobDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - dobDate.getFullYear();
+            const mDiff = today.getMonth() - dobDate.getMonth();
+            if (mDiff < 0 || (mDiff === 0 && today.getDate() < dobDate.getDate())) {
+                age--;
+            }
+            if (age < 8) {
+                alert("The primary account holder must be at least 8 years old to open an account.");
                 return false;
             }
 
@@ -1750,7 +1682,7 @@ class VGBAdminAccountManager {
             const depositInput = document.getElementById("wizInitialDeposit");
             if (!depositInput) return false;
             const deposit = parseFloat(depositInput.value);
-            const minVal = this.activeFlow === "current" ? 1500 : (this.activeFlow === "savings_joint" ? 1000 : 500);
+            const minVal = this.activeFlow === "current" ? 5000 : 1000;
             
             if (isNaN(deposit) || deposit < minVal) {
                 alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', {minimumFractionDigits: 2})}.`);
@@ -1895,6 +1827,19 @@ class VGBAdminAccountManager {
             const pPhone = document.getElementById("wizPhoneNo")?.value ?? "";
             const pPan = document.getElementById("wizPanCard")?.value ?? "";
             const pAadhaar = document.getElementById("wizAadhaarCard")?.value ?? "";
+            const pDob = document.getElementById("wizDob")?.value ?? "";
+
+            let ageCategory = "";
+            if (pDob) {
+                const dobD = new Date(pDob);
+                const today = new Date();
+                let age = today.getFullYear() - dobD.getFullYear();
+                const mDiff = today.getMonth() - dobD.getMonth();
+                if (mDiff < 0 || (mDiff === 0 && today.getDate() < dobD.getDate())) {
+                    age--;
+                }
+                ageCategory = age >= 18 ? "Major Account" : "Minor Account";
+            }
 
             html += '<div class="summary-card">' +
                     '<h5>Primary Holder Personal Details</h5>' +
@@ -1919,6 +1864,11 @@ class VGBAdminAccountManager {
                             '<span>Aadhaar Ident</span>' +
                             '<strong>' + this.escapeHTML(pAadhaar) + '</strong>' +
                         '</div>' +
+                        (ageCategory ? 
+                        '<div class="summary-field" style="color: var(--primary-500);">' +
+                            '<span>Age Category</span>' +
+                            '<strong>' + ageCategory + '</strong>' +
+                        '</div>' : '') +
                     '</div>' +
                 '</div>';
 
@@ -2269,7 +2219,7 @@ class VGBAdminAccountManager {
                 const depositInput = document.getElementById("wizInitialDeposit");
                 if (!depositInput) return;
                 const deposit = parseFloat(depositInput.value);
-                const minVal = this.activeFlow === "current" ? 1500 : (this.activeFlow === "savings_joint" ? 1000 : 500);
+                const minVal = this.activeFlow === "current" ? 5000 : 1000;
                 
                 if (isNaN(deposit) || deposit < minVal) {
                     alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', {minimumFractionDigits: 2})}.`);
@@ -2320,4 +2270,3 @@ window.flipWizServiceCard = vgbAdminManager.flipWizServiceCard;
 window.toggle3DCardCvv = vgbAdminManager.toggle3DCardCvv;
 window.toggleWizAtmSelection = vgbAdminManager.toggleWizAtmSelection;
 window.toggleWizChequeSelection = vgbAdminManager.toggleWizChequeSelection;
-

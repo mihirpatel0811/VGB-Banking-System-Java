@@ -328,7 +328,7 @@ public class LoanService {
             stmtDebit.executeUpdate();
             stmtDebit.close();
 
-            // Step 8: Log audit entry into the transactions ledger
+            // Step 8: Log entry into the transactions ledger
             String insertTxnSql = "INSERT INTO transaction (from_account_id, to_account_id, transaction_type, amount, reference_number, description, status) VALUES (?, NULL, ?, ?, ?, ?, ?)";
             stmtTxn = conn.prepareStatement(insertTxnSql, Statement.RETURN_GENERATED_KEYS);
             stmtTxn.setLong(1, accountId);
@@ -350,7 +350,7 @@ public class LoanService {
             }
             stmtTxn.close();
 
-            // Step 10: Create repayment audit history (loan_statement entry)
+            // Step 10: Create repayment history (loan_statement entry)
             String insertRepaySql = "INSERT INTO repayment (loan_id, customer_id, transaction_id, amount_paid, principal_component, interest_component) VALUES (?, ?, ?, ?, ?, ?)";
             stmtRepay = conn.prepareStatement(insertRepaySql);
             stmtRepay.setLong(1, loanId);

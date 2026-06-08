@@ -56,9 +56,6 @@ public class AccountServlet extends BaseServlet {
                 case "statement":
                     showStatement(request, response);
                     break;
-                case "verifyKyc":
-                    verifyKyc(request, response);
-                    break;
                 case "getCustomerDetails":
                     getCustomerDetails(request, response);
                     break;
@@ -89,14 +86,11 @@ public class AccountServlet extends BaseServlet {
         
         try {
             switch (action) {
-                case "create":
-                    createAccount(request, response);
-                    break;
-                case "createProcess":
-                    createCustomerAndAccountProcess(request, response);
-                    break;
                 case "update":
                     updateAccount(request, response);
+                    break;
+                case "createProcess":
+                    createAccount(request, response);
                     break;
                 case "close":
                     closeAccount(request, response);
@@ -137,12 +131,17 @@ public class AccountServlet extends BaseServlet {
             } else {
                 accounts = accountService.getAllAccounts();
             }
-            // Load all registered customers for the account wizard dropdown
-            List<com.vgb.model.Customer> customers = new com.vgb.service.CustomerService().getAllCustomers();
-            request.setAttribute("customers", customers);
+
 
             // Load administrative statistics for the metrics dashboard
             loadAdminStatistics(request);
+
+            // Fetch list of registered customers to select as joint signatory
+            try {
+                request.setAttribute("customers", new com.vgb.service.CustomerService().getAllCustomers());
+            } catch (Exception e) {
+                logger.error("Failed to load customer directory in listAccounts", e);
+            }
 
             // Identify all customers who have pending or active loans
             try {
@@ -341,23 +340,7 @@ public class AccountServlet extends BaseServlet {
         }
     }
 
-    private void createAccount(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // Admin only - for now we'll implement basic account creation
-        Long customerId = Long.parseLong(getParameter(request, "customerId", "0"));
-        String accountType = getParameter(request, "accountType", "");
-        String ifscCode = getParameter(request, "ifscCode", "");
-        String accountNumber = getParameter(request, "accountNumber", "");
 
-        Account account = new Account(customerId, accountType, accountNumber);
-        account.setIfscCode(ifscCode);
-        
-        if (accountService.createAccount(account) != null) {
-            request.setAttribute("success", "Account created successfully");
-        } else {
-            request.setAttribute("error", "Failed to create account");
-        }
-        response.sendRedirect(request.getContextPath() + "/account?action=list");
-    }
 
     private void processDeposit(HttpServletRequest request, HttpServletResponse response) throws Exception {
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
@@ -467,7 +450,7 @@ public class AccountServlet extends BaseServlet {
                     // Credit Card Withdrawal (increases outstanding dues, account balance remains untouched)
                     new com.vgb.dao.CardDAOImpl().updateOutstandingBalance(cardId, newOutstanding);
 
-                    // Log audit transaction in ledger
+                    // Log transaction in ledger
                     Transaction transaction = new Transaction();
                     transaction.setFromAccountId(accountId);
                     transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_WITHDRAWAL);
@@ -660,6 +643,7 @@ public class AccountServlet extends BaseServlet {
     }
 
     private void showTransactions(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        generateCSRFToken(request);
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
         Long customerId = getUserId(request);
         Integer adminId = getAdminId(request);
@@ -774,776 +758,9 @@ public class AccountServlet extends BaseServlet {
         showTransactions(request, response);
     }
 
-    /**
-     * AJAX Endpoint: Verify if PAN or Aadhaar card already exists in database
-     */
-    private void verifyKyc(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String type = getParameter(request, "type", "");
-        String value = getParameter(request, "value", "").trim();
-        boolean exists = false;
-        
-        com.vgb.dao.CustomerDAOImpl customerDAO = new com.vgb.dao.CustomerDAOImpl();
-        if ("pan".equalsIgnoreCase(type)) {
-            exists = customerDAO.existsByPan(value);
-        } else if ("aadhaar".equalsIgnoreCase(type)) {
-            exists = customerDAO.existsByAadhaar(value);
-        }
-        
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"exists\":" + exists + "}");
-    }
 
-    /**
-     * Safe SQL Transaction block to create a customer, open account, and log initial deposit
-     */
-    private void createCustomerAndAccountProcess(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // Admin spec check
-        if (getAdminId(request) == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
-            return;
-        }
 
-        // Retrieve core account parameters
-        String accountType = getParameter(request, "accountType", "savings");
 
-        // Retrieve customer registration parameters
-        String firstName = getParameter(request, "firstName", "").trim();
-        String lastName = getParameter(request, "lastName", "").trim();
-        String email = getParameter(request, "email", "").trim();
-        String phoneNo = getParameter(request, "phoneNo", "").trim();
-        String address = getParameter(request, "address", "").trim();
-        String city = getParameter(request, "city", "").trim();
-        String state = getParameter(request, "state", "").trim();
-        String zipCode = getParameter(request, "zipCode", "").trim();
-        String panCard = getParameter(request, "panCard", "").trim();
-        String aadhaarCard = getParameter(request, "aadhaarCard", "").trim();
-
-        // Retrieve demographic, address, and financial parameters from wizard step 2
-        String middleName = getParameter(request, "middleName", "").trim();
-        String fatherName = getParameter(request, "fatherName", "").trim();
-        String motherName = getParameter(request, "motherName", "").trim();
-        String dob = getParameter(request, "dob", "").trim();
-        String gender = getParameter(request, "gender", "").trim();
-        String maritalStatus = getParameter(request, "maritalStatus", "").trim();
-        String nationality = getParameter(request, "nationality", "Indian").trim();
-        String altPhoneNo = getParameter(request, "altPhoneNo", "").trim();
-        String occupation = getParameter(request, "occupation", "").trim();
-        String annualIncomeStr = getParameter(request, "annualIncome", "0.00").trim();
-        String permAddress = getParameter(request, "permAddress", "").trim();
-
-        // Retrieve login parameters
-        String username = getParameter(request, "username", "").trim();
-        String password = getParameter(request, "password", "");
-        String pin = getParameter(request, "pin", "").trim();
-
-        // Banking services options
-        boolean hasAtmCard = "1".equals(getParameter(request, "hasAtmCard", "0"));
-        String wizardCardType = getParameter(request, "wizardCardType", "debit");
-        String wizardCardProvider = getParameter(request, "wizardCardProvider", "visa");
-        boolean hasChequeBook = "1".equals(getParameter(request, "hasChequeBook", "0"));
-        boolean hasPassbook = "savings".equalsIgnoreCase(accountType); // Default locked/selected for savings
-
-        // Subclass fields
-        String nomineeName = getParameter(request, "nomineeName", "").trim();
-        String holdingType = getParameter(request, "holdingType", "single");
-        String dailyLimitStr = getParameter(request, "dailyWithdrawalLimit", "50000.00");
-        String jointCustomerIdStr = getParameter(request, "jointCustomerId", null);
-
-        // New Joint Signatory registration parameters
-        String jointCustomerMode = getParameter(request, "jointCustomerMode", "existing");
-        String jointFirstName = getParameter(request, "jointFirstName", "").trim();
-        String jointLastName = getParameter(request, "jointLastName", "").trim();
-        String jointEmail = getParameter(request, "jointEmail", "").trim();
-        String jointPhone = getParameter(request, "jointPhone", "").trim();
-        String jointPan = getParameter(request, "jointPan", "").trim();
-        String jointAadhaar = getParameter(request, "jointAadhaar", "").trim();
-        String jointAddress = getParameter(request, "jointAddress", "").trim();
-        String jointCity = getParameter(request, "jointCity", "").trim();
-        String jointState = getParameter(request, "jointState", "").trim();
-        String jointZipCode = getParameter(request, "jointZipCode", "").trim();
-
-        String businessName = getParameter(request, "businessName", "").trim();
-        String gstin = getParameter(request, "gstin", "").trim();
-        String overdraftLimitStr = getParameter(request, "overdraftLimit", "100000.00");
-        String companyCategory = getParameter(request, "companyCategory", "").trim();
-        String companyPhone = getParameter(request, "companyPhone", "").trim();
-        String companyEmail = getParameter(request, "companyEmail", "").trim();
-        String companyAddress = getParameter(request, "companyAddress", "").trim();
-        String companyPan = getParameter(request, "companyPan", "").trim();
-        String companyAadhaar = getParameter(request, "companyAadhaar", "").trim();
-
-        String rawInitialDeposit = getParameter(request, "initialDeposit", "500");
-        logger.info("[DEBUG] rawInitialDeposit: '{}'", rawInitialDeposit);
-        BigDecimal initialDeposit = new BigDecimal(rawInitialDeposit);
-        String ifscCode = getParameter(request, "ifscCode", "VGBK0000001");
-
-        // Enforce minimum funding borders
-        BigDecimal minDeposit;
-        if ("current".equalsIgnoreCase(accountType)) {
-            minDeposit = new BigDecimal("1500");
-        } else {
-            if ("joint".equalsIgnoreCase(holdingType)) {
-                minDeposit = new BigDecimal("1000");
-            } else {
-                minDeposit = new BigDecimal("500");
-            }
-        }
-        logger.info("[DEBUG] parsed initialDeposit: {}, minDeposit: {}", initialDeposit, minDeposit);
-        if (initialDeposit.compareTo(minDeposit) < 0) {
-            String errorMsg = "Initial deposit cannot be less than ₹" + minDeposit.setScale(2) + " for " + accountType + " account.";
-            logger.error("Validation failed during customer account opening: {}", errorMsg);
-            request.setAttribute("error", errorMsg);
-            reloadServletAttributes(request);
-            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
-            return;
-        }
-
-        // If current account, copy company details to representative details to avoid empty fields
-        if ("current".equalsIgnoreCase(accountType)) {
-            if (firstName.isEmpty()) firstName = businessName;
-            if (lastName.isEmpty()) lastName = "Representative";
-            if (email.isEmpty()) email = companyEmail;
-            if (phoneNo.isEmpty()) phoneNo = companyPhone;
-            if (address.isEmpty()) address = companyAddress;
-            if (city.isEmpty()) city = "N/A";
-            if (state.isEmpty()) state = "N/A";
-            if (zipCode.isEmpty()) zipCode = "N/A";
-            if (permAddress.isEmpty()) permAddress = companyAddress;
-            if (!companyPan.isEmpty()) {
-                panCard = companyPan;
-            } else if (panCard.isEmpty() && gstin.length() >= 12) {
-                panCard = gstin.substring(2, 12).toUpperCase();
-            } else if (panCard.isEmpty()) {
-                panCard = gstin;
-            }
-            if (!companyAadhaar.isEmpty()) {
-                aadhaarCard = companyAadhaar;
-            } else if (aadhaarCard.isEmpty()) {
-                aadhaarCard = "000000000000";
-            }
-        }
-
-        // Basic inputs validation with descriptive field logging and clear user feedback
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phoneNo.isEmpty() || 
-            address.isEmpty() || city.isEmpty() || state.isEmpty() || zipCode.isEmpty() || 
-            username.isEmpty() || password.isEmpty() || pin.isEmpty()) {
-            
-            java.util.List<String> missingFields = new java.util.ArrayList<>();
-            if (firstName.isEmpty()) missingFields.add("First Name");
-            if (lastName.isEmpty()) missingFields.add("Last Name");
-            if (email.isEmpty()) missingFields.add("Email");
-            if (phoneNo.isEmpty()) missingFields.add("Phone Number");
-            if (address.isEmpty()) missingFields.add("Address");
-            if (city.isEmpty()) missingFields.add("City");
-            if (state.isEmpty()) missingFields.add("State");
-            if (zipCode.isEmpty()) missingFields.add("Zip Code");
-            if (username.isEmpty()) missingFields.add("Username");
-            if (password.isEmpty()) missingFields.add("Password");
-            if (pin.isEmpty()) missingFields.add("Secure PIN");
-
-            String errorMsg = "All personal, login, and security fields are required. Missing: " + String.join(", ", missingFields);
-            logger.error("Validation failed during customer account opening: {}", errorMsg);
-            
-            request.setAttribute("error", errorMsg);
-            reloadServletAttributes(request);
-            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
-            return;
-        }
-
-        if (!ValidatorUtil.isValidEmail(email)) {
-            request.setAttribute("error", "Invalid email address format.");
-            reloadServletAttributes(request);
-            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
-            return;
-        }
-
-        if (phoneNo.length() != 10 || !phoneNo.matches("\\d+")) {
-            request.setAttribute("error", "Phone number must be exactly 10 digits.");
-            reloadServletAttributes(request);
-            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
-            return;
-        }
-
-        if (!SecurityUtil.isValidPIN(pin)) {
-            request.setAttribute("error", "Secure PIN must be exactly 4 numeric digits.");
-            reloadServletAttributes(request);
-            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
-            return;
-        }
-
-        // Hash password
-        String hashedPassword = SecurityUtil.hashPassword(password);
-        String accountNumber = generateIndianAccountNumber();
-
-        Connection conn = null;
-        PreparedStatement stmtCheck = null;
-        PreparedStatement stmtCust = null;
-        PreparedStatement stmtAcc = null;
-        PreparedStatement stmtSign = null;
-        PreparedStatement stmtTxn = null;
-        ResultSet rsCheck = null;
-
-        try {
-            conn = DatabaseConfig.getInstance().getConnection();
-            conn.setAutoCommit(false); // Start Transaction
-
-            // I. Verify unique constraints
-            String checkExistSql = "SELECT " +
-                                   "(SELECT COUNT(*) FROM customer WHERE email = ?) as email_count, " +
-                                   "(SELECT COUNT(*) FROM customer WHERE phone_no = ?) as phone_count, " +
-                                   "(SELECT COUNT(*) FROM customer WHERE username = ?) as user_count, " +
-                                   "(SELECT COUNT(*) FROM customer WHERE pan_card = ? AND pan_card IS NOT NULL) as pan_count, " +
-                                   "(SELECT COUNT(*) FROM customer WHERE aadhaar_card = ? AND aadhaar_card IS NOT NULL) as aadhaar_count";
-            stmtCheck = conn.prepareStatement(checkExistSql);
-            stmtCheck.setString(1, email);
-            stmtCheck.setString(2, phoneNo);
-            stmtCheck.setString(3, username);
-            stmtCheck.setString(4, panCard.isEmpty() ? null : panCard);
-            stmtCheck.setString(5, aadhaarCard.isEmpty() ? null : aadhaarCard);
-            rsCheck = stmtCheck.executeQuery();
-            if (rsCheck.next()) {
-                if (rsCheck.getInt("email_count") > 0) {
-                    throw new SQLException("Email address '" + email + "' is already registered.");
-                }
-                if (rsCheck.getInt("phone_count") > 0) {
-                    throw new SQLException("Phone number '" + phoneNo + "' is already registered.");
-                }
-                if (rsCheck.getInt("user_count") > 0) {
-                    throw new SQLException("Username '" + username + "' is already registered.");
-                }
-                if (rsCheck.getInt("pan_count") > 0) {
-                    throw new SQLException("PAN Card '" + panCard + "' is already registered.");
-                }
-                if (rsCheck.getInt("aadhaar_count") > 0) {
-                    throw new SQLException("Aadhaar Number '" + aadhaarCard + "' is already registered.");
-                }
-            }
-            rsCheck.close();
-            stmtCheck.close();
-
-            // II. Determine if pan_card and aadhaar_card columns exist in the database table
-            boolean hasKycColumns = false;
-            DatabaseMetaData dbmd = conn.getMetaData();
-            try (ResultSet rsCol = dbmd.getColumns(null, null, "customer", "pan_card")) {
-                if (rsCol.next()) {
-                    hasKycColumns = true;
-                }
-            }
-
-            // III. Insert new customer profile
-            long customerId = 0;
-            String insertCust;
-            if (hasKycColumns) {
-                insertCust = "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                stmtCust = conn.prepareStatement(insertCust, Statement.RETURN_GENERATED_KEYS);
-                stmtCust.setString(1, firstName);
-                stmtCust.setString(2, middleName.isEmpty() ? null : middleName);
-                stmtCust.setString(3, lastName);
-                stmtCust.setString(4, fatherName.isEmpty() ? null : fatherName);
-                stmtCust.setString(5, motherName.isEmpty() ? null : motherName);
-                stmtCust.setDate(6, dob.isEmpty() ? null : java.sql.Date.valueOf(dob));
-                stmtCust.setString(7, gender.isEmpty() ? null : gender);
-                stmtCust.setString(8, maritalStatus.isEmpty() ? null : maritalStatus);
-                stmtCust.setString(9, nationality.isEmpty() ? "Indian" : nationality);
-                stmtCust.setString(10, email);
-                stmtCust.setString(11, panCard.isEmpty() ? null : panCard);
-                stmtCust.setString(12, aadhaarCard.isEmpty() ? null : aadhaarCard);
-                stmtCust.setString(13, phoneNo);
-                stmtCust.setString(14, altPhoneNo.isEmpty() ? null : altPhoneNo);
-                stmtCust.setString(15, address);
-                stmtCust.setString(16, permAddress.isEmpty() ? null : permAddress);
-                stmtCust.setString(17, city);
-                stmtCust.setString(18, state);
-                stmtCust.setString(19, zipCode);
-                stmtCust.setString(20, username);
-                stmtCust.setString(21, pin);
-                stmtCust.setString(22, hashedPassword);
-                stmtCust.setString(23, "active");
-                stmtCust.setString(24, occupation.isEmpty() ? null : occupation);
-                
-                java.math.BigDecimal incomeVal = null;
-                if (!annualIncomeStr.isEmpty()) {
-                    String sanitized = annualIncomeStr.replaceAll("[^0-9.]", "");
-                    if (!sanitized.isEmpty()) {
-                        try {
-                            incomeVal = new java.math.BigDecimal(sanitized);
-                        } catch (NumberFormatException e) {
-                            incomeVal = java.math.BigDecimal.ZERO;
-                        }
-                    }
-                }
-                stmtCust.setBigDecimal(25, incomeVal);
-            } else {
-                insertCust = "INSERT INTO customer (first_name, last_name, email, phone_no, address, city, state, zip_code, username, pin, password, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                stmtCust = conn.prepareStatement(insertCust, Statement.RETURN_GENERATED_KEYS);
-                stmtCust.setString(1, firstName);
-                stmtCust.setString(2, lastName);
-                stmtCust.setString(3, email);
-                stmtCust.setString(4, phoneNo);
-                stmtCust.setString(5, address);
-                stmtCust.setString(6, city);
-                stmtCust.setString(7, state);
-                stmtCust.setString(8, zipCode);
-                stmtCust.setString(9, username);
-                stmtCust.setString(10, pin);
-                stmtCust.setString(11, hashedPassword);
-                stmtCust.setString(12, "active");
-            }
-
-            stmtCust.executeUpdate();
-            ResultSet rsCust = stmtCust.getGeneratedKeys();
-            if (rsCust.next()) {
-                customerId = rsCust.getLong(1);
-            }
-            rsCust.close();
-            stmtCust.close();
-
-            if (customerId == 0) {
-                throw new SQLException("Failed to retrieve generated customer ID.");
-            }
-
-            // Save and set primary customer avatar
-            try {
-                Part primaryAvatarPart = request.getPart("primaryAvatarFile");
-                saveAndSetCustomerAvatar(request, customerId, primaryAvatarPart, conn);
-            } catch (Exception e) {
-                logger.error("Failed to parse primary avatar file part", e);
-            }
-
-            // IV. Open core account (WITHOUT customer_id inside account - mapping goes in account_signatory)
-            String insertAcc = "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            stmtAcc = conn.prepareStatement(insertAcc, Statement.RETURN_GENERATED_KEYS);
-            stmtAcc.setString(1, accountType);
-            stmtAcc.setBigDecimal(2, initialDeposit);
-            stmtAcc.setString(3, ifscCode);
-            stmtAcc.setString(4, accountNumber);
-            stmtAcc.setString(5, "active");
-            stmtAcc.setInt(6, hasAtmCard ? 1 : 0);
-            stmtAcc.setInt(7, hasChequeBook ? 1 : 0);
-            stmtAcc.setInt(8, hasPassbook ? 1 : 0);
-            stmtAcc.executeUpdate();
-
-            long accountId = 0;
-            ResultSet rsAcc = stmtAcc.getGeneratedKeys();
-            if (rsAcc.next()) {
-                accountId = rsAcc.getLong(1);
-            }
-            rsAcc.close();
-            stmtAcc.close();
-
-            if (accountId == 0) {
-                throw new SQLException("Failed to retrieve generated account ID.");
-            }
-
-            // V. Map signatories inside junction registry
-            String insertSign = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, ?)";
-            stmtSign = conn.prepareStatement(insertSign);
-            
-            // Link Primary Signatory (Created Customer)
-            stmtSign.setLong(1, accountId);
-            stmtSign.setLong(2, customerId);
-            stmtSign.setString(3, "primary");
-            stmtSign.executeUpdate();
-
-            // Link Joint Signatory / Partners
-            if ("savings".equalsIgnoreCase(accountType) && "joint".equalsIgnoreCase(holdingType)) {
-                long jointCustId = 0;
-                if ("existing".equalsIgnoreCase(jointCustomerMode) && jointCustomerIdStr != null) {
-                    jointCustId = Long.parseLong(jointCustomerIdStr);
-                } else if ("new".equalsIgnoreCase(jointCustomerMode)) {
-                    // Check if joint holder already exists by email, phone, PAN, or Aadhaar
-                    String checkJointSql = "SELECT customer_id FROM customer WHERE email = ? OR phone_no = ? OR (pan_card = ? AND pan_card IS NOT NULL) OR (aadhaar_card = ? AND aadhaar_card IS NOT NULL)";
-                    try (PreparedStatement stmtCheckJ = conn.prepareStatement(checkJointSql)) {
-                        stmtCheckJ.setString(1, jointEmail);
-                        stmtCheckJ.setString(2, jointPhone);
-                        stmtCheckJ.setString(3, jointPan.isEmpty() ? null : jointPan);
-                        stmtCheckJ.setString(4, jointAadhaar.isEmpty() ? null : jointAadhaar);
-                        try (ResultSet rsCheckJ = stmtCheckJ.executeQuery()) {
-                            if (rsCheckJ.next()) {
-                                jointCustId = rsCheckJ.getLong("customer_id");
-                            }
-                        }
-                    }
-
-                    if (jointCustId == 0) {
-                        // Auto-register brand new joint customer profile
-                        String cleanFirst = jointFirstName.toLowerCase().replaceAll("[^a-z0-9]", "");
-                        if (cleanFirst.isEmpty()) cleanFirst = "joint";
-                        String baseUsername = "j_" + cleanFirst;
-                        String jUsername = baseUsername;
-                        boolean userExists = true;
-                        int suffix = 1000 + new java.util.Random().nextInt(9000);
-                        while (userExists) {
-                            jUsername = baseUsername + "_" + suffix;
-                            String checkUserSql = "SELECT COUNT(*) FROM customer WHERE username = ?";
-                            try (PreparedStatement stmtCheckUser = conn.prepareStatement(checkUserSql)) {
-                                stmtCheckUser.setString(1, jUsername);
-                                try (ResultSet rsCheckUser = stmtCheckUser.executeQuery()) {
-                                    if (rsCheckUser.next() && rsCheckUser.getInt(1) == 0) {
-                                        userExists = false;
-                                    } else {
-                                        suffix = 1000 + new java.util.Random().nextInt(9000);
-                                    }
-                                }
-                            }
-                        }
-
-                        String jPin = String.format("%04d", new java.util.Random().nextInt(10000));
-                        String jDefaultPassword = "VgbJoint123!";
-                        String jHashedPassword = com.vgb.util.SecurityUtil.hashPassword(jDefaultPassword);
-
-                        String insertCustSql;
-                        if (hasKycColumns) {
-                            insertCustSql = "INSERT INTO customer (first_name, last_name, email, pan_card, aadhaar_card, phone_no, address, city, state, zip_code, username, pin, password, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                            try (PreparedStatement stmtCustNew = conn.prepareStatement(insertCustSql, Statement.RETURN_GENERATED_KEYS)) {
-                                stmtCustNew.setString(1, jointFirstName);
-                                stmtCustNew.setString(2, jointLastName);
-                                stmtCustNew.setString(3, jointEmail);
-                                stmtCustNew.setString(4, jointPan.isEmpty() ? null : jointPan);
-                                stmtCustNew.setString(5, jointAadhaar.isEmpty() ? null : jointAadhaar);
-                                stmtCustNew.setString(6, jointPhone);
-                                stmtCustNew.setString(7, jointAddress);
-                                stmtCustNew.setString(8, jointCity);
-                                stmtCustNew.setString(9, jointState);
-                                stmtCustNew.setString(10, jointZipCode);
-                                stmtCustNew.setString(11, jUsername);
-                                stmtCustNew.setString(12, jPin);
-                                stmtCustNew.setString(13, jHashedPassword);
-                                stmtCustNew.setString(14, "active");
-                                stmtCustNew.executeUpdate();
-                                try (ResultSet rsCustNew = stmtCustNew.getGeneratedKeys()) {
-                                    if (rsCustNew.next()) {
-                                        jointCustId = rsCustNew.getLong(1);
-                                    }
-                                }
-                            }
-                        } else {
-                            insertCustSql = "INSERT INTO customer (first_name, last_name, email, phone_no, address, city, state, zip_code, username, pin, password, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                            try (PreparedStatement stmtCustNew = conn.prepareStatement(insertCustSql, Statement.RETURN_GENERATED_KEYS)) {
-                                stmtCustNew.setString(1, jointFirstName);
-                                stmtCustNew.setString(2, jointLastName);
-                                stmtCustNew.setString(3, jointEmail);
-                                stmtCustNew.setString(4, jointPhone);
-                                stmtCustNew.setString(5, jointAddress);
-                                stmtCustNew.setString(6, jointCity);
-                                stmtCustNew.setString(7, jointState);
-                                stmtCustNew.setString(8, jointZipCode);
-                                stmtCustNew.setString(9, jUsername);
-                                stmtCustNew.setString(10, jPin);
-                                stmtCustNew.setString(11, jHashedPassword);
-                                stmtCustNew.setString(12, "active");
-                                stmtCustNew.executeUpdate();
-                                try (ResultSet rsCustNew = stmtCustNew.getGeneratedKeys()) {
-                                    if (rsCustNew.next()) {
-                                        jointCustId = rsCustNew.getLong(1);
-                                    }
-                                }
-                            }
-                        }
-
-                        if (jointCustId == 0) {
-                            throw new SQLException("Failed to retrieve generated joint customer ID.");
-                        }
-
-                        // Save and set joint customer avatar
-                        try {
-                            Part jointAvatarPart = request.getPart("jointAvatarFile");
-                            saveAndSetCustomerAvatar(request, jointCustId, jointAvatarPart, conn);
-                        } catch (Exception e) {
-                            logger.error("Failed to parse joint avatar file part", e);
-                        }
-
-                        java.util.List<String> autoCreated = new java.util.ArrayList<>();
-                        autoCreated.add(jointFirstName + " " + jointLastName + " (Username: " + jUsername + ", PIN: " + jPin + ")");
-                        request.getSession().setAttribute("autoCreatedPartners", autoCreated);
-                    }
-                }
-
-                if (jointCustId > 0) {
-                    stmtSign.setLong(1, accountId);
-                    stmtSign.setLong(2, jointCustId);
-                    stmtSign.setString(3, "joint_holder");
-                    stmtSign.executeUpdate();
-                }
-            } else if ("current".equalsIgnoreCase(accountType)) {
-                // Parse dynamic partner signatory details
-                String[] pFirstNames = request.getParameterValues("partnerFirstName");
-                String[] pLastNames = request.getParameterValues("partnerLastName");
-                String[] pEmails = request.getParameterValues("partnerEmail");
-                String[] pPhones = request.getParameterValues("partnerPhone");
-                String[] pPans = request.getParameterValues("partnerPan");
-                String[] pAadhaars = request.getParameterValues("partnerAadhaar");
-
-                if (pFirstNames != null) {
-                    java.util.List<Part> partnerAvatarParts = new java.util.ArrayList<>();
-                    try {
-                        for (Part part : request.getParts()) {
-                            if ("partnerAvatarFile".equals(part.getName())) {
-                                partnerAvatarParts.add(part);
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.error("Failed to parse request parts for partner avatars", e);
-                    }
-
-                    java.util.List<String> autoCreated = new java.util.ArrayList<>();
-                    for (int i = 0; i < pFirstNames.length; i++) {
-                        String pFirst = (i < pFirstNames.length && pFirstNames[i] != null) ? pFirstNames[i].trim() : "";
-                        String pLast = (i < pLastNames.length && pLastNames[i] != null) ? pLastNames[i].trim() : "";
-                        String pEmail = (i < pEmails.length && pEmails[i] != null) ? pEmails[i].trim() : "";
-                        String pPhone = (i < pPhones.length && pPhones[i] != null) ? pPhones[i].trim() : "";
-                        String pPan = (i < pPans.length && pPans[i] != null) ? pPans[i].trim() : "";
-                        String pAadhaar = (i < pAadhaars.length && pAadhaars[i] != null) ? pAadhaars[i].trim() : "";
-
-                        if (pFirst.isEmpty() || pLast.isEmpty() || pEmail.isEmpty() || pPhone.isEmpty()) {
-                            continue; // Skip incomplete partner card inputs
-                        }
-
-                        long partnerCustId = 0;
-
-                        // Check if partner already exists by email, phone, PAN, or Aadhaar
-                        String checkPartnerSql = "SELECT customer_id FROM customer WHERE email = ? OR phone_no = ? OR (pan_card = ? AND pan_card IS NOT NULL) OR (aadhaar_card = ? AND aadhaar_card IS NOT NULL)";
-                        try (PreparedStatement stmtCheckPart = conn.prepareStatement(checkPartnerSql)) {
-                            stmtCheckPart.setString(1, pEmail);
-                            stmtCheckPart.setString(2, pPhone);
-                            stmtCheckPart.setString(3, pPan.isEmpty() ? null : pPan);
-                            stmtCheckPart.setString(4, pAadhaar.isEmpty() ? null : pAadhaar);
-                            try (ResultSet rsCheckPart = stmtCheckPart.executeQuery()) {
-                                if (rsCheckPart.next()) {
-                                    partnerCustId = rsCheckPart.getLong("customer_id");
-                                }
-                            }
-                        }
-
-                        if (partnerCustId == 0) {
-                            // Auto-register partner
-                            // 1. Generate unique username: p_firstname_xxxx
-                            String cleanFirst = pFirst.toLowerCase().replaceAll("[^a-z0-9]", "");
-                            if (cleanFirst.isEmpty()) cleanFirst = "partner";
-                            String baseUsername = "p_" + cleanFirst;
-                            String pUsername = baseUsername;
-                            boolean userExists = true;
-                            int suffix = 1000 + new java.util.Random().nextInt(9000);
-                            while (userExists) {
-                                pUsername = baseUsername + "_" + suffix;
-                                String checkUserSql = "SELECT COUNT(*) FROM customer WHERE username = ?";
-                                try (PreparedStatement stmtCheckUser = conn.prepareStatement(checkUserSql)) {
-                                    stmtCheckUser.setString(1, pUsername);
-                                    try (ResultSet rsCheckUser = stmtCheckUser.executeQuery()) {
-                                        if (rsCheckUser.next() && rsCheckUser.getInt(1) == 0) {
-                                            userExists = false;
-                                        } else {
-                                            suffix = 1000 + new java.util.Random().nextInt(9000);
-                                        }
-                                    }
-                                }
-                            }
-
-                            // 2. Generate 4-digit PIN & Hashed secure default password
-                            String pPin = String.format("%04d", new java.util.Random().nextInt(10000));
-                            String pDefaultPassword = "VgbPartner123!";
-                            String pHashedPassword = com.vgb.util.SecurityUtil.hashPassword(pDefaultPassword);
-
-                            // 3. Insert partner into customer table
-                            String insertCustSql;
-                            if (hasKycColumns) {
-                                insertCustSql = "INSERT INTO customer (first_name, last_name, email, pan_card, aadhaar_card, phone_no, address, city, state, zip_code, username, pin, password, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                                try (PreparedStatement stmtCustNew = conn.prepareStatement(insertCustSql, Statement.RETURN_GENERATED_KEYS)) {
-                                    stmtCustNew.setString(1, pFirst);
-                                    stmtCustNew.setString(2, pLast);
-                                    stmtCustNew.setString(3, pEmail);
-                                    stmtCustNew.setString(4, pPan.isEmpty() ? null : pPan);
-                                    stmtCustNew.setString(5, pAadhaar.isEmpty() ? null : pAadhaar);
-                                    stmtCustNew.setString(6, pPhone);
-                                    stmtCustNew.setString(7, address); // Inherit address details
-                                    stmtCustNew.setString(8, city);
-                                    stmtCustNew.setString(9, state);
-                                    stmtCustNew.setString(10, zipCode);
-                                    stmtCustNew.setString(11, pUsername);
-                                    stmtCustNew.setString(12, pPin);
-                                    stmtCustNew.setString(13, pHashedPassword);
-                                    stmtCustNew.setString(14, "active");
-                                    stmtCustNew.executeUpdate();
-                                    try (ResultSet rsCustNew = stmtCustNew.getGeneratedKeys()) {
-                                        if (rsCustNew.next()) {
-                                            partnerCustId = rsCustNew.getLong(1);
-                                        }
-                                    }
-                                }
-                            } else {
-                                insertCustSql = "INSERT INTO customer (first_name, last_name, email, phone_no, address, city, state, zip_code, username, pin, password, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                                try (PreparedStatement stmtCustNew = conn.prepareStatement(insertCustSql, Statement.RETURN_GENERATED_KEYS)) {
-                                    stmtCustNew.setString(1, pFirst);
-                                    stmtCustNew.setString(2, pLast);
-                                    stmtCustNew.setString(3, pEmail);
-                                    stmtCustNew.setString(4, pPhone);
-                                    stmtCustNew.setString(5, address);
-                                    stmtCustNew.setString(6, city);
-                                    stmtCustNew.setString(7, state);
-                                    stmtCustNew.setString(8, zipCode);
-                                    stmtCustNew.setString(9, pUsername);
-                                    stmtCustNew.setString(10, pPin);
-                                    stmtCustNew.setString(11, pHashedPassword);
-                                    stmtCustNew.setString(12, "active");
-                                    stmtCustNew.executeUpdate();
-                                    try (ResultSet rsCustNew = stmtCustNew.getGeneratedKeys()) {
-                                        if (rsCustNew.next()) {
-                                            partnerCustId = rsCustNew.getLong(1);
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (partnerCustId == 0) {
-                                throw new SQLException("Failed to retrieve generated partner customer ID.");
-                            }
-
-                            // Save and set partner customer avatar
-                            try {
-                                Part pAvatarPart = (i < partnerAvatarParts.size()) ? partnerAvatarParts.get(i) : null;
-                                saveAndSetCustomerAvatar(request, partnerCustId, pAvatarPart, conn);
-                            } catch (Exception e) {
-                                logger.error("Failed to parse partner avatar file part at index " + i, e);
-                            }
-
-                            autoCreated.add(pFirst + " " + pLast + " (Username: " + pUsername + ", PIN: " + pPin + ")");
-                        }
-
-                        // Link partner signatory into junction registry
-                        stmtSign.setLong(1, accountId);
-                        stmtSign.setLong(2, partnerCustId);
-                        stmtSign.setString(3, "joint_holder");
-                        stmtSign.executeUpdate();
-                    }
-
-                    if (!autoCreated.isEmpty()) {
-                        request.getSession().setAttribute("autoCreatedPartners", autoCreated);
-                    }
-                }
-            }
-            stmtSign.close();
-
-            // VI. Map Sub-table subclass specifics
-            if ("savings".equalsIgnoreCase(accountType)) {
-                String insertSav = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, ?, ?, ?)";
-                try (PreparedStatement stmtSav = conn.prepareStatement(insertSav)) {
-                    stmtSav.setLong(1, accountId);
-                    stmtSav.setString(2, nomineeName.isEmpty() ? "No Nominee" : nomineeName);
-                    stmtSav.setString(3, holdingType);
-                    stmtSav.setBigDecimal(4, new BigDecimal(dailyLimitStr));
-                    stmtSav.executeUpdate();
-                }
-            } else if ("current".equalsIgnoreCase(accountType)) {
-                String insertCurr = "INSERT INTO account_current (account_id, business_name, gstin, overdraft_limit, company_category, company_phone, company_email, company_address, company_pan, company_aadhaar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                try (PreparedStatement stmtCurr = conn.prepareStatement(insertCurr)) {
-                    stmtCurr.setLong(1, accountId);
-                    stmtCurr.setString(2, businessName.isEmpty() ? "Unnamed Business" : businessName);
-                    stmtCurr.setString(3, gstin.isEmpty() ? "GST" + java.util.UUID.randomUUID().toString().substring(0, 10).toUpperCase() : gstin);
-                    stmtCurr.setBigDecimal(4, new BigDecimal(overdraftLimitStr));
-                    stmtCurr.setString(5, companyCategory);
-                    stmtCurr.setString(6, companyPhone);
-                    stmtCurr.setString(7, companyEmail);
-                    stmtCurr.setString(8, companyAddress);
-                    stmtCurr.setString(9, companyPan);
-                    stmtCurr.setString(10, companyAadhaar);
-                    stmtCurr.executeUpdate();
-                }
-            }
-
-            // VII. Log initial counter deposit CREDIT transaction
-            String insertTxn = "INSERT INTO transaction (from_account_id, to_account_id, transaction_type, amount, reference_number, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            stmtTxn = conn.prepareStatement(insertTxn);
-            stmtTxn.setNull(1, Types.BIGINT);
-            stmtTxn.setLong(2, accountId);
-            stmtTxn.setString(3, "deposit");
-            stmtTxn.setBigDecimal(4, initialDeposit);
-            stmtTxn.setString(5, "TXN" + java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-            stmtTxn.setString(6, "Initial account opening deposit (Credit)");
-            stmtTxn.setString(7, "completed");
-            stmtTxn.executeUpdate();
-            stmtTxn.close();
-
-            conn.commit(); // Transaction success!
-            logger.info("Ledger created. Cust ID: {}, Account No: {}, Balance: ₹{}", customerId, accountNumber, initialDeposit);
-
-            HttpSession session = request.getSession();
-            StringBuilder successMsg = new StringBuilder();
-            successMsg.append("Ledger successfully initialized! Customer profile '")
-                      .append(firstName).append(" ").append(lastName)
-                      .append("' registered with username '").append(username)
-                      .append("'. Account No: '").append(accountNumber)
-                      .append("' is active with initial deposit ₹").append(initialDeposit).append("!");
-            
-            @SuppressWarnings("unchecked")
-            java.util.List<String> autoCreated = (java.util.List<String>) session.getAttribute("autoCreatedPartners");
-            if (autoCreated != null && !autoCreated.isEmpty()) {
-                if ("savings".equalsIgnoreCase(accountType)) {
-                    successMsg.append(" The joint holder was auto-registered with default password 'VgbJoint123!': ");
-                } else {
-                    successMsg.append(" The following partners were auto-registered with default password 'VgbPartner123!': ");
-                }
-                for (int idx = 0; idx < autoCreated.size(); idx++) {
-                    if (idx > 0) successMsg.append(", ");
-                    successMsg.append(autoCreated.get(idx));
-                }
-                session.removeAttribute("autoCreatedPartners"); // Clean up session
-            }
-
-            // Auto-generate VGB card request if opted
-            if (hasAtmCard) {
-                try {
-                    com.vgb.service.CardService cardService = new com.vgb.service.CardService();
-                    String cardHolderName = (firstName + " " + lastName).trim().toUpperCase();
-                    cardService.applyForCard(customerId, accountId, wizardCardType, wizardCardProvider, cardHolderName);
-                    logger.info("Auto-registered pending VGB card for Account ID: {}", accountId);
-                    successMsg.append(" Programmatic ATM card application generated successfully (Pending Approval).");
-                } catch (Exception cardEx) {
-                    logger.error("Failed to auto-generate VGB card during account setup", cardEx);
-                    successMsg.append(" (Warning: ATM card generation failed: ").append(cardEx.getMessage()).append(")");
-                }
-            }
-
-            // Auto-generate VGB cheque book request if opted
-            if (hasChequeBook) {
-                try {
-                    com.vgb.service.ChequeBookRequestService chequeService = new com.vgb.service.ChequeBookRequestService();
-                    chequeService.applyForChequeBook(customerId, accountId, 50); // Default to 50 leaves
-                    logger.info("Auto-registered pending VGB cheque book request for Account ID: {}", accountId);
-                    successMsg.append(" Programmatic cheque book application generated successfully (Pending Approval).");
-                } catch (Exception chequeEx) {
-                    logger.error("Failed to auto-generate VGB cheque book request during account setup", chequeEx);
-                    successMsg.append(" (Warning: Cheque book request generation failed: ").append(chequeEx.getMessage()).append(")");
-                }
-            }
-
-            session.setAttribute("success", successMsg.toString());
-            response.sendRedirect(request.getContextPath() + "/account?action=list");
-
-        } catch (Exception e) {
-            if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed!", ex); }
-            }
-            logger.error("Unified customer & account transaction failed", e);
-            request.setAttribute("error", "Database Transaction failed: " + e.getMessage());
-            reloadServletAttributes(request);
-            request.getRequestDispatcher("/admin/account.jsp").forward(request, response);
-        } finally {
-            DatabaseConfig.closeResources(rsCheck, stmtCheck, conn);
-        }
-    }
-
-    /**
-     * Helper to reload dashboard lists in error states
-     */
-    private void reloadServletAttributes(HttpServletRequest request) {
-        try {
-            List<com.vgb.model.Customer> customers = new com.vgb.service.CustomerService().getAllCustomers();
-            request.setAttribute("customers", customers);
-            List<Account> accounts = accountService.getAllAccounts();
-            request.setAttribute("accounts", accounts);
-        } catch (Exception ex) {}
-    }
 
     /**
      * Update details of an existing customer (Admin only - Personal and Login details)
@@ -1918,75 +1135,6 @@ public class AccountServlet extends BaseServlet {
         response.sendRedirect(request.getContextPath() + "/account?action=list");
     }
 
-    /**
-     * Generate unique 12-digit Indian Banking Account Number format
-     */
-    private String generateIndianAccountNumber() {
-        java.security.SecureRandom random = new java.security.SecureRandom();
-        long nextNum = 10000000L + random.nextInt(90000000);
-        return "1000" + nextNum;
-    }
-
-    /**
-     * Helper to process profile avatar uploads for new primary, joint, or partner signatories
-     */
-    private void saveAndSetCustomerAvatar(HttpServletRequest request, long customerId, Part filePart, Connection conn) {
-        if (filePart == null || filePart.getSize() == 0) {
-            return;
-        }
-        
-        try {
-            String contentType = filePart.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                return; // Only allow images
-            }
-
-            String uploadPath = request.getServletContext().getRealPath("/assest/img/avatars/");
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-
-            // Get original file extension safely to prevent directory/path traversal (e.g. filename traversal)
-            String originalName = getSubmittedFileName(filePart);
-            if (originalName == null) {
-                originalName = "avatar.png";
-            }
-            
-            // Extract leaf name only, removing any directory components or path traversal sequences
-            originalName = new File(originalName).getName();
-            
-            String ext = "png";
-            if (originalName.contains(".")) {
-                String potentialExt = originalName.substring(originalName.lastIndexOf(".") + 1).toLowerCase().trim();
-                // Strict alphanumeric whitelisting to only allow safe image extensions, preventing traversal or malicious file execution
-                if (potentialExt.matches("^[a-zA-Z0-9]+$") && 
-                    (potentialExt.equals("png") || potentialExt.equals("jpg") || potentialExt.equals("jpeg") || potentialExt.equals("gif"))) {
-                    ext = potentialExt;
-                }
-            }
-
-            String fileName = "avatar_" + customerId + "_" + System.currentTimeMillis() + "." + ext;
-            String filePath = uploadPath + File.separator + fileName;
-            
-            // Save file
-            filePart.write(filePath);
-            
-            // Update in DB using transaction connection
-            String relativePath = "/assest/img/avatars/" + fileName;
-            String updateSql = "UPDATE customer SET avatar_path = ? WHERE customer_id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(updateSql)) {
-                stmt.setString(1, relativePath);
-                stmt.setLong(2, customerId);
-                stmt.executeUpdate();
-            }
-            logger.info("Avatar successfully uploaded and set for customer ID: {}", customerId);
-
-        } catch (Exception e) {
-            logger.error("Failed to save and set customer avatar for ID " + customerId, e);
-        }
-    }
-
     private void loadAdminStatistics(HttpServletRequest request) {
         int totalCustomers = 0;
         int savingsSingleCustomers = 0;
@@ -2047,6 +1195,596 @@ public class AccountServlet extends BaseServlet {
         request.setAttribute("savingsSingleCustomers", savingsSingleCustomers);
         request.setAttribute("savingsJointCustomers", savingsJointCustomers);
         request.setAttribute("currentCustomers", currentCustomers);
+    }
+
+    private void createAccount(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (getAdminId(request) == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
+            return;
+        }
+
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Failed security check: Invalid CSRF token");
+            response.sendRedirect(request.getContextPath() + "/account?action=list");
+            return;
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false);
+
+            createCustomerAndAccountProcess(request, conn);
+
+            conn.commit();
+            request.getSession().setAttribute("success", "Account and customer signatories ledger successfully created!");
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (Exception ex) {}
+            }
+            logger.error("Failed to process account onboarding counter transaction", e);
+            request.getSession().setAttribute("error", "Onboarding Counter Failed: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try { conn.close(); } catch (Exception e) {}
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/account?action=list");
+    }
+
+    private void createCustomerAndAccountProcess(HttpServletRequest request, Connection conn) throws Exception {
+        // Read account type info
+        String accountType = getParameter(request, "accountType", "savings").toLowerCase();
+        String holdingType = getParameter(request, "holdingType", "single").toLowerCase();
+        String ifscCode = getParameter(request, "ifscCode", "VGBK0000001").trim();
+
+        // 1. Primary signatory parameters
+        String firstName = getParameter(request, "firstName", "").trim();
+        String middleName = getParameter(request, "middleName", "").trim();
+        String lastName = getParameter(request, "lastName", "").trim();
+        String dob = getParameter(request, "dob", "").trim();
+        String gender = getParameter(request, "gender", "").trim();
+        String maritalStatus = getParameter(request, "maritalStatus", "").trim();
+        String fatherName = getParameter(request, "fatherName", "").trim();
+        String motherName = getParameter(request, "motherName", "").trim();
+        String email = getParameter(request, "email", "").trim();
+        String phoneNo = getParameter(request, "phoneNo", "").trim();
+        String altPhoneNo = getParameter(request, "altPhoneNo", "").trim();
+        String address = getParameter(request, "address", "").trim();
+        String permAddress = getParameter(request, "permAddress", "").trim();
+        if (permAddress.isEmpty()) {
+            permAddress = address;
+        }
+        String city = getParameter(request, "city", "").trim();
+        String state = getParameter(request, "state", "").trim();
+        String zipCode = getParameter(request, "zipCode", "").trim();
+        String occupation = getParameter(request, "occupation", "").trim();
+        String annualIncomeStr = getParameter(request, "annualIncome", "0.00").trim();
+        BigDecimal annualIncome = new BigDecimal(annualIncomeStr.isEmpty() ? "0.00" : annualIncomeStr);
+        String panCard = getParameter(request, "panCard", "").trim();
+        String aadhaarCard = getParameter(request, "aadhaarCard", "").trim();
+        
+        String username = getParameter(request, "username", "").trim();
+        String password = getParameter(request, "password", "").trim();
+        String pin = getParameter(request, "pin", "").trim();
+
+        // Validations
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phoneNo.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty() || zipCode.isEmpty() || username.isEmpty() || password.isEmpty() || pin.isEmpty()) {
+            throw new Exception("All primary personal, login, and security fields marked with * are required.");
+        }
+
+        if (dob.isEmpty()) {
+            throw new Exception("Date of Birth is required.");
+        }
+        try {
+            java.time.LocalDate dobLocalDate = java.time.LocalDate.parse(dob);
+            java.time.LocalDate today = java.time.LocalDate.now();
+            int age = java.time.Period.between(dobLocalDate, today).getYears();
+            if (age < 8) {
+                throw new Exception("Customer is below 8 years of age. An account cannot be opened.");
+            }
+        } catch (java.time.format.DateTimeParseException e) {
+            throw new Exception("Invalid Date of Birth format. Please select a valid date.");
+        }
+
+        // Validate Username uniqueness
+        String checkUserSql = "SELECT COUNT(*) FROM customer WHERE username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(checkUserSql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new Exception("Username '" + username + "' is already taken. Please choose another login username.");
+                }
+            }
+        }
+
+        // Validate Email uniqueness
+        String checkEmailSql = "SELECT COUNT(*) FROM customer WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(checkEmailSql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new Exception("Email '" + email + "' is already registered to another signatory profile.");
+                }
+            }
+        }
+
+        // Validate Phone uniqueness
+        String checkPhoneSql = "SELECT COUNT(*) FROM customer WHERE phone_no = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(checkPhoneSql)) {
+            stmt.setString(1, phoneNo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new Exception("Phone number '" + phoneNo + "' is already associated with another signatory profile.");
+                }
+            }
+        }
+
+        // Validate Initial Deposit minimums
+        BigDecimal initialDeposit = new BigDecimal(getParameter(request, "initialDeposit", "0.00"));
+        BigDecimal minDeposit = BigDecimal.ZERO;
+        if ("current".equalsIgnoreCase(accountType)) {
+            minDeposit = new BigDecimal("1500.00");
+        } else if ("savings".equalsIgnoreCase(accountType)) {
+            if ("joint".equalsIgnoreCase(holdingType)) {
+                minDeposit = new BigDecimal("1000.00");
+            } else {
+                minDeposit = new BigDecimal("500.00");
+            }
+        }
+        if (initialDeposit.compareTo(minDeposit) < 0) {
+            throw new Exception("Initial deposit cannot be less than ₹" + minDeposit.setScale(2) + " for " + accountType + " account.");
+        }
+
+        // A. Insert Primary Customer
+        long primaryCustomerId = 0;
+        String insertCustSql = "INSERT INTO customer (first_name, middle_name, last_name, dob, gender, marital_status, father_name, mother_name, email, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, occupation, annual_income, pan_card, aadhaar_card, username, password, pin, status) " +
+                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
+        
+        try (PreparedStatement stmtCust = conn.prepareStatement(insertCustSql, Statement.RETURN_GENERATED_KEYS)) {
+            stmtCust.setString(1, firstName);
+            stmtCust.setString(2, middleName);
+            stmtCust.setString(3, lastName);
+            if (dob.isEmpty()) {
+                stmtCust.setNull(4, java.sql.Types.DATE);
+            } else {
+                stmtCust.setDate(4, java.sql.Date.valueOf(dob));
+            }
+            stmtCust.setString(5, gender);
+            stmtCust.setString(6, maritalStatus);
+            stmtCust.setString(7, fatherName);
+            stmtCust.setString(8, motherName);
+            stmtCust.setString(9, email);
+            stmtCust.setString(10, phoneNo);
+            stmtCust.setString(11, altPhoneNo);
+            stmtCust.setString(12, address);
+            stmtCust.setString(13, permAddress);
+            stmtCust.setString(14, city);
+            stmtCust.setString(15, state);
+            stmtCust.setString(16, zipCode);
+            stmtCust.setString(17, occupation);
+            stmtCust.setBigDecimal(18, annualIncome);
+            stmtCust.setString(19, panCard);
+            stmtCust.setString(20, aadhaarCard);
+            stmtCust.setString(21, username);
+            stmtCust.setString(22, password);
+            stmtCust.setString(23, pin);
+            
+            stmtCust.executeUpdate();
+            try (ResultSet rsKeys = stmtCust.getGeneratedKeys()) {
+                if (rsKeys.next()) {
+                    primaryCustomerId = rsKeys.getLong(1);
+                }
+            }
+        }
+
+        if (primaryCustomerId == 0) {
+            throw new Exception("Failed to register primary customer profile in database.");
+        }
+
+        // B. Upload Primary Customer Avatar
+        try {
+            Part primaryAvatarPart = request.getPart("primaryAvatarFile");
+            saveAndSetCustomerAvatar(request, primaryCustomerId, primaryAvatarPart, conn);
+        } catch (Exception e) {
+            logger.error("Failed to parse primary avatar file part", e);
+        }
+
+        // C. Generate unique 12-digit Indian Account Number
+        String accountNumber = "";
+        boolean isUnique = false;
+        String checkAccSql = "SELECT COUNT(*) FROM account WHERE account_number = ?";
+        while (!isUnique) {
+            accountNumber = generateIndianAccountNumber();
+            try (PreparedStatement stmtAcc = conn.prepareStatement(checkAccSql)) {
+                stmtAcc.setString(1, accountNumber);
+                try (ResultSet rs = stmtAcc.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        isUnique = true;
+                    }
+                }
+            }
+        }
+
+        // D. Insert parent account ledger
+        long accountId = 0;
+        boolean hasAtm = "1".equals(getParameter(request, "hasAtmCard", "0"));
+        boolean hasCheque = "1".equals(getParameter(request, "hasChequeBook", "0"));
+        boolean hasPassbook = "savings".equalsIgnoreCase(accountType);
+        
+        String insertAccSql = "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook) " +
+                              "VALUES (?, ?, ?, ?, 'active', ?, ?, ?)";
+        try (PreparedStatement stmtAcc = conn.prepareStatement(insertAccSql, Statement.RETURN_GENERATED_KEYS)) {
+            stmtAcc.setString(1, accountType);
+            stmtAcc.setBigDecimal(2, initialDeposit);
+            stmtAcc.setString(3, ifscCode);
+            stmtAcc.setString(4, accountNumber);
+            stmtAcc.setInt(5, hasAtm ? 1 : 0);
+            stmtAcc.setInt(6, hasCheque ? 1 : 0);
+            stmtAcc.setInt(7, hasPassbook ? 1 : 0);
+            
+            stmtAcc.executeUpdate();
+            try (ResultSet rsKeys = stmtAcc.getGeneratedKeys()) {
+                if (rsKeys.next()) {
+                    accountId = rsKeys.getLong(1);
+                }
+            }
+        }
+
+        if (accountId == 0) {
+            throw new Exception("Failed to open parent account ledger in database.");
+        }
+
+        // E. Map Primary signatory to the account
+        String insertSignSql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'primary')";
+        try (PreparedStatement stmtSign = conn.prepareStatement(insertSignSql)) {
+            stmtSign.setLong(1, accountId);
+            stmtSign.setLong(2, primaryCustomerId);
+            stmtSign.executeUpdate();
+        }
+
+        // F. Handle Savings specifics
+        if ("savings".equalsIgnoreCase(accountType)) {
+            String nomineeName = getParameter(request, "nomineeName", "").trim();
+            String limitStr = getParameter(request, "dailyWithdrawalLimit", "50000.00").trim();
+            BigDecimal dailyLimit = new BigDecimal(limitStr.isEmpty() ? "50000.00" : limitStr);
+            
+            String insertSavingsSql = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement stmtSav = conn.prepareStatement(insertSavingsSql)) {
+                stmtSav.setLong(1, accountId);
+                stmtSav.setString(2, nomineeName);
+                stmtSav.setString(3, holdingType);
+                stmtSav.setBigDecimal(4, dailyLimit);
+                stmtSav.executeUpdate();
+            }
+
+            // G. Handle Joint Signatory (Savings Joint only)
+            if ("joint".equalsIgnoreCase(holdingType)) {
+                String jointCustomerMode = getParameter(request, "jointCustomerMode", "existing");
+                long jointCustomerId = 0;
+
+                if ("existing".equalsIgnoreCase(jointCustomerMode)) {
+                    String jointCustomerIdStr = getParameter(request, "jointCustomerId", "0");
+                    jointCustomerId = Long.parseLong(jointCustomerIdStr.isEmpty() ? "0" : jointCustomerIdStr);
+                    if (jointCustomerId == 0) {
+                        throw new Exception("Existing customer ID is required for joint holding link.");
+                    }
+                } else {
+                    // New joint customer registration
+                    String jFirst = getParameter(request, "jointFirstName", "").trim();
+                    String jLast = getParameter(request, "jointLastName", "").trim();
+                    String jEmail = getParameter(request, "jointEmail", "").trim();
+                    String jPhone = getParameter(request, "jointPhone", "").trim();
+                    String jAddress = getParameter(request, "jointAddress", "").trim();
+                    String jCity = getParameter(request, "jointCity", "").trim();
+                    String jState = getParameter(request, "jointState", "").trim();
+                    String jZip = getParameter(request, "jointZipCode", "").trim();
+                    String jPan = getParameter(request, "jointPan", "").trim();
+                    String jAadhaar = getParameter(request, "jointAadhaar", "").trim();
+
+                    if (jFirst.isEmpty() || jLast.isEmpty() || jEmail.isEmpty() || jPhone.isEmpty() || jAddress.isEmpty() || jCity.isEmpty() || jState.isEmpty() || jZip.isEmpty() || jPan.isEmpty() || jAadhaar.isEmpty()) {
+                        throw new Exception("All joint holder demographic fields are required.");
+                    }
+
+                    // Auto-generate credentials for joint customer
+                    String jPin = String.format("%04d", new java.security.SecureRandom().nextInt(10000));
+                    String jUsername = (jFirst.toLowerCase() + "_" + jLast.toLowerCase() + "_" + (System.currentTimeMillis() % 1000)).replaceAll("\\s+", "");
+                    String jPassword = "Vgb@" + jPin + "@" + (System.currentTimeMillis() % 1000);
+
+                    // Insert Joint Customer
+                    String insertJointSql = "INSERT INTO customer (first_name, last_name, email, phone_no, address, perm_address, city, state, zip_code, pan_card, aadhaar_card, username, password, pin, status) " +
+                                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')";
+                    try (PreparedStatement stmtJoint = conn.prepareStatement(insertJointSql, Statement.RETURN_GENERATED_KEYS)) {
+                        stmtJoint.setString(1, jFirst);
+                        stmtJoint.setString(2, jLast);
+                        stmtJoint.setString(3, jEmail);
+                        stmtJoint.setString(4, jPhone);
+                        stmtJoint.setString(5, jAddress);
+                        stmtJoint.setString(6, jAddress);
+                        stmtJoint.setString(7, jCity);
+                        stmtJoint.setString(8, jState);
+                        stmtJoint.setString(9, jZip);
+                        stmtJoint.setString(10, jPan);
+                        stmtJoint.setString(11, jAadhaar);
+                        stmtJoint.setString(12, jUsername);
+                        stmtJoint.setString(13, jPassword);
+                        stmtJoint.setString(14, jPin);
+                        
+                        stmtJoint.executeUpdate();
+                        try (ResultSet rsKeys = stmtJoint.getGeneratedKeys()) {
+                            if (rsKeys.next()) {
+                                jointCustomerId = rsKeys.getLong(1);
+                            }
+                        }
+                    }
+
+                    if (jointCustomerId == 0) {
+                        throw new Exception("Failed to register joint holder customer profile.");
+                    }
+
+                    // Upload joint avatar
+                    try {
+                        Part jAvatarPart = request.getPart("jointAvatarFile");
+                        saveAndSetCustomerAvatar(request, jointCustomerId, jAvatarPart, conn);
+                    } catch (Exception e) {
+                        logger.error("Failed to parse joint avatar file part", e);
+                    }
+
+                    // Save credentials info to session for display
+                    java.util.List<String> autoCreated = new java.util.ArrayList<>();
+                    autoCreated.add(jFirst + " " + jLast + " (Username: " + jUsername + ", Password: " + jPassword + ", PIN: " + jPin + ")");
+                    request.getSession().setAttribute("autoCreatedPartners", autoCreated);
+                }
+
+                // Map joint signatory to the account
+                String mapSignSql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'joint_holder')";
+                try (PreparedStatement stmtMap = conn.prepareStatement(mapSignSql)) {
+                    stmtMap.setLong(1, accountId);
+                    stmtMap.setLong(2, jointCustomerId);
+                    stmtMap.executeUpdate();
+                }
+            }
+        }
+        // H. Handle Current Account specifics
+        else if ("current".equalsIgnoreCase(accountType)) {
+            String businessName = getParameter(request, "businessName", "").trim();
+            String gstin = getParameter(request, "gstin", "").trim();
+            String odLimitStr = getParameter(request, "overdraftLimit", "100000.00").trim();
+            BigDecimal overdraftLimit = new BigDecimal(odLimitStr.isEmpty() ? "100000.00" : odLimitStr);
+            String category = getParameter(request, "companyCategory", "").trim();
+            String companyPhone = getParameter(request, "companyPhone", "").trim();
+            String companyEmail = getParameter(request, "companyEmail", "").trim();
+            String companyAddress = getParameter(request, "companyAddress", "").trim();
+            String companyPan = getParameter(request, "companyPan", "").trim();
+            String companyAadhaar = getParameter(request, "companyAadhaar", "").trim();
+
+            if (businessName.isEmpty() || gstin.isEmpty()) {
+                throw new Exception("Business Name and GSTIN ID are required for Corporate Current Account.");
+            }
+
+            // Insert Corporate Details
+            String insertCurrentSql = "INSERT INTO account_current (account_id, business_name, gstin, overdraft_limit, company_category, company_phone, company_email, company_address, company_pan, company_aadhaar) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement stmtCur = conn.prepareStatement(insertCurrentSql)) {
+                stmtCur.setLong(1, accountId);
+                stmtCur.setString(2, businessName);
+                stmtCur.setString(3, gstin);
+                stmtCur.setBigDecimal(4, overdraftLimit);
+                stmtCur.setString(5, category);
+                stmtCur.setString(6, companyPhone);
+                stmtCur.setString(7, companyEmail);
+                stmtCur.setString(8, companyAddress);
+                stmtCur.setString(9, companyPan);
+                stmtCur.setString(10, companyAadhaar);
+                stmtCur.executeUpdate();
+            }
+
+            // Register dynamic partners if provided
+            String[] pFirstNames = request.getParameterValues("partnerFirstName");
+            String[] pLastNames = request.getParameterValues("partnerLastName");
+            String[] pEmails = request.getParameterValues("partnerEmail");
+            String[] pPhones = request.getParameterValues("partnerPhone");
+            String[] pPans = request.getParameterValues("partnerPan");
+            String[] pAadhaars = request.getParameterValues("partnerAadhaar");
+
+            if (pFirstNames != null) {
+                java.util.List<Part> partnerAvatarParts = new java.util.ArrayList<>();
+                try {
+                    for (Part part : request.getParts()) {
+                        if ("partnerAvatarFile".equals(part.getName())) {
+                            partnerAvatarParts.add(part);
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to parse partner avatar parts", e);
+                }
+
+                java.util.List<String> autoCreated = new java.util.ArrayList<>();
+
+                for (int i = 0; i < pFirstNames.length; i++) {
+                    String pFirst = pFirstNames[i].trim();
+                    String pLast = pLastNames[i].trim();
+                    String pEmail = pEmails[i].trim();
+                    String pPhone = pPhones[i].trim();
+                    String pPan = pPans[i].trim();
+                    String pAadhaar = pAadhaars[i].trim();
+
+                    if (pFirst.isEmpty() || pLast.isEmpty() || pEmail.isEmpty() || pPhone.isEmpty() || pPan.isEmpty() || pAadhaar.isEmpty()) {
+                        continue;
+                    }
+
+                    // Auto-generate credentials for partners
+                    String pPin = String.format("%04d", new java.security.SecureRandom().nextInt(10000));
+                    String pUsername = (pFirst.toLowerCase() + "_" + pLast.toLowerCase() + "_" + (System.currentTimeMillis() % 1000) + "_" + i).replaceAll("\\s+", "");
+                    String pPassword = "Vgb@" + pPin + "@" + (System.currentTimeMillis() % 1000);
+
+                    // Insert partner as customer
+                    long partnerCustId = 0;
+                    String insertPartnerSql = "INSERT INTO customer (first_name, last_name, email, phone_no, address, perm_address, city, state, zip_code, pan_card, aadhaar_card, username, password, pin, status) " +
+                                              "VALUES (?, ?, ?, ?, ?, ?, 'BusinessHQ', 'BusinessHQ', '999999', ?, ?, ?, ?, ?, 'active')";
+                    try (PreparedStatement stmtPart = conn.prepareStatement(insertPartnerSql, Statement.RETURN_GENERATED_KEYS)) {
+                        stmtPart.setString(1, pFirst);
+                        stmtPart.setString(2, pLast);
+                        stmtPart.setString(3, pEmail);
+                        stmtPart.setString(4, pPhone);
+                        stmtPart.setString(5, companyAddress.isEmpty() ? address : companyAddress);
+                        stmtPart.setString(6, companyAddress.isEmpty() ? address : companyAddress);
+                        stmtPart.setString(7, pPan);
+                        stmtPart.setString(8, pAadhaar);
+                        stmtPart.setString(9, pUsername);
+                        stmtPart.setString(10, pPassword);
+                        stmtPart.setString(11, pPin);
+                        
+                        stmtPart.executeUpdate();
+                        try (ResultSet rsKeys = stmtPart.getGeneratedKeys()) {
+                            if (rsKeys.next()) {
+                                partnerCustId = rsKeys.getLong(1);
+                            }
+                        }
+                    }
+
+                    if (partnerCustId > 0) {
+                        // Map partner as joint holder signatory
+                        String mapSignSql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'joint_holder')";
+                        try (PreparedStatement stmtMap = conn.prepareStatement(mapSignSql)) {
+                            stmtMap.setLong(1, accountId);
+                            stmtMap.setLong(2, partnerCustId);
+                            stmtMap.executeUpdate();
+                        }
+
+                        // Upload avatar if exists in list
+                        if (i < partnerAvatarParts.size()) {
+                            saveAndSetCustomerAvatar(request, partnerCustId, partnerAvatarParts.get(i), conn);
+                        }
+
+                        autoCreated.add(pFirst + " " + pLast + " (Username: " + pUsername + ", Password: " + pPassword + ", PIN: " + pPin + ")");
+                    }
+                }
+                
+                if (!autoCreated.isEmpty()) {
+                    request.getSession().setAttribute("autoCreatedPartners", autoCreated);
+                }
+            }
+        }
+
+        // I. Record Initial Funding Ledger Deposit Transaction
+        String refNo = "TXN" + System.currentTimeMillis() + String.format("%04d", new java.security.SecureRandom().nextInt(10000));
+        String insertTxnSql = "INSERT INTO transaction (from_account_id, to_account_id, transaction_type, amount, reference_number, description, status) " +
+                              "VALUES (NULL, ?, 'deposit', ?, ?, 'Initial Onboarding Counter Deposit', 'completed')";
+        try (PreparedStatement stmtTx = conn.prepareStatement(insertTxnSql)) {
+            stmtTx.setLong(1, accountId);
+            stmtTx.setBigDecimal(2, initialDeposit);
+            stmtTx.setString(3, refNo);
+            stmtTx.executeUpdate();
+        }
+
+        // J. Register Card Request if Opted
+        if (hasAtm) {
+            String cardType = getParameter(request, "wizardCardType", "debit").toLowerCase();
+            String cardProvider = getParameter(request, "wizardCardProvider", "visa").toLowerCase();
+            
+            java.security.SecureRandom r = new java.security.SecureRandom();
+            String cNumber = "4589 " + String.format("%04d", r.nextInt(10000)) + " " + String.format("%04d", r.nextInt(10000)) + " " + String.format("%04d", r.nextInt(10000));
+            String cvv = String.format("%03d", r.nextInt(1000));
+            
+            java.sql.Date expDate = java.sql.Date.valueOf(java.time.LocalDate.now().plusYears(5));
+            BigDecimal cardFee = new BigDecimal("150.00");
+            
+            String insertCardSql = "INSERT INTO card (account_id, customer_id, card_number, card_type, card_provider, card_holder_name, cvv, expiry_date, status, daily_limit, card_fee, is_fee_paid) " +
+                                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', 50000.00, ?, 0)";
+            try (PreparedStatement stmtCard = conn.prepareStatement(insertCardSql)) {
+                stmtCard.setLong(1, accountId);
+                stmtCard.setLong(2, primaryCustomerId);
+                stmtCard.setString(3, cNumber);
+                stmtCard.setString(4, cardType);
+                stmtCard.setString(5, cardProvider);
+                stmtCard.setString(6, firstName + " " + lastName);
+                stmtCard.setString(7, cvv);
+                stmtCard.setDate(8, expDate);
+                stmtCard.setBigDecimal(9, cardFee);
+                stmtCard.executeUpdate();
+            }
+        }
+
+        // K. Register Cheque Book Request if Opted
+        if (hasCheque) {
+            String insertChequeSql = "INSERT INTO cheque_book_request (account_id, customer_id, leaves_count, status, charges, is_charges_paid) " +
+                                     "VALUES (?, ?, 50, 'pending', 150.00, 0)";
+            try (PreparedStatement stmtChq = conn.prepareStatement(insertChequeSql)) {
+                stmtChq.setLong(1, accountId);
+                stmtChq.setLong(2, primaryCustomerId);
+                stmtChq.executeUpdate();
+            }
+        }
+
+        // L. Register Passbook Request if Opted
+        if (hasPassbook) {
+            String insertPassbookSql = "INSERT INTO passbook_request (account_id, customer_id, request_type, status, charges, is_charges_paid) " +
+                                       "VALUES (?, ?, 'new', 'pending', 100.00, 0)";
+            try (PreparedStatement stmtPass = conn.prepareStatement(insertPassbookSql)) {
+                stmtPass.setLong(1, accountId);
+                stmtPass.setLong(2, primaryCustomerId);
+                stmtPass.executeUpdate();
+            }
+        }
+    }
+
+    private String generateIndianAccountNumber() {
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        long nextNum = 10000000L + random.nextInt(90000000);
+        return "1000" + nextNum;
+    }
+
+    private void saveAndSetCustomerAvatar(HttpServletRequest request, long customerId, Part filePart, Connection conn) {
+        if (filePart == null || filePart.getSize() == 0) {
+            return;
+        }
+        
+        try {
+            String contentType = filePart.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return;
+            }
+
+            String uploadPath = request.getServletContext().getRealPath("/assest/img/avatars/");
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            String originalName = getSubmittedFileName(filePart);
+            if (originalName == null) {
+                originalName = "avatar.png";
+            }
+            
+            originalName = new File(originalName).getName();
+            
+            String ext = "png";
+            if (originalName.contains(".")) {
+                String potentialExt = originalName.substring(originalName.lastIndexOf(".") + 1).toLowerCase().trim();
+                if (potentialExt.matches("^[a-zA-Z0-9]+$") && 
+                    (potentialExt.equals("png") || potentialExt.equals("jpg") || potentialExt.equals("jpeg") || potentialExt.equals("gif"))) {
+                    ext = potentialExt;
+                }
+            }
+
+            String fileName = "avatar_" + customerId + "_" + System.currentTimeMillis() + "." + ext;
+            String filePath = uploadPath + File.separator + fileName;
+            
+            filePart.write(filePath);
+            
+            String relativePath = "/assest/img/avatars/" + fileName;
+            String updateSql = "UPDATE customer SET avatar_path = ? WHERE customer_id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateSql)) {
+                stmt.setString(1, relativePath);
+                stmt.setLong(2, customerId);
+                stmt.executeUpdate();
+            }
+            logger.info("Avatar successfully uploaded and set for customer ID: {}", customerId);
+
+        } catch (Exception e) {
+            logger.error("Failed to save and set customer avatar for ID " + customerId, e);
+        }
     }
 
     private String getSubmittedFileName(Part part) {

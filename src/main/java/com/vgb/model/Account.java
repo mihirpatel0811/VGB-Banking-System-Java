@@ -19,6 +19,7 @@ public class Account implements Serializable {
     private String status; // active, frozen, dormant, closed
     private String customerName; // Transitive property for JOIN query display
     private LocalDateTime createdAt;
+    private java.time.LocalDate customerDob;
 
     // Banking Services options
     private boolean hasAtmCard;
@@ -46,6 +47,17 @@ public class Account implements Serializable {
 
     public String getCustomerName() { return customerName; }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
+
+    public java.time.LocalDate getCustomerDob() { return customerDob; }
+    public void setCustomerDob(java.time.LocalDate customerDob) { this.customerDob = customerDob; }
+
+    public String getAgeCategory() {
+        if (customerDob == null) {
+            return "";
+        }
+        int age = java.time.Period.between(customerDob, java.time.LocalDate.now()).getYears();
+        return age >= 18 ? "Major Account" : "Minor Account";
+    }
 
     public Account(long customerId, String accountType, String accountNumber) {
         this.customerId = customerId;

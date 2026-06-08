@@ -20,6 +20,7 @@ public class AccountDAOImpl implements AccountDAO {
         "SELECT a.*, " +
         "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
         "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
+        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
         "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
         "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
         "FROM account a " +
@@ -33,6 +34,7 @@ public class AccountDAOImpl implements AccountDAO {
         "SELECT a.*, " +
         "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
         "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
+        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
         "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
         "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
         "FROM account a " +
@@ -46,6 +48,7 @@ public class AccountDAOImpl implements AccountDAO {
         "SELECT a.*, " +
         "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
         "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
+        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
         "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
         "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
         "FROM account a " +
@@ -60,6 +63,7 @@ public class AccountDAOImpl implements AccountDAO {
         "SELECT a.*, " +
         "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
         "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
+        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
         "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
         "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
         "FROM account a " +
@@ -821,6 +825,15 @@ public class AccountDAOImpl implements AccountDAO {
             String custName = rs.getString("customer_name");
             if (custName != null) {
                 account.setCustomerName(custName);
+            }
+        } catch (SQLException e) {
+            // Column not in result set for plain non-join queries
+        }
+
+        try {
+            Date dobDate = rs.getDate("customer_dob");
+            if (dobDate != null) {
+                account.setCustomerDob(dobDate.toLocalDate());
             }
         } catch (SQLException e) {
             // Column not in result set for plain non-join queries

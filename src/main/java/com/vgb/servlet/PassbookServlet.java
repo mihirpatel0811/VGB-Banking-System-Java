@@ -80,6 +80,7 @@ public class PassbookServlet extends BaseServlet {
     }
 
     private void listRequests(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
+        generateCSRFToken(request);
         if (adminId != null) {
             // Admin lists all requests
             List<PassbookRequest> allRequests = passbookService.getAllRequests();

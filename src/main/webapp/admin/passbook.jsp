@@ -464,13 +464,14 @@
 
     <!-- Header -->
     <header class="header scrolled">
-        <a href="#" class="logo">
-            <span class="logo-text">V</span>
-            <span class="logo-text">G</span>
-            <span class="logo-text">B</span>
+        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
         </a>
         <div class="nav-actions">
-            <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
+                <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
+            </div>
             <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
         </div>
@@ -487,9 +488,7 @@
             <a href="${pageContext.request.contextPath}/passbook?action=list" class="active"><i class="bx bx-book-open"></i> Passbook Requests</a>
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Review Loans</a>
             <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
-            <a href="${pageContext.request.contextPath}/admin/notification.jsp">
-                <i class="bx bx-bell"></i> Audit Logs
-            </a>
+
         </div>
         <div style="padding: 15px; background: rgba(99, 102, 241, 0.05); border-radius: var(--radius-md); text-align: center;">
             <p style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Admin Controls</p>
@@ -570,7 +569,7 @@
                                 <li>Verify that customer's legal name matches profile.</li>
                                 <li>Verify account number integrity.</li>
                                 <li>Approving changes the customer's account flag to active passbook transaction support.</li>
-                                <li>Rejecting triggers an automatic audit trail and refunds the ₹100.00 debit fee instantly.</li>
+                                <li>Rejecting triggers an automatic transaction log and refunds the ₹100.00 debit fee instantly.</li>
                             </ul>
                         </div>
                         <div style="background: rgba(16,185,129,0.04); border: 1px dashed rgba(16,185,129,0.15); border-radius: var(--radius-md); padding: 12px; font-size: 0.75rem; color: var(--gray-500); margin-top: 15px;">

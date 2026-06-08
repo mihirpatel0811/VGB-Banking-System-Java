@@ -30,10 +30,8 @@
     <div class="cursor-glow"></div>
 
     <header class="header scrolled">
-        <a href="${pageContext.request.contextPath}/index.jsp" class="logo" aria-label="Vertex Galaxy Bank home">
-            <span class="logo-text">V</span>
-            <span class="logo-text">G</span>
-            <span class="logo-text">B</span>
+        <a href="${pageContext.request.contextPath}/index.jsp" class="logo" aria-label="Vertex Galaxy Bank home" style="display: flex; align-items: center;">
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
         </a>
         <nav class="navbar" aria-label="Main navigation">
             <a href="${pageContext.request.contextPath}/index.jsp#home"><i class="bx bx-home"></i> Home</a>
@@ -166,7 +164,11 @@
                     <div class="form-group" id="passwordFieldGroup" style="margin-bottom: 25px; position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label for="password" style="font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 0;">Password</label>
-                            <a href="${pageContext.request.contextPath}/forgot-password" id="forgotPasswordLink" style="font-size: 0.8rem; color: var(--primary-500); font-weight: 600; transition: color var(--transition-fast);">Forgot Password?</a>
+                            <div id="passwordLinksContainer" style="display: flex; gap: 8px; font-size: 0.8rem; align-items: center;">
+                                <a href="${pageContext.request.contextPath}/forgot-password?type=password" id="forgotPasswordLink" style="color: var(--primary-500); font-weight: 600; transition: color var(--transition-fast);">Forgot Password?</a>
+                                <span id="forgotDivider" style="color: var(--gray-300);">|</span>
+                                <a href="${pageContext.request.contextPath}/forgot-password?type=username" id="forgotUsernameLink" style="color: var(--primary-500); font-weight: 600; transition: color var(--transition-fast);">Forgot Username?</a>
+                            </div>
                         </div>
                         <div style="position: relative;">
                             <i class="bx bx-lock-alt" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 1.1rem;"></i>
@@ -181,9 +183,13 @@
                     <div class="form-group" id="pinFieldGroup" style="margin-bottom: 25px; display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 0;">4-Digit Transaction PIN</label>
-                            <button type="button" onclick="togglePinBoxesVisibility()" style="background: none; border: none; color: var(--gray-400); cursor: pointer; padding: 0; display: flex; align-items: center; font-size: 1.15rem; outline: none; gap: 4px; font-weight: 600;" onmouseover="this.style.color='var(--primary-500)'" onmouseout="this.style.color='var(--gray-400)'">
-                                <i class="bx bx-show" id="pinBoxEyeIcon"></i> <span style="font-size: 0.75rem;">Show PIN</span>
-                            </button>
+                            <div style="display: flex; gap: 8px; align-items: center; font-size: 0.8rem;">
+                                <a href="${pageContext.request.contextPath}/forgot-password?type=pin" id="forgotPinLink" style="color: var(--primary-500); font-weight: 600; transition: color var(--transition-fast);">Forgot PIN?</a>
+                                <span style="color: var(--gray-300);">|</span>
+                                <button type="button" onclick="togglePinBoxesVisibility()" style="background: none; border: none; color: var(--gray-400); cursor: pointer; padding: 0; display: flex; align-items: center; font-size: 0.8rem; outline: none; gap: 4px; font-weight: 600;" onmouseover="this.style.color='var(--primary-500)'" onmouseout="this.style.color='var(--gray-400)'">
+                                    <i class="bx bx-show" id="pinBoxEyeIcon"></i> <span style="font-size: 0.75rem;">Show PIN</span>
+                                </button>
+                            </div>
                         </div>
                         <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;" id="pinBoxContainer">
                             <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="1" class="pin-box" oninput="moveToNext(this, 'pin2')" onkeydown="moveToPrev(event, this, null)" id="pin1" style="width: 55px; height: 55px; text-align: center; font-size: 1.5rem; font-weight: 700; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; transition: all 0.3s; box-shadow: var(--shadow-sm); color: var(--gray-800);">
@@ -216,7 +222,11 @@
             const adminTab = document.getElementById('adminTab');
             const userTypeInput = document.getElementById('userTypeInput');
             const loginTitle = document.getElementById('loginTitle');
+            
             const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            const forgotUsernameLink = document.getElementById('forgotUsernameLink');
+            const forgotDivider = document.getElementById('forgotDivider');
+            const forgotPinLink = document.getElementById('forgotPinLink');
             
             // Default to Password mode when switching portals
             switchLoginMode('password');
@@ -227,14 +237,35 @@
 
                 userTypeInput.value = 'admin';
                 loginTitle.textContent = 'Admin Workspace';
-                if (forgotPasswordLink) forgotPasswordLink.style.display = 'none';
+                
+                if (forgotPasswordLink) {
+                    forgotPasswordLink.style.display = 'inline';
+                    forgotPasswordLink.href = "${pageContext.request.contextPath}/forgot-password?type=password&role=admin";
+                }
+                if (forgotUsernameLink) forgotUsernameLink.style.display = 'none';
+                if (forgotDivider) forgotDivider.style.display = 'none';
+                if (forgotPinLink) {
+                    forgotPinLink.href = "${pageContext.request.contextPath}/forgot-password?type=pin&role=admin";
+                }
             } else {
                 customerTab.classList.add('active');
                 adminTab.classList.remove('active');
 
                 userTypeInput.value = 'customer';
                 loginTitle.textContent = 'Welcome Back';
-                if (forgotPasswordLink) forgotPasswordLink.style.display = 'block';
+                
+                if (forgotPasswordLink) {
+                    forgotPasswordLink.style.display = 'inline';
+                    forgotPasswordLink.href = "${pageContext.request.contextPath}/forgot-password?type=password&role=customer";
+                }
+                if (forgotUsernameLink) {
+                    forgotUsernameLink.style.display = 'inline';
+                    forgotUsernameLink.href = "${pageContext.request.contextPath}/forgot-password?type=username&role=customer";
+                }
+                if (forgotDivider) forgotDivider.style.display = 'inline';
+                if (forgotPinLink) {
+                    forgotPinLink.href = "${pageContext.request.contextPath}/forgot-password?type=pin&role=customer";
+                }
             }
         }
 
@@ -247,7 +278,6 @@
             
             const passwordInput = document.getElementById('password');
             const pinInput = document.getElementById('pin');
-            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 
             // Clear any PIN boxes on mode switch
             clearPinBoxes();
@@ -262,7 +292,14 @@
                 
                 passwordInput.removeAttribute('required');
                 pinInput.setAttribute('required', 'required');
-                if (forgotPasswordLink) forgotPasswordLink.style.display = 'none';
+                
+                // Update pin link href based on current role
+                const userTypeInput = document.getElementById('userTypeInput');
+                const forgotPinLink = document.getElementById('forgotPinLink');
+                const role = (userTypeInput && userTypeInput.value === 'admin') ? 'admin' : 'customer';
+                if (forgotPinLink) {
+                    forgotPinLink.href = "${pageContext.request.contextPath}/forgot-password?type=pin&role=" + role;
+                }
                 
                 // Auto-focus first PIN box
                 setTimeout(() => {
@@ -280,12 +317,29 @@
                 pinInput.removeAttribute('required');
                 passwordInput.setAttribute('required', 'required');
                 
-                // Only show forgot password link for customers
+                // Update password links hrefs based on current role
                 const userTypeInput = document.getElementById('userTypeInput');
-                if (userTypeInput && userTypeInput.value === 'customer') {
-                    if (forgotPasswordLink) forgotPasswordLink.style.display = 'block';
+                const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+                const forgotUsernameLink = document.getElementById('forgotUsernameLink');
+                const forgotDivider = document.getElementById('forgotDivider');
+                
+                if (userTypeInput && userTypeInput.value === 'admin') {
+                    if (forgotPasswordLink) {
+                        forgotPasswordLink.style.display = 'inline';
+                        forgotPasswordLink.href = "${pageContext.request.contextPath}/forgot-password?type=password&role=admin";
+                    }
+                    if (forgotUsernameLink) forgotUsernameLink.style.display = 'none';
+                    if (forgotDivider) forgotDivider.style.display = 'none';
                 } else {
-                    if (forgotPasswordLink) forgotPasswordLink.style.display = 'none';
+                    if (forgotPasswordLink) {
+                        forgotPasswordLink.style.display = 'inline';
+                        forgotPasswordLink.href = "${pageContext.request.contextPath}/forgot-password?type=password&role=customer";
+                    }
+                    if (forgotUsernameLink) {
+                        forgotUsernameLink.style.display = 'inline';
+                        forgotUsernameLink.href = "${pageContext.request.contextPath}/forgot-password?type=username&role=customer";
+                    }
+                    if (forgotDivider) forgotDivider.style.display = 'inline';
                 }
             }
         }

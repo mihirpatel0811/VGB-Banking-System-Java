@@ -86,6 +86,7 @@ public class CardServlet extends BaseServlet {
     }
 
     private void listCards(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
+        generateCSRFToken(request);
         if (adminId != null) {
             // Admin list
             List<Card> allCards = cardService.getAllCards();

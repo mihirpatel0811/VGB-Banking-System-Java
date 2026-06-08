@@ -99,42 +99,64 @@ public abstract class BaseServlet extends HttpServlet {
      * Get request parameter with default value
      */
     protected String getParameter(HttpServletRequest request, String name, String defaultValue) {
-        String value = null;
-        
-        // 1. Try standard request parameter retrieval first
-        try {
-            value = request.getParameter(name);
-        } catch (Exception e) {
-            // Ignore if standard parameter retrieval fails or throws exception
-        }
-        
-        // 2. If null or empty and multipart request, retrieve from parsed request attributes cache
-        if ((value == null || value.trim().isEmpty()) && request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+        // For multipart requests, parse parts first to prevent Tomcat caching empty parameter maps
+        if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
             @SuppressWarnings("unchecked")
             java.util.Map<String, String> multipartParams = (java.util.Map<String, String>) request.getAttribute("com.vgb.multipart.parameters");
             
             if (multipartParams == null) {
                 multipartParams = new java.util.HashMap<>();
+                
+                // 1. Trigger multipart parsing by calling request.getParts() first
                 try {
-                    for (jakarta.servlet.http.Part part : request.getParts()) {
-                        // Only read parts that are standard form fields (not file uploads)
-                        if (part.getSubmittedFileName() == null) {
-                            try (java.io.InputStream is = part.getInputStream()) {
-                                byte[] bytes = is.readAllBytes();
-                                String textValue = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
-                                multipartParams.put(part.getName(), textValue);
+                    java.util.Collection<jakarta.servlet.http.Part> parts = request.getParts();
+                    if (parts != null) {
+                        for (jakarta.servlet.http.Part part : parts) {
+                            String partName = part.getName();
+                            if (partName != null && part.getSubmittedFileName() == null) {
+                                try (java.io.InputStream is = part.getInputStream()) {
+                                    byte[] bytes = is.readAllBytes();
+                                    String textValue = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+                                    multipartParams.put(partName, textValue);
+                                } catch (Exception e) {
+                                    logger.error("[DEBUG] Error reading part input stream for: " + partName, e);
+                                }
                             }
                         }
                     }
-                    request.setAttribute("com.vgb.multipart.parameters", multipartParams);
                 } catch (Exception e) {
-                    logger.error("[DEBUG] Exception pre-parsing multipart request", e);
+                    logger.error("[DEBUG] Exception calling request.getParts() in getParameter", e);
                 }
+                
+                // 2. Also copy anything from request.getParameterMap() (e.g. query parameters like 'action')
+                try {
+                    java.util.Map<String, String[]> paramMap = request.getParameterMap();
+                    if (paramMap != null) {
+                        for (java.util.Map.Entry<String, String[]> entry : paramMap.entrySet()) {
+                            String key = entry.getKey();
+                            if (!multipartParams.containsKey(key) && entry.getValue() != null && entry.getValue().length > 0) {
+                                multipartParams.put(key, entry.getValue()[0]);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("[DEBUG] Exception copying parameter map in getParameter", e);
+                }
+                
+                request.setAttribute("com.vgb.multipart.parameters", multipartParams);
             }
             
-            value = multipartParams.get(name);
+            String value = multipartParams.get(name);
+            return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
         }
         
+        // Standard request parameter retrieval
+        String value = null;
+        try {
+            value = request.getParameter(name);
+        } catch (Exception e) {
+            // Ignore
+        }
         return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
 
@@ -144,7 +166,7 @@ public abstract class BaseServlet extends HttpServlet {
      */
     protected boolean validateCSRFToken(HttpServletRequest request) {
         String sessionToken = (String) request.getSession().getAttribute(AppConstants.CSRF_TOKEN_SESSION);
-        String requestToken = request.getParameter("csrfToken");
+        String requestToken = getParameter(request, "csrfToken", "");
         
         return sessionToken != null && sessionToken.equals(requestToken);
     }
