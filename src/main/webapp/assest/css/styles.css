@@ -3938,32 +3938,92 @@ body.dark-mode ::-webkit-scrollbar-track {
     min-height: 96vh;
 }
 
+.bank-card-container {
+    perspective: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
 .bank-card-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 }
 
 .bank-card {
     width: min(100%, 420px);
     min-height: 255px;
     padding: 32px;
-    border-radius: var(--radius-xl);
-    background: var(--gradient-dark);
+    border-radius: 20px;
+    background: linear-gradient(135deg, #131a30 0%, #070b16 100%);
     color: var(--white);
-    box-shadow: var(--shadow-2xl), var(--shadow-glow);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 
+                inset 0 0 20px rgba(255, 255, 255, 0.05),
+                0 0 40px rgba(168, 85, 247, 0.15);
     position: relative;
     z-index: 2;
     overflow: hidden;
-    animation: fadeInUp 0.8s ease 0.4s forwards;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    transform-style: preserve-3d;
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0);
+    transition: transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+.bank-card:hover {
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 
+                inset 0 0 25px rgba(255, 255, 255, 0.08),
+                0 0 50px rgba(168, 85, 247, 0.25);
+}
+
+.card-glare {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.bank-card:hover .card-glare {
+    opacity: 1;
 }
 
 .bank-card::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--gradient-glass);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
     pointer-events: none;
+}
+
+.bank-card-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
+}
+
+.bank-name-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f8fafc;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.vg-orbit-logo {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    transform: translateZ(15px);
+}
+
+.bank-card-chip {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    transform: translateZ(25px);
 }
 
 .bank-card-top,
@@ -3974,13 +4034,15 @@ body.dark-mode ::-webkit-scrollbar-track {
     gap: 20px;
     position: relative;
     z-index: 1;
+    transform-style: preserve-3d;
 }
 
 .bank-card-top span,
 .bank-card-bottom span {
     font-size: var(--font-size-sm);
-    color: var(--gray-300);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 600;
+    transform: translateZ(15px);
 }
 
 .bank-card-top i {
@@ -3992,10 +4054,13 @@ body.dark-mode ::-webkit-scrollbar-track {
     position: relative;
     z-index: 1;
     margin: 55px 0;
-    font-size: var(--font-size-2xl);
+    font-size: 1.6rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     color: var(--white);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-family: 'Courier New', Courier, monospace;
+    transform: translateZ(30px);
 }
 
 .bank-card-bottom strong {
@@ -4004,6 +4069,20 @@ body.dark-mode ::-webkit-scrollbar-track {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+.vgb-gradient-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: var(--font-size-2xl);
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    filter: drop-shadow(0 2px 4px rgba(168, 85, 247, 0.2));
+    transform: translateZ(20px);
 }
 
 .bank-about-panel {
@@ -4883,4 +4962,326 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
 #eyeIconBtn:hover {
     transform: scale(1.2) !important;
     color: white !important;
+}
+
+/* ==========================================================
+   INTERACTIVE 3D FLIPPABLE CEO BUSINESS CARD
+   ========================================================== */
+.ceo-card-container {
+    perspective: 1500px;
+    width: 100%;
+    max-width: 460px;
+    height: 270px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+/* Toggle flip on class 'flipped' */
+.ceo-card-container.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+/* === CARD FRONT SIDE === */
+.flip-card-front {
+    background: #ffffff;
+    color: #1e293b;
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Left Half of Front (Details) */
+.ceo-card-left {
+    flex: 1.25;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+}
+
+.ceo-profile-info {
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.ceo-profile-info::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: #b88f14; /* Gold accent line */
+}
+
+.ceo-name {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.ceo-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #b88f14;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.ceo-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ceo-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: #475569;
+}
+
+.ceo-contact-icon {
+    width: 26px;
+    height: 26px;
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Right Half of Front (Navy Angle) */
+.ceo-card-right {
+    flex: 0.85;
+    background: #070b16;
+    color: #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Angular chevron separator */
+.ceo-card-right::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 0;
+    height: 0;
+    border-top: 135px solid transparent;
+    border-bottom: 135px solid transparent;
+    border-right: 20px solid #070b16;
+    z-index: 2;
+}
+
+.ceo-card-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -24px;
+    width: 0;
+    height: 0;
+    border-top: 135px solid transparent;
+    border-bottom: 135px solid transparent;
+    border-right: 24px solid rgba(212, 175, 55, 0.95); /* Gold border line */
+    z-index: 1;
+}
+
+/* Dark faded background logo watermark on card front */
+.ceo-card-watermark {
+    position: absolute;
+    opacity: 0.05;
+    width: 120%;
+    height: auto;
+    pointer-events: none;
+    z-index: 0;
+    top: 10%;
+    right: -10%;
+}
+
+.ceo-front-logo-block {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    margin-top: 30px;
+}
+
+.ceo-front-logo-block .vg-orbit-logo {
+    width: 38px;
+    height: 38px;
+}
+
+.ceo-front-logo-block h4 {
+    font-family: var(--font-family);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+}
+
+.ceo-front-logo-block span {
+    font-size: 0.5rem;
+    letter-spacing: 1.5px;
+    color: #f7c844;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1px 6px;
+    margin-top: 1px;
+}
+
+
+/* === CARD BACK SIDE === */
+.flip-card-back {
+    background: #070b16;
+    transform: rotateY(180deg);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* Marble white background cut bottom-right */
+.ceo-card-back-marble {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 42%;
+    height: 100%;
+    background: #fdfdfd;
+    background-image: 
+        linear-gradient(115deg, rgba(0,0,0,0.01) 23%, transparent 23%), 
+        linear-gradient(290deg, rgba(0,0,0,0.008) 4%, transparent 4%),
+        linear-gradient(115deg, rgba(0,0,0,0.008) 10%, transparent 10%);
+    z-index: 1;
+}
+
+.ceo-card-back-marble::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -40px;
+    width: 0;
+    height: 0;
+    border-bottom: 270px solid #fdfdfd;
+    border-left: 40px solid transparent;
+    z-index: 2;
+}
+
+.ceo-card-back-marble::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -44px;
+    width: 0;
+    height: 0;
+    border-bottom: 270px solid rgba(212, 175, 55, 0.95); /* gold stripe */
+    border-left: 44px solid transparent;
+    z-index: 1;
+}
+
+.ceo-back-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 30px;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.ceo-back-logo-section {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.ceo-back-logo-section .vg-orbit-logo {
+    width: 70px;
+    height: 70px;
+}
+
+.ceo-back-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.ceo-back-sub {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #ffe875;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.ceo-back-web {
+    flex: 0.8;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    z-index: 4;
+}
+
+.ceo-back-web:hover {
+    color: #b88f14;
+}
+
+/* Adjustments for dark mode theme compatibility */
+body.dark-mode .flip-card-front {
+    border-color: rgba(255, 255, 255, 0.08);
 }

@@ -200,6 +200,37 @@ public class DatabaseConfig {
                 }
             }
 
+            // 3ca. Create passbook_request table if needed
+            try {
+                rs = metaData.getTables(null, null, "passbook_request", null);
+                if (!rs.next()) {
+                    logger.info("Upgrading schema: Creating passbook_request table");
+                    stmt.execute(
+                        "CREATE TABLE passbook_request (" +
+                        "    request_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                        "    account_id BIGINT NOT NULL, " +
+                        "    customer_id BIGINT NOT NULL, " +
+                        "    request_type ENUM('new', 'renew') NOT NULL DEFAULT 'new', " +
+                        "    status ENUM('pending', 'approved', 'rejected', 'delivered') NOT NULL DEFAULT 'pending', " +
+                        "    charges DECIMAL(15, 4) NOT NULL DEFAULT 100.0000, " +
+                        "    is_charges_paid TINYINT(1) NOT NULL DEFAULT 0, " +
+                        "    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                        "    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE, " +
+                        "    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE" +
+                        ")"
+                    );
+                    logger.info("Passbook request table created successfully!");
+                } else {
+                    logger.debug("Schema verification: passbook_request table is present.");
+                }
+            } catch (SQLException ex) {
+                logger.warn("Passbook request table creation error: {}", ex.getMessage());
+            } finally {
+                if (rs != null) {
+                    try { rs.close(); } catch (SQLException e) {}
+                }
+            }
+
             // 3c. Modify loan_type in loan table to support more types like Business Loan and Vehicle Loan
             try {
                 stmt.execute("ALTER TABLE loan MODIFY COLUMN loan_type VARCHAR(50) NOT NULL");

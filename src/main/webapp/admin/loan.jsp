@@ -326,6 +326,7 @@
                                 class="bx bx-transfer-alt"></i> Admin Counter</a>
                         <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i> Manage Cards</a>
                         <a href="${pageContext.request.contextPath}/chequebook?action=list"><i class="bx bx-book-bookmark"></i> Cheque Requests</a>
+                        <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
                         <a href="${pageContext.request.contextPath}/loan?action=list" class="active"><i
                                 class="bx bx-building-house"></i> Review Loans</a>
                         <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My

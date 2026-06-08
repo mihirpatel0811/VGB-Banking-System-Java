@@ -873,11 +873,23 @@ public class AccountServlet extends BaseServlet {
         String companyPan = getParameter(request, "companyPan", "").trim();
         String companyAadhaar = getParameter(request, "companyAadhaar", "").trim();
 
-        BigDecimal initialDeposit = new BigDecimal(getParameter(request, "initialDeposit", "500"));
+        String rawInitialDeposit = getParameter(request, "initialDeposit", "500");
+        logger.info("[DEBUG] rawInitialDeposit: '{}'", rawInitialDeposit);
+        BigDecimal initialDeposit = new BigDecimal(rawInitialDeposit);
         String ifscCode = getParameter(request, "ifscCode", "VGBK0000001");
 
         // Enforce minimum funding borders
-        BigDecimal minDeposit = "current".equalsIgnoreCase(accountType) ? new BigDecimal("5000") : new BigDecimal("1000");
+        BigDecimal minDeposit;
+        if ("current".equalsIgnoreCase(accountType)) {
+            minDeposit = new BigDecimal("1500");
+        } else {
+            if ("joint".equalsIgnoreCase(holdingType)) {
+                minDeposit = new BigDecimal("1000");
+            } else {
+                minDeposit = new BigDecimal("500");
+            }
+        }
+        logger.info("[DEBUG] parsed initialDeposit: {}, minDeposit: {}", initialDeposit, minDeposit);
         if (initialDeposit.compareTo(minDeposit) < 0) {
             String errorMsg = "Initial deposit cannot be less than ₹" + minDeposit.setScale(2) + " for " + accountType + " account.";
             logger.error("Validation failed during customer account opening: {}", errorMsg);

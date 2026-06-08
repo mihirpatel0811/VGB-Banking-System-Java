@@ -54,6 +54,11 @@ public interface AccountDAO {
     boolean updateChequeBookStatus(long accountId, boolean hasChequeBook) throws Exception;
 
     /**
+     * Update passbook status
+     */
+    boolean updatePassbookStatus(long accountId, boolean hasPassbook) throws Exception;
+
+    /**
      * Delete account
      */
     boolean delete(long accountId) throws Exception;

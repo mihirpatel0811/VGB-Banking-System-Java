@@ -422,6 +422,30 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
+    public boolean updatePassbookStatus(long accountId, boolean hasPassbook) throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        String sql = "UPDATE account SET has_passbook = ? WHERE account_id = ?";
+
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, hasPassbook ? 1 : 0);
+            stmt.setLong(2, accountId);
+
+            int result = stmt.executeUpdate();
+            logger.info("Account passbook status updated - ID: {}, hasPassbook: {}", accountId, hasPassbook);
+            return result > 0;
+
+        } catch (SQLException e) {
+            logger.error("Error updating account passbook status", e);
+            throw new Exception("Failed to update account passbook status", e);
+        } finally {
+            DatabaseConfig.closeResources(null, stmt, conn);
+        }
+    }
+
+    @Override
     public boolean delete(long accountId) throws Exception {
         Connection conn = null;
         PreparedStatement stmtGetSignatories = null;

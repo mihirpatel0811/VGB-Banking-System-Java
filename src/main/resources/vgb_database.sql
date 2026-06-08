@@ -17,6 +17,7 @@ USE vgb_database;
 DROP TABLE IF EXISTS repayment;
 DROP TABLE IF EXISTS card;
 DROP TABLE IF EXISTS cheque_book_request;
+DROP TABLE IF EXISTS passbook_request;
 DROP TABLE IF EXISTS loan;
 DROP TABLE IF EXISTS transaction;
 DROP TABLE IF EXISTS account_savings;
@@ -228,6 +229,22 @@ CREATE TABLE cheque_book_request (
     leaves_count INT NOT NULL DEFAULT 50,
     status ENUM('pending', 'approved', 'rejected', 'delivered') NOT NULL DEFAULT 'pending',
     charges DECIMAL(15, 4) NOT NULL DEFAULT 150.0000,
+    is_charges_paid TINYINT(1) NOT NULL DEFAULT 0,
+    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
+);
+
+-- ==========================================
+-- 7b. PASSBOOK BOOKLET SERVICES
+-- ==========================================
+CREATE TABLE passbook_request (
+    request_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account_id BIGINT NOT NULL,
+    customer_id BIGINT NOT NULL,
+    request_type ENUM('new', 'renew') NOT NULL DEFAULT 'new',
+    status ENUM('pending', 'approved', 'rejected', 'delivered') NOT NULL DEFAULT 'pending',
+    charges DECIMAL(15, 4) NOT NULL DEFAULT 100.0000,
     is_charges_paid TINYINT(1) NOT NULL DEFAULT 0,
     requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE,

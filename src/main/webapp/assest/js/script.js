@@ -111,6 +111,57 @@ const App = {
         this.setupCursorGlow();
         this.setupParticleSystem();
         this.setupParallaxElements();
+        this.setupCardTilt();
+        this.setupCeoCardFlip();
+    },
+
+    setupCardTilt: function () {
+        const cards = document.querySelectorAll('.bank-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((centerY - y) / centerY) * 15;
+                const rotateY = ((x - centerX) / centerX) * 15;
+                
+                const glareX = (x / rect.width) * 100;
+                const glareY = (y / rect.height) * 100;
+                card.style.setProperty('--glare-x', `${glareX}%`);
+                card.style.setProperty('--glare-y', `${glareY}%`);
+                
+                card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.transition = 'transform 0.05s ease';
+                card.style.transitionProperty = 'transform';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+            });
+
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'transform 0.1s ease';
+            });
+        });
+    },
+
+    setupCeoCardFlip: function () {
+        const ceoCard = document.getElementById('ceoCard');
+        if (!ceoCard) return;
+
+        ceoCard.addEventListener('click', () => {
+            ceoCard.classList.toggle('flipped');
+            if (ceoCard.classList.contains('flipped')) {
+                ceoCard.classList.add('clicked-flip');
+            } else {
+                ceoCard.classList.remove('clicked-flip');
+            }
+        });
     },
 
     setupCursorGlow: function () {
@@ -1405,32 +1456,62 @@ class VGBAdminAccountManager {
         steps.forEach((step, idx) => {
             const item = document.createElement("div");
             
-            let stateClass = "";
-            let colorStyle = "color: var(--gray-400);";
-            let circleBg = "background: var(--gray-200); color: var(--gray-500);";
+            let stateClass = "pending";
+            let statusText = "Pending";
             
             if (idx < this.currentStepIndex) {
                 stateClass = "completed";
-                colorStyle = "color: #10b981;";
-                circleBg = "background: #10b981; color: white;";
+                statusText = "Completed";
             } else if (idx === this.currentStepIndex) {
                 stateClass = "active";
-                colorStyle = "color: var(--primary-500); font-weight: bold;";
-                circleBg = "background: var(--primary-500); color: white; box-shadow: 0 0 8px rgba(99,102,241,0.25);";
+                statusText = "In Progress";
             }
             
-            item.style.cssText = `display: flex; align-items: center; gap: 6px; font-size: 0.72rem; ${colorStyle}`;
-            item.className = `step-indicator-item ${stateClass}`;
+            item.className = `stepper-item ${stateClass}`;
             
-            const circleSpan = document.createElement("span");
-            circleSpan.style.cssText = `width: 20px; height: 20px; border-radius: 50%; ${circleBg} display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700;`;
-            circleSpan.textContent = idx + 1;
-
-            const textSpan = document.createElement("span");
-            textSpan.textContent = step.title;
-
-            item.appendChild(circleSpan);
-            item.appendChild(textSpan);
+            // Circle Wrapper
+            const circleWrapper = document.createElement("div");
+            circleWrapper.className = "stepper-circle-wrapper";
+            
+            // Circle
+            const circle = document.createElement("div");
+            circle.className = "stepper-circle";
+            if (stateClass === "completed") {
+                circle.innerHTML = `<i class="bx bx-check"></i>`;
+            }
+            circleWrapper.appendChild(circle);
+            
+            // Line (only draw for non-last steps)
+            if (idx < steps.length - 1) {
+                const line = document.createElement("div");
+                line.className = "stepper-line";
+                circleWrapper.appendChild(line);
+            }
+            
+            item.appendChild(circleWrapper);
+            
+            // Label Wrapper
+            const labelWrapper = document.createElement("div");
+            labelWrapper.className = "stepper-label";
+            
+            const stepLabel = document.createElement("span");
+            stepLabel.className = "stepper-step-label";
+            stepLabel.textContent = `Step ${idx + 1}`;
+            
+            const titleLabel = document.createElement("span");
+            titleLabel.className = "stepper-title";
+            titleLabel.textContent = step.title;
+            
+            const statusLabel = document.createElement("span");
+            statusLabel.className = "stepper-status";
+            statusLabel.textContent = statusText;
+            
+            labelWrapper.appendChild(stepLabel);
+            labelWrapper.appendChild(titleLabel);
+            labelWrapper.appendChild(statusLabel);
+            
+            item.appendChild(labelWrapper);
+            
             container.appendChild(item);
         });
     }
@@ -1454,7 +1535,7 @@ class VGBAdminAccountManager {
             const depInput = document.getElementById("wizInitialDeposit");
             const depLabel = document.getElementById("wizMinDepositLabel");
             if (depInput && depLabel) {
-                const minVal = this.activeFlow === "current" ? "5000" : "1000";
+                const minVal = this.activeFlow === "current" ? "1500" : (this.activeFlow === "savings_joint" ? "1000" : "500");
                 depLabel.innerText = `₹${parseFloat(minVal).toLocaleString('en-IN', {minimumFractionDigits: 2})} Minimum Fixed Amount`;
                 depInput.min = minVal;
                 // Only set default value if empty, not a number, or less than minimum
@@ -1669,7 +1750,7 @@ class VGBAdminAccountManager {
             const depositInput = document.getElementById("wizInitialDeposit");
             if (!depositInput) return false;
             const deposit = parseFloat(depositInput.value);
-            const minVal = this.activeFlow === "current" ? 5000 : 1000;
+            const minVal = this.activeFlow === "current" ? 1500 : (this.activeFlow === "savings_joint" ? 1000 : 500);
             
             if (isNaN(deposit) || deposit < minVal) {
                 alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', {minimumFractionDigits: 2})}.`);
@@ -2188,7 +2269,7 @@ class VGBAdminAccountManager {
                 const depositInput = document.getElementById("wizInitialDeposit");
                 if (!depositInput) return;
                 const deposit = parseFloat(depositInput.value);
-                const minVal = this.activeFlow === "current" ? 5000 : 1000;
+                const minVal = this.activeFlow === "current" ? 1500 : (this.activeFlow === "savings_joint" ? 1000 : 500);
                 
                 if (isNaN(deposit) || deposit < minVal) {
                     alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', {minimumFractionDigits: 2})}.`);

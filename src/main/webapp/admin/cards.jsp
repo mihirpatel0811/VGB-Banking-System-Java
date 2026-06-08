@@ -90,31 +90,163 @@
 
         /* PREMIUM VGB 3D GLOWING CARDS FOR VISUALIZER */
         .vgb-atm-card {
-            border-radius: 20px;
-            padding: 25px;
-            color: white;
+            width: 100%;
+            height: 100%;
             position: relative;
-            overflow: hidden;
-            min-height: 220px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+            border-radius: 20px;
+        }
+        .vgb-atm-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .vgb-atm-card:hover {
+            box-shadow: 0 25px 45px rgba(99, 102, 241, 0.25);
+        }
+        .vgb-atm-card .card-face {
+            position: absolute;
+            inset: 0;
+            padding: 22px 25px;
+            backface-visibility: hidden;
+            border-radius: inherit;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            box-sizing: border-box;
+        }
+        .vgb-atm-card .card-front {
+            z-index: 2;
+        }
+        .vgb-atm-card .card-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+            background: #080b11;
         }
 
-        .vgb-atm-card.debit {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
-            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.3);
+        /* 8 DYNAMIC PREMIUM BACKGROUNDS & ACCENTS */
+        /* 1. Visa Debit */
+        .vgb-atm-card.debit.visa {
+            background: linear-gradient(135deg, #091326 0%, #030611 100%);
+            box-shadow: 0 12px 25px rgba(29, 78, 216, 0.25);
         }
-
-        .vgb-atm-card.credit {
-            background: linear-gradient(135deg, #4c1d95 0%, #8b5cf6 50%, #ec4899 100%);
-            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.3);
+        .vgb-atm-card.debit.visa .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.35) 0%, transparent 60%),
+                linear-gradient(125deg, transparent 40%, rgba(255, 255, 255, 0.18) 47%, rgba(255, 255, 255, 0.32) 50%, rgba(255, 255, 255, 0.18) 53%, transparent 60%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* 2. Premium Visa Debit (Visa Platinum) */
+        .vgb-atm-card.debit.visa.premium-tier {
+            background: linear-gradient(135deg, #18181b 0%, #09090b 100%) !important;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+        .vgb-atm-card.debit.visa.premium-tier .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(120deg, transparent 35%, rgba(191, 149, 63, 0.2) 45%, rgba(252, 211, 77, 0.35) 50%, rgba(191, 149, 63, 0.2) 55%, transparent 65%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.01) 0px, rgba(255, 255, 255, 0.01) 2px, transparent 2px, transparent 10px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* 3. Mastercard Debit */
+        .vgb-atm-card.debit.mastercard {
+            background: radial-gradient(circle at 75% 35%, #181105 0%, #000000 75%);
+            box-shadow: 0 12px 25px rgba(191, 149, 63, 0.15);
+        }
+        .vgb-atm-card.debit.mastercard .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 75% 35%, rgba(254, 240, 138, 0.35) 0%, rgba(202, 138, 4, 0.2) 20%, rgba(113, 63, 18, 0.05) 40%, transparent 65%),
+                repeating-radial-gradient(ellipse 220px 110px at 75% 35%, transparent 0px, transparent 12px, rgba(217, 119, 6, 0.03) 15px, transparent 18px);
+            pointer-events: none;
+            transform: rotate(-15deg);
+            z-index: 1;
+        }
+        /* 4. Rupay Debit */
+        .vgb-atm-card.debit.rupay {
+            background: linear-gradient(135deg, #050d24 0%, #0c0822 50%, #030209 100%);
+            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.2);
+        }
+        .vgb-atm-card.debit.rupay .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 10% 85%, rgba(59, 130, 246, 0.22) 0%, transparent 55%),
+                radial-gradient(circle at 80% 15%, rgba(139, 92, 246, 0.18) 0%, transparent 55%),
+                linear-gradient(55deg, transparent 30%, rgba(99, 102, 241, 0.12) 45%, rgba(236, 72, 153, 0.15) 55%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* 5. Classic Credit (Visa Signature) */
+        .vgb-atm-card.credit.visa {
+            background: radial-gradient(circle at 70% 35%, #18153c 0%, #080517 75%, #020108 100%);
+            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.2);
+        }
+        .vgb-atm-card.credit.visa .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 70% 35%, rgba(147, 197, 253, 0.35) 0%, rgba(99, 102, 241, 0.2) 25%, rgba(67, 56, 202, 0.05) 50%, transparent 70%),
+                repeating-radial-gradient(ellipse 180px 90px at 70% 35%, transparent 0px, transparent 15px, rgba(99, 102, 241, 0.04) 18px, transparent 22px);
+            pointer-events: none;
+            transform: rotate(10deg);
+            z-index: 1;
+        }
+        /* 6. Gold Credit (Mastercard Royale) */
+        .vgb-atm-card.credit.mastercard {
+            background: radial-gradient(circle at 75% 35%, #181105 0%, #000000 75%);
+            box-shadow: 0 12px 25px rgba(245, 158, 11, 0.2);
+        }
+        .vgb-atm-card.credit.mastercard .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 75% 35%, rgba(254, 240, 138, 0.35) 0%, rgba(202, 138, 4, 0.2) 20%, rgba(113, 63, 18, 0.05) 40%, transparent 65%),
+                repeating-radial-gradient(ellipse 220px 110px at 75% 35%, transparent 0px, transparent 12px, rgba(217, 119, 6, 0.03) 15px, transparent 18px);
+            pointer-events: none;
+            transform: rotate(-15deg);
+            z-index: 1;
+        }
+        /* 7. Platinum Credit (RuPay Platinum) */
+        .vgb-atm-card.credit.rupay {
+            background: linear-gradient(135deg, #1c1c24 0%, #0c0c10 100%);
+            box-shadow: 0 12px 25px rgba(255, 255, 255, 0.08);
+        }
+        .vgb-atm-card.credit.rupay .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%),
+                linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.05) 60%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* 8. Infinite Credit (Visa Infinite) */
+        .vgb-atm-card.credit.visa.premium-tier {
+            background: linear-gradient(135deg, #111111 0%, #030303 100%) !important;
+            box-shadow: 0 12px 25px rgba(191, 149, 63, 0.25);
+        }
+        .vgb-atm-card.credit.visa.premium-tier .card-front::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(120deg, transparent 40%, #bf953f 44%, #fcf6ba 47%, #b38728 50%, transparent 54%);
+            pointer-events: none;
+            z-index: 1;
         }
 
         .vgb-atm-card.inactive-card {
@@ -123,43 +255,463 @@
             opacity: 0.8;
         }
 
-        .vgb-atm-card:hover:not(.interactive) {
-            transform: translateY(-8px) rotateX(6deg) rotateY(-6deg);
-            box-shadow: 0 22px 40px rgba(0, 0, 0, 0.25);
+        /* Card Back Visual Layouts */
+        .card-back-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.45rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2px;
+            z-index: 5;
+            background: transparent;
         }
-
-        .vgb-atm-card.debit:hover:not(.interactive) {
-            box-shadow: 0 22px 40px rgba(59, 130, 246, 0.4), 0 0 15px rgba(6, 182, 212, 0.3);
+        .card-back-header .back-helpline {
+            font-size: 0.45rem;
         }
-
-        .vgb-atm-card.credit:hover:not(.interactive) {
-            box-shadow: 0 22px 40px rgba(139, 92, 246, 0.4), 0 0 15px rgba(236, 72, 153, 0.3);
+        .card-back-header .back-card-id {
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 0.48rem;
         }
-
-        .vgb-atm-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 20%, rgba(255, 255, 255, 0.08) 40%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.08) 60%, transparent 80%);
-            transform: rotate(-45deg);
-            transition: all 0.8s ease;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        .vgb-atm-card:hover::after {
-            left: 100%;
-        }
-
-        .vgb-atm-card.flipped {
-            transform: rotateY(180deg);
+        .card-back-magnetic-strip {
+            height: 35px;
+            background: #000000;
+            margin: 0 -25px;
+            z-index: 5;
         }
         
-        .vgb-atm-card.flipped:hover:not(.interactive) {
-            transform: rotateY(180deg) translateY(-8px) rotateX(-6deg) rotateY(6deg);
+        .card-back-signature-container {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            z-index: 5;
+            background: transparent;
+        }
+        .signature-strip-text {
+            background: repeating-linear-gradient(45deg, #e2e8f0, #e2e8f0 4px, #cbd5e1 4px, #cbd5e1 8px);
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 12px;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.2;
+        }
+        .signature-strip-text span:first-child {
+            font-size: 0.45rem;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.5px;
+        }
+        .signature-strip-text span:last-child {
+            font-size: 0.4rem;
+            font-weight: 500;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+        .signature-strip-cvv {
+            background: #ffffff;
+            height: 32px;
+            width: 45px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #cbd5e1;
+        }
+        .signature-strip-cvv .cvv-val {
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #334155;
+            letter-spacing: 1px;
+        }
+
+        .card-back-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            z-index: 5;
+            background: transparent;
+        }
+        .back-left-emblem {
+            display: flex;
+            align-items: center;
+        }
+        .dove-hologram {
+            width: 32px;
+            height: 22px;
+            background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 50%, #94a3b8 100%);
+            border-radius: 3px;
+            opacity: 0.75;
+            position: relative;
+            box-shadow: 0 0 4px rgba(255,255,255,0.1);
+        }
+        .dove-hologram::after {
+            content: '🕊';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+            text-shadow: 0 0 2px rgba(0,0,0,0.2);
+        }
+        .mc-hologram {
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%);
+            border-radius: 3px;
+            opacity: 0.8;
+            box-shadow: 0 0 4px rgba(255,255,255,0.1);
+        }
+        .rupay-back-emblem {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .rupay-back-emblem .arrow-accent {
+            color: rgba(202, 138, 4, 0.4);
+            font-size: 0.6rem;
+            margin-left: 1px;
+        }
+        
+        .back-right-logo {
+            display: flex;
+            align-items: center;
+        }
+        .back-logo-v {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .logo-text-stacked {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        .logo-text-stacked .text-top {
+            font-size: 0.52rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+        }
+        .logo-text-stacked .text-bottom {
+            font-size: 0.35rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Poppins', sans-serif;
+        }
+        .back-property-text {
+            font-size: 0.45rem;
+            opacity: 0.45;
+            text-align: center;
+            line-height: 1.3;
+            margin-top: 4px;
+            color: #ffffff;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 4px;
+            z-index: 5;
+        }
+
+        /* Gold Card Back customization */
+        .vgb-atm-card.credit.mastercard .card-back {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%) !important;
+            color: #0f172a !important;
+        }
+        .vgb-atm-card.credit.mastercard .card-back .card-back-header {
+            color: rgba(15, 23, 42, 0.7) !important;
+        }
+        .vgb-atm-card.credit.mastercard .card-back .signature-strip-text span:first-child {
+            color: #0f172a !important;
+        }
+        .vgb-atm-card.credit.mastercard .card-back .signature-strip-text span:last-child {
+            color: #1e293b !important;
+        }
+        .vgb-atm-card.credit.mastercard .card-back .logo-text-stacked .text-top {
+            color: #0f172a !important;
+        }
+        .vgb-atm-card.credit.mastercard .card-back .logo-text-stacked .text-bottom {
+            color: rgba(15, 23, 42, 0.7) !important;
+        }
+        .vgb-atm-card.credit.mastercard .card-back .back-property-text {
+            color: #0f172a !important;
+            border-top: 1px solid rgba(15, 23, 42, 0.15) !important;
+        }
+
+        /* Card Bank Header */
+        .card-bank-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            z-index: 5;
+        }
+        .card-bank-name-stack {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .card-bank-name-stack .bank-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+        }
+        .card-bank-name-stack .bank-subtitle {
+            font-size: 0.45rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Tier indicator */
+        .card-tier-indicator {
+            position: absolute;
+            top: 22px;
+            right: 25px;
+            font-size: 0.52rem;
+            font-weight: 700;
+            color: #d4af37;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .card-tier-indicator .platinum-text {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.55rem;
+            font-weight: 800;
+        }
+
+        /* Middle section */
+        .card-middle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            z-index: 5;
+            background: transparent;
+        }
+        .contactless-icon {
+            font-size: 1.5rem;
+            transform: rotate(90deg);
+            opacity: 0.8;
+            color: #ffffff;
+        }
+
+        /* Card Number */
+        .card-number-display {
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin: 20px 0 10px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            color: #ffffff;
+            z-index: 5;
+        }
+
+        /* Bottom row */
+        .card-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 5;
+            background: transparent;
+        }
+        .card-holder-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .expiry-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .expiry-label {
+            font-size: 0.45rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+            color: #ffffff;
+        }
+        .expiry-value {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .holder-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            font-family: monospace;
+        }
+
+        /* Brand logos */
+        .brand-visa {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1;
+        }
+        .brand-visa .visa-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            font-style: italic;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .brand-visa .visa-sub {
+            font-size: 0.45rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
+            margin-top: -2px;
+        }
+
+        .brand-mastercard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1;
+            gap: 2px;
+        }
+        .mc-circles {
+            display: flex;
+            align-items: center;
+            width: 28px;
+            height: 18px;
+            position: relative;
+        }
+        .mc-circles .circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .mc-circles .circle.red {
+            background: #eb001b;
+            left: 0;
+        }
+        .mc-circles .circle.orange {
+            background: #ff5f00;
+            right: 0;
+            opacity: 0.9;
+        }
+        .mc-text {
+            font-size: 0.42rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-rupay {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1;
+        }
+        .brand-rupay .rupay-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-style: italic;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .brand-rupay .rupay-text .arrow-accent {
+            color: #ca8a04;
+            font-size: 0.8rem;
+            margin-left: 2px;
+        }
+        .brand-rupay .rupay-sub {
+            font-size: 0.45rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
+            margin-top: -1px;
+        }
+
+        /* Card Elements */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-provider-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-style: italic;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .metallic-chip {
+            width: 42px;
+            height: 32px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
+        .metallic-chip::after {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        .card-number {
+            font-family: monospace;
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin: 20px 0 10px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .card-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.75;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .card-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         /* PREMIUM DYNAMIC INTERACTIVE CARD CLASSES */
@@ -294,6 +846,7 @@
             <a href="${pageContext.request.contextPath}/admin/transfer.jsp"><i class="bx bx-transfer-alt"></i> Admin Counter</a>
             <a href="${pageContext.request.contextPath}/card?action=list" class="active"><i class="bx bx-credit-card"></i> Manage Cards</a>
             <a href="${pageContext.request.contextPath}/chequebook?action=list"><i class="bx bx-book-bookmark"></i> Cheque Requests</a>
+            <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Review Loans</a>
             <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
             <a href="${pageContext.request.contextPath}/admin/notification.jsp"><i class="bx bx-bell"></i> Audit Logs</a>
@@ -405,36 +958,97 @@
                         <div class="card-3d-scene" id="demo3DCardTiltWrapper" style="width: 340px; height: 220px; position: relative; transition: transform 0.1s ease; transform-style: preserve-3d;">
                             <div id="demo3DCard" class="vgb-atm-card debit interactive" style="width: 100%; height: 100%; position: absolute; border-radius: 20px; margin: 0; transform-style: preserve-3d;" onclick="flipDemoCard()">
                                 <!-- Front Face -->
-                                <div class="card-face card-front" style="position: absolute; inset: 0; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; background: inherit; border-radius: inherit;">
-                                    <div class="card-top" style="display: flex; justify-content: space-between; align-items: center; background: transparent;">
-                                        <span id="demoProvider" style="font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; font-style: italic; background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">VISA</span>
-                                        <div class="metallic-chip" style="width: 42px; height: 32px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.25); box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4); position: relative;"></div>
+                                <div class="card-face card-front">
+                                    <!-- Gold V-Logo & Stacked Bank Name Header -->
+                                    <div class="card-bank-header">
+                                        <div class="card-logo-v">
+                                            <svg viewBox="0 0 100 100" style="width: 22px; height: 22px;">
+                                                <defs>
+                                                    <linearGradient id="goldGradCard_demo" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#bf953f" />
+                                                        <stop offset="25%" stop-color="#fcf6ba" />
+                                                        <stop offset="50%" stop-color="#b38728" />
+                                                        <stop offset="75%" stop-color="#fbf5b7" />
+                                                        <stop offset="100%" stop-color="#aa771c" />
+                                                    </linearGradient>
+                                                </defs>
+                                                <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradCard_demo)" />
+                                                <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradCard_demo)" />
+                                            </svg>
+                                        </div>
+                                        <div class="card-bank-name-stack">
+                                            <span class="bank-title">VERTEX</span>
+                                            <span class="bank-subtitle">GELEXY BANK</span>
+                                        </div>
                                     </div>
-                                    <div class="card-number" id="demoNumber" style="font-family: monospace; font-size: 1.25rem; letter-spacing: 2px; font-weight: 600; margin: 20px 0 10px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);">4589  7321  6048  2190</div>
-                                    <div class="card-details" style="display: flex; justify-content: space-between; align-items: flex-end; background: transparent;">
-                                        <div>
-                                            <span style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.75; display: block; margin-bottom: 2px;">Card Holder</span>
-                                            <span class="card-value" id="demoHolder" style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">MIHIR BHAYANI</span>
+                                    
+                                    <!-- Platinum Tier Indicator Text -->
+                                    <div class="card-tier-indicator" id="demoTierIndicator"></div>
+
+                                    <!-- Metallic Chip & Wireless Waves Row -->
+                                    <div class="card-middle-row">
+                                        <div class="metallic-chip"></div>
+                                        <i class="bx bx-wifi contactless-icon"></i>
+                                    </div>
+
+                                    <!-- Centered Card Number -->
+                                    <div class="card-number-display" id="demoNumber">4589  7321  6048  2190</div>
+
+                                    <!-- Details & Network Provider Footer Row -->
+                                    <div class="card-bottom-row">
+                                        <div class="card-holder-info">
+                                            <div class="expiry-info">
+                                                <span class="expiry-label">VALID THRU</span>
+                                                <span class="expiry-value" id="demoExpiry">12/30</span>
+                                            </div>
+                                            <div class="holder-name" id="demoHolder">MIHIR BHAYANI</div>
                                         </div>
-                                        <div>
-                                            <span style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.75; display: block; margin-bottom: 2px;">Expires</span>
-                                            <span class="card-value" id="demoExpiry" style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;">12/30</span>
-                                        </div>
-                                        <span style="font-size: 0.95rem; font-weight: 800; font-style: italic; color: rgba(255, 255, 255, 0.85);">VGB</span>
+                                        <div class="card-brand-logo" id="demoBrandLogo"></div>
                                     </div>
                                 </div>
                                 
                                 <!-- Back Face -->
-                                <div class="card-face card-back" style="position: absolute; inset: 0; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; transform: rotateY(180deg); background: inherit; border-radius: inherit;">
-                                    <div style="height: 40px; background: #000; margin: 0 -25px; margin-top: 5px;"></div>
-                                    <div style="padding: 0 10px;">
-                                        <div style="font-size: 0.5rem; opacity: 0.7; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">Authorized Signature</div>
-                                        <div style="background: rgba(255, 255, 255, 0.9); height: 35px; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 15px; color: #1e293b; font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.1rem;">
-                                            <span style="font-family: monospace; font-size: 0.9rem; font-weight: 700; color: #334155; margin-left: 20px; font-style: normal; letter-spacing: 1px; cursor: pointer;" id="demoCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV">•••</span>
+                                <div class="card-face card-back">
+                                    <div class="card-back-header">
+                                        <span class="back-helpline">For customer service, call 1800 123 4567 or visit www.vertexgelexybank.com</span>
+                                        <span class="back-card-id" id="demoCardId">VGB000</span>
+                                    </div>
+                                    <div class="card-back-magnetic-strip"></div>
+                                    <div class="card-back-signature-container">
+                                        <div class="signature-strip-text">
+                                            <span>AUTHORISED SIGNATURE</span>
+                                            <span>NOT VALID UNLESS SIGNED</span>
+                                        </div>
+                                        <div class="signature-strip-cvv">
+                                            <span class="cvv-val" id="demoCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV" style="cursor: pointer;">•••</span>
                                         </div>
                                     </div>
-                                    <div style="font-size: 0.55rem; opacity: 0.6; text-align: center; line-height: 1.3;">
-                                        Property of Vertex Galaxy Bank. For customer support contact 1800-VGB-BANK. Strictly Confidential.
+                                    <div class="card-back-bottom">
+                                        <div class="back-left-emblem" id="demoBackEmblem"></div>
+                                        <div class="back-right-logo">
+                                            <div class="back-logo-v">
+                                                <svg viewBox="0 0 100 100" style="width: 15px; height: 15px;">
+                                                    <defs>
+                                                        <linearGradient id="goldGradBack_demo" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stop-color="#bf953f" />
+                                                            <stop offset="25%" stop-color="#fcf6ba" />
+                                                            <stop offset="50%" stop-color="#b38728" />
+                                                            <stop offset="75%" stop-color="#fbf5b7" />
+                                                            <stop offset="100%" stop-color="#aa771c" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradBack_demo)" />
+                                                    <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradBack_demo)" />
+                                                </svg>
+                                                <span class="logo-text-stacked">
+                                                    <span class="text-top">VERTEX</span>
+                                                    <span class="text-bottom">GELEXY BANK</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="back-property-text">
+                                        This card is the property of Vertex Gelexy Bank. If found, please return to the nearest branch.
                                     </div>
                                 </div>
                             </div>
@@ -454,7 +1068,9 @@
                                 <label class="control-label">Card Type</label>
                                 <select id="ctrlCardType" class="control-select" onchange="syncDemoCard()">
                                     <option value="debit">VGB Sapphire Debit</option>
+                                    <option value="debit-premium">VGB Platinum Debit (Premium)</option>
                                     <option value="credit">VGB Royale Credit</option>
+                                    <option value="credit-premium">VGB Infinite Credit (Premium)</option>
                                     <option value="inactive">VGB Blocked/Inactive</option>
                                 </select>
                             </div>
@@ -535,7 +1151,7 @@
                                         <td style="padding: 15px; font-weight: 600; color: var(--accent-emerald);">₹ ${card.cardFee}</td>
                                         <td style="padding: 15px;"><fmt:formatDate value="${card.createdAt}" pattern="yyyy-MM-dd HH:mm" /></td>
                                         <td style="padding: 15px; text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; white-space: nowrap;">
-                                            <button type="button" class="btn btn-secondary" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedAppliedDate}', '${card.status}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-show"></i> View 3D</button>
+                                            <button type="button" class="btn btn-secondary" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedAppliedDate}', '${card.status}', '${card.dailyLimit}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-show"></i> View 3D</button>
                                             <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald); margin-top: 0; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-check"></i> Approve</a>
                                             <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}" class="btn btn-secondary" onclick="return confirm('Reject and permanently close this card application?');" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; margin-top: 0; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-x"></i> Reject</a>
                                         </td>
@@ -604,7 +1220,7 @@
                                                 </c:choose>
                                             </td>
                                             <td style="padding: 15px; text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; white-space: nowrap;">
-                                                <button type="button" class="btn btn-secondary" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedExpiryDate}', '${card.status}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-show"></i> View 3D</button>
+                                                <button type="button" class="btn btn-secondary" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedExpiryDate}', '${card.status}', '${card.dailyLimit}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-show"></i> View 3D</button>
                                                 <c:if test="${card.status eq 'active'}">
                                                     <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}" class="btn btn-secondary" onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; margin-top: 0; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-power-off"></i> Close</a>
                                                 </c:if>
@@ -644,36 +1260,97 @@
             <div class="card-3d-scene" id="visualizerCardTiltWrapper" style="perspective: 1000px; width: 100%; display: flex; justify-content: center; margin-bottom: 30px; transition: transform 0.1s ease; transform-style: preserve-3d;">
                 <div id="visualizerCard" class="vgb-atm-card interactive" style="width: 340px; height: 220px; border-radius: 20px; position: relative; margin: 0; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); transform-style: preserve-3d; border: 1.5px solid rgba(255, 255, 255, 0.2); cursor: pointer;" onclick="this.classList.toggle('flipped')">
                     <!-- Front Face -->
-                    <div class="card-face card-front" style="position: absolute; inset: 0; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; background: inherit; border-radius: inherit;">
-                        <div class="card-top" style="display: flex; justify-content: space-between; align-items: center; background: transparent;">
-                            <span id="previewProvider" style="font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; font-style: italic; background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">VISA</span>
-                            <div class="metallic-chip" style="width: 42px; height: 32px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.25); box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4); position: relative;"></div>
+                    <div class="card-face card-front">
+                        <!-- Gold V-Logo & Stacked Bank Name Header -->
+                        <div class="card-bank-header">
+                            <div class="card-logo-v">
+                                <svg viewBox="0 0 100 100" style="width: 22px; height: 22px;">
+                                    <defs>
+                                        <linearGradient id="goldGradCard_preview" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#bf953f" />
+                                            <stop offset="25%" stop-color="#fcf6ba" />
+                                            <stop offset="50%" stop-color="#b38728" />
+                                            <stop offset="75%" stop-color="#fbf5b7" />
+                                            <stop offset="100%" stop-color="#aa771c" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradCard_preview)" />
+                                    <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradCard_preview)" />
+                                </svg>
+                            </div>
+                            <div class="card-bank-name-stack">
+                                <span class="bank-title">VERTEX</span>
+                                <span class="bank-subtitle">GELEXY BANK</span>
+                            </div>
                         </div>
-                        <div class="card-number" id="previewNumber" style="font-family: monospace; font-size: 1.25rem; letter-spacing: 2px; font-weight: 600; margin: 20px 0 10px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);">4589  7321  6048  2190</div>
-                        <div class="card-details" style="display: flex; justify-content: space-between; align-items: flex-end; background: transparent;">
-                            <div>
-                                <span style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.75; display: block; margin-bottom: 2px;">Card Holder</span>
-                                <span class="card-value" id="previewHolder" style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">John Doe</span>
+                        
+                        <!-- Platinum Tier Indicator Text -->
+                        <div class="card-tier-indicator" id="previewTierIndicator"></div>
+
+                        <!-- Metallic Chip & Wireless Waves Row -->
+                        <div class="card-middle-row">
+                            <div class="metallic-chip"></div>
+                            <i class="bx bx-wifi contactless-icon"></i>
+                        </div>
+
+                        <!-- Centered Card Number -->
+                        <div class="card-number-display" id="previewNumber">4589  7321  6048  2190</div>
+
+                        <!-- Details & Network Provider Footer Row -->
+                        <div class="card-bottom-row">
+                            <div class="card-holder-info">
+                                <div class="expiry-info">
+                                    <span class="expiry-label">VALID THRU</span>
+                                    <span class="expiry-value" id="previewExpiry">12/29</span>
+                                </div>
+                                <div class="holder-name" id="previewHolder">John Doe</div>
                             </div>
-                            <div>
-                                <span style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.75; display: block; margin-bottom: 2px;">Expires</span>
-                                <span class="card-value" id="previewExpiry" style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;">12/29</span>
-                            </div>
-                            <span style="font-size: 0.95rem; font-weight: 800; font-style: italic; color: rgba(255, 255, 255, 0.85);">VGB</span>
+                            <div class="card-brand-logo" id="previewBrandLogo"></div>
                         </div>
                     </div>
 
                     <!-- Back Face -->
-                    <div class="card-face card-back" style="position: absolute; inset: 0; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; transform: rotateY(180deg); background: inherit; border-radius: inherit;">
-                        <div style="height: 40px; background: #000; margin: 0 -25px; margin-top: 5px;"></div>
-                        <div style="padding: 0 10px;">
-                            <div style="font-size: 0.5rem; opacity: 0.7; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">Authorized Signature</div>
-                            <div style="background: rgba(255, 255, 255, 0.9); height: 35px; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 15px; color: #1e293b; font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.1rem;">
-                                <span style="font-family: monospace; font-size: 0.9rem; font-weight: 700; color: #334155; margin-left: 20px; font-style: normal; letter-spacing: 1px; cursor: pointer;" id="previewCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV">•••</span>
+                    <div class="card-face card-back">
+                        <div class="card-back-header">
+                            <span class="back-helpline">For customer service, call 1800 123 4567 or visit www.vertexgelexybank.com</span>
+                            <span class="back-card-id" id="previewCardId">VGB000</span>
+                        </div>
+                        <div class="card-back-magnetic-strip"></div>
+                        <div class="card-back-signature-container">
+                            <div class="signature-strip-text">
+                                <span>AUTHORISED SIGNATURE</span>
+                                <span>NOT VALID UNLESS SIGNED</span>
+                            </div>
+                            <div class="signature-strip-cvv">
+                                <span class="cvv-val" id="previewCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV" style="cursor: pointer;">•••</span>
                             </div>
                         </div>
-                        <div style="font-size: 0.55rem; opacity: 0.6; text-align: center; line-height: 1.3;">
-                            Property of Vertex Galaxy Bank. For customer support contact 1800-VGB-BANK. Strictly Confidential.
+                        <div class="card-back-bottom">
+                            <div class="back-left-emblem" id="previewBackEmblem"></div>
+                            <div class="back-right-logo">
+                                <div class="back-logo-v">
+                                    <svg viewBox="0 0 100 100" style="width: 15px; height: 15px;">
+                                        <defs>
+                                            <linearGradient id="goldGradBack_preview" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#bf953f" />
+                                                <stop offset="25%" stop-color="#fcf6ba" />
+                                                <stop offset="50%" stop-color="#b38728" />
+                                                <stop offset="75%" stop-color="#fbf5b7" />
+                                                <stop offset="100%" stop-color="#aa771c" />
+                                            </linearGradient>
+                                        </defs>
+                                        <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradBack_preview)" />
+                                        <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradBack_preview)" />
+                                    </svg>
+                                    <span class="logo-text-stacked">
+                                        <span class="text-top">VERTEX</span>
+                                        <span class="text-bottom">GELEXY BANK</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="back-property-text">
+                            This card is the property of Vertex Gelexy Bank. If found, please return to the nearest branch.
                         </div>
                     </div>
                 </div>
@@ -700,9 +1377,108 @@
     </div>
 
     <script>
-        function open3DCardPreview(number, holder, type, provider, cvv, expiry, status) {
+        function updateDynamicCardDetails(cardElementId, tierElId, brandLogoElId, backEmblemElId, cardType, provider, dailyLimit, status = 'active') {
+            const card = document.getElementById(cardElementId);
+            const tierEl = document.getElementById(tierElId);
+            const brandLogoEl = document.getElementById(brandLogoElId);
+            const backEmblemEl = document.getElementById(backEmblemElId);
+            
+            if (!card) return;
+
+            // Normalise cardType
+            let isDebit = true;
+            let isPremium = false;
+            let isInactive = status.toLowerCase() !== 'active';
+
+            if (cardType === 'debit') {
+                isDebit = true;
+                isPremium = dailyLimit > 50000;
+            } else if (cardType === 'debit-premium') {
+                isDebit = true;
+                isPremium = true;
+            } else if (cardType === 'credit') {
+                isDebit = false;
+                isPremium = dailyLimit > 50000;
+            } else if (cardType === 'credit-premium') {
+                isDebit = false;
+                isPremium = true;
+            } else if (cardType === 'inactive') {
+                isInactive = true;
+            }
+
+            // Set classes on card element
+            card.className = "vgb-atm-card interactive";
+            if (isInactive) {
+                card.classList.add('inactive-card');
+            } else {
+                card.classList.add(isDebit ? 'debit' : 'credit');
+                card.classList.add(provider.toLowerCase());
+                if (isPremium) {
+                    card.classList.add('premium-tier');
+                }
+            }
+
+            // Set Tier text
+            if (tierEl) {
+                if (!isInactive && (isPremium || (!isDebit && provider.toLowerCase() === 'rupay'))) {
+                    let tierText = 'PLATINUM';
+                    if (!isDebit && provider.toLowerCase() === 'visa') {
+                        tierText = 'INFINITE';
+                    }
+                    tierEl.innerHTML = `<span class="platinum-text">${tierText}</span>`;
+                } else {
+                    tierEl.innerHTML = '';
+                }
+            }
+
+            // Set Front Brand Logo
+            if (brandLogoEl) {
+                const prov = provider.toLowerCase();
+                if (prov === 'visa') {
+                    let subText = isDebit ? (isPremium ? 'Platinum' : 'Debit') : (isPremium ? 'Infinite' : 'Signature');
+                    brandLogoEl.innerHTML = `
+                        <div class="brand-visa">
+                            <span class="visa-text">VISA</span>
+                            <span class="visa-sub">${subText}</span>
+                        </div>
+                    `;
+                } else if (prov === 'mastercard') {
+                    let subText = isDebit ? 'debit' : 'mastercard';
+                    brandLogoEl.innerHTML = `
+                        <div class="brand-mastercard">
+                            <div class="mc-circles">
+                                <span class="circle red"></span>
+                                <span class="circle orange"></span>
+                            </div>
+                            <span class="mc-text">${subText}</span>
+                        </div>
+                    `;
+                } else {
+                    let subText = isDebit ? 'DEBIT' : 'CREDIT';
+                    brandLogoEl.innerHTML = `
+                        <div class="brand-rupay">
+                            <span class="rupay-text">RuPay<span class="arrow-accent">▶</span></span>
+                            <span class="rupay-sub">${subText}</span>
+                        </div>
+                    `;
+                }
+            }
+
+            // Set Back Emblem
+            if (backEmblemEl) {
+                const prov = provider.toLowerCase();
+                if (prov === 'visa') {
+                    backEmblemEl.innerHTML = `<div class="dove-hologram"></div>`;
+                } else if (prov === 'mastercard') {
+                    backEmblemEl.innerHTML = `<div class="mc-hologram"></div>`;
+                } else {
+                    backEmblemEl.innerHTML = `<span class="rupay-back-emblem">RuPay<span class="arrow-accent">▶</span></span>`;
+                }
+            }
+        }
+
+        function open3DCardPreview(number, holder, type, provider, cvv, expiry, status, limit) {
             const modal = document.getElementById('previewCardModal');
-            const card = document.getElementById('visualizerCard');
             
             // Set text values
             document.getElementById('previewNumber').innerText = number;
@@ -713,11 +1489,10 @@
             previewCvvEl.innerText = "•••";
             previewCvvEl.setAttribute('data-cvv', cvv);
             
-            // Set Provider logo
-            document.getElementById('previewProvider').innerText = provider.toUpperCase();
+            const numLimit = parseFloat(limit) || 0;
             
-            // Apply Card Types & Status styles
-            card.className = "vgb-atm-card " + type.toLowerCase();
+            // Call helper to set all classes, tier indicators, brand logos, and back emblems
+            updateDynamicCardDetails('visualizerCard', 'previewTierIndicator', 'previewBrandLogo', 'previewBackEmblem', type.toLowerCase(), provider.toLowerCase(), numLimit, status);
             
             const specStatus = document.getElementById('previewSpecStatus');
             const specLimit = document.getElementById('previewSpecLimit');
@@ -728,23 +1503,20 @@
             } else if (status.toLowerCase() === 'pending') {
                 specStatus.innerText = "Pending Approval";
                 specStatus.style.color = "var(--accent-amber)";
-                card.classList.add('inactive-card');
             } else if (status.toLowerCase() === 'expired') {
                 specStatus.innerText = "Expired";
                 specStatus.style.color = "#ef4444";
-                card.classList.add('inactive-card');
             } else {
                 specStatus.innerText = "Closed";
                 specStatus.style.color = "var(--gray-500)";
-                card.classList.add('inactive-card');
             }
             
-            // Set Limit
-            specLimit.innerText = type.toLowerCase() === 'credit' ? "₹ 50,000.00 Outstanding" : "₹ 50,000.00 Daily Limit";
+            // Set Limit Spec
+            specLimit.innerText = type.toLowerCase() === 'credit' ? "₹ " + numLimit.toLocaleString('en-IN', {minimumFractionDigits:2}) + " Outstanding" : "₹ " + numLimit.toLocaleString('en-IN', {minimumFractionDigits:2}) + " Daily Limit";
             
-            // Ensure card front face is showing by default and has interactive behaviors
+            // Ensure card front face is showing by default
+            const card = document.getElementById('visualizerCard');
             card.classList.remove('flipped');
-            card.classList.add('interactive');
             
             const wrapper = document.getElementById('visualizerCardTiltWrapper');
             if (wrapper) {
@@ -760,7 +1532,6 @@
 
         // Flagship Card Customizer & Interactive Simulator Logic
         function syncDemoCard() {
-            const card = document.getElementById('demo3DCard');
             const type = document.getElementById('ctrlCardType').value;
             const provider = document.getElementById('ctrlCardProvider').value;
             const holder = document.getElementById('ctrlHolderName').value.trim().toUpperCase() || "DEMO HOLDER";
@@ -772,7 +1543,6 @@
             document.getElementById('demoNumber').innerText = number;
             document.getElementById('demoHolder').innerText = holder;
             document.getElementById('demoExpiry').innerText = expiry;
-            document.getElementById('demoProvider').innerText = provider.toUpperCase();
 
             // Handle secure CVV storage and masking update
             const demoCvvEl = document.getElementById('demoCvv');
@@ -781,15 +1551,12 @@
                 demoCvvEl.innerText = cvv;
             }
 
-            // Set background gradient and shadows depending on selection type
-            card.className = "vgb-atm-card";
-            if (type === 'debit') {
-                card.classList.add('debit');
-            } else if (type === 'credit') {
-                card.classList.add('credit');
-            } else {
-                card.classList.add('inactive-card');
-            }
+            // Set status based on selected type
+            const status = type === 'inactive' ? 'inactive' : 'active';
+            const limit = type.includes('premium') ? 100000 : 50000;
+
+            // Call helper to sync all classes, tier indicators, brand logos, and back emblems
+            updateDynamicCardDetails('demo3DCard', 'demoTierIndicator', 'demoBrandLogo', 'demoBackEmblem', type, provider, limit, status);
         }
 
         // Mask/Unmask CVV on the back face securely without flipping card
@@ -806,9 +1573,9 @@
         }
 
         function randomizeDemoCard() {
-            const names = ["MIHIR BHAYANI", "PARTH TANK", "KARAN PATEL", "SNEHA RAO", "ROHAN SHARMA", "VERTEX GALAXY BANK SPECIAL"];
+            const names = ["MIHIR BHAYANI", "PARTH TANK", "KARAN PATEL", "SNEHA RAO", "ROHAN SHARMA", "VERTEX GELEXY BANK SPECIAL"];
             const providers = ["visa", "mastercard", "rupay"];
-            const types = ["debit", "credit"];
+            const types = ["debit", "debit-premium", "credit", "credit-premium"];
             
             const randomName = names[Math.floor(Math.random() * names.length)];
             const randomProvider = providers[Math.floor(Math.random() * providers.length)];

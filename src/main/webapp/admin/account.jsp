@@ -519,35 +519,195 @@
         }
 
 
-        /* Active step indicator animation */
-        .step-indicator-item {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        /* Premium Stepper Styling */
+        .stepper-container {
+            width: 100%;
+            padding: 24px 20px;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            margin-bottom: 30px;
+            border: 1px solid rgba(99, 102, 241, 0.08);
+            box-sizing: border-box;
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             position: relative;
+            width: 100%;
         }
-        .step-indicator-item.active {
-            transform: scale(1.08);
+
+        .stepper-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            text-align: center;
         }
-        .step-indicator-item.active span:first-child {
-            animation: pulseActiveIndicator 2s infinite;
+
+        .stepper-item:last-child {
+            flex: 0 0 auto;
+            width: 50px;
         }
-        @keyframes pulseActiveIndicator {
+
+        .stepper-circle-wrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .stepper-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            position: relative;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Stepper Circle States */
+        .stepper-item.completed .stepper-circle {
+            background: #0f766e; /* Green/Teal */
+            color: #ffffff;
+        }
+
+        .stepper-item.active .stepper-circle {
+            background: #ffffff;
+            border: 3px solid #0056b3; /* Thick Dark Blue border */
+            color: #0056b3;
+            box-shadow: 0 0 12px rgba(0, 86, 179, 0.2);
+        }
+
+        .stepper-item.active .stepper-circle::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0056b3; /* Center blue solid dot */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .stepper-item.pending .stepper-circle {
+            background: #bfdbfe; /* Solid light blue */
+            color: #1e3a8a;
+        }
+
+        /* Stepper Connector Lines */
+        .stepper-line {
+            height: 4px;
+            position: absolute;
+            left: calc(50% + 18px);
+            right: calc(-50% + 18px);
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            border-radius: 2px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .stepper-item.completed .stepper-line {
+            background: #0f766e; /* Green line */
+        }
+
+        .stepper-item.active .stepper-line {
+            background: #bfdbfe; /* Base light blue track */
+        }
+
+        .stepper-item.active .stepper-line::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 50%; /* Animating blue fill */
+            background: #0056b3;
+            border-radius: inherit;
+            animation: stepperLineFillPulse 2s infinite ease-in-out alternate;
+        }
+
+        @keyframes stepperLineFillPulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6);
-            }
-            70% {
-                box-shadow: 0 0 0 6px rgba(99, 102, 241, 0);
+                width: 35%;
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+                width: 65%;
             }
         }
-        .step-indicator-item.completed span:first-child {
-            animation: pulseCompletedIndicator 0.4s ease-out;
+
+        .stepper-item.pending .stepper-line {
+            background: #bfdbfe; /* Light blue connector line */
         }
-        @keyframes pulseCompletedIndicator {
-            0% { transform: scale(0.8); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+
+        /* Labels styling */
+        .stepper-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .stepper-step-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stepper-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-top: 2px;
+        }
+
+        .stepper-status {
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .stepper-item.completed .stepper-status {
+            color: #0f766e; /* Completed */
+        }
+
+        .stepper-item.active .stepper-status {
+            color: #0056b3; /* In Progress */
+        }
+
+        .stepper-item.pending .stepper-status {
+            color: var(--gray-400); /* Pending */
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stepper {
+                overflow-x: auto;
+                padding-bottom: 12px;
+                gap: 15px;
+                justify-content: flex-start;
+            }
+            .stepper-item {
+                flex: 0 0 120px;
+            }
+            .stepper-line {
+                display: none;
+            }
         }
 
         /* Button premium micro-interactions */
@@ -709,6 +869,7 @@
             <a href="${pageContext.request.contextPath}/admin/transfer.jsp"><i class="bx bx-transfer-alt"></i> Admin Counter</a>
             <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i> Manage Cards</a>
             <a href="${pageContext.request.contextPath}/chequebook?action=list"><i class="bx bx-book-bookmark"></i> Cheque Requests</a>
+            <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Review Loans</a>
             <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
             <a href="${pageContext.request.contextPath}/admin/notification.jsp"><i class="bx bx-bell"></i> Audit Logs</a>
@@ -1223,8 +1384,10 @@
                 
                 <div class="modal-body">
                     <!-- Dynamic Step Indicators -->
-                    <div id="wizardStepsIndicator" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--gray-100); padding-bottom: 15px;">
-                        <!-- Rendered by JS -->
+                    <div class="stepper-container">
+                        <div id="wizardStepsIndicator" class="stepper">
+                            <!-- Rendered by JS -->
+                        </div>
                     </div>
 
                     <!-- STEP 1: Account Classification -->
@@ -1694,7 +1857,7 @@
                         <div class="form-group" style="max-width: 350px;">
                             <label class="form-label">Initial Deposit Amount (₹) *</label>
                             <input type="number" id="wizInitialDeposit" name="initialDeposit" class="form-control" style="font-size: 1.15rem; font-weight: 700; color: var(--primary-500);" step="0.01">
-                            <span id="wizMinDepositLabel" style="font-size: 0.72rem; color: var(--gray-400); font-weight: 500; margin-top: 5px; display: block;">₹1,000.00 Minimum Fixed Amount</span>
+                            <span id="wizMinDepositLabel" style="font-size: 0.72rem; color: var(--gray-400); font-weight: 500; margin-top: 5px; display: block;">₹500.00 Minimum Fixed Amount</span>
                         </div>
                     </div>
 

@@ -99,32 +99,43 @@ public abstract class BaseServlet extends HttpServlet {
      * Get request parameter with default value
      */
     protected String getParameter(HttpServletRequest request, String name, String defaultValue) {
-        String value = request.getParameter(name);
-        if (value == null && request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
-            try {
-                jakarta.servlet.http.Part part = request.getPart(name);
-                if (part != null) {
-                    try (java.io.InputStream is = part.getInputStream()) {
-                        byte[] bytes = is.readAllBytes();
-                        value = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
-                    }
-                } else {
-                    // Fallback to iterating through all parts
-                    for (jakarta.servlet.http.Part p : request.getParts()) {
-                        if (name.equals(p.getName())) {
-                            try (java.io.InputStream is = p.getInputStream()) {
+        String value = null;
+        
+        // 1. Try standard request parameter retrieval first
+        try {
+            value = request.getParameter(name);
+        } catch (Exception e) {
+            // Ignore if standard parameter retrieval fails or throws exception
+        }
+        
+        // 2. If null or empty and multipart request, retrieve from parsed request attributes cache
+        if ((value == null || value.trim().isEmpty()) && request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, String> multipartParams = (java.util.Map<String, String>) request.getAttribute("com.vgb.multipart.parameters");
+            
+            if (multipartParams == null) {
+                multipartParams = new java.util.HashMap<>();
+                try {
+                    for (jakarta.servlet.http.Part part : request.getParts()) {
+                        // Only read parts that are standard form fields (not file uploads)
+                        if (part.getSubmittedFileName() == null) {
+                            try (java.io.InputStream is = part.getInputStream()) {
                                 byte[] bytes = is.readAllBytes();
-                                value = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
-                                break;
+                                String textValue = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+                                multipartParams.put(part.getName(), textValue);
                             }
                         }
                     }
+                    request.setAttribute("com.vgb.multipart.parameters", multipartParams);
+                } catch (Exception e) {
+                    logger.error("[DEBUG] Exception pre-parsing multipart request", e);
                 }
-            } catch (Exception e) {
-                logger.error("Error parsing multipart parameter: " + name, e);
             }
+            
+            value = multipartParams.get(name);
         }
-        return value != null ? value.trim() : defaultValue;
+        
+        return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
 
 
