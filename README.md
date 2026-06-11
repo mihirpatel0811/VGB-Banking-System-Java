@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # VGB Banking System
 
 A secure digital banking platform built with Java Servlet, JSP, and MySQL for Vertex Galaxy Bank.
