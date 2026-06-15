@@ -33,77 +33,217 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Admin Teller Counter</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(99, 102, 241, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.04);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        body {
+            background-color: #f6f8fc !important;
+            color: var(--gray-700) !important;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body.dark-mode {
+            --glass-bg: rgba(30, 41, 59, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background-color: #0f172a !important;
+        }
+
+        /* Preloader styling fixes to match dashboard design */
+        .preloader {
+            background: #f6f8fc;
+            z-index: 9999;
+        }
+        body.dark-mode .preloader {
+            background: #0f172a;
+        }
+
+        /* Background blur animation cursor glow */
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+        body.dark-mode .cursor-glow {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        /* --- STICKY GLASSMORPHIC HEADER --- */
+        .header {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            padding: 20px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        
+        body.dark-mode .header {
+            background: rgba(15, 23, 42, 0.6) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 14px 40px;
+            border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-mode .header.scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-nav-toggle {
+            display: none !important;
+        }
+        body.dark-mode .mobile-nav-toggle {
+            color: var(--gray-300) !important;
+        }
+
+        /* --- STYLISH SIDEBAR --- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-right: 1px solid var(--glass-border) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: var(--panel-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 20px;
-            color: var(--gray-600);
+            padding: 12px 18px;
+            color: var(--gray-600) !important;
             font-weight: 500;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
             transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
         }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
         }
+
+        .sidebar-menu a i {
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateX(4px);
+        }
+        
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
+
+        .sidebar-menu a:hover i {
+            transform: scale(1.1);
+        }
+
+        .sidebar-menu a.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+            border-color: transparent;
+        }
+
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
-            background: var(--gray-50);
+            background: transparent;
+            z-index: 10;
+            position: relative;
         }
-        @media (max-width: 991px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 120px 20px 20px; }
-        }
+
+        /* --- PREMIUM GLASS CARDS --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: var(--shadow-md);
+            padding: 28px;
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
             margin-bottom: 30px;
-            animation: fadeIn 0.4s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body.dark-mode .glass-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.2) !important;
         }
 
         /* Teller Tab styling */
         .counter-tabs {
             display: flex;
             gap: 15px;
-            border-bottom: 1.5px solid var(--gray-200);
-            padding-bottom: 15px;
+            border-bottom: 1.5px solid rgba(99, 102, 241, 0.1);
+            padding-bottom: 20px;
             margin-bottom: 35px;
+            flex-wrap: wrap;
         }
         .counter-tab-btn {
             padding: 12px 24px;
             font-weight: 600;
             font-size: 0.9rem;
-            color: var(--gray-500);
-            background: white;
-            border: 1px solid var(--gray-200);
+            color: var(--gray-600) !important;
+            background: rgba(255, 255, 255, 0.45);
+            border: 1.5px solid var(--glass-border);
             border-radius: 30px;
             cursor: pointer;
             display: flex;
@@ -111,16 +251,24 @@
             gap: 8px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        body.dark-mode .counter-tab-btn {
+            color: var(--gray-400) !important;
+            background: rgba(30, 41, 59, 0.2);
+        }
         .counter-tab-btn:hover {
-            background: var(--gray-50);
-            color: var(--primary-500);
-            border-color: var(--primary-500);
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
         }
         .counter-tab-btn.active {
-            background: var(--gradient-primary);
-            color: white;
+            background: var(--gradient-primary) !important;
+            color: white !important;
             border-color: transparent;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+        }
+        body.dark-mode .counter-tab-btn.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
         }
 
         .counter-pane {
@@ -157,6 +305,10 @@
             position: relative;
             overflow: hidden;
         }
+        body.dark-mode .counter-clock-card {
+            background: rgba(255, 255, 255, 0.01);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
         .clock-icon-wrapper {
             width: 42px;
             height: 42px;
@@ -167,6 +319,10 @@
             align-items: center;
             justify-content: center;
             font-size: 1.3rem;
+        }
+        body.dark-mode .clock-icon-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--primary-300);
         }
         .clock-label {
             display: block;
@@ -182,6 +338,9 @@
             color: var(--gray-700);
             font-family: monospace;
             margin-top: 2px;
+        }
+        body.dark-mode .clock-display {
+            color: var(--gray-300);
         }
         .clock-pulse {
             width: 8px;
@@ -212,9 +371,13 @@
             border-radius: var(--radius-md);
             outline: none;
             font-weight: 500;
-            background: white;
+            background: var(--white);
+            color: var(--gray-800);
             font-size: 0.9rem;
             transition: all var(--transition-normal);
+        }
+        body.dark-mode .search-select-input {
+            border-color: rgba(255, 255, 255, 0.1);
         }
         .search-select-input:focus {
             border-color: var(--primary-500);
@@ -246,7 +409,7 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
+            background: var(--white);
             border: 1.5px solid var(--gray-200);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-lg);
@@ -257,6 +420,10 @@
             display: none;
             animation: paneFadeIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        body.dark-mode .search-select-results {
+            background: #1e293b;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
         .search-select-item {
             padding: 12px 15px;
             cursor: pointer;
@@ -266,13 +433,19 @@
             gap: 4px;
             transition: background 0.2s ease;
         }
+        body.dark-mode .search-select-item {
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
         .search-select-item:hover {
-            background: rgba(99, 102, 241, 0.03);
+            background: rgba(99, 102, 241, 0.05);
         }
         .search-select-item-title {
             font-weight: 600;
             color: var(--gray-800);
             font-size: 0.85rem;
+        }
+        body.dark-mode .search-select-item-title {
+            color: var(--gray-200);
         }
         .search-select-item-subtitle {
             font-size: 0.75rem;
@@ -288,20 +461,26 @@
 
         /* Verified Details Card visuals */
         .verified-preview-card {
-            background: white;
-            border: 1.5px solid var(--gray-200);
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
             border-radius: var(--radius-lg);
             padding: 24px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
             margin-bottom: 20px;
         }
+        body.dark-mode .verified-preview-card {
+            border-color: rgba(255, 255, 255, 0.06);
+            box-shadow: var(--panel-shadow);
+        }
         .verified-preview-card.selected {
-            border-color: rgba(16, 185, 129, 0.25);
-            background: rgba(16, 185, 129, 0.01);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.03);
+            border-color: rgba(16, 185, 129, 0.3) !important;
+            background: rgba(16, 185, 129, 0.02) !important;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.05);
         }
         .verified-badge {
             display: inline-flex;
@@ -363,6 +542,60 @@
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Form elements overrides */
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+        body.dark-mode .form-group label {
+            color: var(--gray-400);
+        }
+
+        .footer {
+            margin-left: 280px;
+            background: var(--white) !important;
+            border-top: 1px solid var(--glass-border) !important;
+            padding: 24px 0;
+            transition: all 0.3s ease;
+        }
+        body.dark-mode .footer {
+            background: rgba(15, 23, 42, 0.8) !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE WORKOUTS --- */
+        @media (max-width: 991px) {
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .admin-label {
+                display: none !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
+        }
     </style>
 </head>
 <body class="bank-home-page">
@@ -395,14 +628,19 @@
     <div class="cursor-glow"></div>
 
     <!-- Header -->
-    <header class="header scrolled">
-        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
-        </a>
+    <header class="header scrolled no-print">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                <i class="bx bx-menu"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
+            </a>
+        </div>
         <div class="nav-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
-                <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
+                <span style="font-weight: 600; color: var(--gray-700);" class="admin-label"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
             </div>
             <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
@@ -410,7 +648,7 @@
     </header>
 
     <!-- Sidebar Navigation -->
-    <aside class="sidebar">
+    <aside class="sidebar no-print">
         <div class="sidebar-menu">
             <a href="${pageContext.request.contextPath}/admin-dashboard"><i class="bx bx-grid-alt"></i> Dashboard</a>
             <a href="${pageContext.request.contextPath}/account?action=list"><i class="bx bx-user-check"></i> Manage Accounts</a>
@@ -420,7 +658,6 @@
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Review Loans</a>
             <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
             <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
-
         </div>
         <div style="padding: 15px; background: rgba(99, 102, 241, 0.05); border-radius: var(--radius-md); text-align: center;">
             <p style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Admin Controls</p>
@@ -792,6 +1029,7 @@
         ]
     </script>
 
+    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
         const allAccounts = JSON.parse(document.getElementById('accounts-data').textContent);
         allAccounts.forEach(acc => {
@@ -933,37 +1171,36 @@
             const ownerName = selectedDepositAcc.businessName ? selectedDepositAcc.businessName + ' (Business)' : selectedDepositAcc.customerName;
             const newBal = selectedDepositAcc.balance + amtVal;
 
-            card.innerHTML = `
-                <div class="verified-badge"><i class="bx bx-shield-quarter"></i> Verified Target Account</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Owner Name</span>
-                        <strong style="color: var(--gray-800); font-size: 0.9rem;">\${ownerName}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Number</span>
-                        <strong style="color: var(--gray-800); font-family: monospace; font-size: 0.9rem;">\${selectedDepositAcc.accountNumber}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Type</span>
-                        <strong style="color: var(--gray-700); font-size: 0.85rem; text-transform: capitalize;">\${selectedDepositAcc.accountType}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">IFSC Code</span>
-                        <strong style="color: var(--gray-700); font-family: monospace; font-size: 0.85rem;">\${selectedDepositAcc.ifscCode}</strong>
-                    </div>
-                    <div style="grid-column: span 2; border-top: 1px solid var(--gray-100); padding-top: 12px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <span style="display: block; font-size: 0.72rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Current Balance</span>
-                            <span style="color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">₹ \${selectedDepositAcc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="display: block; font-size: 0.72rem; color: var(--primary-400); text-transform: uppercase; font-weight: 600;">Balance Post-Deposit</span>
-                            <strong style="color: var(--accent-emerald); font-size: 1.15rem;">₹ \${newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                    </div>
-                </div>
-            `;
+            card.innerHTML = 
+                '<div class="verified-badge"><i class="bx bx-shield-quarter"></i> Verified Target Account</div>' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Owner Name</span>' +
+                        '<strong style="color: var(--gray-800); font-size: 0.9rem;">' + ownerName + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Number</span>' +
+                        '<strong style="color: var(--gray-800); font-family: monospace; font-size: 0.9rem;">' + selectedDepositAcc.accountNumber + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Type</span>' +
+                        '<strong style="color: var(--gray-700); font-size: 0.85rem; text-transform: capitalize;">' + selectedDepositAcc.accountType + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">IFSC Code</span>' +
+                        '<strong style="color: var(--gray-700); font-family: monospace; font-size: 0.85rem;">' + selectedDepositAcc.ifscCode + '</strong>' +
+                    '</div>' +
+                    '<div style="grid-column: span 2; border-top: 1px solid var(--gray-100); padding-top: 12px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center;">' +
+                        '<div>' +
+                            '<span style="display: block; font-size: 0.72rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Current Balance</span>' +
+                            '<span style="color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">₹ ' + selectedDepositAcc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</span>' +
+                        '</div>' +
+                        '<div style="text-align: right;">' +
+                            '<span style="display: block; font-size: 0.72rem; color: var(--primary-400); text-transform: uppercase; font-weight: 600;">Balance Post-Deposit</span>' +
+                            '<strong style="color: var(--accent-emerald); font-size: 1.15rem;">₹ ' + newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
             card.classList.add('selected');
         }
 
@@ -978,37 +1215,36 @@
             const ownerName = selectedWithdrawAcc.businessName ? selectedWithdrawAcc.businessName + ' (Business)' : selectedWithdrawAcc.customerName;
             const newBal = selectedWithdrawAcc.balance - amtVal;
 
-            card.innerHTML = `
-                <div class="verified-badge" style="background: rgba(99,102,241,0.08); color: var(--primary-500);"><i class="bx bx-shield-quarter"></i> Verified Source Account</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Owner Name</span>
-                        <strong style="color: var(--gray-800); font-size: 0.9rem;">\${ownerName}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Number</span>
-                        <strong style="color: var(--gray-800); font-family: monospace; font-size: 0.9rem;">\${selectedWithdrawAcc.accountNumber}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Type</span>
-                        <strong style="color: var(--gray-700); font-size: 0.85rem; text-transform: capitalize;">\${selectedWithdrawAcc.accountType}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">IFSC Code</span>
-                        <strong style="color: var(--gray-700); font-family: monospace; font-size: 0.85rem;">\${selectedWithdrawAcc.ifscCode}</strong>
-                    </div>
-                    <div style="grid-column: span 2; border-top: 1px solid var(--gray-100); padding-top: 12px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <span style="display: block; font-size: 0.72rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Current Balance</span>
-                            <span style="color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">₹ \${selectedWithdrawAcc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="display: block; font-size: 0.72rem; color: var(--primary-400); text-transform: uppercase; font-weight: 600;">Remaining Balance</span>
-                            <strong style="color: \${newBal < 0 ? '#ef4444' : 'var(--gray-800)'}; font-size: 1.1rem;">₹ \${newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                    </div>
-                </div>
-            `;
+            card.innerHTML = 
+                '<div class="verified-badge" style="background: rgba(99,102,241,0.08); color: var(--primary-500);"><i class="bx bx-shield-quarter"></i> Verified Source Account</div>' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Owner Name</span>' +
+                        '<strong style="color: var(--gray-800); font-size: 0.9rem;">' + ownerName + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Number</span>' +
+                        '<strong style="color: var(--gray-800); font-family: monospace; font-size: 0.9rem;">' + selectedWithdrawAcc.accountNumber + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Account Type</span>' +
+                        '<strong style="color: var(--gray-700); font-size: 0.85rem; text-transform: capitalize;">' + selectedWithdrawAcc.accountType + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">IFSC Code</span>' +
+                        '<strong style="color: var(--gray-700); font-family: monospace; font-size: 0.85rem;">' + selectedWithdrawAcc.ifscCode + '</strong>' +
+                    '</div>' +
+                    '<div style="grid-column: span 2; border-top: 1px solid var(--gray-100); padding-top: 12px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center;">' +
+                        '<div>' +
+                            '<span style="display: block; font-size: 0.72rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Current Balance</span>' +
+                            '<span style="color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">₹ ' + selectedWithdrawAcc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</span>' +
+                        '</div>' +
+                        '<div style="text-align: right;">' +
+                            '<span style="display: block; font-size: 0.72rem; color: var(--primary-400); text-transform: uppercase; font-weight: 600;">Remaining Balance</span>' +
+                            '<strong style="color: ' + (newBal < 0 ? '#ef4444' : 'var(--gray-800)') + '; font-size: 1.1rem;">₹ ' + newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
             card.classList.add('selected');
 
             // Limit warning checks
@@ -1042,23 +1278,22 @@
                 const ownerName = selectedTransferFrom.businessName ? selectedTransferFrom.businessName + ' (Business)' : selectedTransferFrom.customerName;
                 const newBal = selectedTransferFrom.balance - amtVal;
                 
-                sourceCard.innerHTML = `
-                    <div class="verified-badge" style="background: rgba(99,102,241,0.08); color: var(--primary-500);"><i class="bx bx-log-out"></i> Verified Source Account (Debit)</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div style="grid-column: span 2;">
-                            <span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Owner / Number</span>
-                            <strong style="font-size: 0.85rem; color: var(--gray-800);">\${ownerName} (\${selectedTransferFrom.accountNumber})</strong>
-                        </div>
-                        <div>
-                            <span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Balance</span>
-                            <strong style="font-size: 0.85rem; color: var(--gray-700);">₹ \${selectedTransferFrom.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="display: block; font-size: 0.7rem; color: var(--primary-400); text-transform: uppercase;">Remaining</span>
-                            <strong style="font-size: 0.88rem; color: \${newBal < 0 ? '#ef4444' : 'var(--gray-800)'};">₹ \${newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                    </div>
-                `;
+                sourceCard.innerHTML = 
+                    '<div class="verified-badge" style="background: rgba(99,102,241,0.08); color: var(--primary-500);"><i class="bx bx-log-out"></i> Verified Source Account (Debit)</div>' +
+                    '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">' +
+                        '<div style="grid-column: span 2;">' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Owner / Number</span>' +
+                            '<strong style="font-size: 0.85rem; color: var(--gray-800);">' + ownerName + ' (' + selectedTransferFrom.accountNumber + ')</strong>' +
+                        '</div>' +
+                        '<div>' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Balance</span>' +
+                            '<strong style="font-size: 0.85rem; color: var(--gray-700);">₹ ' + selectedTransferFrom.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                        '<div style="text-align: right;">' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--primary-400); text-transform: uppercase;">Remaining</span>' +
+                            '<strong style="font-size: 0.88rem; color: ' + (newBal < 0 ? '#ef4444' : 'var(--gray-800)') + ';">₹ ' + newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                    '</div>';
                 sourceCard.classList.add('selected');
             }
 
@@ -1066,23 +1301,22 @@
                 const ownerName = selectedTransferTo.businessName ? selectedTransferTo.businessName + ' (Business)' : selectedTransferTo.customerName;
                 const newBal = selectedTransferTo.balance + amtVal;
 
-                targetCard.innerHTML = `
-                    <div class="verified-badge" style="background: rgba(16,185,129,0.08); color: var(--accent-emerald);"><i class="bx bx-log-in"></i> Verified Target Account (Credit)</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div style="grid-column: span 2;">
-                            <span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Owner / Number</span>
-                            <strong style="font-size: 0.85rem; color: var(--gray-800);">\${ownerName} (\${selectedTransferTo.accountNumber})</strong>
-                        </div>
-                        <div>
-                            <span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Balance</span>
-                            <strong style="font-size: 0.85rem; color: var(--gray-700);">₹ \${selectedTransferTo.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="display: block; font-size: 0.7rem; color: var(--primary-400); text-transform: uppercase;">Post-Credit</span>
-                            <strong style="font-size: 0.88rem; color: var(--accent-emerald);">₹ \${newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                    </div>
-                `;
+                targetCard.innerHTML = 
+                    '<div class="verified-badge" style="background: rgba(16,185,129,0.08); color: var(--accent-emerald);"><i class="bx bx-log-in"></i> Verified Target Account (Credit)</div>' +
+                    '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">' +
+                        '<div style="grid-column: span 2;">' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Owner / Number</span>' +
+                            '<strong style="font-size: 0.85rem; color: var(--gray-800);">' + ownerName + ' (' + selectedTransferTo.accountNumber + ')</strong>' +
+                        '</div>' +
+                        '<div>' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Balance</span>' +
+                            '<strong style="font-size: 0.85rem; color: var(--gray-700);">₹ ' + selectedTransferTo.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                        '<div style="text-align: right;">' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--primary-400); text-transform: uppercase;">Post-Credit</span>' +
+                            '<strong style="font-size: 0.88rem; color: var(--accent-emerald);">₹ ' + newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                    '</div>';
                 targetCard.classList.add('selected');
             }
 
@@ -1224,17 +1458,16 @@
             if (selectedAcc) {
                 const accBal = parseFloat(selectedAcc.balance);
                 const postAccBal = accBal - amtVal;
-                accountDetailsHTML = `
-                    <div style="grid-column: span 2; border-top: 1px dashed var(--gray-200); padding-top: 10px; margin-top: 5px;">
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Selected Source Account Details</span>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-                            <span style="font-size: 0.85rem; color: var(--gray-600); font-family: monospace;">Acc #\${selectedAcc.accountNumber}</span>
-                            <span style="font-size: 0.85rem; color: \${postAccBal < 0 ? '#ef4444' : 'var(--gray-800)'}; font-weight: 600;">
-                                ₹ \${accBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })} ➡️ ₹ \${postAccBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                            </span>
-                        </div>
-                    </div>
-                `;
+                accountDetailsHTML = 
+                    '<div style="grid-column: span 2; border-top: 1px dashed var(--gray-200); padding-top: 10px; margin-top: 5px;">' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Selected Source Account Details</span>' +
+                        '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">' +
+                            '<span style="font-size: 0.85rem; color: var(--gray-600); font-family: monospace;">Acc #' + selectedAcc.accountNumber + '</span>' +
+                            '<span style="font-size: 0.85rem; color: ' + (postAccBal < 0 ? '#ef4444' : 'var(--gray-800)') + '; font-weight: 600;">' +
+                                '₹ ' + accBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + ' ➡️ ₹ ' + postAccBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) +
+                            '</span>' +
+                        '</div>' +
+                    '</div>';
 
                 if (amtVal > accBal) {
                     alertContainer.innerHTML = `
@@ -1246,38 +1479,37 @@
                 }
             }
 
-            card.innerHTML = `
-                <div class="verified-badge" style="background: rgba(16, 185, 129, 0.08); color: var(--accent-emerald);"><i class="bx bx-shield-quarter"></i> Verified Loan Profile</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Borrower Name</span>
-                        <strong style="color: var(--gray-800); font-size: 0.9rem;">\${selectedRepayLoan.customerName}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Loan Account ID</span>
-                        <strong style="color: var(--gray-800); font-family: monospace; font-size: 0.9rem;">#LN-\${selectedRepayLoan.loanId}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Loan Category</span>
-                        <strong style="color: var(--gray-700); font-size: 0.85rem; text-transform: capitalize;">\${selectedRepayLoan.loanType}</strong>
-                    </div>
-                    <div>
-                        <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Status</span>
-                        <strong style="color: var(--primary-500); font-size: 0.85rem; text-transform: uppercase;">\${selectedRepayLoan.status}</strong>
-                    </div>
-                    <div style="grid-column: span 2; border-top: 1px solid var(--gray-100); padding-top: 12px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <span style="display: block; font-size: 0.72rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Remaining Balance</span>
-                            <span style="color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">₹ \${remBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="display: block; font-size: 0.72rem; color: var(--primary-400); text-transform: uppercase; font-weight: 600;">Balance Post-Repayment</span>
-                            <strong style="color: \${postRepayBal < 0 ? '#ef4444' : 'var(--gray-800)'}; font-size: 1.15rem;">₹ \${postRepayBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                        </div>
-                    </div>
-                    \${accountDetailsHTML}
-                </div>
-            `;
+            card.innerHTML = 
+                '<div class="verified-badge" style="background: rgba(16, 185, 129, 0.08); color: var(--accent-emerald);"><i class="bx bx-shield-quarter"></i> Verified Loan Profile</div>' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Borrower Name</span>' +
+                        '<strong style="color: var(--gray-800); font-size: 0.9rem;">' + selectedRepayLoan.customerName + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Loan Account ID</span>' +
+                        '<strong style="color: var(--gray-800); font-family: monospace; font-size: 0.9rem;">#LN-' + selectedRepayLoan.loanId + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Loan Category</span>' +
+                        '<strong style="color: var(--gray-700); font-size: 0.85rem; text-transform: capitalize;">' + selectedRepayLoan.loanType + '</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Status</span>' +
+                        '<strong style="color: var(--primary-500); font-size: 0.85rem; text-transform: uppercase;">' + selectedRepayLoan.status + '</strong>' +
+                    '</div>' +
+                    '<div style="grid-column: span 2; border-top: 1px solid var(--gray-100); padding-top: 12px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center;">' +
+                        '<div>' +
+                            '<span style="display: block; font-size: 0.72rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Remaining Balance</span>' +
+                            '<span style="color: var(--gray-600); font-weight: 600; font-size: 0.9rem;">₹ ' + remBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</span>' +
+                        '</div>' +
+                        '<div style="text-align: right;">' +
+                            '<span style="display: block; font-size: 0.72rem; color: var(--primary-400); text-transform: uppercase; font-weight: 600;">Balance Post-Repayment</span>' +
+                            '<strong style="color: ' + (postRepayBal < 0 ? '#ef4444' : 'var(--gray-800)') + '; font-size: 1.15rem;">₹ ' + postRepayBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                    '</div>' +
+                    accountDetailsHTML +
+                '</div>';
             card.classList.add('selected');
 
             if (amtVal > remBal) {
@@ -1456,8 +1688,65 @@
                     recalcLoanRepayPayout();
                 }
             );
+
+            // Override global theme toggle hidden behavior
+            const themeBtn = document.getElementById('themeToggle');
+            if (themeBtn) {
+                themeBtn.style.setProperty('display', 'flex', 'important');
+                themeBtn.onclick = function () {
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    themeBtn.querySelector('i').className = isDark ? 'bx bx-sun' : 'bx bx-moon';
+                    localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
+                };
+
+                // Sync with stored theme preference on load
+                const savedTheme = localStorage.getItem('admin-theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeBtn.querySelector('i').className = 'bx bx-sun';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    themeBtn.querySelector('i').className = 'bx bx-moon';
+                }
+            }
+
+            // Mobile menu toggle handler
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (sidebar.classList.contains('active')) {
+                        icon.className = 'bx bx-x';
+                    } else {
+                        icon.className = 'bx bx-menu';
+                    }
+                });
+
+                // Close sidebar if clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        mobileToggle.querySelector('i').className = 'bx bx-menu';
+                    }
+                });
+            }
+
+            // Cursor glow follower
+            const glow = document.querySelector('.cursor-glow');
+            if (glow) {
+                window.addEventListener('mousemove', (e) => {
+                    const { clientX, clientY } = e;
+                    requestAnimationFrame(() => {
+                        glow.style.left = clientX + 'px';
+                        glow.style.top = clientY + 'px';
+                    });
+                });
+            }
         });
     </script>
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
 </body>
 </html>

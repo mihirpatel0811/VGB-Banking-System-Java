@@ -7,70 +7,238 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Manage ATM Cards</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(99, 102, 241, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.04);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        body {
+            background-color: #f6f8fc !important;
+            color: var(--gray-700) !important;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body.dark-mode {
+            --glass-bg: rgba(30, 41, 59, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background-color: #0f172a !important;
+        }
+
+        /* Preloader override */
+        .preloader {
+            background: #f6f8fc;
+            z-index: 9999;
+        }
+        body.dark-mode .preloader {
+            background: #0f172a;
+        }
+
+        /* Background blur animation cursor glow */
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+        body.dark-mode .cursor-glow {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        /* --- STICKY GLASSMORPHIC HEADER --- */
+        .header {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            padding: 20px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        
+        body.dark-mode .header {
+            background: rgba(15, 23, 42, 0.6) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 14px 40px;
+            border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-mode .header.scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-nav-toggle {
+            display: none !important;
+        }
+        body.dark-mode .mobile-nav-toggle {
+            color: var(--gray-300) !important;
+        }
+
+        /* --- STYLISH SIDEBAR --- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-right: 1px solid var(--glass-border) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: var(--panel-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 20px;
-            color: var(--gray-600);
+            padding: 12px 18px;
+            color: var(--gray-600) !important;
             font-weight: 500;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
             transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
         }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
         }
+
+        .sidebar-menu a i {
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateX(4px);
+        }
+        
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
+
+        .sidebar-menu a:hover i {
+            transform: scale(1.1);
+        }
+
+        .sidebar-menu a.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+            border-color: transparent;
+        }
+
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
-            background: var(--gray-50);
+            background: transparent;
+            z-index: 10;
+            position: relative;
         }
-        @media (max-width: 991px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 120px 20px 20px; }
-        }
+
+        /* --- PREMIUM GLASS CARDS --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
-            padding: 25px;
-            box-shadow: var(--shadow-md);
+            padding: 28px;
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body.dark-mode .glass-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.2) !important;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
         }
+
+        /* --- STATS CARD ACCENTS --- */
         .stat-card {
-            background: white;
-            border: 1px solid var(--gray-200);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
             padding: 20px;
             display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        body.dark-mode .stat-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
+        }
+
+        body.dark-mode .stat-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         .stat-icon {
             width: 50px;
             height: 50px;
@@ -81,11 +249,87 @@
             font-size: 1.5rem;
             flex-shrink: 0;
         }
+
+        /* --- PREMIUM MODERN TABLES --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 16px 20px;
+            color: var(--gray-500);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            white-space: nowrap;
+        }
+
+        body.dark-mode th {
+            color: var(--gray-400);
+        }
+
+        td {
+            padding: 18px 20px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        body.dark-mode td {
+            color: var(--gray-300);
+            border-bottom-color: rgba(255, 255, 255, 0.04);
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        body.dark-mode tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        /* --- MONOSPACE ID BADGE --- */
+        .badge-id {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            font-size: 0.8rem;
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(99, 102, 241, 0.08);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        body.dark-mode .badge-id {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary-300);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+        }
+
         .card-dues-warning {
             color: #ef4444;
         }
         .card-dues-normal {
             color: var(--gray-800);
+        }
+        body.dark-mode .card-dues-normal {
+            color: var(--gray-300);
         }
 
         /* PREMIUM VGB 3D GLOWING CARDS FOR VISUALIZER */
@@ -812,6 +1056,47 @@
             perspective: 1200px;
             transform-style: preserve-3d;
         }
+
+        /* --- DARK MODE SIMULATOR & CUSTOMIZER CONTROLS --- */
+        body.dark-mode .control-label {
+            color: var(--gray-400);
+        }
+        body.dark-mode .control-input, body.dark-mode .control-select {
+            background: rgba(15, 23, 42, 0.45);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+        body.dark-mode .control-input:focus, body.dark-mode .control-select:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+        body.dark-mode .simulator-display {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(6, 182, 212, 0.02) 100%);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- RESPONSIVE WORKOUTS --- */
+        @media (max-width: 991px) {
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
+        }
     </style>
 </head>
 <body class="bank-home-page">
@@ -826,13 +1111,18 @@
 
     <!-- Header -->
     <header class="header scrolled">
-        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
-        </a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                <i class="bx bx-menu"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
+            </a>
+        </div>
         <div class="nav-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
-                <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
+                <span style="font-weight: 600; color: var(--gray-700);" class="admin-label"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
             </div>
             <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
@@ -885,52 +1175,59 @@
             </c:if>
 
             <!-- Stats Rows (Dynamic Card Metrics) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-bottom: 40px;" class="mobile-grid-1">
-                <c:set var="pendingCount" value="0" />
-                <c:set var="activeCount" value="0" />
-                <c:set var="feeRevenue" value="0" />
-                
-                <c:forEach var="card" items="${cards}">
-                    <c:choose>
-                        <c:when test="${card.status eq 'pending'}">
-                            <c:set var="pendingCount" value="${pendingCount + 1}" />
-                        </c:when>
-                        <c:when test="${card.status eq 'active'}">
-                            <c:set var="activeCount" value="${activeCount + 1}" />
-                        </c:when>
-                    </c:choose>
-                    <c:if test="${card.feePaid}">
-                        <c:set var="feeRevenue" value="${feeRevenue + card.cardFee}" />
-                    </c:if>
-                </c:forEach>
+            <c:set var="pendingCount" value="0" />
+            <c:set var="activeCount" value="0" />
+            <c:set var="closedCount" value="0" />
+            
+            <c:forEach var="card" items="${cards}">
+                <c:choose>
+                    <c:when test="${card.status eq 'pending'}">
+                        <c:set var="pendingCount" value="${pendingCount + 1}" />
+                    </c:when>
+                    <c:when test="${card.status eq 'active'}">
+                        <c:set var="activeCount" value="${activeCount + 1}" />
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="closedCount" value="${closedCount + 1}" />
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
 
+            <div class="stat-grid">
                 <div class="stat-card" style="border-left: 5px solid var(--primary-500);">
                     <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
                         <i class="bx bx-credit-card"></i>
                     </div>
                     <div>
-                        <span style="display: block; font-size: 0.8rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Active Cards Issued</span>
-                        <strong style="font-size: 1.8rem; color: var(--gray-800);">${activeCount}</strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Total Requests</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${cards.size()}</h3>
                     </div>
                 </div>
-
-                <div class="stat-card" style="border-left: 5px solid var(--secondary-500);">
-                    <div class="stat-icon" style="background: rgba(236, 72, 153, 0.1); color: var(--secondary-500);">
-                        <i class="bx bx-time-five"></i>
+                <div class="stat-card" style="border-left: 5px solid #fbbf24;">
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
+                        <i class="bx bx-time"></i>
                     </div>
                     <div>
-                        <span style="display: block; font-size: 0.8rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Pending Approvals</span>
-                        <strong style="font-size: 1.8rem; color: var(--gray-800);">${pendingCount}</strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Pending Review</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
                     </div>
                 </div>
-
                 <div class="stat-card" style="border-left: 5px solid var(--accent-emerald);">
-                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald);">
-                        <i class="bx bx-wallet"></i>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                        <i class="bx bx-check-double"></i>
                     </div>
                     <div>
-                        <span style="display: block; font-size: 0.8rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Card Service Revenue</span>
-                        <strong style="font-size: 1.8rem; color: var(--gray-800);">₹ <fmt:formatNumber value="${feeRevenue}" minFractionDigits="2" maxFractionDigits="2"/></strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Approved Cards</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${activeCount}</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 5px solid #ef4444;">
+                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                        <i class="bx bx-x-circle"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Rejected / Closed</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${closedCount}</h3>
                     </div>
                 </div>
             </div>
@@ -1122,17 +1419,17 @@
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
                     <i class="bx bx-time"></i> Pending Card Applications Awaiting Review
                 </h3>
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <div class="table-responsive">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px;">Card Type</th>
-                                <th style="padding: 12px 15px;">Provider</th>
-                                <th style="padding: 12px 15px;">Holder Name</th>
-                                <th style="padding: 12px 15px;">Linked Account</th>
-                                <th style="padding: 12px 15px;">Fee Paid</th>
-                                <th style="padding: 12px 15px;">Applied Date</th>
-                                <th style="padding: 12px 15px; text-align: center;">Actions</th>
+                            <tr>
+                                <th>Card Type</th>
+                                <th>Provider</th>
+                                <th>Holder Name</th>
+                                <th>Linked Account</th>
+                                <th>Fee Paid</th>
+                                <th>Applied Date</th>
+                                <th style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1141,16 +1438,16 @@
                                 <c:if test="${card.status eq 'pending'}">
                                     <c:set var="hasPending" value="true" />
                                     <fmt:formatDate var="formattedAppliedDate" value="${card.createdAt}" pattern="MM/yy" />
-                                    <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                        <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
+                                    <tr>
+                                        <td style="text-transform: capitalize; font-weight: 600;">
                                             <span style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 0.75rem;">${card.cardType}</span>
                                         </td>
-                                        <td style="padding: 15px; text-transform: uppercase; font-weight: 500;">${card.cardProvider}</td>
-                                        <td style="padding: 15px; font-weight: 500;">${card.cardHolderName}</td>
-                                        <td style="padding: 15px; font-family: monospace; letter-spacing: 1px;">${card.accountNumber}</td>
-                                        <td style="padding: 15px; font-weight: 600; color: var(--accent-emerald);">₹ ${card.cardFee}</td>
-                                        <td style="padding: 15px;"><fmt:formatDate value="${card.createdAt}" pattern="yyyy-MM-dd HH:mm" /></td>
-                                        <td style="padding: 15px; text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; white-space: nowrap;">
+                                        <td style="text-transform: uppercase; font-weight: 500;">${card.cardProvider}</td>
+                                        <td style="font-weight: 500;">${card.cardHolderName}</td>
+                                        <td><span class="badge-id">${card.accountNumber}</span></td>
+                                        <td style="font-weight: 600; color: var(--accent-emerald);">₹ ${card.cardFee}</td>
+                                        <td><fmt:formatDate value="${card.createdAt}" pattern="yyyy-MM-dd HH:mm" /></td>
+                                        <td style="text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; white-space: nowrap;">
                                             <button type="button" class="btn btn-secondary" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedAppliedDate}', '${card.status}', '${card.dailyLimit}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-show"></i> View 3D</button>
                                             <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald); margin-top: 0; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-check"></i> Approve</a>
                                             <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}" class="btn btn-secondary" onclick="return confirm('Reject and permanently close this card application?');" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; margin-top: 0; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-x"></i> Reject</a>
@@ -1173,19 +1470,19 @@
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
                     <i class="bx bx-credit-card-front"></i> All System Issued Cards Directory
                 </h3>
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <div class="table-responsive">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px;">Sr No.</th>
-                                <th style="padding: 12px 15px;">Card Number</th>
-                                <th style="padding: 12px 15px;">Holder Name</th>
-                                <th style="padding: 12px 15px;">Card Type</th>
-                                <th style="padding: 12px 15px;">Provider</th>
-                                <th style="padding: 12px 15px;">Expiry Date</th>
-                                <th style="padding: 12px 15px;">Dues (Credit)</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: center;">Actions</th>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Card Number</th>
+                                <th>Holder Name</th>
+                                <th>Card Type</th>
+                                <th>Provider</th>
+                                <th>Expiry Date</th>
+                                <th>Dues (Credit)</th>
+                                <th>Status</th>
+                                <th style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1193,17 +1490,17 @@
                                 <c:when test="${not empty cards}">
                                     <c:forEach var="card" items="${cards}" varStatus="status">
                                         <fmt:formatDate var="formattedExpiryDate" value="${card.expiryDate}" pattern="MM/yy" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-600);">${status.count}</td>
-                                            <td style="padding: 15px; font-family: monospace; letter-spacing: 1px;">${card.cardNumber}</td>
-                                            <td style="padding: 15px; font-weight: 500;">${card.cardHolderName}</td>
-                                            <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">${card.cardType}</td>
-                                            <td style="padding: 15px; text-transform: uppercase;">${card.cardProvider}</td>
-                                            <td style="padding: 15px;"><fmt:formatDate value="${card.expiryDate}" pattern="yyyy-MM-dd" /></td>
-                                            <td style="padding: 15px; font-weight: 700;" class="${card.outstandingBalance gt 0 ? 'card-dues-warning' : 'card-dues-normal'}">
+                                        <tr>
+                                            <td style="font-weight: 600; color: var(--gray-600);">${status.count}</td>
+                                            <td><span class="badge-id">${card.cardNumber}</span></td>
+                                            <td style="font-weight: 500;">${card.cardHolderName}</td>
+                                            <td style="text-transform: capitalize; font-weight: 600;">${card.cardType}</td>
+                                            <td style="text-transform: uppercase;">${card.cardProvider}</td>
+                                            <td><fmt:formatDate value="${card.expiryDate}" pattern="yyyy-MM-dd" /></td>
+                                            <td style="font-weight: 700;" class="${card.outstandingBalance gt 0 ? 'card-dues-warning' : 'card-dues-normal'}">
                                                 ₹ <fmt:formatNumber value="${card.outstandingBalance}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
-                                            <td style="padding: 15px;">
+                                            <td>
                                                 <c:choose>
                                                     <c:when test="${card.status eq 'active'}">
                                                         <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Active</span>
@@ -1219,7 +1516,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; white-space: nowrap;">
+                                            <td style="text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; white-space: nowrap;">
                                                 <button type="button" class="btn btn-secondary" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedExpiryDate}', '${card.status}', '${card.dailyLimit}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-show"></i> View 3D</button>
                                                 <c:if test="${card.status eq 'active'}">
                                                     <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}" class="btn btn-secondary" onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; margin-top: 0; width: 95px; min-width: 95px; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><i class="bx bx-power-off"></i> Close</a>
@@ -1376,6 +1673,7 @@
         </div>
     </div>
 
+    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
         function updateDynamicCardDetails(cardElementId, tierElId, brandLogoElId, backEmblemElId, cardType, provider, dailyLimit, status = 'active') {
             const card = document.getElementById(cardElementId);
@@ -1661,9 +1959,65 @@
         window.addEventListener('DOMContentLoaded', () => {
             init3DCardTiltEffect();
             syncDemoCard();
+
+            // Override global theme toggle hidden behavior
+            const themeBtn = document.getElementById('themeToggle');
+            if (themeBtn) {
+                themeBtn.style.setProperty('display', 'flex', 'important');
+                themeBtn.onclick = function () {
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    themeBtn.querySelector('i').className = isDark ? 'bx bx-sun' : 'bx bx-moon';
+                    localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
+                };
+
+                // Sync with stored theme preference on load
+                const savedTheme = localStorage.getItem('admin-theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeBtn.querySelector('i').className = 'bx bx-sun';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    themeBtn.querySelector('i').className = 'bx bx-moon';
+                }
+            }
+
+            // Mobile menu toggle handler
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (sidebar.classList.contains('active')) {
+                        icon.className = 'bx bx-x';
+                    } else {
+                        icon.className = 'bx bx-menu';
+                    }
+                });
+
+                // Close sidebar if clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        mobileToggle.querySelector('i').className = 'bx bx-menu';
+                    }
+                });
+            }
+
+            // Cursor glow follower
+            const glow = document.querySelector('.cursor-glow');
+            if (glow) {
+                window.addEventListener('mousemove', (e) => {
+                    const { clientX, clientY } = e;
+                    requestAnimationFrame(() => {
+                        glow.style.left = clientX + 'px';
+                        glow.style.top = clientY + 'px';
+                    });
+                });
+            }
         });
     </script>
-
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
 </body>
 </html>

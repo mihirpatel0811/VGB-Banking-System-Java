@@ -7,61 +7,202 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Manage Cheque Books</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(99, 102, 241, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.04);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        body {
+            background-color: #f6f8fc !important;
+            color: var(--gray-700) !important;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body.dark-mode {
+            --glass-bg: rgba(30, 41, 59, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background-color: #0f172a !important;
+        }
+
+        /* Preloader override */
+        .preloader {
+            background: #f6f8fc;
+            z-index: 9999;
+        }
+        body.dark-mode .preloader {
+            background: #0f172a;
+        }
+
+        /* Background blur animation cursor glow */
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+        body.dark-mode .cursor-glow {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        /* --- STICKY GLASSMORPHIC HEADER --- */
+        .header {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            padding: 20px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        
+        body.dark-mode .header {
+            background: rgba(15, 23, 42, 0.6) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 14px 40px;
+            border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-mode .header.scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-nav-toggle {
+            display: none !important;
+        }
+        body.dark-mode .mobile-nav-toggle {
+            color: var(--gray-300) !important;
+        }
+
+        /* --- STYLISH SIDEBAR --- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-right: 1px solid var(--glass-border) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: var(--panel-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 20px;
-            color: var(--gray-600);
+            padding: 12px 18px;
+            color: var(--gray-600) !important;
             font-weight: 500;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
             transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
         }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
         }
+
+        .sidebar-menu a i {
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateX(4px);
+        }
+        
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
+
+        .sidebar-menu a:hover i {
+            transform: scale(1.1);
+        }
+
+        .sidebar-menu a.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+            border-color: transparent;
+        }
+
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
-            background: var(--gray-50);
+            background: transparent;
+            z-index: 10;
+            position: relative;
         }
-        @media (max-width: 991px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 120px 20px 20px; }
-        }
+
+        /* --- PREMIUM GLASS CARDS --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
-            padding: 25px;
-            box-shadow: var(--shadow-md);
+            padding: 28px;
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
             margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         
+        body.dark-mode .glass-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.2) !important;
+        }
+
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -69,16 +210,35 @@
             margin-bottom: 30px;
         }
 
+        /* --- STATS CARD ACCENTS --- */
         .stat-card {
-            background: white;
-            border: 1px solid var(--gray-200);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
             padding: 20px;
             display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        body.dark-mode .stat-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
+        }
+
+        body.dark-mode .stat-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         .stat-icon {
             width: 50px;
             height: 50px;
@@ -89,32 +249,90 @@
             font-size: 1.5rem;
             flex-shrink: 0;
         }
+
+        /* --- PREMIUM MODERN TABLES --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 16px 20px;
+            color: var(--gray-500);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            white-space: nowrap;
+        }
+
+        body.dark-mode th {
+            color: var(--gray-400);
+        }
+
+        td {
+            padding: 18px 20px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        body.dark-mode td {
+            color: var(--gray-300);
+            border-bottom-color: rgba(255, 255, 255, 0.04);
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        body.dark-mode tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
         .badge-pending {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--accent-amber);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .badge-approved {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent-emerald);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .badge-rejected {
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.12);
             color: #ef4444;
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* ===== 3D CHEQUE VISUALIZER IN MODAL ===== */
@@ -484,11 +702,18 @@
             position: relative;
             transform-style: preserve-3d;
             cursor: pointer;
+            transition: transform 0.3s ease;
         }
         @media (max-width: 480px) {
             .chequebook-wrapper {
-                width: 320px;
-                height: 200px;
+                transform: scale(0.75);
+                transform-origin: center center;
+            }
+        }
+        @media (max-width: 380px) {
+            .chequebook-wrapper {
+                transform: scale(0.68);
+                transform-origin: center center;
             }
         }
 
@@ -516,19 +741,24 @@
             opacity: 0.8;
         }
 
-        /* 3D cover swing wrapper */
+        /* 3D cover swing wrapper - transitions opacity and visibility to hide left cover when open */
         .chequebook-cover-wrapper {
             position: absolute;
             inset: 0;
             transform-origin: left center;
             transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s ease;
             z-index: 30;
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Book states */
         .chequebook-book.open .chequebook-cover-wrapper {
             transform: rotateY(-155deg);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .chequebook-book.open {
@@ -602,9 +832,11 @@
 
         .chequebook-page.page-instructions {
             transform-origin: left center;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s ease;
             transform-style: preserve-3d;
             z-index: 25;
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Front cover features list style */
@@ -767,6 +999,9 @@
             transform: rotateY(-165deg);
             z-index: 28 !important;
             box-shadow: -5px 10px 20px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         /* Faint grey watermark logo in the center of booklet pages */
@@ -887,9 +1122,10 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             width: 100%;
             max-width: 680px;
             border-radius: var(--radius-lg);
@@ -932,6 +1168,114 @@
         .close-btn:hover {
             color: #ef4444;
         }
+
+        /* --- MONOSPACE ID BADGE --- */
+        .badge-id {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            font-size: 0.8rem;
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(99, 102, 241, 0.08);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        body.dark-mode .badge-id {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary-300);
+        }
+
+        /* --- DARK MODE SIMULATOR & CUSTOMIZER CONTROLS --- */
+        body.dark-mode .control-label {
+            color: var(--gray-400);
+        }
+        body.dark-mode .control-input, body.dark-mode .control-select {
+            background: rgba(15, 23, 42, 0.45) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: var(--white) !important;
+        }
+        body.dark-mode .control-input:focus, body.dark-mode .control-select:focus {
+            border-color: var(--primary-500) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+        }
+        body.dark-mode .simulator-display {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(6, 182, 212, 0.02) 100%) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode .modal-content {
+            background: rgba(15, 23, 42, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* --- RESPONSIVE WORKOUTS --- */
+        @media (max-width: 991px) {
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
+            .mobile-grid-1 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Show both pages side-by-side in modals on larger viewports */
+        @media (min-width: 768px) {
+            .modal .chequebook-book.open .chequebook-cover-wrapper {
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+            }
+
+            .modal .chequebook-page.page-instructions.turned {
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+            }
+        }
+
+        /* Modal scaling rules to ensure perfect sizing and no cropping */
+        .modal .chequebook-wrapper {
+            transform: scale(1);
+            transform-origin: center center;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 991px) {
+            .modal .chequebook-wrapper {
+                transform: scale(0.8);
+            }
+        }
+
+        @media (max-width: 767px) {
+            /* Fallback to centered single page mode on mobile modal viewports */
+            .modal .chequebook-wrapper {
+                transform: scale(0.75);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal .chequebook-wrapper {
+                transform: scale(0.65);
+            }
+        }
     </style>
 </head>
 <body class="bank-home-page">
@@ -946,9 +1290,14 @@
 
     <!-- Header -->
     <header class="header scrolled">
-        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
-        </a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                <i class="bx bx-menu"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
+            </a>
+        </div>
         <div class="nav-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
@@ -1013,7 +1362,7 @@
             </c:forEach>
 
             <div class="stat-grid">
-                <div class="stat-card">
+                <div class="stat-card" style="border-left: 5px solid var(--primary-500);">
                     <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
                         <i class="bx bx-book-open"></i>
                     </div>
@@ -1022,7 +1371,7 @@
                         <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${requests.size()}</h3>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" style="border-left: 5px solid #fbbf24;">
                     <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
                         <i class="bx bx-time"></i>
                     </div>
@@ -1031,7 +1380,7 @@
                         <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" style="border-left: 5px solid var(--accent-emerald);">
                     <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
                         <i class="bx bx-check-double"></i>
                     </div>
@@ -1040,7 +1389,7 @@
                         <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${approvedCount}</h3>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" style="border-left: 5px solid #ef4444;">
                     <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
                         <i class="bx bx-x-circle"></i>
                     </div>
@@ -1070,6 +1419,7 @@
                                 <i class="bx bx-expand-alt" style="font-size: 0.8rem;"></i> 3D Sandbox
                             </span>
                         </div>
+                        <button type="button" class="btn" style="position: absolute; top: 12px; right: 15px; background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: 1px solid rgba(99, 102, 241, 0.2); padding: 5px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; z-index: 100;" onclick="openFullChequeDemo3D(event)"><i class="bx bx-expand"></i> View Full 3D</button>
 
                         <div class="chequebook-wrapper" id="demoChequebookWrapper" onclick="toggleDemoBookOpen()">
                             <div class="chequebook-book" id="demo3dChequebook">
@@ -1436,7 +1786,7 @@
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <i class="bx bx-task" style="color: var(--primary-500);"></i> Executive Cheque Book Request Ledger
                 </h3>
-                <div style="overflow-x: auto;">
+                <div class="table-responsive">
                     <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead>
                             <tr style="border-bottom: 2px solid var(--gray-200); padding-bottom: 10px; color: var(--gray-500); font-weight: 600; font-size: 0.85rem;">
@@ -1453,110 +1803,110 @@
                         <tbody>
                             <c:choose>
                                 <c:when test="${not empty requests}">
-                                    <c:forEach var="req" items="${requests}">
-                                        <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);">#${req.requestId}</td>
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
-                                            <td style="padding: 15px; font-family: monospace; font-weight: 600;">${req.accountNumber}</td>
-                                            <td style="padding: 15px;"><strong>${req.leavesCount} Leaves</strong></td>
-                                            <td style="padding: 15px;">
-                                                <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
-                                                <c:choose>
-                                                    <c:when test="${req.chargesPaid}">
-                                                        <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Paid</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Refunded</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px; color: var(--gray-500);">
-                                                <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
-                                            </td>
-                                            <td style="padding: 15px;">
-                                                <c:choose>
-                                                    <c:when test="${req.status eq 'approved'}">
-                                                        <span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>
-                                                    </c:when>
-                                                    <c:when test="${req.status eq 'pending'}">
-                                                        <span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px; text-align: right;">
-                                                <c:choose>
-                                                    <c:when test="${req.status eq 'pending'}">
-                                                        <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                            <button type="button" class="btn" 
-                                                                    data-id="${req.requestId}" 
-                                                                    data-name="${req.customerName}" 
-                                                                    data-account="${req.accountNumber}" 
-                                                                    data-leaves="${req.leavesCount}" 
-                                                                    data-charges="${req.charges}" 
-                                                                    data-date="${formattedDate}" 
-                                                                    data-status="${req.status}"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                                    onclick="inspectRequest(this)">
-                                                                <i class="bx bx-show"></i> View Leaf
-                                                            </button>
-                                                            <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
-                                                               class="btn btn-primary" 
-                                                               style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
-                                                               onclick="return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');">
-                                                                Approve
-                                                            </a>
-                                                            <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}" 
-                                                               class="btn btn-danger" 
-                                                               style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
-                                                               onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">
-                                                                Reject
-                                                            </a>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                            <button type="button" class="btn" 
-                                                                    data-id="${req.requestId}" 
-                                                                    data-name="${req.customerName}" 
-                                                                    data-account="${req.accountNumber}" 
-                                                                    data-leaves="${req.leavesCount}" 
-                                                                    data-charges="${req.charges}" 
-                                                                    data-date="${formattedDate}" 
-                                                                    data-status="${req.status}"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                                    onclick="inspectRequest(this)">
-                                                                <i class="bx bx-show"></i> View Leaf
-                                                            </button>
-                                                            <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <tr>
-                                        <td colspan="8" style="padding: 30px; text-align: center; color: var(--gray-400); font-style: italic;">
-                                            <i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No cheque book requests have been submitted.
-                                        </td>
-                                    </tr>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                     <c:forEach var="req" items="${requests}">
+                                         <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
+                                         <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
+                                             <td style="padding: 15px;"><span class="badge-id">#${req.requestId}</span></td>
+                                             <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
+                                             <td style="padding: 15px;"><span class="badge-id">${req.accountNumber}</span></td>
+                                             <td style="padding: 15px;"><strong>${req.leavesCount} Leaves</strong></td>
+                                             <td style="padding: 15px;">
+                                                 <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
+                                                 <c:choose>
+                                                     <c:when test="${req.chargesPaid}">
+                                                         <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Paid</span>
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Refunded</span>
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                             </td>
+                                             <td style="padding: 15px; color: var(--gray-500);">
+                                                 <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
+                                             </td>
+                                             <td style="padding: 15px;">
+                                                 <c:choose>
+                                                     <c:when test="${req.status eq 'approved'}">
+                                                         <span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>
+                                                     </c:when>
+                                                     <c:when test="${req.status eq 'pending'}">
+                                                         <span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         <span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                             </td>
+                                             <td style="padding: 15px; text-align: right;">
+                                                 <c:choose>
+                                                     <c:when test="${req.status eq 'pending'}">
+                                                         <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                                                             <button type="button" class="btn" 
+                                                                     data-id="${req.requestId}" 
+                                                                     data-name="${req.customerName}" 
+                                                                     data-account="${req.accountNumber}" 
+                                                                     data-leaves="${req.leavesCount}" 
+                                                                     data-charges="${req.charges}" 
+                                                                     data-date="${formattedDate}" 
+                                                                     data-status="${req.status}"
+                                                                     style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
+                                                                     onclick="inspectRequest(this)">
+                                                                 <i class="bx bx-show"></i> View Leaf
+                                                             </button>
+                                                             <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
+                                                                class="btn btn-primary" 
+                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
+                                                                onclick="return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');">
+                                                                 Approve
+                                                             </a>
+                                                             <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}" 
+                                                                class="btn btn-danger" 
+                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
+                                                                onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">
+                                                                 Reject
+                                                             </a>
+                                                         </div>
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                                                             <button type="button" class="btn" 
+                                                                     data-id="${req.requestId}" 
+                                                                     data-name="${req.customerName}" 
+                                                                     data-account="${req.accountNumber}" 
+                                                                     data-leaves="${req.leavesCount}" 
+                                                                     data-charges="${req.charges}" 
+                                                                     data-date="${formattedDate}" 
+                                                                     data-status="${req.status}"
+                                                                     style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
+                                                                     onclick="inspectRequest(this)">
+                                                                 <i class="bx bx-show"></i> View Leaf
+                                                             </button>
+                                                             <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
+                                                         </div>
+                                                     </c:otherwise>
+                                                 </c:choose>
+                                             </td>
+                                         </tr>
+                                     </c:forEach>
+                                 </c:when>
+                                 <c:otherwise>
+                                     <tr>
+                                         <td colspan="8" style="padding: 30px; text-align: center; color: var(--gray-400); font-style: italic;">
+                                             <i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No cheque book requests have been submitted.
+                                         </td>
+                                     </tr>
+                                 </c:otherwise>
+                             </c:choose>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
         </div>
     </main>
 
     <!-- Modal: Premium 3D Cheque Inspector -->
     <div id="inspectModal" class="modal">
-        <div class="modal-content" style="max-width: 680px;">
+        <div class="modal-content" style="max-width: 920px; width: 95%;">
             <div class="modal-header">
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800);"><i class="bx bx-show"></i> Interactive Cheque Inspector</h3>
                 <button type="button" onclick="closeInspectModal()" class="close-btn">&times;</button>
@@ -1907,12 +2257,18 @@
             const modal = document.getElementById('inspectModal');
             
             // Set dynamic fields
-            document.getElementById('inspectRequestId').innerHTML = '#' + requestId;
-            document.getElementById('inspectCapacity').innerHTML = leavesCount + ' Leaves';
-            document.getElementById('inspectCharges').innerHTML = '₹ ' + charges.toFixed(2);
+            const reqIdEl = document.getElementById('inspectRequestId');
+            if (reqIdEl) reqIdEl.innerHTML = '#' + requestId;
+            
+            const capEl = document.getElementById('inspectCapacity');
+            if (capEl) capEl.innerHTML = leavesCount + ' Leaves';
+            
+            const charEl = document.getElementById('inspectCharges');
+            if (charEl) charEl.innerHTML = '₹ ' + charges.toFixed(2);
             
             // Sync Cheque visualizer
-            document.getElementById('inspectChequePayeeDisplay').innerHTML = 'Self or Bearer';
+            const payeeEl = document.getElementById('inspectChequePayeeDisplay');
+            if (payeeEl) payeeEl.innerHTML = 'Self or Bearer';
             
             let words = "One Hundred and Fifty Rupees Only";
             if (leavesCount === 25) {
@@ -1923,17 +2279,31 @@
                 words = "Two Hundred and Fifty Rupees Only";
             }
             
-            document.getElementById('inspectChequeRupeesTextDisplay').innerHTML = words;
-            document.getElementById('inspectChequeAmountDisplay').innerHTML = charges.toFixed(2);
-            document.getElementById('inspectChequeAccountDisplayVal').innerHTML = accountNumber;
-            document.getElementById('inspectChequeSignatureVal').innerHTML = customerName ? customerName.toUpperCase() : '';
-            document.getElementById('inspectChequeSignatureBackVal').innerHTML = customerName ? customerName.toUpperCase() : '';
-            document.getElementById('inspectpbCustName').innerHTML = customerName ? customerName.toUpperCase() : '';
-            document.getElementById('inspectpbAccNum').innerHTML = accountNumber;
+            const rupeesEl = document.getElementById('inspectChequeRupeesTextDisplay');
+            if (rupeesEl) rupeesEl.innerHTML = words;
+            
+            const amtEl = document.getElementById('inspectChequeAmountDisplay');
+            if (amtEl) amtEl.innerHTML = charges.toFixed(2);
+            
+            const accEl = document.getElementById('inspectChequeAccountDisplayVal');
+            if (accEl) accEl.innerHTML = accountNumber;
+            
+            const sigEl = document.getElementById('inspectChequeSignatureVal');
+            if (sigEl) sigEl.innerHTML = customerName ? customerName.toUpperCase() : '';
+            
+            const sigBackEl = document.getElementById('inspectChequeSignatureBackVal');
+            if (sigBackEl) sigBackEl.innerHTML = customerName ? customerName.toUpperCase() : '';
+            
+            const pbCustEl = document.getElementById('inspectpbCustName');
+            if (pbCustEl) pbCustEl.innerHTML = customerName ? customerName.toUpperCase() : '';
+            
+            const pbAccEl = document.getElementById('inspectpbAccNum');
+            if (pbAccEl) pbAccEl.innerHTML = accountNumber;
             
             // MICR Band parsing
             const last6 = accountNumber.length >= 6 ? accountNumber.substring(accountNumber.length - 6) : "018696";
-            document.getElementById('inspectChequeMicrVal').innerHTML = `⑈000076⑈ 360240005⑆ ${last6}⑈ 31`;
+            const micrEl = document.getElementById('inspectChequeMicrVal');
+            if (micrEl) micrEl.innerHTML = `⑈000076⑈ 360240005⑆ ${last6}⑈ 31`;
             
             // Date Squares parsing (Format expected: ddMMyyyy)
             const squares = document.getElementById('inspectChequeDateSquares');
@@ -2160,6 +2530,64 @@
                 });
             }
 
+            // Override global theme toggle hidden behavior
+            const themeBtn = document.getElementById('themeToggle');
+            if (themeBtn) {
+                themeBtn.style.setProperty('display', 'flex', 'important');
+                themeBtn.onclick = function () {
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    themeBtn.querySelector('i').className = isDark ? 'bx bx-sun' : 'bx bx-moon';
+                    localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
+                };
+
+                // Sync with stored theme preference on load
+                const savedTheme = localStorage.getItem('admin-theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeBtn.querySelector('i').className = 'bx bx-sun';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    themeBtn.querySelector('i').className = 'bx bx-moon';
+                }
+            }
+
+            // Mobile menu toggle handler
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (sidebar.classList.contains('active')) {
+                        icon.className = 'bx bx-x';
+                    } else {
+                        icon.className = 'bx bx-menu';
+                    }
+                });
+
+                // Close sidebar if clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        mobileToggle.querySelector('i').className = 'bx bx-menu';
+                    }
+                });
+            }
+
+            // Cursor glow follower
+            const glow = document.querySelector('.cursor-glow');
+            if (glow) {
+                window.addEventListener('mousemove', (e) => {
+                    const { clientX, clientY } = e;
+                    requestAnimationFrame(() => {
+                        glow.style.left = clientX + 'px';
+                        glow.style.top = clientY + 'px';
+                    });
+                });
+            }
+
             // Sync initial state of showcase cheque
             syncDemoCheque();
         });
@@ -2256,7 +2684,51 @@
             if (event.target === inspectModal) {
                 closeInspectModal();
             }
+            const fullChequeModal = document.getElementById('fullChequeModal');
+            if (event.target === fullChequeModal) {
+                closeFullChequeDemo3D();
+            }
+        }
+
+        // Modal open/close functions for full 3D cheque sandbox
+        function openFullChequeDemo3D(event) {
+            if (event) event.stopPropagation();
+            const modal = document.getElementById('fullChequeModal');
+            const modalScene = document.getElementById('modalChequeScene');
+            const wrapper = document.getElementById('demoChequebookWrapper');
+            
+            modalScene.appendChild(wrapper);
+            modal.style.display = 'flex';
+        }
+
+        function closeFullChequeDemo3D() {
+            const modal = document.getElementById('fullChequeModal');
+            const inlineScene = document.querySelector('.cheque-visualizer-container');
+            const wrapper = document.getElementById('demoChequebookWrapper');
+            
+            inlineScene.appendChild(wrapper);
+            modal.style.display = 'none';
         }
     </script>
+
+    <!-- Full 3D Cheque Visualizer Modal Overlay -->
+    <div id="fullChequeModal" class="modal">
+        <div class="modal-content" style="max-width: 920px; width: 95%; padding: 30px; position: relative; display: flex; flex-direction: column; align-items: center;">
+            <button type="button" onclick="closeFullChequeDemo3D()" class="close-btn" style="position: absolute; right: 20px; top: 20px; font-size: 1.8rem; z-index: 110;">&times;</button>
+            
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="bx bx-book-bookmark" style="color: var(--primary-500); font-size: 1.4rem;"></i> VGB Premium 3D Chequebook
+            </h3>
+
+            <!-- 3D Scene Container in Modal -->
+            <div id="modalChequeScene" style="perspective: 1200px; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(236, 72, 153, 0.02) 100%); border-radius: var(--radius-md); padding: 40px 20px;">
+                <!-- Cheque wrapper will be appended here dynamically on open -->
+            </div>
+            
+            <div style="font-size: 0.8rem; color: var(--gray-500); margin-top: 15px; text-align: center; font-weight: 500;">
+                <i class="bx bx-mouse-alt" style="vertical-align: middle;"></i> Move mouse inside card/book to rotate. Click to flip open or flip the cheque leaf.
+            </div>
+        </div>
+    </div>
 </body>
 </html>

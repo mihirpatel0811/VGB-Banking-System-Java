@@ -7,59 +7,213 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Manage Passbooks</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(99, 102, 241, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.04);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        body {
+            background-color: #f6f8fc !important;
+            color: var(--gray-700) !important;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body.dark-mode {
+            --glass-bg: rgba(30, 41, 59, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background-color: #0f172a !important;
+        }
+
+        /* Preloader override */
+        .preloader {
+            background: #f6f8fc;
+            z-index: 9999;
+        }
+        body.dark-mode .preloader {
+            background: #0f172a;
+        }
+
+        /* Background blur animation cursor glow */
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+        body.dark-mode .cursor-glow {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        /* --- STICKY GLASSMORPHIC HEADER --- */
+        .header {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            padding: 20px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        
+        body.dark-mode .header {
+            background: rgba(15, 23, 42, 0.6) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 14px 40px;
+            border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-mode .header.scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-nav-toggle {
+            display: none !important;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            color: var(--gray-700);
+            border-radius: var(--radius-sm);
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .mobile-nav-toggle {
+            color: var(--gray-300) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* --- STYLISH SIDEBAR --- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-right: 1px solid var(--glass-border) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: var(--panel-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 20px;
-            color: var(--gray-600);
+            padding: 12px 18px;
+            color: var(--gray-600) !important;
             font-weight: 500;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
             transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
         }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
         }
+
+        .sidebar-menu a i {
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateX(4px);
+        }
+        
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
+
+        .sidebar-menu a:hover i {
+            transform: scale(1.1);
+        }
+
+        .sidebar-menu a.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+            border-color: transparent;
+        }
+
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
-            background: var(--gray-50);
+            background: transparent;
+            z-index: 10;
+            position: relative;
         }
-        @media (max-width: 991px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 120px 20px 20px; }
-        }
+
+        /* --- PREMIUM GLASS CARDS --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
-            padding: 25px;
-            box-shadow: var(--shadow-md);
+            padding: 28px;
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
             margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body.dark-mode .glass-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.2) !important;
         }
 
         .stat-grid {
@@ -69,16 +223,35 @@
             margin-bottom: 30px;
         }
 
+        /* --- STATS CARD ACCENTS --- */
         .stat-card {
-            background: white;
-            border: 1px solid var(--gray-200);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
             padding: 20px;
             display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        body.dark-mode .stat-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
+        }
+
+        body.dark-mode .stat-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         .stat-icon {
             width: 50px;
             height: 50px;
@@ -90,32 +263,85 @@
             flex-shrink: 0;
         }
 
+        /* Status Badge Utilities */
         .badge-pending {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--accent-amber);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .badge-approved {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent-emerald);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .badge-rejected {
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.12);
             color: #ef4444;
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-id {
+            font-family: monospace;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--primary-600);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+        }
+        body.dark-mode .badge-id {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary-400);
+        }
+
+        .badge-new {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary-600);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
+        }
+        body.dark-mode .badge-new {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-400);
+        }
+
+        .badge-renew {
+            background: rgba(236, 72, 153, 0.12);
+            color: var(--secondary-600);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        body.dark-mode .badge-renew {
+            background: rgba(236, 72, 153, 0.2);
+            color: var(--secondary-400);
         }
 
         /* ===== 3D BOOKLET PASSBOOK PREVIEW AREA ===== */
@@ -146,7 +372,11 @@
             position: relative;
             overflow: hidden;
             height: 100%;
-            min-height: 320px;
+            min-height: 340px;
+        }
+        body.dark-mode .passbook-visualizer-container {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(236, 72, 153, 0.02) 100%);
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
         .passbook-wrapper {
@@ -155,6 +385,8 @@
             position: relative;
             transform-style: preserve-3d;
             cursor: pointer;
+            transform-origin: center center;
+            transition: transform 0.3s ease;
         }
 
         .passbook-book {
@@ -181,17 +413,23 @@
             opacity: 0.8;
         }
 
+        /* 3D cover swing wrapper - transitions opacity and visibility to hide left cover when open */
         .passbook-cover-wrapper {
             position: absolute;
             inset: 0;
             transform-origin: left center;
             transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s ease;
             z-index: 30;
+            opacity: 1;
+            visibility: visible;
         }
 
         .passbook-book.open .passbook-cover-wrapper {
             transform: rotateY(-155deg);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .passbook-book.open {
@@ -431,24 +669,161 @@
             50% { opacity: 1; transform: translateX(3px); }
         }
 
-        .badge-new {
-            background: rgba(99, 102, 241, 0.12);
-            color: var(--primary-600);
-            padding: 2px 8px;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        /* --- PREMIUM MODERN TABLES --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
         }
 
-        .badge-renew {
-            background: rgba(236, 72, 153, 0.12);
-            color: var(--secondary-600);
-            padding: 2px 8px;
-            border-radius: var(--radius-sm);
+        th {
+            padding: 16px 20px;
+            color: var(--gray-500);
             font-size: 0.75rem;
-            font-weight: 700;
             text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            white-space: nowrap;
+        }
+
+        body.dark-mode th {
+            color: var(--gray-400);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 18px 20px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        body.dark-mode td {
+            color: var(--gray-300);
+            border-bottom-color: rgba(255, 255, 255, 0.04);
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        body.dark-mode tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        /* --- RESPONSIVE WORKOUTS --- */
+        @media (max-width: 991px) {
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Show both pages side-by-side in modals on larger viewports */
+        @media (min-width: 768px) {
+            .modal .passbook-book.open .passbook-cover-wrapper {
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+            }
+        }
+
+        /* Responsive scaling for booklet sandbox */
+        @media (max-width: 991px) {
+            .modal .passbook-wrapper {
+                transform: scale(0.8);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .modal .passbook-wrapper {
+                transform: scale(0.75);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal .passbook-wrapper {
+                transform: scale(0.65);
+            }
+        }
+
+        /* Glassmorphic Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            width: 100%;
+            max-width: 600px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        body.dark-mode .modal-content {
+            background: rgba(15, 23, 42, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        @keyframes modalScaleUp {
+            from { transform: scale(0.9) translateY(10px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-400);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover {
+            color: var(--gray-900);
+        }
+        body.dark-mode .close-btn:hover {
+            color: white;
         }
     </style>
 </head>
@@ -464,9 +839,14 @@
 
     <!-- Header -->
     <header class="header scrolled">
-        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
-        </a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                <i class="bx bx-menu"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
+            </a>
+        </div>
         <div class="nav-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
@@ -523,41 +903,59 @@
                 <c:remove var="success" scope="session" />
             </c:if>
 
+            <!-- Dynamic Statistics Cards -->
+            <c:set var="pendingCount" value="0"/>
+            <c:set var="approvedCount" value="0"/>
+            <c:set var="rejectedCount" value="0"/>
+            <c:forEach var="r" items="${requests}">
+                <c:if test="${r.status eq 'pending'}"><c:set var="pendingCount" value="${pendingCount + 1}"/></c:if>
+                <c:if test="${r.status eq 'approved' or r.status eq 'delivered'}"><c:set var="approvedCount" value="${approvedCount + 1}"/></c:if>
+                <c:if test="${r.status eq 'rejected'}"><c:set var="rejectedCount" value="${rejectedCount + 1}"/></c:if>
+            </c:forEach>
+
+            <div class="stat-grid">
+                <div class="stat-card" style="border-left: 4px solid var(--primary-500);">
+                    <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
+                        <i class="bx bx-book-open"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Total Requests</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${requests.size()}</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--accent-amber);">
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
+                        <i class="bx bx-time"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Pending Review</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--accent-emerald);">
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                        <i class="bx bx-check-double"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Approved Books</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${approvedCount}</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--secondary-500);">
+                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                        <i class="bx bx-x-circle"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Rejected / Refunded</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${rejectedCount}</h3>
+                    </div>
+                </div>
+            </div>
+
             <!-- Stats & Preview Split Grid -->
             <div class="passbook-preview-layout">
                 <!-- Left Column: Stats + Preview Summary Info -->
                 <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Stat boxes -->
-                    <div class="stat-grid" style="margin-bottom: 0;">
-                        <div class="stat-card" style="border-left: 4px solid var(--accent-amber);">
-                            <div class="stat-icon" style="background: rgba(245,158,11,0.1); color: var(--accent-amber);">
-                                <i class="bx bx-time"></i>
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Pending Actions</span>
-                                <strong style="font-size: 1.4rem; color: var(--gray-800);">
-                                    <c:set var="pendingCount" value="0"/>
-                                    <c:forEach var="r" items="${requests}">
-                                        <c:if test="${r.status eq 'pending'}"><c:set var="pendingCount" value="${pendingCount + 1}"/></c:if>
-                                    </c:forEach>
-                                    ${pendingCount} Requests
-                                </strong>
-                            </div>
-                        </div>
-
-                        <div class="stat-card" style="border-left: 4px solid var(--primary-500);">
-                            <div class="stat-icon" style="background: rgba(99,102,241,0.1); color: var(--primary-500);">
-                                <i class="bx bx-book-open"></i>
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Total Applications</span>
-                                <strong style="font-size: 1.4rem; color: var(--gray-800);">
-                                    <c:out value="${requests.size()}" default="0"/> Total
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Booklet inspector instructions -->
                     <div class="glass-card" style="margin-bottom: 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
                         <div>
@@ -580,6 +978,8 @@
 
                 <!-- Right Column: Interactive 3D booklet visualizer -->
                 <div class="passbook-visualizer-container">
+                    <button type="button" class="btn" style="position: absolute; top: 12px; right: 15px; background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: 1px solid rgba(99, 102, 241, 0.2); padding: 5px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; z-index: 100;" onclick="openFullPassbook3D(event)"><i class="bx bx-expand"></i> View Full 3D</button>
+                    
                     <div class="passbook-wrapper" onclick="toggleBookOpen()">
                         <div class="passbook-book" id="3dPassbook">
                             <!-- Back Cover -->
@@ -686,8 +1086,8 @@
 
             <!-- Table of all requests -->
             <div class="glass-card">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-list-ol"></i> Passbook Applications</h3>
-                <div style="overflow-x: auto;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;"><i class="bx bx-list-ol" style="color: var(--primary-500);"></i> Passbook Applications</h3>
+                <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead>
                             <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
@@ -707,9 +1107,9 @@
                                     <c:forEach var="req" items="${requests}">
                                         <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
                                         <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);">#${req.requestId}</td>
+                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);"><span class="badge-id">#${req.requestId}</span></td>
                                             <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
-                                            <td style="padding: 15px; font-family: monospace; font-weight: 600;">${req.accountNumber}</td>
+                                            <td style="padding: 15px;"><span class="badge-id">${req.accountNumber}</span></td>
                                             <td style="padding: 15px;">
                                                 <c:choose>
                                                     <c:when test="${req.requestType eq 'new'}">
@@ -802,48 +1202,156 @@
 
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme toggle logic
+            const themeBtn = document.getElementById('themeToggle');
+            if (themeBtn) {
+                themeBtn.style.setProperty('display', 'flex', 'important');
+                themeBtn.onclick = function () {
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    const icon = themeBtn.querySelector('i');
+                    if (icon) icon.className = isDark ? 'bx bx-sun' : 'bx bx-moon';
+                    localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
+                };
+
+                // Sync with stored theme preference
+                const savedTheme = localStorage.getItem('admin-theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    const icon = themeBtn.querySelector('i');
+                    if (icon) icon.className = 'bx bx-sun';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    const icon = themeBtn.querySelector('i');
+                    if (icon) icon.className = 'bx bx-moon';
+                }
+            }
+
+            // Mobile menu toggle logic
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (icon) {
+                        icon.className = sidebar.classList.contains('active') ? 'bx bx-x' : 'bx bx-menu';
+                    }
+                });
+
+                // Close sidebar when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        const icon = mobileToggle.querySelector('i');
+                        if (icon) icon.className = 'bx bx-menu';
+                    }
+                });
+            }
+
+            // Cursor glow follower
+            const glow = document.querySelector('.cursor-glow');
+            if (glow) {
+                window.addEventListener('mousemove', (e) => {
+                    requestAnimationFrame(() => {
+                        glow.style.left = e.clientX + 'px';
+                        glow.style.top = e.clientY + 'px';
+                    });
+                });
+            }
+
+            // Preloader fadeout
+            const preloader = document.querySelector('.preloader');
+            if (preloader) {
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                }, 300);
+            }
+            
+            // Set current year in footer dynamically
+            const yearEl = document.querySelector('[data-current-year]');
+            if (yearEl) {
+                yearEl.textContent = new Date().getFullYear();
+            }
+        });
+
+        // 3D passbook variables & interactivity
         const book = document.getElementById('3dPassbook');
         const container = document.querySelector('.passbook-visualizer-container');
+        const wrapper = document.querySelector('.passbook-wrapper');
         const hint = document.getElementById('pbHint');
 
-        // Interactive 3D mouse move effect
-        container.addEventListener('mousemove', (e) => {
-            if (book.classList.contains('open')) return;
+        if (wrapper && book) {
+            wrapper.addEventListener('mousemove', (e) => {
+                if (book.classList.contains('open')) return;
 
-            const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+                const rect = wrapper.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+                const rX = -(y / rect.height) * 15;
+                const rY = (x / rect.width) * 22;
 
-            const maxRotX = 15;
-            const maxRotY = 22;
+                requestAnimationFrame(() => {
+                    book.style.transform = `rotateX(${12 + rX}deg) rotateY(${-18 + rY}deg) scale(1.025)`;
+                });
+            });
 
-            const rotX = -((y - centerY) / centerY) * maxRotX;
-            const rotY = ((x - centerX) / centerX) * maxRotY;
-
-            book.style.transform = `rotateX(${12 + rotX}deg) rotateY(${-18 + rotY}deg)`;
-        });
-
-        container.addEventListener('mouseleave', () => {
-            if (book.classList.contains('open')) return;
-            book.style.transform = `rotateX(12deg) rotateY(-18deg)`;
-        });
+            wrapper.addEventListener('mouseleave', () => {
+                if (book.classList.contains('open')) return;
+                requestAnimationFrame(() => {
+                    book.style.transform = `rotateX(12deg) rotateY(-18deg) scale(1)`;
+                });
+            });
+        }
 
         function toggleBookOpen() {
+            if (!book) return;
             book.classList.toggle('open');
             if (book.classList.contains('open')) {
-                hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Close';
+                if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Close';
                 book.style.transform = 'rotateX(15deg) rotateY(10deg)';
             } else {
-                hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Open';
+                if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Open';
                 book.style.transform = 'rotateX(12deg) rotateY(-18deg)';
+            }
+        }
+
+        // Modal open/close functions
+        function openFullPassbook3D(event) {
+            if (event) event.stopPropagation();
+            const modal = document.getElementById('fullPassbookModal');
+            const modalScene = document.getElementById('modalPassbookScene');
+            
+            if (modal && modalScene && wrapper) {
+                modalScene.appendChild(wrapper);
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeFullPassbook3D() {
+            const modal = document.getElementById('fullPassbookModal');
+            const inlineScene = document.querySelector('.passbook-visualizer-container');
+            const hintEl = document.getElementById('pbHint');
+            
+            if (modal && inlineScene && wrapper) {
+                inlineScene.insertBefore(wrapper, hintEl || null);
+                modal.style.display = 'none';
+            }
+        }
+
+        function closeFullPassbook3DOnOutsideClick(event) {
+            const modal = document.getElementById('fullPassbookModal');
+            if (modal && event.target === modal) {
+                closeFullPassbook3D();
             }
         }
 
         // View dynamic preview for a selected request
         function inspectRequest(btn) {
+            if (!btn) return;
             const id = btn.getAttribute('data-id');
             const name = btn.getAttribute('data-name');
             const acc = btn.getAttribute('data-account');
@@ -851,22 +1359,50 @@
             const acctype = btn.getAttribute('data-acctype');
             const status = btn.getAttribute('data-status');
 
-            document.getElementById('pbCustName').innerText = name;
-            document.getElementById('pbAccNum').innerText = acc;
-            document.getElementById('pbAccType').innerText = acctype;
-
+            const nameEl = document.getElementById('pbCustName');
+            const accEl = document.getElementById('pbAccNum');
+            const accTypeEl = document.getElementById('pbAccType');
             const wm = document.getElementById('pbWatermark');
-            wm.innerText = status;
-            wm.className = "passbook-status-watermark " + status.toLowerCase();
+
+            if (nameEl) nameEl.innerText = name || '';
+            if (accEl) accEl.innerText = acc || '';
+            if (accTypeEl) accTypeEl.innerText = acctype || '';
+
+            if (wm && status) {
+                wm.innerText = status;
+                wm.className = "passbook-status-watermark " + status.toLowerCase();
+            }
 
             // Open book cover automatically to show info
-            if (!book.classList.contains('open')) {
+            if (book && !book.classList.contains('open')) {
                 toggleBookOpen();
             }
 
             // Scroll visualizer into view on mobile
-            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (container) {
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
     </script>
+
+    <!-- Full 3D Passbook Visualizer Modal Overlay -->
+    <div id="fullPassbookModal" class="modal" onclick="closeFullPassbook3DOnOutsideClick(event)">
+        <div class="modal-content" style="max-width: 600px; padding: 30px; position: relative;">
+            <button type="button" onclick="closeFullPassbook3D()" class="close-btn" style="position: absolute; right: 20px; top: 20px; font-size: 1.8rem; z-index: 110;">&times;</button>
+            
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="bx bx-book-open" style="color: var(--primary-500); font-size: 1.4rem;"></i> VGB Premium 3D Passbook
+            </h3>
+
+            <!-- 3D Scene Container in Modal -->
+            <div id="modalPassbookScene" style="perspective: 1200px; width: 100%; min-height: 340px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(236, 72, 153, 0.02) 100%); border-radius: var(--radius-md); padding: 40px 20px;">
+                <!-- Passbook wrapper will be appended here dynamically on open -->
+            </div>
+            
+            <div style="font-size: 0.8rem; color: var(--gray-500); margin-top: 15px; text-align: center; font-weight: 500;">
+                <i class="bx bx-mouse-alt" style="vertical-align: middle;"></i> Move mouse inside card/book to rotate. Click to flip open or close.
+            </div>
+        </div>
+    </div>
 </body>
 </html>

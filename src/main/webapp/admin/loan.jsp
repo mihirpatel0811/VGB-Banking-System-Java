@@ -8,72 +8,214 @@
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>VGB | Admin Loan Review</title>
+                <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
                 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet">
                 <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
                 <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
                 <style>
+                    :root {
+                        --glass-bg: rgba(255, 255, 255, 0.45);
+                        --glass-border: rgba(99, 102, 241, 0.08);
+                        --card-glow: rgba(99, 102, 241, 0.04);
+                        --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+                    }
+
+                    body {
+                        background-color: #f6f8fc !important;
+                        color: var(--gray-700) !important;
+                        overflow-x: hidden;
+                        font-family: 'Poppins', sans-serif;
+                        transition: background-color 0.3s ease, color 0.3s ease;
+                    }
+                    
+                    body.dark-mode {
+                        --glass-bg: rgba(30, 41, 59, 0.45);
+                        --glass-border: rgba(255, 255, 255, 0.08);
+                        --card-glow: rgba(99, 102, 241, 0.1);
+                        --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+                        background-color: #0f172a !important;
+                    }
+
+                    /* Preloader override */
+                    .preloader {
+                        background: #f6f8fc;
+                        z-index: 9999;
+                    }
+                    body.dark-mode .preloader {
+                        background: #0f172a;
+                    }
+
+                    /* Background blur animation cursor glow */
+                    .cursor-glow {
+                        position: fixed;
+                        width: 350px;
+                        height: 350px;
+                        background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        transform: translate(-50%, -50%);
+                        z-index: 1;
+                        transition: left 0.1s ease-out, top 0.1s ease-out;
+                    }
+                    body.dark-mode .cursor-glow {
+                        background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+                    }
+
+                    /* --- STICKY GLASSMORPHIC HEADER --- */
+                    .header {
+                        background: rgba(255, 255, 255, 0.6) !important;
+                        backdrop-filter: blur(25px) saturate(180%);
+                        -webkit-backdrop-filter: blur(25px) saturate(180%);
+                        border-bottom: 1px solid var(--glass-border) !important;
+                        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+                        padding: 20px 40px;
+                        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        z-index: 1000;
+                    }
+                    
+                    body.dark-mode .header {
+                        background: rgba(15, 23, 42, 0.6) !important;
+                        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+                    }
+
+                    .header.scrolled {
+                        background: rgba(255, 255, 255, 0.8) !important;
+                        padding: 14px 40px;
+                        border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+                    }
+                    
+                    body.dark-mode .header.scrolled {
+                        background: rgba(15, 23, 42, 0.8) !important;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    }
+
+                    .mobile-nav-toggle {
+                        display: none !important;
+                        align-items: center;
+                        justify-content: center;
+                        width: 40px;
+                        height: 40px;
+                        font-size: 1.5rem;
+                        color: var(--gray-700);
+                        border-radius: var(--radius-sm);
+                        background: rgba(99, 102, 241, 0.05);
+                        border: 1px solid rgba(99, 102, 241, 0.1);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    body.dark-mode .mobile-nav-toggle {
+                        color: var(--gray-300) !important;
+                        border-color: rgba(255, 255, 255, 0.08) !important;
+                        background: rgba(255, 255, 255, 0.02);
+                    }
+
+                    /* --- STYLISH SIDEBAR --- */
                     .sidebar {
                         width: 280px;
-                        background: rgba(255, 255, 255, 0.9);
-                        backdrop-filter: blur(20px);
-                        border-right: 1px solid rgba(99, 102, 241, 0.15);
+                        background: rgba(255, 255, 255, 0.45) !important;
+                        backdrop-filter: blur(25px) saturate(180%) !important;
+                        -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+                        border-right: 1px solid var(--glass-border) !important;
                         padding: 30px 20px;
                         position: fixed;
                         top: 80px;
                         bottom: 0;
                         left: 0;
-                        z-index: 100;
+                        z-index: 99;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
+                        box-shadow: var(--panel-shadow);
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+                    
+                    body.dark-mode .sidebar {
+                        background: rgba(15, 23, 42, 0.45) !important;
                     }
 
                     .sidebar-menu a {
                         display: flex;
                         align-items: center;
                         gap: 15px;
-                        padding: 14px 20px;
-                        color: var(--gray-600);
+                        padding: 12px 18px;
+                        color: var(--gray-600) !important;
                         font-weight: 500;
                         border-radius: var(--radius-md);
                         margin-bottom: 8px;
                         transition: all var(--transition-normal);
+                        position: relative;
+                        overflow: hidden;
+                        border: 1px solid transparent;
                     }
 
-                    .sidebar-menu a:hover,
+                    body.dark-mode .sidebar-menu a {
+                        color: var(--gray-400) !important;
+                    }
+
+                    .sidebar-menu a i {
+                        font-size: 1.25rem;
+                        transition: transform var(--transition-fast);
+                    }
+
+                    .sidebar-menu a:hover {
+                        background: rgba(99, 102, 241, 0.06);
+                        color: var(--primary-500) !important;
+                        border-color: rgba(99, 102, 241, 0.1);
+                        transform: translateX(4px);
+                    }
+                    
+                    body.dark-mode .sidebar-menu a:hover {
+                        background: rgba(255, 255, 255, 0.03);
+                        color: var(--white) !important;
+                    }
+
+                    .sidebar-menu a:hover i {
+                        transform: scale(1.1);
+                    }
+
                     .sidebar-menu a.active {
-                        background: var(--gradient-primary);
-                        color: white;
-                        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+                        background: var(--gradient-primary) !important;
+                        color: white !important;
+                        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+                        border-color: transparent;
                     }
 
+                    body.dark-mode .sidebar-menu a.active {
+                        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+                    }
+
+                    /* --- MAIN CONTENT AREA --- */
                     .main-content {
                         margin-left: 280px;
                         padding: 120px 40px 40px;
                         min-height: 100vh;
-                        background: var(--gray-50);
+                        background: transparent;
+                        z-index: 10;
+                        position: relative;
                     }
 
-                    @media (max-width: 991px) {
-                        .sidebar {
-                            display: none;
-                        }
-
-                        .main-content {
-                            margin-left: 0;
-                            padding: 120px 20px 20px;
-                        }
-                    }
-
+                    /* --- PREMIUM GLASS CARDS --- */
                     .glass-card {
-                        background: rgba(255, 255, 255, 0.7);
-                        backdrop-filter: blur(20px);
-                        border: 1px solid rgba(99, 102, 241, 0.15);
+                        background: var(--glass-bg) !important;
+                        backdrop-filter: blur(25px) saturate(180%);
+                        -webkit-backdrop-filter: blur(25px) saturate(180%);
+                        border: 1px solid rgba(255, 255, 255, 0.5) !important;
                         border-radius: var(--radius-lg);
-                        padding: 25px;
-                        box-shadow: var(--shadow-md);
+                        padding: 28px;
+                        box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
                         margin-bottom: 30px;
+                        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+                    }
+                    
+                    body.dark-mode .glass-card {
+                        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+                        box-shadow: var(--panel-shadow);
+                    }
+
+                    .glass-card:hover {
+                        border-color: rgba(99, 102, 241, 0.2) !important;
                     }
 
                     /* Print Optimized CSS */
@@ -112,7 +254,7 @@
                             margin: 0 !important;
                         }
 
-                        #statementModal .glass-card {
+                        #statementModal .modal-card {
                             max-width: 100% !important;
                             max-height: none !important;
                             overflow: visible !important;
@@ -167,19 +309,40 @@
                         display: none;
                     }
 
+                    /* --- TAB BUTTONS --- */
                     .tab-btn {
-                        background: rgba(255, 255, 255, 0.6);
-                        color: var(--gray-600);
-                        border: 1px solid rgba(99, 102, 241, 0.15);
+                        background: var(--glass-bg) !important;
+                        color: var(--gray-600) !important;
+                        border: 1px solid rgba(99, 102, 241, 0.15) !important;
                         box-shadow: var(--shadow-sm);
                         cursor: pointer;
                         transition: all var(--transition-normal);
+                        backdrop-filter: blur(20px);
+                        -webkit-backdrop-filter: blur(20px);
+                    }
+
+                    body.dark-mode .tab-btn {
+                        color: var(--gray-400) !important;
+                        border-color: rgba(255, 255, 255, 0.08) !important;
+                        background: rgba(30, 41, 59, 0.45) !important;
                     }
 
                     .tab-btn:hover {
-                        background: rgba(99, 102, 241, 0.05);
-                        color: var(--primary-500);
+                        background: rgba(99, 102, 241, 0.05) !important;
+                        color: var(--primary-500) !important;
                         transform: translateY(-2px);
+                    }
+
+                    body.dark-mode .tab-btn:hover {
+                        background: rgba(255, 255, 255, 0.02) !important;
+                        color: white !important;
+                    }
+
+                    .tab-btn.active {
+                        background: var(--gradient-primary) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25) !important;
                     }
 
                     /* Printable paper layout inside Admin View Modal */
@@ -196,11 +359,28 @@
                         position: relative;
                         max-width: 800px;
                         margin: 0 auto;
+                        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
                     }
+
+                    body.dark-mode .loan-paper-form {
+                        background: #1e293b;
+                        border-color: rgba(255, 255, 255, 0.08);
+                        color: #cbd5e1;
+                        box-shadow: var(--shadow-xl);
+                    }
+
                     .loan-paper-form h1, .loan-paper-form h2, .loan-paper-form h3, .loan-paper-form h4 {
                         font-family: 'Poppins', sans-serif;
                         color: #0f172a;
                     }
+
+                    body.dark-mode .loan-paper-form h1,
+                    body.dark-mode .loan-paper-form h2,
+                    body.dark-mode .loan-paper-form h3,
+                    body.dark-mode .loan-paper-form h4 {
+                        color: #f1f5f9;
+                    }
+
                     .loan-paper-form h1 {
                         font-size: 1.5rem;
                         font-weight: 800;
@@ -211,6 +391,11 @@
                         padding-bottom: 12px;
                         margin-bottom: 20px;
                     }
+
+                    body.dark-mode .loan-paper-form h1 {
+                        border-bottom-color: #64748b;
+                    }
+
                     .loan-paper-form h2 {
                         font-size: 1.05rem;
                         font-weight: 700;
@@ -222,15 +407,23 @@
                         color: #475569;
                         letter-spacing: 0.5px;
                     }
+
+                    body.dark-mode .loan-paper-form h2 {
+                        border-bottom-color: #475569;
+                        color: #cbd5e1;
+                    }
+
                     .loan-paper-form table {
                         width: 100%;
                         border-collapse: collapse;
                         margin-bottom: 15px;
                     }
+
                     .loan-paper-form td {
                         padding: 6px 0;
                         vertical-align: middle;
                     }
+
                     .loan-paper-form input[type="text"], .loan-paper-form input[type="date"], .loan-paper-form input[type="number"], .loan-paper-form select, .loan-paper-form textarea {
                         border: none;
                         border-bottom: 1px dotted #475569 !important;
@@ -242,6 +435,233 @@
                         color: #0f172a;
                         width: 100%;
                         padding: 2px 5px;
+                    }
+
+                    body.dark-mode .loan-paper-form input[type="text"],
+                    body.dark-mode .loan-paper-form input[type="date"],
+                    body.dark-mode .loan-paper-form input[type="number"],
+                    body.dark-mode .loan-paper-form select,
+                    body.dark-mode .loan-paper-form textarea {
+                        border-bottom-color: #64748b !important;
+                        color: #f1f5f9;
+                    }
+
+                    /* --- INPUTS AND SELECTS --- */
+                    .form-control, .control-select, .control-input {
+                        width: 100%;
+                        padding: 12px 15px;
+                        border: 1.5px solid var(--gray-200);
+                        border-radius: var(--radius-md);
+                        background: white;
+                        outline: none;
+                        font-family: var(--font-family);
+                        transition: all 0.3s ease;
+                    }
+
+                    body.dark-mode .form-control,
+                    body.dark-mode .control-select,
+                    body.dark-mode .control-input {
+                        background: #0f172a !important;
+                        border-color: rgba(255, 255, 255, 0.08) !important;
+                        color: white !important;
+                    }
+
+                    .form-control:focus, .control-select:focus, .control-input:focus {
+                        border-color: var(--primary-500);
+                        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+                    }
+
+                    /* Badge Monospace styling */
+                    .badge-pending {
+                        background: rgba(245, 158, 11, 0.12);
+                        color: var(--accent-amber);
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .badge-approved {
+                        background: rgba(16, 185, 129, 0.12);
+                        color: var(--accent-emerald);
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .badge-rejected {
+                        background: rgba(239, 68, 68, 0.12);
+                        color: #ef4444;
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .badge-id {
+                        font-family: monospace;
+                        font-weight: 600;
+                        letter-spacing: 0.5px;
+                        background: rgba(99, 102, 241, 0.08);
+                        color: var(--primary-600);
+                        padding: 4px 8px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.8rem;
+                    }
+                    body.dark-mode .badge-id {
+                        background: rgba(99, 102, 241, 0.15);
+                        color: var(--primary-400);
+                    }
+
+                    /* --- PREMIUM MODERN TABLES --- */
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        text-align: left;
+                    }
+
+                    th {
+                        padding: 16px 20px;
+                        color: var(--gray-500);
+                        font-size: 0.75rem;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                        border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+                        white-space: nowrap;
+                    }
+
+                    body.dark-mode th {
+                        color: var(--gray-400);
+                        border-bottom-color: rgba(255, 255, 255, 0.1);
+                    }
+
+                    td {
+                        padding: 18px 20px;
+                        font-size: 0.875rem;
+                        color: var(--gray-700);
+                        border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+                        vertical-align: middle;
+                        white-space: nowrap;
+                    }
+
+                    body.dark-mode td {
+                        color: var(--gray-300);
+                        border-bottom-color: rgba(255, 255, 255, 0.04);
+                    }
+
+                    tr {
+                        transition: background 0.2s ease;
+                    }
+
+                    tr:hover td {
+                        background: rgba(99, 102, 241, 0.02);
+                    }
+
+                    body.dark-mode tr:hover td {
+                        background: rgba(255, 255, 255, 0.01);
+                    }
+
+                    /* --- RESPONSIVE WORKOUTS --- */
+                    @media (max-width: 991px) {
+                        .mobile-nav-toggle {
+                            display: flex !important;
+                        }
+                        .sidebar {
+                            left: -280px !important;
+                            top: 80px;
+                            height: calc(100vh - 80px);
+                            z-index: 1000;
+                        }
+                        .sidebar.active {
+                            left: 0 !important;
+                        }
+                        .main-content {
+                            margin-left: 0 !important;
+                            padding: 120px 20px 40px !important;
+                        }
+                        .footer {
+                            margin-left: 0 !important;
+                        }
+                    }
+
+                    /* Glassmorphic Modal */
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        z-index: 1000;
+                        background: rgba(15, 23, 42, 0.6);
+                        backdrop-filter: blur(8px);
+                        align-items: center;
+                        justify-content: center;
+                        padding: 20px;
+                    }
+
+                    .modal-content {
+                        background: rgba(255, 255, 255, 0.95);
+                        backdrop-filter: blur(25px);
+                        border: 1px solid rgba(99, 102, 241, 0.2);
+                        width: 100%;
+                        border-radius: var(--radius-lg);
+                        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+                        animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        overflow: hidden;
+                        max-height: 90vh;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    
+                    body.dark-mode .modal-content {
+                        background: rgba(15, 23, 42, 0.85) !important;
+                        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                    }
+
+                    .modal-card {
+                        background: rgba(255, 255, 255, 0.95) !important;
+                        backdrop-filter: blur(25px) saturate(180%);
+                        -webkit-backdrop-filter: blur(25px) saturate(180%);
+                        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+                        box-shadow: var(--panel-shadow), var(--shadow-2xl) !important;
+                        border-radius: var(--radius-lg);
+                        padding: 35px;
+                    }
+                    body.dark-mode .modal-card {
+                        background: rgba(15, 23, 42, 0.92) !important;
+                        border-color: rgba(255, 255, 255, 0.08) !important;
+                    }
+
+                    @keyframes modalScaleUp {
+                        from { transform: scale(0.9) translateY(10px); opacity: 0; }
+                        to { transform: scale(1) translateY(0); opacity: 1; }
+                    }
+
+                    .close-btn {
+                        background: none;
+                        border: none;
+                        font-size: 1.5rem;
+                        color: var(--gray-400);
+                        cursor: pointer;
+                        transition: color 0.2s;
+                    }
+                    .close-btn:hover {
+                        color: var(--gray-900);
+                    }
+                    body.dark-mode .close-btn:hover {
+                        color: white;
                     }
 
                     /* Admin View Modal specific print isolates */
@@ -286,6 +706,13 @@
                             max-width: 100% !important;
                         }
                     }
+
+                    .txn-deposit {
+                        color: var(--accent-emerald) !important;
+                    }
+                    .txn-withdrawal {
+                        color: var(--secondary-500) !important;
+                    }
                 </style>
             </head>
 
@@ -301,9 +728,14 @@
 
                 <!-- Header -->
                 <header class="header scrolled">
-                    <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
-                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
-                    </a>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                            <i class="bx bx-menu"></i>
+                        </button>
+                        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
+                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
+                        </a>
+                    </div>
                     <div class="nav-actions">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
@@ -371,11 +803,12 @@
 
                         <!-- Loan & Customer Search Filter -->
                         <div class="glass-card no-print"
-                            style="padding: 15px 25px; margin-bottom: 25px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(99, 102, 241, 0.15);">
+                            style="padding: 15px 25px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px;">
                             <div style="position: relative; flex: 1;">
                                 <input type="text" id="loanSearchInput" onkeyup="filterLoanTables()"
+                                    class="control-input"
                                     placeholder="Search loans by customer name, account number, phone number, or loan category..."
-                                    style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem; background: white; transition: all var(--transition-normal); box-shadow: var(--shadow-sm);">
+                                    style="padding-left: 45px; font-size: 0.9rem;">
                                 <i class="bx bx-search"
                                     style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 1.35rem;"></i>
                             </div>
@@ -419,7 +852,7 @@
                                 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
                                 <i class="bx bx-time-five"></i> Pending Loan Applications
                             </h3>
-                            <div style="overflow-x: auto;">
+                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                                 <table style="width: 100%; border-collapse: collapse; text-align: left;">
                                     <thead>
                                         <tr
@@ -446,8 +879,7 @@
                                                     data-customer-name="${customerNames[loan.customerId]}"
                                                     data-customer-phone="${customerPhones[loan.customerId]}">
                                                     <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-500);">
-                                                        ${pendingCount}</td>
+                                                        style="padding: 15px;"><span class="badge-id">#${pendingCount}</span></td>
                                                     <td
                                                         style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                         ${customerNames[loan.customerId]}</td>
@@ -504,7 +936,7 @@
                                 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
                                 <i class="bx bx-check-double"></i> Approved and Active Loans
                             </h3>
-                            <div style="overflow-x: auto;">
+                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                                 <table style="width: 100%; border-collapse: collapse; text-align: left;">
                                     <thead>
                                         <tr
@@ -534,8 +966,7 @@
                                                     data-customer-name="${customerNames[loan.customerId]}"
                                                     data-customer-phone="${customerPhones[loan.customerId]}">
                                                     <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-500);">
-                                                        ${approvedCount}</td>
+                                                        style="padding: 15px;"><span class="badge-id">#${approvedCount}</span></td>
                                                     <td
                                                         style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                         ${customerNames[loan.customerId]}</td>
@@ -624,7 +1055,7 @@
                                 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
                                 <i class="bx bx-archive"></i> Closed &amp; Archived Loans
                             </h3>
-                            <div style="overflow-x: auto;">
+                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                                 <table style="width: 100%; border-collapse: collapse; text-align: left;">
                                     <thead>
                                         <tr
@@ -652,8 +1083,7 @@
                                                     data-customer-name="${customerNames[loan.customerId]}"
                                                     data-customer-phone="${customerPhones[loan.customerId]}">
                                                     <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-500);">
-                                                        ${closedCount}</td>
+                                                        style="padding: 15px;"><span class="badge-id">#${closedCount}</span></td>
                                                     <td
                                                         style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                         ${customerNames[loan.customerId]}</td>
@@ -717,7 +1147,7 @@
                                 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
                                 <i class="bx bx-credit-card"></i> Loan Repayment Ledger
                             </h3>
-                            <div style="overflow-x: auto;">
+                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                                 <table style="width: 100%; border-collapse: collapse; text-align: left;">
                                     <thead>
                                         <tr
@@ -741,8 +1171,7 @@
                                                 data-customer-name="${customerNames[pay.customerId]}"
                                                 data-customer-phone="${customerPhones[pay.customerId]}"
                                                 data-loan-id="${pay.loanId}">
-                                                <td style="padding: 15px; font-weight: 600; color: var(--gray-500);">
-                                                    ${paymentsCount}</td>
+                                                <td style="padding: 15px;"><span class="badge-id">#${paymentsCount}</span></td>
                                                 <td style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                     ${customerNames[pay.customerId]}</td>
                                                 <td
@@ -792,49 +1221,49 @@
                         <div id="disburseModal"
                             style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;"
                             class="no-print">
-                            <div class="glass-card"
-                                style="width: 100%; max-width: 500px; background: white; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: var(--shadow-2xl); position: relative; margin-bottom: 0;">
-                                <button type="button" onclick="closeDisburseModal()"
-                                    style="position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--gray-400); cursor: pointer;"><i
+                            <div class="modal-card"
+                                style="width: 100%; max-width: 500px; position: relative; margin-bottom: 0;">
+                                <button type="button" onclick="closeDisburseModal()" class="close-btn"
+                                    style="position: absolute; top: 25px; right: 25px; font-size: 1.5rem; line-height: 1;"><i
                                         class="bx bx-x"></i></button>
 
                                 <h3
-                                    style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;">
-                                    <i class="bx bx-wallet"></i> Execute Loan Disbursement
+                                    style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
+                                    <i class="bx bx-wallet" style="color: var(--primary-500); font-size: 1.5rem;"></i> Execute Loan Disbursement
                                 </h3>
                                 <form action="${pageContext.request.contextPath}/loan?action=disburse" method="post"
                                     id="disburseForm">
                                     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                                     <input type="hidden" name="id" id="disburseLoanId">
 
-                                    <div class="form-group" style="margin-bottom: 15px;">
+                                    <div class="form-group" style="margin-bottom: 20px;">
                                         <label for="disburseAmount"
-                                            style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Disbursement
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Disbursement
                                             Amount (₹)</label>
-                                        <input type="text" id="disburseAmount" readonly
-                                            style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: var(--gray-100); outline: none; font-weight: 600; color: var(--gray-900);">
+                                        <input type="text" id="disburseAmount" readonly class="control-input"
+                                            style="font-weight: 700; color: var(--gray-900); background: rgba(99, 102, 241, 0.04); border-color: rgba(99, 102, 241, 0.15);">
                                     </div>
 
-                                    <div class="form-group" style="margin-bottom: 25px;">
+                                    <div class="form-group" style="margin-bottom: 20px;">
                                         <label for="disburseAccount"
-                                            style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Select
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Select
                                             Target Customer Account</label>
-                                        <select name="accountId" id="disburseAccount" required
-                                            style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none; font-family: var(--font-family);">
+                                        <select name="accountId" id="disburseAccount" required class="control-select" style="font-weight: 500;">
                                             <option value="">-- Select Active Account --</option>
                                         </select>
                                         <span
-                                            style="font-size: 0.75rem; color: var(--gray-400); display: block; margin-top: 5px;">Only
+                                            style="font-size: 0.75rem; color: var(--gray-400); display: block; margin-top: 6px; line-height: 1.4;">Only
                                             active checking or savings accounts owned by this customer will be
                                             listed.</span>
                                     </div>
 
-                                    <div style="display: flex; gap: 15px; justify-content: flex-end;">
-                                        <button type="button" class="btn btn-secondary"
-                                            onclick="closeDisburseModal()">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">
+                                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                                        <button type="button" class="btn btn-secondary" onclick="closeDisburseModal()"
+                                            style="background: transparent !important; border: none !important; color: var(--gray-600) !important; padding: 10px 24px; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; transition: color 0.2s ease;">Cancel</button>
+                                        <button type="submit" class="btn btn-primary"
+                                            style="background: var(--gradient-primary) !important; border: none !important; color: white !important; padding: 10px 24px; font-weight: 700; border-radius: var(--radius-full); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25); transition: all 0.3s ease;">
                                             <span>Transfer Funds</span>
-                                            <i class="bx bx-check-double"></i>
+                                            <i class="bx bx-check-double" style="font-size: 1.1rem;"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -845,15 +1274,15 @@
                         <div id="repayModal"
                             style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;"
                             class="no-print">
-                            <div class="glass-card"
-                                style="width: 100%; max-width: 500px; background: white; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: var(--shadow-2xl); position: relative; margin-bottom: 0;">
-                                <button type="button" onclick="closeRepayModal()"
-                                    style="position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--gray-400); cursor: pointer;"><i
+                            <div class="modal-card"
+                                style="width: 100%; max-width: 500px; position: relative; margin-bottom: 0;">
+                                <button type="button" onclick="closeRepayModal()" class="close-btn"
+                                    style="position: absolute; top: 25px; right: 25px; font-size: 1.5rem; line-height: 1;"><i
                                         class="bx bx-x"></i></button>
 
                                 <h3
-                                    style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;">
-                                    <i class="bx bx-wallet-alt"></i> Execute Loan Repayment
+                                    style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
+                                    <i class="bx bx-wallet-alt" style="color: var(--primary-500); font-size: 1.5rem;"></i> Execute Loan Repayment
                                 </h3>
                                 <form action="${pageContext.request.contextPath}/loan?action=repayment" method="post"
                                     id="repayForm">
@@ -861,39 +1290,38 @@
                                     <input type="hidden" name="loanId" id="repayLoanId">
                                     <input type="hidden" name="customerId" id="repayCustomerId">
 
-                                    <div class="form-group" style="margin-bottom: 15px;">
+                                    <div class="form-group" style="margin-bottom: 20px;">
                                         <label for="repayRemaining"
-                                            style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Remaining
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Remaining
                                             Balance (₹)</label>
-                                        <input type="text" id="repayRemaining" readonly
-                                            style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: var(--gray-100); outline: none; font-weight: 600; color: var(--gray-900);">
+                                        <input type="text" id="repayRemaining" readonly class="control-input"
+                                            style="font-weight: 700; color: var(--gray-900); background: rgba(99, 102, 241, 0.04); border-color: rgba(99, 102, 241, 0.15);">
                                     </div>
 
-                                    <div class="form-group" style="margin-bottom: 15px;">
+                                    <div class="form-group" style="margin-bottom: 20px;">
                                         <label for="repayAccount"
-                                            style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Select
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Select
                                             Customer Account to Debit</label>
-                                        <select name="accountId" id="repayAccount" required
-                                            style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none; font-family: var(--font-family);">
+                                        <select name="accountId" id="repayAccount" required class="control-select" style="font-weight: 500;">
                                             <option value="">-- Select Active Account --</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group" style="margin-bottom: 25px;">
                                         <label for="repayAmount"
-                                            style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Repayment
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Repayment
                                             Amount (₹)</label>
                                         <input type="number" step="0.01" min="1" name="amount" id="repayAmount" required
-                                            placeholder="E.g., 5000"
-                                            style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                            placeholder="E.g., 5000" class="control-input" style="font-weight: 600;">
                                     </div>
 
-                                    <div style="display: flex; gap: 15px; justify-content: flex-end;">
-                                        <button type="button" class="btn btn-secondary"
-                                            onclick="closeRepayModal()">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">
+                                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                                        <button type="button" class="btn btn-secondary" onclick="closeRepayModal()"
+                                            style="background: transparent !important; border: none !important; color: var(--gray-600) !important; padding: 10px 24px; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; transition: color 0.2s ease;">Cancel</button>
+                                        <button type="submit" class="btn btn-primary"
+                                            style="background: var(--gradient-primary) !important; border: none !important; color: white !important; padding: 10px 24px; font-weight: 700; border-radius: var(--radius-full); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25); transition: all 0.3s ease;">
                                             <span>Process Repayment</span>
-                                            <i class="bx bx-check-double"></i>
+                                            <i class="bx bx-check-double" style="font-size: 1.1rem;"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -910,11 +1338,11 @@
                             </c:if>
                             <div id="statementModal"
                                 style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
-                                <div class="glass-card"
-                                    style="width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; background: white; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: var(--shadow-2xl); position: relative; padding: 35px; margin-bottom: 0;">
+                                <div class="modal-card"
+                                    style="width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; margin-bottom: 0;">
                                     <!-- Close button in modal (hidden in print) -->
-                                    <button type="button" onclick="closeStatementModal()" class="no-print"
-                                        style="position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: var(--gray-400); cursor: pointer;"><i
+                                    <button type="button" onclick="closeStatementModal()" class="close-btn"
+                                        style="position: absolute; top: 25px; right: 25px; font-size: 1.5rem; line-height: 1;"><i
                                             class="bx bx-x"></i></button>
 
                                     <!-- Header (Print/Download Option, hidden in print) -->
@@ -939,179 +1367,134 @@
                                             </div>
                                             <div style="text-align: right;">
                                                 <span
-                                                    style="font-family: monospace; font-size: 0.85rem; color: var(--gray-500);">LN-REF:
+                                                    style="font-family: monospace; font-size: 0.85rem; color: var(--gray-500); font-weight: 700;">LN-REF:
                                                     #LN-${statementLoan.loanId}</span>
                                                 <p style="font-size: 0.8rem; color: var(--gray-400); margin-top: 3px;">
                                                     Date Generated: <span id="currentDate"></span></p>
                                             </div>
                                         </div>
 
-                                        <!-- Info Grid (Customer and Loan Info) -->
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;"
-                                            class="mobile-grid-1">
-                                            <!-- Customer Info Card -->
-                                            <div
-                                                style="background: var(--gray-50); padding: 15px 20px; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                                                <h4
-                                                    style="font-size: 0.9rem; font-weight: 700; color: var(--gray-800); border-bottom: 1px solid var(--gray-200); padding-bottom: 8px; margin-bottom: 10px;">
-                                                    <i class="bx bx-user"></i> Borrower Details
-                                                </h4>
-                                                <table
-                                                    style="width: 100%; font-size: 0.85rem; color: var(--gray-600); line-height: 1.8;">
-                                                    <tr>
-                                                        <td style="font-weight: 500; width: 100px;">Customer ID:</td>
-                                                        <td style="font-family: monospace;">
-                                                            #CUST-${statementCustomer.customerId}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Full Name:</td>
-                                                        <td style="font-weight: 600; color: var(--gray-900);">
-                                                            ${statementCustomer.firstName} ${statementCustomer.lastName}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Email:</td>
-                                                        <td>${statementCustomer.email}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Phone:</td>
-                                                        <td>${statementCustomer.phoneNo}</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
+                                        <!-- Official Header Subtitle (shown in both screen and print) -->
+                                        <div style="text-align: center; background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); padding: 10px 15px; margin-bottom: 25px;">
+                                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-500); text-transform: uppercase; letter-spacing: 1.5px;">Official Loan Amortization &amp; Repayment Statement</span>
+                                        </div>
 
-                                            <!-- Loan Summary Card -->
-                                            <div
-                                                style="background: var(--gray-50); padding: 15px 20px; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                                                <h4
-                                                    style="font-size: 0.9rem; font-weight: 700; color: var(--gray-800); border-bottom: 1px solid var(--gray-200); padding-bottom: 8px; margin-bottom: 10px;">
-                                                    <i class="bx bx-briefcase"></i> Loan Summary
-                                                </h4>
-                                                <table
-                                                    style="width: 100%; font-size: 0.85rem; color: var(--gray-600); line-height: 1.8;">
-                                                    <tr>
-                                                        <td style="font-weight: 500; width: 160px;">Loan Type:</td>
-                                                        <td
-                                                            style="text-transform: capitalize; font-weight: 600; color: var(--gray-900);">
-                                                            ${statementLoan.loanType}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Principal Amount:</td>
-                                                        <td style="font-weight: 600; color: var(--gray-900);">₹
-                                                            <fmt:formatNumber value="${statementLoan.principalAmount}"
-                                                                minFractionDigits="2" maxFractionDigits="2" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500; color: #ef4444;">Remaining Balance:
-                                                        </td>
-                                                        <td style="font-weight: 700; color: #ef4444;">₹
-                                                            <fmt:formatNumber value="${statementLoan.remainingBalance}"
-                                                                minFractionDigits="2" maxFractionDigits="2" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500; color: #10b981;">Total Amount Paid:
-                                                        </td>
-                                                        <td style="font-weight: 700; color: #10b981;">₹
-                                                            <fmt:formatNumber value="${totalRepaid}"
-                                                                minFractionDigits="2" maxFractionDigits="2" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Interest Rate / Term:</td>
-                                                        <td>${statementLoan.interestRate}% P.A. /
-                                                            ${statementLoan.termMonths} Months</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Tenure Period:</td>
-                                                        <td>${statementLoan.startDate} to ${statementLoan.endDate}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-weight: 500;">Account Status:</td>
-                                                        <td>
-                                                            <span
-                                                                style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">${statementLoan.status}</span>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                        <!-- Details grid (Bank details vs Borrower details) -->
+                                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 25px; margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; color: var(--gray-700);" class="mobile-grid-1">
+                                            <!-- Left: Bank Information -->
+                                            <div style="border-right: 1px dashed var(--gray-300); padding-right: 20px;">
+                                                <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Bank Details</span>
+                                                <strong style="color: var(--gray-900);">Vertex Galaxy Bank (Corporate HQ)</strong>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">VGB Corporate Towers, BKC Road, Bandra Kurla Complex,<br>Mumbai, Maharashtra - 400051</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">IFSC Branch Code: <strong style="font-family: monospace;">VGBK0000001</strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Support Toll Free: 1800-VGB-BANK</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Online Portal: www.vertexgalaxybank.com</p>
+                                            </div>
+                                            
+                                            <!-- Right: Customer & Loan Details -->
+                                            <div>
+                                                <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Customer &amp; Loan Details</span>
+                                                <strong style="color: var(--gray-900); font-size: 0.95rem; text-transform: uppercase;">${statementCustomer.firstName} ${statementCustomer.lastName}</strong>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Customer ID: <strong style="font-family: monospace;">#VGB-CUST-${statementCustomer.customerId}</strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Res. Address: ${statementCustomer.address}, ${statementCustomer.city}, ${statementCustomer.state} - ${statementCustomer.zipCode}</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Loan Reference: <strong style="font-family: monospace;">#LN-${statementLoan.loanId}</strong> (${statementLoan.loanType} Loan)</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Principal Amount: <strong>₹<fmt:formatNumber value="${statementLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Interest Rate / Term: <strong>${statementLoan.interestRate}% P.A. / ${statementLoan.termMonths} Mos</strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Accumulated Repaid: <strong style="color: var(--accent-emerald);">₹<fmt:formatNumber value="${totalRepaid}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Outstanding Balance: <strong style="color: var(--secondary-500);">₹<fmt:formatNumber value="${statementLoan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
                                             </div>
                                         </div>
 
                                         <!-- Repayment Schedule List -->
                                         <div
-                                            style="display: flex; justify-content: space-between; align-items: center;">
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 15px;">
                                             <h4
-                                                style="font-size: 1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px;">
-                                                <i class="bx bx-history"></i> Chronological Repayment Ledger
+                                                style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                                                <i class="bx bx-history" style="color: var(--primary-500);"></i> Repayment Ledger Log
                                             </h4>
                                             <button type="button" onclick="window.print()" class="btn btn-primary no-print"
-                                                style="padding: 10px 20px; font-size: 0.85rem;">
-                                                <span>Print Statement</span>
+                                                style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px;">
+                                                <span>Print Document</span>
                                                 <i class="bx bx-printer"></i>
                                             </button>
                                         </div>
-                                        <div style="overflow-x: auto;">
+                                        <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
                                             <table
-                                                style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                                                style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;">
                                                 <thead>
                                                     <tr
-                                                        style="border-bottom: 2px solid var(--gray-300); color: var(--gray-500); font-weight: 600;">
-                                                        <th style="padding: 10px 12px; width: 80px;">Sr. No.</th>
-                                                        <th style="padding: 10px 12px; width: 220px;">Repayment Date
-                                                        </th>
-                                                        <th
-                                                            style="padding: 10px 12px; text-align: right; width: 140px;">
-                                                            Principal
-                                                            Portion</th>
-                                                        <th
-                                                            style="padding: 10px 12px; text-align: right; width: 140px;">
-                                                            Interest
-                                                            Portion</th>
-                                                        <th
-                                                            style="padding: 10px 12px; text-align: right; font-weight: 700; color: var(--gray-900); width: 140px;">
-                                                            Amount Paid</th>
+                                                        style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Payment Date</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
+                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <c:choose>
-                                                        <c:when test="${not empty statementRepayments}">
-                                                            <c:set var="rpySr" value="0" />
-                                                            <c:forEach var="rpy" items="${statementRepayments}">
-                                                                <c:set var="rpySr" value="${rpySr + 1}" />
+                                                        <c:when test="${not empty statementRepayments || not empty statementLoan}">
+                                                            <c:set var="repaySr" value="0" />
+                                                            <c:set var="runningLoanBal" value="${statementLoan.remainingBalance}" />
+                                                            
+                                                            <!-- Repayment rows -->
+                                                            <c:forEach var="repay" items="${statementRepayments}">
+                                                                <c:set var="repaySr" value="${repaySr + 1}" />
                                                                 <tr
-                                                                    style="border-bottom: 1px solid var(--gray-200); color: var(--gray-700);">
+                                                                    style="border-bottom: 1px solid var(--gray-200); color: var(--gray-700); transition: background 0.15s ease;">
                                                                     <td
-                                                                        style="padding: 12px; font-weight: 600; color: var(--gray-500);">
-                                                                        ${rpySr}</td>
-                                                                    <td style="padding: 12px;">
-                                                                        ${rpy.formattedRepaymentDate}</td>
-                                                                    <td style="padding: 12px; text-align: right;">₹
-                                                                        <fmt:formatNumber
-                                                                            value="${not empty rpy.principalComponent ? rpy.principalComponent : 0.00}"
-                                                                            minFractionDigits="2"
-                                                                            maxFractionDigits="2" />
+                                                                        style="padding: 14px 16px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
+                                                                    <td style="padding: 14px 16px;">${repay.formattedRepaymentDate}</td>
+                                                                    <td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;">
+                                                                        <span class="txn-deposit" style="color: var(--accent-emerald) !important;">Repayment</span>
                                                                     </td>
-                                                                    <td style="padding: 12px; text-align: right;">₹
-                                                                        <fmt:formatNumber
-                                                                            value="${not empty rpy.interestComponent ? rpy.interestComponent : 0.00}"
-                                                                            minFractionDigits="2"
-                                                                            maxFractionDigits="2" />
+                                                                    <td style="padding: 14px 16px;">EMI Repayment (Principal: ₹<fmt:formatNumber value="${repay.principalComponent}" minFractionDigits="2" maxFractionDigits="2"/>, Interest: ₹<fmt:formatNumber value="${repay.interestComponent}" minFractionDigits="2" maxFractionDigits="2"/>)</td>
+                                                                    <td style="padding: 14px 16px;">
+                                                                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
                                                                     </td>
-                                                                    <td
-                                                                        style="padding: 12px; text-align: right; font-weight: 700; color: var(--accent-emerald);">
-                                                                        ₹
-                                                                        <fmt:formatNumber value="${rpy.amountPaid}"
-                                                                            minFractionDigits="2"
-                                                                            maxFractionDigits="2" />
+                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #10b981;">
+                                                                        + ₹<fmt:formatNumber value="${repay.amountPaid}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    </td>
+                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444;">-</td>
+                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                                                        ₹<fmt:formatNumber value="${runningLoanBal}" minFractionDigits="2" maxFractionDigits="2"/>
                                                                     </td>
                                                                 </tr>
+                                                                <c:set var="runningLoanBal" value="${runningLoanBal + repay.principalComponent}" />
                                                             </c:forEach>
+                                                            
+                                                            <!-- Initial Disbursal row -->
+                                                            <c:if test="${not empty statementLoan}">
+                                                                <c:set var="repaySr" value="${repaySr + 1}" />
+                                                                <tr
+                                                                    style="border-bottom: 1px solid var(--gray-200); color: var(--gray-700); transition: background 0.15s ease;">
+                                                                    <td style="padding: 14px 16px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
+                                                                    <td style="padding: 14px 16px;">${statementLoan.startDate}</td>
+                                                                    <td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;">
+                                                                        <span class="txn-withdrawal" style="color: var(--secondary-500) !important;">Disbursal</span>
+                                                                    </td>
+                                                                    <td style="padding: 14px 16px;">Initial ${statementLoan.loanType} Loan Disbursal</td>
+                                                                    <td style="padding: 14px 16px;">
+                                                                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
+                                                                    </td>
+                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #10b981;">-</td>
+                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444;">
+                                                                        - ₹<fmt:formatNumber value="${statementLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    </td>
+                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                                                        ₹<fmt:formatNumber value="${statementLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </c:if>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <tr>
-                                                                <td colspan="5"
-                                                                    style="text-align: center; padding: 25px; color: var(--gray-400);">
+                                                                <td colspan="8"
+                                                                    style="text-align: center; padding: 35px; color: var(--gray-400); font-style: italic;">
+                                                                    <i class="bx bx-info-circle" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i>
                                                                     No repayments recorded on this loan account ledger.
                                                                 </td>
                                                             </tr>
@@ -1147,7 +1530,7 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;"
                                         class="no-print">
                                         <button type="button" class="btn btn-secondary"
-                                            onclick="closeStatementModal()">Close View</button>
+                                            onclick="closeStatementModal()" style="border-radius: var(--radius-full); padding: 10px 24px;">Close View</button>
                                     </div>
                                 </div>
                             </div>
@@ -1155,8 +1538,8 @@
                         
                         <!-- Admin View Loan Application Modal -->
                         <div id="adminViewModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-                            <div class="modal-content" style="width: 100%; max-width: 850px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; max-height: 90vh;">
-                                <div class="modal-header no-print" style="padding: 20px 30px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);">
+                            <div class="modal-content" style="width: 100%; max-width: 850px; display: flex; flex-direction: column; max-height: 90vh;">
+                                <div class="modal-header no-print">
                                     <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px;">
                                         <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.5rem;"></i>
                                         <span>Review Loan Application File</span>
@@ -1522,18 +1905,12 @@
 
                     function switchTab(tabId) {
                         document.querySelectorAll('.tab-btn').forEach(btn => {
-                            btn.style.background = 'rgba(255, 255, 255, 0.6)';
-                            btn.style.color = 'var(--gray-600)';
-                            btn.style.borderColor = 'rgba(99, 102, 241, 0.15)';
-                            btn.style.boxShadow = 'var(--shadow-sm)';
+                            btn.classList.remove('active');
                         });
 
                         const activeBtn = document.getElementById('tab-' + tabId);
                         if (activeBtn) {
-                            activeBtn.style.background = 'var(--gradient-primary)';
-                            activeBtn.style.color = 'white';
-                            activeBtn.style.borderColor = 'transparent';
-                            activeBtn.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.25)';
+                            activeBtn.classList.add('active');
                         }
 
                         document.querySelectorAll('.loan-tab-content').forEach(card => {
@@ -1619,10 +1996,14 @@
                     // Initialize state, badges, and default tabs on page load
                     document.addEventListener("DOMContentLoaded", function () {
                         // Populate dynamic counter badges
-                        document.getElementById('badge-pending').textContent = "${pendingCount}";
-                        document.getElementById('badge-approved').textContent = "${approvedCount}";
-                        document.getElementById('badge-closed').textContent = "${closedCount}";
-                        document.getElementById('badge-payments').textContent = "${paymentsCount}";
+                        const badgePending = document.getElementById('badge-pending');
+                        const badgeApproved = document.getElementById('badge-approved');
+                        const badgeClosed = document.getElementById('badge-closed');
+                        const badgePayments = document.getElementById('badge-payments');
+                        if (badgePending) badgePending.textContent = "${pendingCount}";
+                        if (badgeApproved) badgeApproved.textContent = "${approvedCount}";
+                        if (badgeClosed) badgeClosed.textContent = "${closedCount}";
+                        if (badgePayments) badgePayments.textContent = "${paymentsCount}";
 
                         // Auto switch to appropriate active tab or default to pending
                         const loanStatus = document.body.getAttribute('data-statement-loan-status');
@@ -1644,6 +2025,71 @@
                         let dateEl = document.getElementById('currentDate');
                         if (dateEl) {
                             dateEl.textContent = d.toLocaleDateString('en-US', options);
+                        }
+
+                        // Theme switch toggle logic with localStorage sync
+                        const themeBtn = document.getElementById('themeToggle');
+                        if (themeBtn) {
+                            themeBtn.style.setProperty('display', 'flex', 'important');
+                            themeBtn.onclick = function () {
+                                document.body.classList.toggle('dark-mode');
+                                const isDark = document.body.classList.contains('dark-mode');
+                                const icon = themeBtn.querySelector('i');
+                                if (icon) {
+                                    icon.className = isDark ? 'bx bx-sun' : 'bx bx-moon';
+                                }
+                                localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
+                            };
+
+                            // Sync with stored theme preference on load
+                            const savedTheme = localStorage.getItem('admin-theme');
+                            if (savedTheme === 'dark') {
+                                document.body.classList.add('dark-mode');
+                                const icon = themeBtn.querySelector('i');
+                                if (icon) icon.className = 'bx bx-sun';
+                            } else {
+                                document.body.classList.remove('dark-mode');
+                                const icon = themeBtn.querySelector('i');
+                                if (icon) icon.className = 'bx bx-moon';
+                            }
+                        }
+
+                        // Mobile menu drawer toggle handler with outside click collapse
+                        const mobileToggle = document.getElementById('mobileNavToggle');
+                        const sidebar = document.querySelector('.sidebar');
+                        if (mobileToggle && sidebar) {
+                            mobileToggle.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                sidebar.classList.toggle('active');
+                                const icon = mobileToggle.querySelector('i');
+                                if (icon) {
+                                    if (sidebar.classList.contains('active')) {
+                                        icon.className = 'bx bx-x';
+                                    } else {
+                                        icon.className = 'bx bx-menu';
+                                    }
+                                }
+                            });
+
+                            document.addEventListener('click', (e) => {
+                                if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                                    sidebar.classList.remove('active');
+                                    const icon = mobileToggle.querySelector('i');
+                                    if (icon) icon.className = 'bx bx-menu';
+                                }
+                            });
+                        }
+
+                        // Custom mouse follower cursor glow movement binding
+                        const glow = document.querySelector('.cursor-glow');
+                        if (glow) {
+                            window.addEventListener('mousemove', (e) => {
+                                const { clientX, clientY } = e;
+                                requestAnimationFrame(() => {
+                                    glow.style.left = clientX + 'px';
+                                    glow.style.top = clientY + 'px';
+                                });
+                            });
                         }
                     });
 

@@ -92,4 +92,24 @@ public interface AccountDAO {
      * Retrieve details of an external other-bank beneficiary by beneficiary ID
      */
     String[] getExternalBeneficiaryDetails(long beneficiaryId) throws Exception;
+
+    /**
+     * Get total customer count (system-wide)
+     */
+    int getTotalCustomersCount() throws Exception;
+
+    /**
+     * Get total customer count for single savings accounts
+     */
+    int getSavingsSingleCustomersCount() throws Exception;
+
+    /**
+     * Get total customer count for joint savings accounts
+     */
+    int getSavingsJointCustomersCount() throws Exception;
+
+    /**
+     * Get total customer count for current accounts
+     */
+    int getCurrentCustomersCount() throws Exception;
 }

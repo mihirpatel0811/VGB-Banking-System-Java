@@ -159,23 +159,9 @@ public class CardService {
         card.setStatus("pending"); // Awaiting admin approval
         card.setCardFee(cardFee);
         card.setOutstandingBalance(BigDecimal.ZERO);
-        card.setFeePaid(true); // paid upfront
+        card.setFeePaid(false); // fee will be paid on approval
 
         try {
-            // Transaction deduct fee
-            BigDecimal newBalance = account.getBalance().subtract(cardFee);
-            accountDAO.updateBalance(accountId, newBalance);
-
-            // Record transaction
-            Transaction transaction = new Transaction();
-            transaction.setFromAccountId(accountId);
-            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_FEE);
-            transaction.setAmount(cardFee);
-            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-            transaction.setDescription("VGB " + cardProvider.toUpperCase() + " " + cardType.toUpperCase() + " Card Issuance Fee");
-            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
-
             // Create card record
             if (cardDAO.create(card)) {
                 logger.info("Card applied successfully! Card ID: {}, Card Number: {}", card.getCardId(), card.getCardNumber());
@@ -216,25 +202,12 @@ public class CardService {
                 throw new Exception("Insufficient balance to pay card renewal fee of ₹" + renewalFee.setScale(2) + ".");
             }
 
-            // Deduct fee
-            BigDecimal newBalance = account.getBalance().subtract(renewalFee);
-            accountDAO.updateBalance(accountId, newBalance);
-
-            // Record transaction
-            Transaction transaction = new Transaction();
-            transaction.setFromAccountId(accountId);
-            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_FEE);
-            transaction.setAmount(renewalFee);
-            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-            transaction.setDescription("VGB " + card.getCardProvider().toUpperCase() + " " + card.getCardType().toUpperCase() + " Card Renewal Fee");
-            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
-
             // Expiry extend to 4 years from today
             LocalDate localExpiry = LocalDate.now().plusYears(4);
             Date newExpiry = Date.valueOf(localExpiry);
 
-            // Set pending status upon paid renewal awaiting admin approval
+            // Set pending status and reset fee paid to false upon renewal awaiting admin approval
+            cardDAO.updateFeePaidStatus(cardId, false);
             return cardDAO.updateExpiryAndStatus(cardId, newExpiry, "pending");
         } catch (SQLException e) {
             logger.error("SQL Error renewing card", e);
@@ -305,6 +278,45 @@ public class CardService {
 
     public boolean approveCard(long cardId) throws Exception {
         try {
+            Card card = cardDAO.getById(cardId);
+            if (card == null) {
+                throw new Exception("Card not found.");
+            }
+            if ("active".equalsIgnoreCase(card.getStatus())) {
+                return true;
+            }
+
+            // Debit fee at approval time if not already paid
+            if (!card.isFeePaid() && card.getCardFee().compareTo(BigDecimal.ZERO) > 0) {
+                Account account = accountDAO.getById(card.getAccountId());
+                if (account == null) {
+                    throw new Exception("Linked account not found.");
+                }
+                if (!"active".equalsIgnoreCase(account.getStatus())) {
+                    throw new Exception("Linked account is not active.");
+                }
+                if (account.getBalance().compareTo(card.getCardFee()) < 0) {
+                    throw new Exception("Insufficient account balance to pay Card Issuance/Renewal fee of ₹" + card.getCardFee().setScale(2) + ".");
+                }
+
+                // Deduct fee
+                BigDecimal newBalance = account.getBalance().subtract(card.getCardFee());
+                accountDAO.updateBalance(card.getAccountId(), newBalance);
+
+                // Record transaction fee
+                Transaction transaction = new Transaction();
+                transaction.setFromAccountId(card.getAccountId());
+                transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_FEE);
+                transaction.setAmount(card.getCardFee());
+                transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                transaction.setDescription("VGB " + card.getCardProvider().toUpperCase() + " " + card.getCardType().toUpperCase() + " Card Fee");
+                transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+                transactionDAO.create(transaction);
+
+                // Update fee paid status in DB
+                cardDAO.updateFeePaidStatus(cardId, true);
+            }
+
             return cardDAO.updateStatus(cardId, "active");
         } catch (SQLException e) {
             logger.error("Error approving card", e);

@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Financial Statements</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
@@ -96,6 +97,9 @@
                 box-shadow: none !important;
                 padding: 0 !important;
             }
+            .print-header {
+                display: block !important;
+            }
         }
         .txn-deposit {
             color: var(--accent-emerald) !important;
@@ -139,7 +143,6 @@
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Loans</a>
             <a href="${pageContext.request.contextPath}/account?action=statement" class="active"><i class="bx bx-file"></i> Statements</a>
             <a href="${pageContext.request.contextPath}/customer/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
-            <a href="${pageContext.request.contextPath}/customer/notification.jsp"><i class="bx bx-bell"></i> Alerts</a>
         </div>
         <div style="padding: 15px; background: rgba(99, 102, 241, 0.05); border-radius: var(--radius-md); text-align: center;">
             <p style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Support Hotline</p>
@@ -160,17 +163,6 @@
                     <span>Export Statement</span>
                     <i class="bx bx-printer"></i>
                 </button>
-            </div>
-
-            <!-- Header block for Print layout -->
-            <div style="display: none; border-bottom: 3px double var(--gray-300); padding-bottom: 20px; margin-bottom: 30px;" class="print-header">
-                <h1 style="font-size: 2.2rem; font-weight: 800; color: #4f46e5;">VERTEX GALAXY BANK</h1>
-                <p style="font-size: 0.9rem; color: #475569; margin-top: 5px;">Official Customer Transaction Statement</p>
-                <div style="display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.85rem; color: #64748b;">
-                    <jsp:useBean id="now" class="java.util.Date"/>
-                    <span>Date Compiled: <fmt:formatDate value="${now}" pattern="dd-MM-yyyy HH:mm"/></span>
-                    <span>Account Number: ${selectedAccount.accountNumber} - ${selectedAccount.accountType}</span>
-                </div>
             </div>
 
             <!-- Tabs Section -->
@@ -249,24 +241,70 @@
                         </select>
                     </div>
                 </div>
-            </div>
-
-            <!-- Regular Transactions Ledger Table -->
+            </di            <!-- Regular Transactions Ledger Table -->
             <div class="glass-card" id="regularStatement">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-receipt"></i> Regular Ledger Log</h3>
+                <!-- Official Bank Logo & Name -->
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
+                    <div>
+                        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1; margin: 0;">VERTEX GALAXY BANK</h1>
+                        <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 5px; font-weight: 500; margin-bottom: 0;">Always Beyond Boundaries</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-family: monospace; font-size: 0.85rem; color: var(--gray-500); font-weight: 700;">ACC-REF: #ACC-${selectedAccount.accountNumber}</span>
+                        <p style="font-size: 0.8rem; color: var(--gray-400); margin-top: 3px; margin-bottom: 0;">Date Generated: <span id="currentDateRegular"></span></p>
+                    </div>
+                </div>
+
+                <!-- Official Header Subtitle -->
+                <div style="text-align: center; background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); padding: 10px 15px; margin-bottom: 25px;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-500); text-transform: uppercase; letter-spacing: 1.5px;">Official Account Transaction Ledger Statement</span>
+                </div>
+
+                <!-- Details grid (Bank details vs Customer details) -->
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 25px; margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; color: var(--gray-700);" class="mobile-grid-1">
+                    <!-- Left: Bank Information -->
+                    <div style="border-right: 1px dashed var(--gray-300); padding-right: 20px;">
+                        <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Bank Details</span>
+                        <strong style="color: var(--gray-900);">Vertex Galaxy Bank (Corporate HQ)</strong>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">VGB Corporate Towers, BKC Road, Bandra Kurla Complex,<br>Mumbai, Maharashtra - 400051</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">IFSC Branch Code: <strong style="font-family: monospace;">VGBK0000001</strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Support Toll Free: 1800-VGB-BANK</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Online Portal: www.vertexgalaxybank.com</p>
+                    </div>
+                    
+                    <!-- Right: Customer & Account Details -->
+                    <div>
+                        <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Customer &amp; Account Details</span>
+                        <strong style="color: var(--gray-900); font-size: 0.95rem; text-transform: uppercase;">${customer.fullName}</strong>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Customer ID: <strong style="font-family: monospace;">#VGB-CUST-${customer.customerId}</strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Res. Address: ${customer.address}, ${customer.city}, ${customer.state} - ${customer.zipCode}</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Account Number: <strong style="font-family: monospace;">${selectedAccount.accountNumber}</strong> (${selectedAccount.accountType} Account)</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Account Balance: <strong>₹<fmt:formatNumber value="${selectedAccount.balance}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 15px;">
+                    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                        <i class="bx bx-history" style="color: var(--primary-500);"></i> Transaction Ledger Log
+                    </h4>
+                    <button type="button" onclick="window.print()" class="btn btn-primary no-print" style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px; background: var(--gradient-primary); border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
+                        <span>Print Document</span>
+                        <i class="bx bx-printer"></i>
+                    </button>
+                </div>
                 
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;" id="txnTable">
+                <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;" id="txnTable">
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px; width: 80px;">Sr. No.</th>
-                                <th style="padding: 12px 15px;">Transaction Date</th>
-                                <th style="padding: 12px 15px;">Type</th>
-                                <th style="padding: 12px 15px;">Description</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: right;">Credit Amount</th>
-                                <th style="padding: 12px 15px; text-align: right;">Debit Amount</th>
-                                <th style="padding: 12px 15px; text-align: right;">Total Amount</th>
+                            <tr style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Transaction Date</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -275,7 +313,7 @@
                                     <c:set var="txnSr" value="0" />
                                     <c:forEach var="txn" items="${transactions}">
                                         <c:set var="txnSr" value="${txnSr + 1}" />
-                                        <tr class="txn-row" data-type="${txn.transactionType}" style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
+                                        <tr class="txn-row" data-type="${txn.transactionType}" style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
                                             <td style="padding: 15px; font-weight: 600; color: var(--gray-500);">${txnSr}</td>
                                             <td style="padding: 15px;">${txn.transactionDate}</td>
                                             <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
@@ -301,7 +339,7 @@
                                                     <c:otherwise>-</c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a;">
+                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
                                                 ₹<fmt:formatNumber value="${txn.runningBalance}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                         </tr>
@@ -316,36 +354,94 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Footer Signatures (print only) -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px;" class="print-only">
+                    <div style="text-align: center; width: 200px;">
+                        <div style="border-bottom: 1px solid var(--gray-400); height: 40px; margin-bottom: 5px;"></div>
+                        <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Authorized Signatory</span>
+                    </div>
+                    <div style="text-align: center; width: 200px;">
+                        <div style="border-bottom: 1px solid var(--gray-400); height: 40px; margin-bottom: 5px;"></div>
+                        <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">System Generated Seals</span>
+                    </div>
+                </div>
             </div>
+
             <!-- Loan Repayment Ledger Table -->
             <div class="glass-card" id="loanStatement" style="display: none;">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-building-house"></i> Loan Amortization &amp; EMI Payments</h3>
-                
-                <c:if test="${not empty selectedLoan}">
-                    <div style="background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: var(--radius-md); margin-bottom: 20px; display: flex; justify-content: space-between; gap: 15px; font-size: 0.85rem;" class="loan-summary-box mobile-grid-1">
-                        <div>
-                            <span style="font-weight: 600; color: var(--gray-700);">Loan Type:</span> <span style="text-transform: capitalize; font-weight: 600; color: var(--primary-500);">${selectedLoan.loanType} Loan</span>
-                            <span style="margin-left: 20px; font-weight: 600; color: var(--gray-700);">Total Principal:</span> <span style="font-weight: 600; color: var(--gray-900);">₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></span>
-                        </div>
-                        <div>
-                            <span style="font-weight: 600; color: var(--gray-700);">Interest Rate:</span> <span style="font-weight: 600; color: var(--gray-900);">${selectedLoan.interestRate}% p.a.</span>
-                            <span style="margin-left: 20px; font-weight: 600; color: var(--gray-700);">Remaining Balance:</span> <span style="font-weight: 600; color: var(--secondary-500);">₹<fmt:formatNumber value="${selectedLoan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></span>
-                        </div>
+                <!-- Official Bank Logo & Name -->
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
+                    <div>
+                        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1; margin: 0;">VERTEX GALAXY BANK</h1>
+                        <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 5px; font-weight: 500; margin-bottom: 0;">Always Beyond Boundaries</p>
                     </div>
+                    <div style="text-align: right;">
+                        <span style="font-family: monospace; font-size: 0.85rem; color: var(--gray-500); font-weight: 700;">LN-REF: #LN-${selectedLoan.loanId}</span>
+                        <p style="font-size: 0.8rem; color: var(--gray-400); margin-top: 3px; margin-bottom: 0;">Date Generated: <span id="currentDateLoan"></span></p>
+                    </div>
+                </div>
+
+                <!-- Official Header Subtitle -->
+                <div style="text-align: center; background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); padding: 10px 15px; margin-bottom: 25px;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-500); text-transform: uppercase; letter-spacing: 1.5px;">Official Loan Amortization &amp; Repayment Statement</span>
+                </div>
+
+                <c:set var="totalRepaid" value="0.0" />
+                <c:if test="${not empty repayments}">
+                    <c:forEach var="rpy" items="${repayments}">
+                        <c:set var="totalRepaid" value="${totalRepaid + rpy.amountPaid}" />
+                    </c:forEach>
                 </c:if>
 
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <!-- Details grid (Bank details vs Customer details) -->
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 25px; margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; color: var(--gray-700);" class="mobile-grid-1">
+                    <!-- Left: Bank Information -->
+                    <div style="border-right: 1px dashed var(--gray-300); padding-right: 20px;">
+                        <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Bank Details</span>
+                        <strong style="color: var(--gray-900);">Vertex Galaxy Bank (Corporate HQ)</strong>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">VGB Corporate Towers, BKC Road, Bandra Kurla Complex,<br>Mumbai, Maharashtra - 400051</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">IFSC Branch Code: <strong style="font-family: monospace;">VGBK0000001</strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Support Toll Free: 1800-VGB-BANK</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Online Portal: www.vertexgalaxybank.com</p>
+                    </div>
+                    
+                    <!-- Right: Customer & Loan Details -->
+                    <div>
+                        <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Customer &amp; Loan Details</span>
+                        <strong style="color: var(--gray-900); font-size: 0.95rem; text-transform: uppercase;">${customer.fullName}</strong>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Customer ID: <strong style="font-family: monospace;">#VGB-CUST-${customer.customerId}</strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Res. Address: ${customer.address}, ${customer.city}, ${customer.state} - ${customer.zipCode}</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Loan Reference: <strong style="font-family: monospace;">#LN-${selectedLoan.loanId}</strong> (${selectedLoan.loanType} Loan)</p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Principal Amount: <strong>₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Interest Rate / Term: <strong>${selectedLoan.interestRate}% P.A. / ${selectedLoan.termMonths} Mos</strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Accumulated Repaid: <strong style="color: var(--accent-emerald);">₹<fmt:formatNumber value="${totalRepaid}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Outstanding Balance: <strong style="color: var(--secondary-500);">₹<fmt:formatNumber value="${selectedLoan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 15px;">
+                    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                        <i class="bx bx-history" style="color: var(--primary-500);"></i> Repayment Ledger Log
+                    </h4>
+                    <button type="button" onclick="window.print()" class="btn btn-primary no-print" style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px; background: var(--gradient-primary); border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
+                        <span>Print Document</span>
+                        <i class="bx bx-printer"></i>
+                    </button>
+                </div>
+                
+                <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;">
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px; width: 80px;">Sr. No.</th>
-                                <th style="padding: 12px 15px;">Payment Date</th>
-                                <th style="padding: 12px 15px;">Type</th>
-                                <th style="padding: 12px 15px;">Description</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: right;">Credit Amount</th>
-                                <th style="padding: 12px 15px; text-align: right;">Debit Amount</th>
-                                <th style="padding: 12px 15px; text-align: right;">Total Amount</th>
+                            <tr style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Payment Date</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
+                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -357,11 +453,11 @@
                                     <!-- Repayment rows -->
                                     <c:forEach var="repay" items="${repayments}">
                                         <c:set var="repaySr" value="${repaySr + 1}" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);">${repaySr}</td>
+                                        <tr style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
+                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
                                             <td style="padding: 15px;">${repay.repaymentDate}</td>
                                             <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                <span class="txn-deposit">Repayment</span>
+                                                <span class="txn-deposit" style="color: var(--accent-emerald) !important;">Repayment</span>
                                             </td>
                                             <td style="padding: 15px;">EMI Repayment (Principal: ₹<fmt:formatNumber value="${repay.principalComponent}" minFractionDigits="2" maxFractionDigits="2"/>, Interest: ₹<fmt:formatNumber value="${repay.interestComponent}" minFractionDigits="2" maxFractionDigits="2"/>)</td>
                                             <td style="padding: 15px;">
@@ -371,7 +467,7 @@
                                                 + ₹<fmt:formatNumber value="${repay.amountPaid}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                             <td style="padding: 15px; text-align: right; font-weight: 700; color: #ef4444;">-</td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a;">
+                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
                                                 ₹<fmt:formatNumber value="${runningLoanBal}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                         </tr>
@@ -381,11 +477,11 @@
                                     <!-- Initial Disbursal row -->
                                     <c:if test="${not empty selectedLoan}">
                                         <c:set var="repaySr" value="${repaySr + 1}" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);">${repaySr}</td>
+                                        <tr style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
+                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
                                             <td style="padding: 15px;">${selectedLoan.startDate}</td>
                                             <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                <span class="txn-withdrawal">Disbursal</span>
+                                                <span class="txn-withdrawal" style="color: var(--secondary-500) !important;">Disbursal</span>
                                             </td>
                                             <td style="padding: 15px;">Initial ${selectedLoan.loanType} Loan Disbursal</td>
                                             <td style="padding: 15px;">
@@ -395,14 +491,14 @@
                                             <td style="padding: 15px; text-align: right; font-weight: 700; color: #ef4444;">
                                                 - ₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a;">
+                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
                                                 ₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                         </tr>
                                     </c:if>
                                 </c:when>
                                 <c:otherwise>
-                                    <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-400); text-align: center;">
+                                    <tr style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-400); text-align: center;">
                                         <td colspan="8" style="padding: 30px;">No loan statement entries found.</td>
                                     </tr>
                                 </c:otherwise>
@@ -410,14 +506,19 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
-            <!-- Bottom Controls (Print, hidden in print view) -->
-            <div style="margin-top: 20px; display: flex; justify-content: flex-start;" class="no-print">
-                <button type="button" onclick="window.print()" class="btn btn-primary">
-                    <span>Export Statement</span>
-                    <i class="bx bx-printer"></i>
-                </button>
+                <!-- Footer Signatures (print only) -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px;" class="print-only">
+                    <div style="text-align: center; width: 200px;">
+                        <div style="border-bottom: 1px solid var(--gray-400); height: 40px; margin-bottom: 5px;"></div>
+                        <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Authorized Signatory</span>
+                    </div>
+                    <div style="text-align: center; width: 200px;">
+                        <div style="border-bottom: 1px solid var(--gray-400); height: 40px; margin-bottom: 5px;"></div>
+                        <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">System Generated Seals</span>
+                    </div>
+                </div>
+            </div>button>
             </div>
         </div>
     </main>

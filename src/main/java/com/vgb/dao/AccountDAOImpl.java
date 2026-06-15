@@ -16,13 +16,53 @@ public class AccountDAOImpl implements AccountDAO {
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
     private DatabaseConfig dbConfig = DatabaseConfig.getInstance();
 
-    private static final String GET_ACCOUNT_BY_ID = 
+    private static final String ACCOUNT_SELECT_FIELDS = 
         "SELECT a.*, " +
         "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
         "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
         "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
-        "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
-        "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
+        
+        // Primary Customer fields
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.first_name END) as primary_first_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.middle_name END) as primary_middle_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.last_name END) as primary_last_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.email END) as primary_email, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.phone_no END) as primary_phone, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.address END) as primary_address, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.city END) as primary_city, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.state END) as primary_state, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.zip_code END) as primary_zip, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.pan_card END) as primary_pan, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.aadhaar_card END) as primary_aadhaar, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.gender END) as primary_gender, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.marital_status END) as primary_marital_status, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.occupation END) as primary_occupation, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.annual_income END) as primary_income, " +
+        
+        // Joint Customer fields
+        "COALESCE(MIN(CASE WHEN s.ownership_type = 'joint_holder' THEN s.customer_id END), 0) as joint_customer_id, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.first_name END) as joint_first_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.middle_name END) as joint_middle_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.last_name END) as joint_last_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.email END) as joint_email, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.phone_no END) as joint_phone, " +
+        "MIN(CASE WHEN s.ownership_type = 'joint_holder' THEN c.dob END) as joint_dob, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.gender END) as joint_gender, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.marital_status END) as joint_marital_status, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.pan_card END) as joint_pan, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.aadhaar_card END) as joint_aadhaar, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.address END) as joint_address, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.city END) as joint_city, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.state END) as joint_state, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.zip_code END) as joint_zip, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.occupation END) as joint_occupation, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.annual_income END) as joint_income, " +
+        
+        "MAX(sav.nominee_name) as nominee_name, MAX(sav.holding_type) as holding_type, MAX(sav.daily_withdrawal_limit) as daily_withdrawal_limit, " +
+        "MAX(curr.business_name) as business_name, MAX(curr.gstin) as gstin, MAX(curr.overdraft_limit) as overdraft_limit, MAX(curr.company_category) as company_category, MAX(curr.company_phone) as company_phone, MAX(curr.company_email) as company_email, MAX(curr.company_address) as company_address, MAX(curr.company_pan) as company_pan, MAX(curr.company_aadhaar) as company_aadhaar ";
+
+    private static final String GET_ACCOUNT_BY_ID = 
+        ACCOUNT_SELECT_FIELDS + 
         "FROM account a " +
         "LEFT JOIN account_signatory s ON a.account_id = s.account_id " +
         "LEFT JOIN customer c ON s.customer_id = c.customer_id " +
@@ -31,12 +71,7 @@ public class AccountDAOImpl implements AccountDAO {
         "WHERE a.account_id = ? " +
         "GROUP BY a.account_id";
     private static final String GET_ACCOUNT_BY_NUMBER = 
-        "SELECT a.*, " +
-        "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
-        "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
-        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
-        "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
-        "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
+        ACCOUNT_SELECT_FIELDS + 
         "FROM account a " +
         "LEFT JOIN account_signatory s ON a.account_id = s.account_id " +
         "LEFT JOIN customer c ON s.customer_id = c.customer_id " +
@@ -45,12 +80,7 @@ public class AccountDAOImpl implements AccountDAO {
         "WHERE a.account_number = ? " +
         "GROUP BY a.account_id";
     private static final String GET_ACCOUNTS_BY_CUSTOMER = 
-        "SELECT a.*, " +
-        "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
-        "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
-        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
-        "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
-        "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
+        ACCOUNT_SELECT_FIELDS + 
         "FROM account a " +
         "LEFT JOIN account_signatory s ON a.account_id = s.account_id " +
         "LEFT JOIN customer c ON s.customer_id = c.customer_id " +
@@ -60,12 +90,7 @@ public class AccountDAOImpl implements AccountDAO {
         "GROUP BY a.account_id " +
         "ORDER BY a.created_at DESC";
     private static final String GET_ALL_ACCOUNTS = 
-        "SELECT a.*, " +
-        "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
-        "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
-        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
-        "sav.nominee_name, sav.holding_type, sav.daily_withdrawal_limit, " +
-        "curr.business_name, curr.gstin, curr.overdraft_limit, curr.company_category, curr.company_phone, curr.company_email, curr.company_address, curr.company_pan, curr.company_aadhaar " +
+        ACCOUNT_SELECT_FIELDS + 
         "FROM account a " +
         "LEFT JOIN account_signatory s ON a.account_id = s.account_id " +
         "LEFT JOIN customer c ON s.customer_id = c.customer_id " +
@@ -130,6 +155,30 @@ public class AccountDAOImpl implements AccountDAO {
             stmtSign.setLong(2, account.getCustomerId());
             stmtSign.executeUpdate();
             stmtSign.close();
+
+            // Insert joint holder if present via jointCustomerId
+            if (account.getJointCustomerId() != null && account.getJointCustomerId() > 0) {
+                String createJointSignatorySql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'joint_holder')";
+                try (PreparedStatement stmtJoint = conn.prepareStatement(createJointSignatorySql)) {
+                    stmtJoint.setLong(1, accountId);
+                    stmtJoint.setLong(2, account.getJointCustomerId());
+                    stmtJoint.executeUpdate();
+                }
+            }
+
+            // Insert other joint holders / partners if present via list
+            if (account.getJointCustomerIds() != null && !account.getJointCustomerIds().isEmpty()) {
+                String createJointSignatorySql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'joint_holder')";
+                try (PreparedStatement stmtJointList = conn.prepareStatement(createJointSignatorySql)) {
+                    for (Long jointCustId : account.getJointCustomerIds()) {
+                        if (jointCustId != null && jointCustId > 0 && !jointCustId.equals(account.getJointCustomerId()) && !jointCustId.equals(account.getCustomerId())) {
+                            stmtJointList.setLong(1, accountId);
+                            stmtJointList.setLong(2, jointCustId);
+                            stmtJointList.executeUpdate();
+                        }
+                    }
+                }
+            }
 
             // 3. Insert subclass specific detail tables
             if ("savings".equalsIgnoreCase(account.getAccountType())) {
@@ -297,6 +346,32 @@ public class AccountDAOImpl implements AccountDAO {
 
             int result = stmt.executeUpdate();
 
+            // Update primary customer details if provided
+            if (account.getPrimaryFirstName() != null) {
+                String updatePrimarySql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ? WHERE customer_id = ?";
+                try (PreparedStatement stmtPrim = conn.prepareStatement(updatePrimarySql)) {
+                    stmtPrim.setString(1, account.getPrimaryFirstName());
+                    stmtPrim.setString(2, account.getPrimaryMiddleName());
+                    stmtPrim.setString(3, account.getPrimaryLastName());
+                    stmtPrim.setDate(4, account.getCustomerDob() != null ? java.sql.Date.valueOf(account.getCustomerDob()) : null);
+                    stmtPrim.setString(5, account.getPrimaryGender());
+                    stmtPrim.setString(6, account.getPrimaryMaritalStatus());
+                    stmtPrim.setString(7, account.getPrimaryEmail());
+                    stmtPrim.setString(8, account.getPrimaryPhone());
+                    stmtPrim.setString(9, account.getPrimaryPan());
+                    stmtPrim.setString(10, account.getPrimaryAadhaar());
+                    stmtPrim.setString(11, account.getPrimaryAddress());
+                    stmtPrim.setString(12, account.getPrimaryAddress());
+                    stmtPrim.setString(13, account.getPrimaryCity());
+                    stmtPrim.setString(14, account.getPrimaryState());
+                    stmtPrim.setString(15, account.getPrimaryZip());
+                    stmtPrim.setString(16, account.getPrimaryOccupation());
+                    stmtPrim.setBigDecimal(17, account.getPrimaryIncome());
+                    stmtPrim.setLong(18, account.getCustomerId());
+                    stmtPrim.executeUpdate();
+                }
+            }
+
             // Update sub-table depending on account type
             if ("savings".equalsIgnoreCase(account.getAccountType())) {
                 String updateSavingsSql = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, ?, ?, ?) " +
@@ -311,6 +386,92 @@ public class AccountDAOImpl implements AccountDAO {
                     stmtSav.setString(6, account.getHoldingType() != null ? account.getHoldingType() : "single");
                     stmtSav.setBigDecimal(7, account.getDailyWithdrawalLimit() != null ? account.getDailyWithdrawalLimit() : new BigDecimal("50000.00"));
                     stmtSav.executeUpdate();
+                }
+
+                // Handle Joint Customer Updates
+                if ("joint".equalsIgnoreCase(account.getHoldingType())) {
+                    if (account.getJointCustomerId() != null && account.getJointCustomerId() > 0) {
+                        // Update existing joint customer
+                        String updateJointSql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ? WHERE customer_id = ?";
+                        try (PreparedStatement stmtJnt = conn.prepareStatement(updateJointSql)) {
+                            stmtJnt.setString(1, account.getJointFirstName());
+                            stmtJnt.setString(2, account.getJointMiddleName());
+                            stmtJnt.setString(3, account.getJointLastName());
+                            stmtJnt.setDate(4, account.getJointDob() != null ? java.sql.Date.valueOf(account.getJointDob()) : null);
+                            stmtJnt.setString(5, account.getJointGender());
+                            stmtJnt.setString(6, account.getJointMaritalStatus());
+                            stmtJnt.setString(7, account.getJointEmail());
+                            stmtJnt.setString(8, account.getJointPhone());
+                            stmtJnt.setString(9, account.getJointPan());
+                            stmtJnt.setString(10, account.getJointAadhaar());
+                            stmtJnt.setString(11, account.getJointAddress());
+                            stmtJnt.setString(12, account.getJointAddress());
+                            stmtJnt.setString(13, account.getJointCity());
+                            stmtJnt.setString(14, account.getJointState());
+                            stmtJnt.setString(15, account.getJointZip());
+                            stmtJnt.setString(16, account.getJointOccupation());
+                            stmtJnt.setBigDecimal(17, account.getJointIncome());
+                            stmtJnt.setLong(18, account.getJointCustomerId());
+                            stmtJnt.executeUpdate();
+                        }
+                    } else {
+                        // Create new joint customer profile
+                        String insertJointSql = "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        long newJointId = 0;
+                        try (PreparedStatement stmtIns = conn.prepareStatement(insertJointSql, Statement.RETURN_GENERATED_KEYS)) {
+                            stmtIns.setString(1, account.getJointFirstName());
+                            stmtIns.setString(2, account.getJointMiddleName());
+                            stmtIns.setString(3, account.getJointLastName());
+                            stmtIns.setString(4, account.getJointFirstName() + "'s Father");
+                            stmtIns.setString(5, account.getJointFirstName() + "'s Mother");
+                            stmtIns.setDate(6, account.getJointDob() != null ? java.sql.Date.valueOf(account.getJointDob()) : null);
+                            stmtIns.setString(7, account.getJointGender());
+                            stmtIns.setString(8, account.getJointMaritalStatus());
+                            stmtIns.setString(9, "Indian");
+                            stmtIns.setString(10, account.getJointEmail());
+                            stmtIns.setString(11, account.getJointPan());
+                            stmtIns.setString(12, account.getJointAadhaar());
+                            stmtIns.setString(13, account.getJointPhone());
+                            stmtIns.setString(14, "");
+                            stmtIns.setString(15, account.getJointAddress());
+                            stmtIns.setString(16, account.getJointAddress());
+                            stmtIns.setString(17, account.getJointCity());
+                            stmtIns.setString(18, account.getJointState());
+                            stmtIns.setString(19, account.getJointZip());
+                            
+                            // Generate default credentials
+                            String randUser = "j_" + account.getAccountNumber() + "_" + (10 + new java.util.Random().nextInt(90));
+                            stmtIns.setString(20, randUser);
+                            stmtIns.setString(21, "1234");
+                            stmtIns.setString(22, "Vgb@1234");
+                            stmtIns.setString(23, "active");
+                            stmtIns.setString(24, account.getJointOccupation());
+                            stmtIns.setBigDecimal(25, account.getJointIncome() != null ? account.getJointIncome() : new BigDecimal("300000.00"));
+                            
+                            stmtIns.executeUpdate();
+                            try (ResultSet gk = stmtIns.getGeneratedKeys()) {
+                                if (gk.next()) {
+                                    newJointId = gk.getLong(1);
+                                }
+                            }
+                        }
+                        if (newJointId > 0) {
+                            String linkSignatorySql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'joint_holder')";
+                            try (PreparedStatement stmtLink = conn.prepareStatement(linkSignatorySql)) {
+                                stmtLink.setLong(1, account.getAccountId());
+                                stmtLink.setLong(2, newJointId);
+                                stmtLink.executeUpdate();
+                            }
+                            account.setJointCustomerId(newJointId);
+                        }
+                    }
+                } else {
+                    // Changed from joint to single: delete joint holder signatory mapping
+                    String deleteJointSigSql = "DELETE FROM account_signatory WHERE account_id = ? AND ownership_type = 'joint_holder'";
+                    try (PreparedStatement stmtDelSig = conn.prepareStatement(deleteJointSigSql)) {
+                        stmtDelSig.setLong(1, account.getAccountId());
+                        stmtDelSig.executeUpdate();
+                    }
                 }
             } else if ("current".equalsIgnoreCase(account.getAccountType())) {
                 String updateCurrentSql = "INSERT INTO account_current (account_id, business_name, gstin, overdraft_limit, company_category, company_phone, company_email, company_address, company_pan, company_aadhaar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
@@ -862,11 +1023,159 @@ public class AccountDAOImpl implements AccountDAO {
             // Not a current account or columns not fetched
         }
 
+        // Map primary customer details
+        try {
+            account.setPrimaryFirstName(rs.getString("primary_first_name"));
+            account.setPrimaryMiddleName(rs.getString("primary_middle_name"));
+            account.setPrimaryLastName(rs.getString("primary_last_name"));
+            account.setPrimaryEmail(rs.getString("primary_email"));
+            account.setPrimaryPhone(rs.getString("primary_phone"));
+            account.setPrimaryAddress(rs.getString("primary_address"));
+            account.setPrimaryCity(rs.getString("primary_city"));
+            account.setPrimaryState(rs.getString("primary_state"));
+            account.setPrimaryZip(rs.getString("primary_zip"));
+            account.setPrimaryPan(rs.getString("primary_pan"));
+            account.setPrimaryAadhaar(rs.getString("primary_aadhaar"));
+            account.setPrimaryGender(rs.getString("primary_gender"));
+            account.setPrimaryMaritalStatus(rs.getString("primary_marital_status"));
+            account.setPrimaryOccupation(rs.getString("primary_occupation"));
+            account.setPrimaryIncome(rs.getBigDecimal("primary_income"));
+        } catch (SQLException e) {
+            // ignore
+        }
+
+        // Map joint customer details
+        try {
+            long jointId = rs.getLong("joint_customer_id");
+            if (jointId > 0) {
+                account.setJointCustomerId(jointId);
+                account.setJointFirstName(rs.getString("joint_first_name"));
+                account.setJointMiddleName(rs.getString("joint_middle_name"));
+                account.setJointLastName(rs.getString("joint_last_name"));
+                account.setJointEmail(rs.getString("joint_email"));
+                account.setJointPhone(rs.getString("joint_phone"));
+                Date jDob = rs.getDate("joint_dob");
+                if (jDob != null) {
+                    account.setJointDob(jDob.toLocalDate());
+                }
+                account.setJointGender(rs.getString("joint_gender"));
+                account.setJointMaritalStatus(rs.getString("joint_marital_status"));
+                account.setJointPan(rs.getString("joint_pan"));
+                account.setJointAadhaar(rs.getString("joint_aadhaar"));
+                account.setJointAddress(rs.getString("joint_address"));
+                account.setJointCity(rs.getString("joint_city"));
+                account.setJointState(rs.getString("joint_state"));
+                account.setJointZip(rs.getString("joint_zip"));
+                account.setJointOccupation(rs.getString("joint_occupation"));
+                account.setJointIncome(rs.getBigDecimal("joint_income"));
+            }
+        } catch (SQLException e) {
+            // ignore
+        }
+
         Timestamp timestamp = rs.getTimestamp("created_at");
         if (timestamp != null) {
             account.setCreatedAt(timestamp.toLocalDateTime());
         }
         
         return account;
+    }
+
+    @Override
+    public int getTotalCustomersCount() throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement("SELECT COUNT(*) FROM customer");
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            logger.error("Error getting total customers count", e);
+            throw new Exception("Failed to get total customers count", e);
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, conn);
+        }
+    }
+
+    @Override
+    public int getSavingsSingleCustomersCount() throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement(
+                "SELECT COUNT(DISTINCT s.customer_id) " +
+                "FROM account_savings sav " +
+                "JOIN account_signatory s ON sav.account_id = s.account_id " +
+                "WHERE sav.holding_type = 'single'"
+            );
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            logger.error("Error getting single savings customers count", e);
+            throw new Exception("Failed to get single savings customers count", e);
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, conn);
+        }
+    }
+
+    @Override
+    public int getSavingsJointCustomersCount() throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement(
+                "SELECT COUNT(DISTINCT s.customer_id) " +
+                "FROM account_savings sav " +
+                "JOIN account_signatory s ON sav.account_id = s.account_id " +
+                "WHERE sav.holding_type = 'joint'"
+            );
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            logger.error("Error getting joint savings customers count", e);
+            throw new Exception("Failed to get joint savings customers count", e);
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, conn);
+        }
+    }
+
+    @Override
+    public int getCurrentCustomersCount() throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement(
+                "SELECT COUNT(DISTINCT s.customer_id) " +
+                "FROM account_current curr " +
+                "JOIN account_signatory s ON curr.account_id = s.account_id"
+            );
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            logger.error("Error getting current customers count", e);
+            throw new Exception("Failed to get current customers count", e);
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, conn);
+        }
     }
 }

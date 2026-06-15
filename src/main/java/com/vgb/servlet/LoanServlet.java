@@ -72,6 +72,12 @@ public class LoanServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Failed security check: Invalid CSRF token");
+            response.sendRedirect(request.getContextPath() + "/loan");
+            return;
+        }
+
         String action = getParameter(request, "action", "");
         
         try {

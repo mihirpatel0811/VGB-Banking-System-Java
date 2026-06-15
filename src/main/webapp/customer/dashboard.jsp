@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Customer Dashboard</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
@@ -69,43 +70,73 @@
         }
 
         /* VGB PREMIUM ATM CARD & 3D HOVER ANIMATIONS */
+        .vgb-premium-atm-card-container {
+            perspective: 1500px;
+            width: 100%;
+            height: 100%;
+        }
+
         .vgb-premium-atm-card {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(236, 72, 153, 0.9) 100%) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
-            border-radius: var(--radius-xl) !important;
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.3), var(--shadow-glow) !important;
+            background: #060412 !important; /* Fallback color */
+            border: 1px solid rgba(139, 92, 246, 0.25) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55), 0 0 30px rgba(139, 92, 246, 0.15) !important;
             padding: 30px !important;
             color: white !important;
             position: relative !important;
             overflow: hidden !important;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease !important;
             transform-style: preserve-3d !important;
-            perspective: 1000px !important;
         }
 
         .vgb-premium-atm-card:hover {
-            transform: translateY(-8px) scale(1.02) rotateX(4deg) rotateY(-8deg) !important;
-            box-shadow: 0 25px 45px rgba(99, 102, 241, 0.4), var(--shadow-glow-pink) !important;
-            border-color: rgba(255, 255, 255, 0.45) !important;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(168, 85, 247, 0.35) !important;
+            border-color: rgba(168, 85, 247, 0.45) !important;
         }
 
-        /* 3D Diagonal Sweep Light Reflection Shimmer Effect */
-        .vgb-premium-atm-card::after {
-            content: '' !important;
+        /* 3D Depth layers for floating elements */
+        .vgb-premium-atm-card > *:not(.card-bg-waves) {
+            transform: translateZ(40px);
+            transform-style: preserve-3d;
+            position: relative;
+            z-index: 2; /* Render above background waves */
+        }
+
+        /* Background waves layout Z alignment */
+        .vgb-premium-atm-card .card-bg-waves {
             position: absolute !important;
-            top: -50% !important;
-            left: -50% !important;
-            width: 200% !important;
-            height: 200% !important;
-            background: linear-gradient(45deg, transparent 20%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.1) 60%, transparent 80%) !important;
-            transform: rotate(-45deg) !important;
-            transition: all 0.8s ease !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
             pointer-events: none !important;
-            opacity: 0.5 !important;
+            z-index: 1 !important;
+            transform: translateZ(0px) !important;
         }
 
-        .vgb-premium-atm-card:hover::after {
-            left: 100% !important;
+        /* Glare layer */
+        .vgb-premium-atm-card .card-glare {
+            position: absolute !important;
+            inset: 0 !important;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 65%) !important;
+            mix-blend-mode: overlay !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
+            transition: opacity 0.3s ease !important;
+            z-index: 10 !important;
+            transform: translateZ(0px) !important; /* Keep glare on card surface */
+        }
+
+        .vgb-premium-atm-card:hover .card-glare {
+            opacity: 1 !important;
+        }
+
+        /* Card horizontal divider line */
+        .vgb-premium-atm-card .card-divider {
+            margin: 18px 0 !important;
+            border-top: 1px solid rgba(139, 92, 246, 0.3) !important;
+            box-shadow: 0 1px 8px rgba(139, 92, 246, 0.4) !important;
+            opacity: 0.8 !important;
+            transform: translateZ(20px) !important;
         }
 
         /* Custom interactive scale animations for card toggle icon */
@@ -153,7 +184,6 @@
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Loans</a>
             <a href="${pageContext.request.contextPath}/account?action=statement"><i class="bx bx-file"></i> Statements</a>
             <a href="${pageContext.request.contextPath}/customer/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
-            <a href="${pageContext.request.contextPath}/customer/notification.jsp"><i class="bx bx-bell"></i> Alerts</a>
         </div>
         <div style="padding: 15px; background: rgba(99, 102, 241, 0.05); border-radius: var(--radius-md); text-align: center;">
             <p style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Support Hotline</p>
@@ -187,7 +217,7 @@
                 </div>
                 <div>
                     <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 4px;">Welcome to Vertex Galaxy Bank! Secure PIN Active</h4>
-                    <p style="font-size: 0.85rem; color: var(--gray-600); line-height: 1.5;">Your administrative account approval is complete. Your secure 4-digit Banking PIN is <strong style="color: var(--primary-600); font-family: monospace; font-size: 1rem; letter-spacing: 0.5px;">${customer.pin}</strong>. You can use this PIN for quick authentication and authorization. Visit the <a href="${pageContext.request.contextPath}/customer/notification.jsp" style="color: var(--primary-500); font-weight: 600; text-decoration: underline;">Alerts Hub</a> to view full security credentials details.</p>
+                    <p style="font-size: 0.85rem; color: var(--gray-600); line-height: 1.5;">Your administrative account approval is complete. Your secure 4-digit Banking PIN is <strong style="color: var(--primary-600); font-family: monospace; font-size: 1rem; letter-spacing: 0.5px;">${customer.pin}</strong>. You can use this PIN for quick authentication and authorization.</p>
                 </div>
             </div>
             </c:if>
@@ -196,47 +226,127 @@
             <div style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; margin-bottom: 40px;" class="mobile-grid-1">
                 <!-- VGB Credit Card Rendering + Total Balance -->
                 <!-- VGB Credit Card Rendering + Total Balance -->
-                <div class="vgb-premium-atm-card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 270px;">
-                    <!-- Card Header -->
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 700; letter-spacing: 1px; font-size: 0.95rem; opacity: 0.95;"><i class="bx bx-shield-quarter"></i> Vertex Galaxy Bank</span>
-                        <!-- Golden 3D Metallic Chip -->
-                        <div style="width: 48px; height: 36px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%); border-radius: 6px; position: relative; border: 1.5px solid rgba(255, 255, 255, 0.35); box-shadow: inset 0 2px 5px rgba(255,255,255,0.4);">
-                            <!-- Inner grid lines for authentic look -->
-                            <div style="position: absolute; inset: 6px; border: 1px solid rgba(255,255,255,0.25); border-radius: 3px; background: rgba(0,0,0,0.05);"></div>
-                        </div>
-                    </div>
+                <div class="vgb-premium-atm-card-container">
+                    <div class="vgb-premium-atm-card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 270px;">
+                        <!-- Glare Layer -->
+                        <div class="card-glare"></div>
 
-                    <!-- Balance & Card Number -->
-                    <div style="margin-top: 15px;">
-                        <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">Total Net Balance</span>
-                        <h3 style="font-size: 2.5rem; font-weight: 800; color: white; margin-top: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.15);">₹ <fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/></h3>
+                        <!-- 3D Vector Wave and Dot Grid Background -->
+                        <svg class="card-bg-waves" viewBox="0 0 400 250" preserveAspectRatio="none">
+                            <defs>
+                                <!-- Background radial gradient -->
+                                <radialGradient id="bgGrad" cx="20%" cy="20%" r="90%">
+                                    <stop offset="0%" stop-color="#140f35"/>
+                                    <stop offset="60%" stop-color="#070417"/>
+                                    <stop offset="100%" stop-color="#020106"/>
+                                </radialGradient>
+                                
+                                <!-- Wave neon purple gradient -->
+                                <linearGradient id="wavePurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"/>
+                                    <stop offset="50%" stop-color="#6366f1" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
+                                </linearGradient>
+
+                                <!-- Wave neon magenta gradient -->
+                                <linearGradient id="waveMagenta" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#db2777" stop-opacity="0.5"/>
+                                    <stop offset="70%" stop-color="#7c3aed" stop-opacity="0.15"/>
+                                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                                </linearGradient>
+
+                                <!-- Dot Grid Pattern -->
+                                <pattern id="dotGrid" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+                                    <circle cx="2" cy="2" r="0.75" fill="#a855f7" fill-opacity="0.25"/>
+                                </pattern>
+                            </defs>
+                            
+                            <!-- Base Background -->
+                            <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+                            
+                            <!-- Dot Grid Overlay -->
+                            <rect width="100%" height="100%" fill="url(#dotGrid)"/>
+
+                            <!-- Premium Wave Shapes -->
+                            <path d="M-50,260 C80,260 180,180 260,110 C340,40 380,0 450,-50 L450,260 Z" fill="url(#wavePurple)"/>
+                            <path d="M-50,260 C120,240 220,130 310,70 C370,30 400,-10 450,-50" fill="none" stroke="url(#waveMagenta)" stroke-width="2.5" opacity="0.65"/>
+                            <path d="M-20,270 C100,270 200,210 280,150 C360,90 410,30 450,-20" fill="none" stroke="#db2777" stroke-width="1.5" opacity="0.4"/>
+                            <path d="M50,280 C180,250 250,180 340,110 C400,60 430,20 470,-10" fill="none" stroke="#a855f7" stroke-width="1.2" opacity="0.3"/>
+                        </svg>
                         
-                        <!-- Masked/Full Account Number -->
-                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
-                            <span id="cardNumberDisplay" data-full="${not empty accounts ? accounts[0].accountNumber : '000000000000'}" style="font-family: monospace; font-size: 1.35rem; letter-spacing: 2px; font-weight: 700; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
-                                ••••  ••••  ••••  0000
-                            </span>
-                            <button type="button" onclick="toggleCardNumberVisibility()" style="background: none; border: none; color: rgba(255, 255, 255, 0.85); cursor: pointer; padding: 5px; font-size: 1.25rem; display: flex; align-items: center;" id="eyeIconBtn" title="Show/Hide Account Number">
-                                <i class="bx bx-show" id="eyeIcon"></i>
-                            </button>
+                        <!-- Card Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <!-- Stylish hexagon logo emblem -->
+                                <svg width="24" height="26" viewBox="0 0 24 26" fill="none" style="filter: drop-shadow(0 0 8px rgba(168,85,247,0.5));">
+                                    <path d="M12 1 L22 6.8 L22 18.2 L12 24 L2 18.2 L2 6.8 Z" fill="url(#logoBg)" stroke="#d8b4fe" stroke-width="1.5"/>
+                                    <defs>
+                                        <linearGradient id="logoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#8b5cf6"/>
+                                            <stop offset="100%" stop-color="#ec4899"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M12 7 L16 11 L16 15 L12 18 L8 15 L8 11 Z" fill="white" opacity="0.9"/>
+                                    <path d="M12 9 L14 11 L14 13 L12 15 L10 13 L10 11 Z" fill="#8b5cf6"/>
+                                </svg>
+                                <span style="font-weight: 700; letter-spacing: 0.5px; font-size: 0.95rem; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">Vertex Galaxy Bank</span>
+                            </div>
+                            
+                            <!-- Golden EMV Chip with realistic trace patterns -->
+                            <svg width="46" height="36" viewBox="0 0 46 36" fill="none" style="border-radius: 6px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.25);">
+                                <linearGradient id="chipGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ffe082"/>
+                                    <stop offset="35%" stop-color="#ffd54f"/>
+                                    <stop offset="70%" stop-color="#ffb300"/>
+                                    <stop offset="100%" stop-color="#ff8f00"/>
+                                </linearGradient>
+                                <rect width="46" height="36" rx="6" fill="url(#chipGold)"/>
+                                <path d="M14,0 L14,12 L0,12" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <path d="M32,0 L32,12 L46,12" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <path d="M18,36 L18,24 L0,24" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <path d="M28,36 L28,24 L46,24" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <path d="M14,18 L32,18" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <path d="M23,12 L23,24" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <rect x="18" y="12" width="10" height="12" rx="2" stroke="#424242" stroke-width="0.8" fill="none" opacity="0.65"/>
+                                <line x1="0" y1="18" x2="14" y2="18" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                                <line x1="32" y1="18" x2="46" y2="18" stroke="#424242" stroke-width="0.8" opacity="0.65"/>
+                            </svg>
                         </div>
-                    </div>
 
-                    <!-- Card Footer -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 12px;">
-                        <div style="display: flex; gap: 30px;">
-                            <div>
-                                <span style="display: block; font-size: 0.65rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px;">Card Holder</span>
-                                <span style="font-size: 1rem; font-weight: 600; text-transform: uppercase; color: white; letter-spacing: 1px;">${not empty customer ? customer.fullName : 'VGB CUSTOMER'}</span>
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 0.65rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px;">Birth Date</span>
-                                <span style="font-size: 1rem; font-weight: 600; color: white; letter-spacing: 1px;">${not empty birthDate ? birthDate : '08/08/2002'}</span>
+                        <!-- Balance & Card Number -->
+                        <div style="margin-top: 15px;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.65; color: #a0aec0;">Total Net Balance</span>
+                            <h3 style="font-size: 2.5rem; font-weight: 800; color: white; margin-top: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.15);">₹ <fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/></h3>
+                            
+                            <!-- Masked/Full Account Number -->
+                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                                <span id="cardNumberDisplay" data-full="${not empty accounts ? accounts[0].accountNumber : '000000000000'}" style="font-family: monospace; font-size: 1.35rem; letter-spacing: 2px; font-weight: 700; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+                                    ••••  ••••  ••••  0000
+                                </span>
+                                <button type="button" onclick="toggleCardNumberVisibility()" style="background: none; border: none; color: rgba(255, 255, 255, 0.85); cursor: pointer; padding: 5px; font-size: 1.25rem; display: flex; align-items: center; pointer-events: auto !important; position: relative !important; z-index: 999 !important; transform: translateZ(50px) !important;" id="eyeIconBtn" title="Show/Hide Account Number">
+                                    <i class="bx bx-show" id="eyeIcon"></i>
+                                </button>
                             </div>
                         </div>
-                        <div style="text-align: right;">
-                            <span style="font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: italic;">PREMIUM</span>
+
+                        <!-- Glowing Separator Line -->
+                        <div class="card-divider"></div>
+
+                        <!-- Card Footer -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0;">
+                            <div style="display: flex; gap: 40px;">
+                                <div>
+                                    <span style="display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.75px; font-weight: 500; margin-bottom: 2px;">Card Holder</span>
+                                    <span style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; color: white; letter-spacing: 0.5px;">${not empty customer ? customer.fullName : 'VGB CUSTOMER'}</span>
+                                </div>
+                                <div>
+                                    <span style="display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.75px; font-weight: 500; margin-bottom: 2px;">Birth Date</span>
+                                    <span style="font-size: 0.95rem; font-weight: 700; color: white; letter-spacing: 0.5px;">${not empty birthDate ? birthDate : '08/08/2002'}</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 1.15rem; font-weight: 900; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #fcd34d 0%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: italic; letter-spacing: 0.5px;">PREMIUM</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -367,18 +477,54 @@
                 displayEl.setAttribute('data-masked', `••••  ••••  ••••  ${last4}`);
                 displayEl.textContent = `••••  ••••  ••••  ${last4}`;
             }
+
+            // Interactive 3D ATM Card Tilt & Glare script
+            const cardContainer = document.querySelector('.vgb-premium-atm-card-container');
+            const card = document.querySelector('.vgb-premium-atm-card');
+            if (cardContainer && card) {
+                cardContainer.addEventListener('mousemove', (e) => {
+                    const rect = cardContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    // Calculate rotation angles (max 15 degrees)
+                    const rotX = -((y - centerY) / centerY) * 15;
+                    const rotY = ((x - centerX) / centerX) * 15;
+
+                    card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-8px) scale(1.02)`;
+
+                    // Set custom property positions for glare positioning
+                    card.style.setProperty('--x', `${(x / rect.width) * 100}%`);
+                    card.style.setProperty('--y', `${(y / rect.height) * 100}%`);
+                });
+
+                cardContainer.addEventListener('mouseleave', () => {
+                    // Smooth transition back to neutral state
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+                    card.style.setProperty('--x', '50%');
+                    card.style.setProperty('--y', '50%');
+                });
+            }
         });
 
         function toggleCardNumberVisibility() {
             const displayEl = document.getElementById('cardNumberDisplay');
             const iconEl = document.getElementById('eyeIcon');
             if (displayEl && iconEl) {
-                const isMasked = displayEl.textContent === displayEl.getAttribute('data-masked');
+                const fullNumber = displayEl.getAttribute('data-full');
+                const maskedNumber = displayEl.getAttribute('data-masked');
+                
+                const currentText = displayEl.textContent.trim();
+                const isMasked = (currentText === maskedNumber.trim());
+                
                 if (isMasked) {
-                    displayEl.textContent = displayEl.getAttribute('data-full');
+                    displayEl.textContent = fullNumber;
                     iconEl.className = 'bx bx-hide';
                 } else {
-                    displayEl.textContent = displayEl.getAttribute('data-masked');
+                    displayEl.textContent = maskedNumber;
                     iconEl.className = 'bx bx-show';
                 }
             }

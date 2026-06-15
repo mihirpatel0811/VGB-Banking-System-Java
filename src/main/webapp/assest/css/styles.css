@@ -465,7 +465,7 @@ body.dark-mode .header {
 }
 
 .logo img {
-    height: 4rem !important;
+    height: 38px !important;
     width: auto !important;
 }
 
@@ -563,7 +563,7 @@ body.dark-mode .navbar a {
 
 body.dark-mode .theme-toggle {
     background: var(--gray-800);
-    color: var(--amber-400);
+    color: var(--accent-amber);
 }
 
 .theme-toggle:hover {
@@ -3960,19 +3960,19 @@ body.dark-mode ::-webkit-scrollbar-track {
 }
 
 .bank-card {
-    width: min(100%, 420px);
+    width: min(100%, 500px);
     min-height: 255px;
     padding: 32px;
     border-radius: 20px;
-    background: linear-gradient(135deg, #131a30 0%, #070b16 100%);
+    background: linear-gradient(135deg, #15161e 0%, #0b0c10 100%);
     color: var(--white);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
         inset 0 0 20px rgba(255, 255, 255, 0.05),
-        0 0 40px rgba(168, 85, 247, 0.15);
+        0 0 30px rgba(99, 102, 241, 0.05);
     position: relative;
     z-index: 2;
     overflow: hidden;
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transform-style: preserve-3d;
     transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateZ(0);
     transition: transform 0.1s ease, box-shadow 0.3s ease;
@@ -4059,14 +4059,36 @@ body.dark-mode ::-webkit-scrollbar-track {
 .bank-card-number {
     position: relative;
     z-index: 1;
-    margin: 55px 0;
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: var(--white);
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    font-family: 'Courier New', Courier, monospace;
+    margin: 35px 0 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
     transform: translateZ(30px);
+    text-align: left;
+}
+
+.bank-card-number .dots {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1;
+    font-family: inherit;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.bank-card-number .digits {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    font-family: var(--font-display);
+    letter-spacing: 2px;
+    line-height: 1;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding-left: 2px;
+    white-space: nowrap;
 }
 
 .bank-card-bottom strong {
@@ -5290,7 +5312,8 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
     color: #b88f14;
 }
 
-/* Adjustments for dark mode theme compatibility */
-body.dark-mode .flip-card-front {
-    border-color: rgba(255, 255, 255, 0.08);
+/* Hide theme toggle elements globally to disable theme switching */
+.theme-toggle,
+#themeToggle {
+    display: none !important;
 }

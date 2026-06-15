@@ -2,8 +2,8 @@
    MIHIR BHAYANI - PROFESSIONAL PORTFOLIO JAVASCRIPT
    Version: 2.0.0
    Author: Mihir Bhayani
-    },Description: Advanced interactive features, animations, and state management.
-   /**========================================================================== */
+   Description: Advanced interactive features, animations, and state management.
+   ========================================================================== */
 
 /**
  * Table of Contents:
@@ -26,6 +26,24 @@
  */
 
 "use strict";
+
+// Enforce light mode globally to prevent dark mode rendering
+(function () {
+    const theme = 'light';
+    
+    document.documentElement.classList.remove('dark-mode');
+    document.documentElement.classList.add('light-mode');
+    document.documentElement.setAttribute('data-theme', theme);
+    if (document.body) {
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+    } else {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+        });
+    }
+})();
 
 /* ==========================================================================
    1. GLOBAL STATE & CONSTANTS
@@ -93,7 +111,7 @@ const App = {
             }
         }, 3000);
     },
-    
+
     revealHero: function () {
         const heroElements = document.querySelectorAll('.hero-text > *');
         heroElements.forEach((el, index) => {
@@ -167,39 +185,19 @@ const App = {
        5. THEME & PERSISTENCE LOGIC
        ========================================================================== */
     initThemeSystem: function () {
+        const theme = 'light';
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+        document.documentElement.classList.remove('dark-mode');
+        document.documentElement.classList.add('light-mode');
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Clean up any previously stored theme preferences
+        localStorage.removeItem('theme');
+        
         const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-
-        const applyTheme = (theme) => {
-            if (theme === 'dark') {
-                body.classList.add('dark-mode');
-                document.documentElement.classList.add('dark-mode');
-                document.documentElement.setAttribute('data-theme', 'dark');
-                if (themeToggle) {
-                    const icon = themeToggle.querySelector('i');
-                    if (icon) icon.className = 'bx bx-sun';
-                }
-            } else {
-                body.classList.remove('dark-mode');
-                document.documentElement.classList.remove('dark-mode');
-                document.documentElement.setAttribute('data-theme', 'light');
-                if (themeToggle) {
-                    const icon = themeToggle.querySelector('i');
-                    if (icon) icon.className = 'bx bx-moon';
-                }
-            }
-        };
-
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        applyTheme(savedTheme);
-
         if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const isDark = !body.classList.contains('dark-mode');
-                const newTheme = isDark ? 'dark' : 'light';
-                localStorage.setItem('theme', newTheme);
-                applyTheme(newTheme);
-            });
+            themeToggle.style.display = 'none';
         }
     },
 
@@ -297,7 +295,7 @@ const App = {
         const target = document.querySelector('.typed-text');
         if (!target) return;
 
-        const words = ['Full-Stack Developer', 'Web Designer', 'MCA Student', 'Problem Solver'];
+        const words = ['Convenience', 'Secure Transactions', 'Smarter Investing', 'Digital Freedom'];
         let wordIdx = 0;
         let charIdx = 0;
         let isDeleting = false;
@@ -334,15 +332,15 @@ const App = {
         // Count projects dynamically from the DOM
         const projects = document.querySelectorAll('.project-container .project-box');
         const certificates = document.querySelectorAll('.cert-grid .cert-card');
-        
+
         const projectStats = document.querySelector('.stat-number[data-target]');
         const certStats = document.querySelectorAll('.stat-number[data-target]');
-        
+
         // Update project count
         if (projectStats && projects.length > 0) {
             projectStats.dataset.target = projects.length;
         }
-        
+
         // Update certificate count (second stat element)
         if (certStats.length > 1 && certificates.length > 0) {
             certStats[1].dataset.target = certificates.length;
@@ -360,12 +358,12 @@ const App = {
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
-        
+
         // Adjust if birthday hasn't occurred yet this year
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-        
+
         ageDisplay.textContent = age + ' Years';
     },
 
@@ -417,7 +415,7 @@ const App = {
                             entry.target.style.width = `${width}%`;
                         }, Number.parseInt(delay));
                     }
-                    
+
                     entry.target.classList.add('aos-animate');
                 }
             });
@@ -444,7 +442,7 @@ const App = {
                     if (project.classList.contains('hidden')) {
                         return;
                     }
-                    
+
                     const category = project.getAttribute('data-category');
                     if (filterValue === 'all' || filterValue === category) {
                         project.style.display = 'block';
@@ -457,19 +455,19 @@ const App = {
         });
     },
 
-/* ==========================================================================
-         SHOW MORE / SHOW LESS BUTTONS FUNCTIONALITY
-         ========================================================================== */
+    /* ==========================================================================
+             SHOW MORE / SHOW LESS BUTTONS FUNCTIONALITY
+             ========================================================================== */
     initShowMoreButtons: function () {
         const projectsBtn = document.getElementById('projectsShowMoreBtn');
         const certsBtn = document.getElementById('certsShowMoreBtn');
-        
+
         if (projectsBtn) {
             let projectsExpanded = false;
             projectsBtn.addEventListener('click', () => {
                 const hiddenProjects = document.querySelectorAll('#projects .project-box.show-more-item.hidden');
                 projectsExpanded = !projectsExpanded;
-                
+
                 hiddenProjects.forEach(item => {
                     if (projectsExpanded) {
                         item.classList.remove('hidden');
@@ -479,17 +477,17 @@ const App = {
                         item.style.display = 'none';
                     }
                 });
-                
+
                 projectsBtn.textContent = projectsExpanded ? 'Show Less' : 'Show More';
             });
         }
-        
+
         if (certsBtn) {
             let certsExpanded = false;
             certsBtn.addEventListener('click', () => {
                 const hiddenCerts = document.querySelectorAll('#certifications .cert-card.show-more-item.hidden');
                 certsExpanded = !certsExpanded;
-                
+
                 hiddenCerts.forEach(item => {
                     if (certsExpanded) {
                         item.classList.remove('hidden');
@@ -499,7 +497,7 @@ const App = {
                         item.style.display = 'none';
                     }
                 });
-                
+
                 certsBtn.textContent = certsExpanded ? 'Show Less' : 'Show More';
             });
         }
@@ -650,20 +648,20 @@ const App = {
         };
 
         const showMoreButtons = document.querySelectorAll('.show-more-btn');
-        
+
         showMoreButtons.forEach(btn => {
             const section = btn.getAttribute('data-section');
             const container = btn.closest('.project-container, .cert-grid');
             if (!container) return;
             const items = container.querySelectorAll('.show-more-item');
             const itemsArray = Array.from(items);
-            
+
             itemsArray.forEach((item, index) => {
                 if (index >= 3) {
                     item.classList.add('hidden');
                 }
             });
-            
+
             if (items.length <= 3) {
                 btn.style.display = 'none';
                 return;
@@ -671,14 +669,14 @@ const App = {
 
             btn.addEventListener('click', () => {
                 toggleStates[section] = !toggleStates[section];
-                
+
                 const btnText = btn.querySelector('.btn-text');
                 const icon = btn.querySelector('.bx-chevron-down');
-                
+
                 if (toggleStates[section]) {
                     btnText.textContent = 'Show Less';
                     btn.classList.add('expanded');
-                    
+
                     itemsArray.forEach((item, index) => {
                         if (index >= 3) {
                             item.classList.remove('hidden');
@@ -691,7 +689,7 @@ const App = {
                 } else {
                     btnText.textContent = 'Show More';
                     btn.classList.remove('expanded');
-                    
+
                     itemsArray.forEach((item, index) => {
                         if (index >= 3) {
                             item.classList.add('collapsing');
@@ -701,7 +699,7 @@ const App = {
                             }, 300);
                         }
                     });
-                    
+
                     setTimeout(() => {
                         const sectionEl = document.getElementById(section);
                         if (sectionEl) {
@@ -822,7 +820,7 @@ function openDegreeModal(imageSrc) {
     const modal = document.getElementById('degreeModal');
     const modalImg = document.getElementById('modalImage');
     const modalContent = modal.querySelector('.degree-modal-content');
-    
+
     if (modal && modalImg) {
         if (imageSrc.toLowerCase().endsWith('.pdf')) {
             modalImg.style.display = 'none';
@@ -862,7 +860,7 @@ function closeDegreeModal() {
 }
 
 // Close modal on outside click
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     const modal = document.getElementById('degreeModal');
     if (modal && e.target === modal) {
         closeDegreeModal();
@@ -870,7 +868,7 @@ document.addEventListener('click', function(e) {
 });
 
 // Close modal on Escape key
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         closeDegreeModal();
     }
@@ -894,7 +892,7 @@ function updateSidebarNotificationBadge() {
     const readNotifications = JSON.parse(localStorage.getItem('readNotifications') || '[]');
     const validReadIds = readNotifications.filter(id => id >= 1 && id <= 5);
     const unreadCount = Math.max(0, totalNotifications - validReadIds.length);
-    
+
     const badge = document.getElementById('sidebar-notif-count');
     if (badge) {
         if (unreadCount > 0) {
@@ -1018,7 +1016,7 @@ class VGBAdminAccountManager {
         const typeVal = typeFilter ? typeFilter.value : "all";
         const statusFilter = document.getElementById("statusFilter");
         const statusVal = statusFilter ? statusFilter.value : "all";
-        
+
         const rows = document.querySelectorAll("#accountsTable tbody tr");
         let visibleCount = 0;
 
@@ -1026,7 +1024,7 @@ class VGBAdminAccountManager {
             if (row.cells.length === 1 && row.cells[0].colSpan === 8) {
                 return; // Skip empty row
             }
-            
+
             const custIdAttr = row.getAttribute("data-cust-id");
             const custNameAttr = row.getAttribute("data-cust-name");
             const accNumberAttr = row.getAttribute("data-acc-number");
@@ -1041,7 +1039,7 @@ class VGBAdminAccountManager {
 
             // Check text matching
             const matchesText = custId.includes(searchVal) || custName.includes(searchVal) || accNumber.includes(searchVal);
-            
+
             // Check filters
             const matchesType = (typeVal === "all" || accType === typeVal);
             const matchesStatus = (statusVal === "all" || accStatus === statusVal);
@@ -1146,13 +1144,13 @@ class VGBAdminAccountManager {
 
         const editForm = document.getElementById("editAccountForm");
         if (editForm) editForm.reset();
-        
+
         const tabJointLink = document.getElementById("tabJointLink");
         if (tabJointLink) tabJointLink.style.display = "none";
-        
+
         const subclassSavingsFields = document.getElementById("subclassSavingsFields");
         if (subclassSavingsFields) subclassSavingsFields.style.display = "none";
-        
+
         const subclassCurrentFields = document.getElementById("subclassCurrentFields");
         if (subclassCurrentFields) subclassCurrentFields.style.display = "none";
 
@@ -1164,7 +1162,7 @@ class VGBAdminAccountManager {
                 throw new Error(`Server returned status: ${response.status}`);
             }
             const data = await response.json();
-            
+
             if (data.error) {
                 alert(`Failed to load details: ${data.error}`);
                 return;
@@ -1190,7 +1188,7 @@ class VGBAdminAccountManager {
                 if (tabJointLink) tabJointLink.style.display = "flex";
                 const jData = data.jointCustomer;
                 if (editJointCustomerId) editJointCustomerId.value = jData.customerId ?? "";
-                
+
                 const jFields = ["editJointFirstName", "editJointLastName", "editJointEmail", "editJointPhoneNo", "editJointAddress", "editJointCity", "editJointState", "editJointZipCode", "editJointPanCard", "editJointAadhaarCard"];
                 const jKeys = ["firstName", "lastName", "email", "phoneNo", "address", "city", "state", "zipCode", "panCard", "aadhaarCard"];
                 jFields.forEach((fId, idx) => {
@@ -1214,11 +1212,11 @@ class VGBAdminAccountManager {
                 const nominee = document.getElementById("editNomineeName");
                 const holding = document.getElementById("editHoldingType");
                 const limit = document.getElementById("editDailyWithdrawalLimit");
-                
+
                 if (nominee) nominee.value = data.nomineeName ?? "";
                 if (holding) holding.value = data.holdingType ?? "single";
                 if (limit) limit.value = data.dailyWithdrawalLimit ?? "50000.00";
-                
+
                 if (data.holdingType === "joint" && tabJointLink) {
                     tabJointLink.style.display = "flex";
                 }
@@ -1236,10 +1234,10 @@ class VGBAdminAccountManager {
             const usernameEl = document.getElementById("editUsername");
             const pinEl = document.getElementById("editPin");
             const pwdEl = document.getElementById("editPassword");
-            
+
             if (usernameEl) usernameEl.value = data.username ?? "";
-            if (pinEl) pinEl.value = ""; 
-            if (pwdEl) pwdEl.value = ""; 
+            if (pinEl) pinEl.value = "";
+            if (pwdEl) pwdEl.value = "";
 
             const modal = document.getElementById("editAccountModal");
             if (modal) modal.style.display = "flex";
@@ -1256,12 +1254,12 @@ class VGBAdminAccountManager {
         const holdingType = holdingSelect.value;
         const tabLink = document.getElementById("tabJointLink");
         if (!tabLink) return;
-        
+
         if (holdingType === "joint") {
             tabLink.style.display = "flex";
         } else {
             tabLink.style.display = "none";
-            
+
             if (tabLink.classList.contains("active")) {
                 const tabLinks = document.querySelectorAll(".tab-link");
                 const tabPanes = document.querySelectorAll(".tab-pane");
@@ -1284,14 +1282,14 @@ class VGBAdminAccountManager {
     openCreateAccountModal() {
         const form = document.getElementById("createAccountForm");
         if (!form) return;
-        
+
         this.currentStepIndex = 0;
         form.reset();
-        
+
         const partnerContainer = document.getElementById("partnerListContainer");
         if (partnerContainer) partnerContainer.innerHTML = ""; // reset partner cards
         this.partnerCount = 0;
-        
+
         // Generate auto-generated secure PIN (not entered by admin)
         const autoPin = Math.floor(1000 + Math.random() * 9000).toString();
         const wizPin = document.getElementById("wizPin");
@@ -1302,7 +1300,7 @@ class VGBAdminAccountManager {
         // Trigger flow updates
         this.toggleClassificationFlowSelection();
         this.updateWizardDisplay();
-        
+
         const modal = document.getElementById("createAccountModal");
         if (modal) modal.style.display = "flex";
     }
@@ -1318,10 +1316,10 @@ class VGBAdminAccountManager {
         const modeSelect = document.getElementById("wizJointCustomerMode");
         if (!modeSelect) return;
         const mode = modeSelect.value;
-        
+
         const existingSelector = document.getElementById("wizJointExistingSelector");
         const newFields = document.getElementById("wizJointNewFields");
-        
+
         if (existingSelector) existingSelector.style.display = mode === "existing" ? "block" : "none";
         if (newFields) newFields.style.display = mode === "existing" ? "none" : "flex";
     }
@@ -1331,10 +1329,10 @@ class VGBAdminAccountManager {
         const hasAtmCheckbox = document.getElementById("wizHasAtmCard");
         if (!hasAtmCheckbox) return;
         const isAtmOpted = hasAtmCheckbox.checked;
-        
+
         const cardDetails = document.getElementById("wizAtmCardDetails");
         if (cardDetails) cardDetails.style.display = isAtmOpted ? "flex" : "none";
-        
+
         this.syncWizAtmCardPreview();
         this.sync3DCardSelection();
     }
@@ -1349,41 +1347,79 @@ class VGBAdminAccountManager {
         const typeSelect = document.getElementById("wizAccountType");
         if (!typeSelect) return;
         const type = typeSelect.value;
-        
+
+        const categorySelect = document.getElementById("wizAccountCategory");
+        const category = categorySelect ? categorySelect.value : "major";
+
         const holdingSelect = document.getElementById("wizHoldingType");
+        if (type === "savings" && category === "minor") {
+            if (holdingSelect) {
+                const singleOpt = holdingSelect.querySelector("option[value='single']");
+                if (singleOpt) singleOpt.disabled = true;
+                holdingSelect.value = "joint";
+            }
+        } else {
+            if (holdingSelect) {
+                const singleOpt = holdingSelect.querySelector("option[value='single']");
+                if (singleOpt) singleOpt.disabled = false;
+            }
+        }
+
         const holding = holdingSelect ? holdingSelect.value : "single";
-        
+
         const holdingTypeWrapper = document.getElementById("wizHoldingTypeWrapper");
+        const categoryWrapper = document.getElementById("wizAccountCategoryWrapper");
         const headerTitle = document.getElementById("wizHeaderTitle");
         const pbCheckboxWrapper = document.getElementById("wizPassbookCheckboxWrapper");
         const pbPreviewContainer = document.getElementById("wizPassbookPreviewContainer");
         const pbCheck = document.getElementById("wizHasPassbook");
 
+        const maritalWrapper = document.getElementById("wizMaritalStatusWrapper");
+        const occupationWrapper = document.getElementById("wizOccupationWrapper");
+        const incomeWrapper = document.getElementById("wizAnnualIncomeWrapper");
+
         if (type === "current") {
             this.activeFlow = "current";
             if (holdingTypeWrapper) holdingTypeWrapper.style.display = "none";
+            if (categoryWrapper) categoryWrapper.style.display = "none";
+            if (categorySelect) categorySelect.value = "major";
             if (headerTitle) headerTitle.innerText = "Onboard Corporate Business Account";
-            
+
             // ATM Card Options
             if (pbCheckboxWrapper) pbCheckboxWrapper.style.display = "none";
             if (pbPreviewContainer) pbPreviewContainer.style.display = "none";
-            
+
             // For Current accounts, Passbook is disabled (not opted)
             if (pbCheck) pbCheck.checked = false;
+
+            if (maritalWrapper) maritalWrapper.style.display = "block";
+            if (occupationWrapper) occupationWrapper.style.display = "block";
+            if (incomeWrapper) incomeWrapper.style.display = "block";
         } else {
             if (holdingTypeWrapper) holdingTypeWrapper.style.display = "block";
+            if (categoryWrapper) categoryWrapper.style.display = "block";
             if (pbCheckboxWrapper) pbCheckboxWrapper.style.display = "block";
             if (pbPreviewContainer) pbPreviewContainer.style.display = "block";
-            
+
             // For Savings accounts, Passbook is checked by default
             if (pbCheck) pbCheck.checked = true;
-            
+
             if (holding === "joint") {
                 this.activeFlow = "savings_joint";
                 if (headerTitle) headerTitle.innerText = "Onboard Joint Savings Account";
             } else {
                 this.activeFlow = "savings_single";
                 if (headerTitle) headerTitle.innerText = "Onboard Single Savings Account";
+            }
+
+            if (category === "minor") {
+                if (maritalWrapper) maritalWrapper.style.display = "none";
+                if (occupationWrapper) occupationWrapper.style.display = "none";
+                if (incomeWrapper) incomeWrapper.style.display = "none";
+            } else {
+                if (maritalWrapper) maritalWrapper.style.display = "block";
+                if (occupationWrapper) occupationWrapper.style.display = "block";
+                if (incomeWrapper) incomeWrapper.style.display = "block";
             }
         }
 
@@ -1398,17 +1434,17 @@ class VGBAdminAccountManager {
         const container = document.getElementById("wizardStepsIndicator");
         if (!container) return;
         container.innerHTML = "";
-        
+
         const steps = this.wizardFlows[this.activeFlow];
         if (!steps) return;
-        
+
         steps.forEach((step, idx) => {
             const item = document.createElement("div");
-            
+
             let stateClass = "";
             let colorStyle = "color: var(--gray-400);";
             let circleBg = "background: var(--gray-200); color: var(--gray-500);";
-            
+
             if (idx < this.currentStepIndex) {
                 stateClass = "completed";
                 colorStyle = "color: #10b981;";
@@ -1418,10 +1454,10 @@ class VGBAdminAccountManager {
                 colorStyle = "color: var(--primary-500); font-weight: bold;";
                 circleBg = "background: var(--primary-500); color: white; box-shadow: 0 0 8px rgba(99,102,241,0.25);";
             }
-            
+
             item.style.cssText = `display: flex; align-items: center; gap: 6px; font-size: 0.72rem; ${colorStyle}`;
             item.className = `step-indicator-item ${stateClass}`;
-            
+
             const circleSpan = document.createElement("span");
             circleSpan.style.cssText = `width: 20px; height: 20px; border-radius: 50%; ${circleBg} display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700;`;
             circleSpan.textContent = idx + 1;
@@ -1444,7 +1480,7 @@ class VGBAdminAccountManager {
         // Hide all wizard step panes
         const panes = document.querySelectorAll(".wizard-step-pane");
         panes.forEach(pane => pane.classList.remove("active"));
-        
+
         // Show current active wizard step pane
         const currentPane = document.getElementById(currentStep.id);
         if (currentPane) currentPane.classList.add("active");
@@ -1455,7 +1491,7 @@ class VGBAdminAccountManager {
             const depLabel = document.getElementById("wizMinDepositLabel");
             if (depInput && depLabel) {
                 const minVal = this.activeFlow === "current" ? "5000" : "1000";
-                depLabel.innerText = `₹${parseFloat(minVal).toLocaleString('en-IN', {minimumFractionDigits: 2})} Minimum Fixed Amount`;
+                depLabel.innerText = `₹${parseFloat(minVal).toLocaleString('en-IN', { minimumFractionDigits: 2 })} Minimum Fixed Amount`;
                 depInput.min = minVal;
                 // Only set default value if empty, not a number, or less than minimum
                 const currentVal = parseFloat(depInput.value);
@@ -1471,7 +1507,7 @@ class VGBAdminAccountManager {
         // Toggle back button
         const backBtn = document.getElementById("wizBackBtn");
         if (backBtn) backBtn.style.display = this.currentStepIndex === 0 ? "none" : "inline-block";
-        
+
         // Toggle next/submit button
         const nextBtn = document.getElementById("wizNextBtn");
         const submitBtn = document.getElementById("wizSubmitBtn");
@@ -1490,7 +1526,7 @@ class VGBAdminAccountManager {
     navigateWizardStep(direction) {
         const steps = this.wizardFlows[this.activeFlow];
         if (!steps) return;
-        
+
         if (direction === 1) {
             // Validate current step before advancing
             if (!this.validateWizardStepPane()) {
@@ -1516,7 +1552,7 @@ class VGBAdminAccountManager {
         this.currentStepIndex += direction;
         if (this.currentStepIndex < 0) this.currentStepIndex = 0;
         if (this.currentStepIndex >= steps.length) this.currentStepIndex = steps.length - 1;
-        
+
         // If moving to Summary page, render it dynamically
         if (steps[this.currentStepIndex].id === "wizardStepSummary") {
             this.renderWizardSummary();
@@ -1562,6 +1598,20 @@ class VGBAdminAccountManager {
                 return false;
             }
 
+            const typeSelect = document.getElementById("wizAccountType");
+            const type = typeSelect ? typeSelect.value : "savings";
+            if (type === "savings") {
+                const categorySelect = document.getElementById("wizAccountCategory");
+                const category = categorySelect ? categorySelect.value : "major";
+                if (category === "major" && age < 18) {
+                    alert("For a Major Account, the account holder must be 18 years or older.");
+                    return false;
+                } else if (category === "minor" && age >= 18) {
+                    alert("For a Minor Account, the account holder must be under 18 years.");
+                    return false;
+                }
+            }
+
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 alert("Primary Email signature format is invalid.");
                 return false;
@@ -1580,11 +1630,32 @@ class VGBAdminAccountManager {
         else if (currentStepId === "wizardStepJointHolder") {
             const modeSelect = document.getElementById("wizJointCustomerMode");
             const mode = modeSelect ? modeSelect.value : "existing";
+            const categorySelect = document.getElementById("wizAccountCategory");
+            const category = categorySelect ? categorySelect.value : "major";
+
             if (mode === "existing") {
-                const existingId = document.getElementById("wizJointCustomerId")?.value ?? "";
+                const existingSelect = document.getElementById("wizJointCustomerId");
+                const existingId = existingSelect ? existingSelect.value : "";
                 if (!existingId) {
                     alert("Please select an existing customer signatory.");
                     return false;
+                }
+                if (category === "minor") {
+                    const selectedOpt = existingSelect.options[existingSelect.selectedIndex];
+                    const jDob = selectedOpt ? selectedOpt.getAttribute("data-dob") : "";
+                    if (jDob) {
+                        const dobDate = new Date(jDob);
+                        const today = new Date();
+                        let age = today.getFullYear() - dobDate.getFullYear();
+                        const mDiff = today.getMonth() - dobDate.getMonth();
+                        if (mDiff < 0 || (mDiff === 0 && today.getDate() < dobDate.getDate())) {
+                            age--;
+                        }
+                        if (age < 18) {
+                            alert("The joint holder must be a major (18 years or older) for a minor account.");
+                            return false;
+                        }
+                    }
                 }
             } else {
                 const first = document.getElementById("wizJointFirstName")?.value.trim() ?? "";
@@ -1597,9 +1668,22 @@ class VGBAdminAccountManager {
                 const zip = document.getElementById("wizJointZipCode")?.value.trim() ?? "";
                 const pan = document.getElementById("wizJointPan")?.value.trim() ?? "";
                 const aadhaar = document.getElementById("wizJointAadhaar")?.value.trim() ?? "";
+                const dob = document.getElementById("wizJointDob")?.value ?? "";
 
-                if (!first || !last || !email || !phone || !address || !city || !state || !zip || !pan || !aadhaar) {
+                if (!first || !last || !email || !phone || !address || !city || !state || !zip || !pan || !aadhaar || !dob) {
                     alert("Please fill in all joint holder demographic fields marked with an asterisk (*).");
+                    return false;
+                }
+
+                const dobDate = new Date(dob);
+                const today = new Date();
+                let age = today.getFullYear() - dobDate.getFullYear();
+                const mDiff = today.getMonth() - dobDate.getMonth();
+                if (mDiff < 0 || (mDiff === 0 && today.getDate() < dobDate.getDate())) {
+                    age--;
+                }
+                if (category === "minor" && age < 18) {
+                    alert("The joint holder must be a major (18 years or older) for a minor account.");
                     return false;
                 }
 
@@ -1683,9 +1767,9 @@ class VGBAdminAccountManager {
             if (!depositInput) return false;
             const deposit = parseFloat(depositInput.value);
             const minVal = this.activeFlow === "current" ? 5000 : 1000;
-            
+
             if (isNaN(deposit) || deposit < minVal) {
-                alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', {minimumFractionDigits: 2})}.`);
+                alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}.`);
                 return false;
             }
         }
@@ -1702,34 +1786,34 @@ class VGBAdminAccountManager {
         card.className = "partner-card";
         card.id = `partnerCard_${this.partnerCount}`;
         card.style.cssText = "background: rgba(99, 102, 241, 0.02); border: 1px dashed rgba(99, 102, 241, 0.15); padding: 15px; border-radius: var(--radius-md); margin-bottom: 15px; position: relative;";
-        card.innerHTML = 
+        card.innerHTML =
             '<button type="button" onclick="removePartnerCard(' + this.partnerCount + ')" style="position: absolute; right: 10px; top: 10px; background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1.25rem;"><i class="bx bx-trash"></i></button>' +
             '<h5 style="font-size: 0.8rem; font-weight: 700; color: var(--primary-500); margin-bottom: 12px; text-transform: uppercase;">Partner signatory #' + this.partnerCount + '</h5>' +
             '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px;">' +
-                '<div class="form-group">' +
-                    '<label class="form-label">First Name *</label>' +
-                    '<input type="text" name="partnerFirstName" class="form-control" placeholder="First Name" required>' +
-                '</div>' +
-                '<div class="form-group">' +
-                    '<label class="form-label">Last Name *</label>' +
-                    '<input type="text" name="partnerLastName" class="form-control" placeholder="Last Name" required>' +
-                '</div>' +
-                '<div class="form-group">' +
-                    '<label class="form-label">Email Signature *</label>' +
-                    '<input type="email" name="partnerEmail" class="form-control" placeholder="partner@company.com" required>' +
-                '</div>' +
-                '<div class="form-group">' +
-                    '<label class="form-label">Phone Signature *</label>' +
-                    '<input type="text" name="partnerPhone" class="form-control" placeholder="10 Digits" maxlength="10" required>' +
-                '</div>' +
-                '<div class="form-group">' +
-                    '<label class="form-label">PAN Card *</label>' +
-                    '<input type="text" name="partnerPan" class="form-control" placeholder="ABCDE1234F" required>' +
-                '</div>' +
-                '<div class="form-group">' +
-                    '<label class="form-label">Aadhaar (12 Digits) *</label>' +
-                    '<input type="text" name="partnerAadhaar" class="form-control" placeholder="12 Digits" maxlength="12" required>' +
-                '</div>' +
+            '<div class="form-group">' +
+            '<label class="form-label">First Name *</label>' +
+            '<input type="text" name="partnerFirstName" class="form-control" placeholder="First Name" required>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label class="form-label">Last Name *</label>' +
+            '<input type="text" name="partnerLastName" class="form-control" placeholder="Last Name" required>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label class="form-label">Email Signature *</label>' +
+            '<input type="email" name="partnerEmail" class="form-control" placeholder="partner@company.com" required>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label class="form-label">Phone Signature *</label>' +
+            '<input type="text" name="partnerPhone" class="form-control" placeholder="10 Digits" maxlength="10" required>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label class="form-label">PAN Card *</label>' +
+            '<input type="text" name="partnerPan" class="form-control" placeholder="ABCDE1234F" required>' +
+            '</div>' +
+            '<div class="form-group">' +
+            '<label class="form-label">Aadhaar (12 Digits) *</label>' +
+            '<input type="text" name="partnerAadhaar" class="form-control" placeholder="12 Digits" maxlength="12" required>' +
+            '</div>' +
             '</div>';
         container.appendChild(card);
     }
@@ -1748,25 +1832,25 @@ class VGBAdminAccountManager {
         container.innerHTML = "";
 
         let html = "";
-        
+
         // Section 1: Classification
         const accType = document.getElementById("wizAccountType")?.value ?? "";
         const holding = document.getElementById("wizHoldingType")?.value ?? "";
         const flowName = this.activeFlow === "current" ? "Business Current" : `Savings (${holding})`;
         const ifscVal = document.getElementById("wizIfscCode")?.value ?? "";
-        
+
         html += '<div class="summary-card" style="border-left: 4px solid var(--primary-500);">' +
-                '<h5>Onboarding Classification</h5>' +
-                '<div class="summary-grid">' +
-                    '<div class="summary-field">' +
-                        '<span>Account Type</span>' +
-                        '<strong>' + flowName + '</strong>' +
-                    '</div>' +
-                    '<div class="summary-field">' +
-                        '<span>IFSC Branch Route</span>' +
-                        '<strong>' + this.escapeHTML(ifscVal) + '</strong>' +
-                    '</div>' +
-                '</div>' +
+            '<h5>Onboarding Classification</h5>' +
+            '<div class="summary-grid">' +
+            '<div class="summary-field">' +
+            '<span>Account Type</span>' +
+            '<strong>' + flowName + '</strong>' +
+            '</div>' +
+            '<div class="summary-field">' +
+            '<span>IFSC Branch Route</span>' +
+            '<strong>' + this.escapeHTML(ifscVal) + '</strong>' +
+            '</div>' +
+            '</div>' +
             '</div>';
 
         // Section 2: Profiles
@@ -1779,29 +1863,29 @@ class VGBAdminAccountManager {
             const odLimit = parseFloat(document.getElementById("wizOverdraftLimit")?.value || "0");
 
             html += '<div class="summary-card">' +
-                    '<h5>Corporate Company Profile</h5>' +
-                    '<div class="summary-grid">' +
-                        '<div class="summary-field">' +
-                            '<span>Company Name</span>' +
-                            '<strong>' + this.escapeHTML(busName) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>GSTIN Code</span>' +
-                            '<strong>' + this.escapeHTML(gstin) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Corporate Phone</span>' +
-                            '<strong>' + this.escapeHTML(compPhone) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Corporate Email</span>' +
-                            '<strong>' + this.escapeHTML(compEmail) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Overdraft Limit</span>' +
-                            '<strong>₹' + odLimit.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong>' +
-                        '</div>' +
-                    '</div>' +
+                '<h5>Corporate Company Profile</h5>' +
+                '<div class="summary-grid">' +
+                '<div class="summary-field">' +
+                '<span>Company Name</span>' +
+                '<strong>' + this.escapeHTML(busName) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>GSTIN Code</span>' +
+                '<strong>' + this.escapeHTML(gstin) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Corporate Phone</span>' +
+                '<strong>' + this.escapeHTML(compPhone) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Corporate Email</span>' +
+                '<strong>' + this.escapeHTML(compEmail) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Overdraft Limit</span>' +
+                '<strong>₹' + odLimit.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                '</div>' +
+                '</div>' +
                 '</div>';
 
             // Partners summary
@@ -1809,13 +1893,13 @@ class VGBAdminAccountManager {
             const pLasts = document.getElementsByName("partnerLastName");
             if (pFirsts.length > 0) {
                 html += '<div class="summary-card">' +
-                        '<h5>Partner Signatories (' + pFirsts.length + ')</h5>' +
-                        '<div class="summary-grid">';
+                    '<h5>Partner Signatories (' + pFirsts.length + ')</h5>' +
+                    '<div class="summary-grid">';
                 for (let i = 0; i < pFirsts.length; i++) {
                     html += '<div class="summary-field">' +
-                                '<span>Partner #' + (i + 1) + '</span>' +
-                                '<strong>' + this.escapeHTML(pFirsts.item(i).value) + ' ' + this.escapeHTML(pLasts.item(i).value) + '</strong>' +
-                            '</div>';
+                        '<span>Partner #' + (i + 1) + '</span>' +
+                        '<strong>' + this.escapeHTML(pFirsts.item(i).value) + ' ' + this.escapeHTML(pLasts.item(i).value) + '</strong>' +
+                        '</div>';
                 }
                 html += '</div></div>';
             }
@@ -1842,34 +1926,34 @@ class VGBAdminAccountManager {
             }
 
             html += '<div class="summary-card">' +
-                    '<h5>Primary Holder Personal Details</h5>' +
-                    '<div class="summary-grid">' +
-                        '<div class="summary-field">' +
-                            '<span>Full Name</span>' +
-                            '<strong>' + this.escapeHTML(pFirst) + ' ' + this.escapeHTML(pLast) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Email signature</span>' +
-                            '<strong>' + this.escapeHTML(pEmail) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Phone signature</span>' +
-                            '<strong>' + this.escapeHTML(pPhone) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>PAN Card</span>' +
-                            '<strong>' + this.escapeHTML(pPan) + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Aadhaar Ident</span>' +
-                            '<strong>' + this.escapeHTML(pAadhaar) + '</strong>' +
-                        '</div>' +
-                        (ageCategory ? 
-                        '<div class="summary-field" style="color: var(--primary-500);">' +
-                            '<span>Age Category</span>' +
-                            '<strong>' + ageCategory + '</strong>' +
-                        '</div>' : '') +
-                    '</div>' +
+                '<h5>Primary Holder Personal Details</h5>' +
+                '<div class="summary-grid">' +
+                '<div class="summary-field">' +
+                '<span>Full Name</span>' +
+                '<strong>' + this.escapeHTML(pFirst) + ' ' + this.escapeHTML(pLast) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Email signature</span>' +
+                '<strong>' + this.escapeHTML(pEmail) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Phone signature</span>' +
+                '<strong>' + this.escapeHTML(pPhone) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>PAN Card</span>' +
+                '<strong>' + this.escapeHTML(pPan) + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Aadhaar Ident</span>' +
+                '<strong>' + this.escapeHTML(pAadhaar) + '</strong>' +
+                '</div>' +
+                (ageCategory ?
+                    '<div class="summary-field" style="color: var(--primary-500);">' +
+                    '<span>Age Category</span>' +
+                    '<strong>' + ageCategory + '</strong>' +
+                    '</div>' : '') +
+                '</div>' +
                 '</div>';
 
             // Joint Holder
@@ -1887,13 +1971,13 @@ class VGBAdminAccountManager {
                 }
 
                 html += '<div class="summary-card">' +
-                        '<h5>Joint Holder Signatory Details</h5>' +
-                        '<div class="summary-grid">' +
-                            '<div class="summary-field">' +
-                                '<span>Holding Signee</span>' +
-                                '<strong>' + this.escapeHTML(jointName) + '</strong>' +
-                            '</div>' +
-                        '</div>' +
+                    '<h5>Joint Holder Signatory Details</h5>' +
+                    '<div class="summary-grid">' +
+                    '<div class="summary-field">' +
+                    '<span>Holding Signee</span>' +
+                    '<strong>' + this.escapeHTML(jointName) + '</strong>' +
+                    '</div>' +
+                    '</div>' +
                     '</div>';
             }
 
@@ -1902,19 +1986,19 @@ class VGBAdminAccountManager {
             const nominee = nomineeVal ? nomineeVal.value.trim() : "";
             const limitVal = document.getElementById("wizDailyWithdrawalLimit");
             const limitNum = limitVal ? parseFloat(limitVal.value) : 50000.00;
-            
+
             html += '<div class="summary-card">' +
-                    '<h5>Nominee configuration</h5>' +
-                    '<div class="summary-grid">' +
-                        '<div class="summary-field">' +
-                            '<span>Nominee Name</span>' +
-                            '<strong>' + (nominee ? this.escapeHTML(nominee) : "No Nominee Registered") + '</strong>' +
-                        '</div>' +
-                        '<div class="summary-field">' +
-                            '<span>Daily ATM Limit</span>' +
-                            '<strong>₹' + limitNum.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong>' +
-                        '</div>' +
-                    '</div>' +
+                '<h5>Nominee configuration</h5>' +
+                '<div class="summary-grid">' +
+                '<div class="summary-field">' +
+                '<span>Nominee Name</span>' +
+                '<strong>' + (nominee ? this.escapeHTML(nominee) : "No Nominee Registered") + '</strong>' +
+                '</div>' +
+                '<div class="summary-field">' +
+                '<span>Daily ATM Limit</span>' +
+                '<strong>₹' + limitNum.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                '</div>' +
+                '</div>' +
                 '</div>';
         }
 
@@ -1923,7 +2007,7 @@ class VGBAdminAccountManager {
         const hasChequeCheck = document.getElementById("wizHasChequeBook");
         const hasAtm = hasAtmCheck ? hasAtmCheck.checked : false;
         const hasCheque = hasChequeCheck ? hasChequeCheck.checked : false;
-        
+
         let services = [];
         if (hasAtm) services.push("ATM Debit Card");
         if (hasCheque) services.push("Cheque Book");
@@ -1933,35 +2017,35 @@ class VGBAdminAccountManager {
         const pinVal = document.getElementById("wizPin");
 
         html += '<div class="summary-card">' +
-                '<h5>Onboarding preferences & credentials</h5>' +
-                '<div class="summary-grid">' +
-                    '<div class="summary-field">' +
-                        '<span>Services approved</span>' +
-                        '<strong>' + (services.join(", ") || "None") + '</strong>' +
-                    '</div>' +
-                    '<div class="summary-field">' +
-                        '<span>Login Username</span>' +
-                        '<strong>' + (usernameVal ? this.escapeHTML(usernameVal.value) : "") + '</strong>' +
-                    '</div>' +
-                    '<div class="summary-field" style="color: var(--accent-emerald);">' +
-                        '<span>Auto-Generated PIN</span>' +
-                        '<strong>' + (pinVal ? this.escapeHTML(pinVal.value) : "") + '</strong>' +
-                    '</div>' +
-                '</div>' +
+            '<h5>Onboarding preferences & credentials</h5>' +
+            '<div class="summary-grid">' +
+            '<div class="summary-field">' +
+            '<span>Services approved</span>' +
+            '<strong>' + (services.join(", ") || "None") + '</strong>' +
+            '</div>' +
+            '<div class="summary-field">' +
+            '<span>Login Username</span>' +
+            '<strong>' + (usernameVal ? this.escapeHTML(usernameVal.value) : "") + '</strong>' +
+            '</div>' +
+            '<div class="summary-field" style="color: var(--accent-emerald);">' +
+            '<span>Auto-Generated PIN</span>' +
+            '<strong>' + (pinVal ? this.escapeHTML(pinVal.value) : "") + '</strong>' +
+            '</div>' +
+            '</div>' +
             '</div>';
 
         // Section 4: deposit
         const depositInput = document.getElementById("wizInitialDeposit");
         const deposit = depositInput ? parseFloat(depositInput.value) : 0;
-        
+
         html += '<div class="summary-card" style="border-left: 4px solid var(--accent-emerald);">' +
-                '<h5>Initial Funding Ledger</h5>' +
-                '<div class="summary-grid">' +
-                    '<div class="summary-field">' +
-                        '<span>Initial Deposit Credit</span>' +
-                        '<strong style="color: var(--accent-emerald); font-size: 1.1rem;">₹' + deposit.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong>' +
-                    '</div>' +
-                '</div>' +
+            '<h5>Initial Funding Ledger</h5>' +
+            '<div class="summary-grid">' +
+            '<div class="summary-field">' +
+            '<span>Initial Deposit Credit</span>' +
+            '<strong style="color: var(--accent-emerald); font-size: 1.1rem;">₹' + deposit.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+            '</div>' +
+            '</div>' +
             '</div>';
 
         container.innerHTML = html;
@@ -1971,31 +2055,31 @@ class VGBAdminAccountManager {
     applyCardTiltEffect(wrapperId) {
         const wrapper = document.getElementById(wrapperId);
         if (!wrapper) return;
-        
+
         wrapper.addEventListener('mousemove', (e) => {
             const rect = wrapper.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             const width = rect.width;
             const height = rect.height;
-            
+
             const percentX = (x / width) - 0.5;
             const percentY = (y / height) - 0.5;
-            
+
             const maxRotation = 12;
-            
+
             const rotateX = -(percentY * maxRotation).toFixed(2);
             const rotateY = (percentX * maxRotation).toFixed(2);
-            
+
             wrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
         });
-        
+
         wrapper.addEventListener('mouseleave', () => {
             wrapper.style.transition = "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)";
             wrapper.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
         });
-        
+
         wrapper.addEventListener('mouseenter', () => {
             wrapper.style.transition = "none";
         });
@@ -2005,7 +2089,7 @@ class VGBAdminAccountManager {
     showWizAtmCardPreview() {
         const wrapper = document.getElementById('wizAtmTiltWrapper');
         const card = document.getElementById('wizAtmPreviewCard');
-        
+
         if (wrapper && card) {
             card.classList.remove('flipped');
             card.classList.add('interactive');
@@ -2097,7 +2181,7 @@ class VGBAdminAccountManager {
         const hasAtmCheck = document.getElementById("wizHasAtmCard");
         if (!hasAtmCheck) return;
         const hasAtm = hasAtmCheck.checked;
-        
+
         const atmCard = document.getElementById("wizAtmPreviewCard");
         if (atmCard) {
             if (hasAtm) {
@@ -2131,7 +2215,7 @@ class VGBAdminAccountManager {
                     if (pane.id === "wizardStepPreferences" && pane.classList.contains("active")) {
                         // Show/Initialize ATM Card
                         setTimeout(this.showWizAtmCardPreview, 100);
-                        
+
                         // Initialize Cheque Card tilt and state
                         setTimeout(() => {
                             const chequeCard = document.getElementById("wizChequePreviewCard");
@@ -2220,9 +2304,9 @@ class VGBAdminAccountManager {
                 if (!depositInput) return;
                 const deposit = parseFloat(depositInput.value);
                 const minVal = this.activeFlow === "current" ? 5000 : 1000;
-                
+
                 if (isNaN(deposit) || deposit < minVal) {
-                    alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', {minimumFractionDigits: 2})}.`);
+                    alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}.`);
                     e.preventDefault();
                 }
             });
@@ -2240,7 +2324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const accountsTable = document.getElementById("accountsTable");
     const createAccountModal = document.getElementById("createAccountModal");
     const editAccountForm = document.getElementById("editAccountForm");
-    
+
     if (searchInput || accountsTable || createAccountModal || editAccountForm) {
         vgbAdminManager.init();
     }

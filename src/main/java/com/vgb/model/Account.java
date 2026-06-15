@@ -30,6 +30,14 @@ public class Account implements Serializable {
     private String nomineeName;
     private String holdingType; // single, joint
     private BigDecimal dailyWithdrawalLimit;
+    private Long jointCustomerId;
+    private java.util.List<Long> jointCustomerIds;
+
+    public Long getJointCustomerId() { return jointCustomerId; }
+    public void setJointCustomerId(Long jointCustomerId) { this.jointCustomerId = jointCustomerId; }
+
+    public java.util.List<Long> getJointCustomerIds() { return jointCustomerIds; }
+    public void setJointCustomerIds(java.util.List<Long> jointCustomerIds) { this.jointCustomerIds = jointCustomerIds; }
 
     // Sub-table: Current Business Accounts fields
     private String businessName;
@@ -41,6 +49,41 @@ public class Account implements Serializable {
     private String companyAddress;
     private String companyPan;
     private String companyAadhaar;
+
+    // Primary Customer fields
+    private String primaryFirstName;
+    private String primaryMiddleName;
+    private String primaryLastName;
+    private String primaryEmail;
+    private String primaryPhone;
+    private String primaryAddress;
+    private String primaryCity;
+    private String primaryState;
+    private String primaryZip;
+    private String primaryPan;
+    private String primaryAadhaar;
+    private String primaryGender;
+    private String primaryMaritalStatus;
+    private String primaryOccupation;
+    private BigDecimal primaryIncome;
+
+    // Joint Customer fields
+    private String jointFirstName;
+    private String jointMiddleName;
+    private String jointLastName;
+    private String jointEmail;
+    private String jointPhone;
+    private java.time.LocalDate jointDob;
+    private String jointGender;
+    private String jointMaritalStatus;
+    private String jointPan;
+    private String jointAadhaar;
+    private String jointAddress;
+    private String jointCity;
+    private String jointState;
+    private String jointZip;
+    private String jointOccupation;
+    private BigDecimal jointIncome;
 
     // Constructors
     public Account() {}
@@ -136,6 +179,101 @@ public class Account implements Serializable {
 
     public String getCompanyAadhaar() { return companyAadhaar; }
     public void setCompanyAadhaar(String companyAadhaar) { this.companyAadhaar = companyAadhaar; }
+
+    // Getters and Setters for Primary Customer details
+    public String getPrimaryFirstName() { return primaryFirstName; }
+    public void setPrimaryFirstName(String primaryFirstName) { this.primaryFirstName = primaryFirstName; }
+
+    public String getPrimaryMiddleName() { return primaryMiddleName; }
+    public void setPrimaryMiddleName(String primaryMiddleName) { this.primaryMiddleName = primaryMiddleName; }
+
+    public String getPrimaryLastName() { return primaryLastName; }
+    public void setPrimaryLastName(String primaryLastName) { this.primaryLastName = primaryLastName; }
+
+    public String getPrimaryEmail() { return primaryEmail; }
+    public void setPrimaryEmail(String primaryEmail) { this.primaryEmail = primaryEmail; }
+
+    public String getPrimaryPhone() { return primaryPhone; }
+    public void setPrimaryPhone(String primaryPhone) { this.primaryPhone = primaryPhone; }
+
+    public String getPrimaryAddress() { return primaryAddress; }
+    public void setPrimaryAddress(String primaryAddress) { this.primaryAddress = primaryAddress; }
+
+    public String getPrimaryCity() { return primaryCity; }
+    public void setPrimaryCity(String primaryCity) { this.primaryCity = primaryCity; }
+
+    public String getPrimaryState() { return primaryState; }
+    public void setPrimaryState(String primaryState) { this.primaryState = primaryState; }
+
+    public String getPrimaryZip() { return primaryZip; }
+    public void setPrimaryZip(String primaryZip) { this.primaryZip = primaryZip; }
+
+    public String getPrimaryPan() { return primaryPan; }
+    public void setPrimaryPan(String primaryPan) { this.primaryPan = primaryPan; }
+
+    public String getPrimaryAadhaar() { return primaryAadhaar; }
+    public void setPrimaryAadhaar(String primaryAadhaar) { this.primaryAadhaar = primaryAadhaar; }
+
+    public String getPrimaryGender() { return primaryGender; }
+    public void setPrimaryGender(String primaryGender) { this.primaryGender = primaryGender; }
+
+    public String getPrimaryMaritalStatus() { return primaryMaritalStatus; }
+    public void setPrimaryMaritalStatus(String primaryMaritalStatus) { this.primaryMaritalStatus = primaryMaritalStatus; }
+
+    public String getPrimaryOccupation() { return primaryOccupation; }
+    public void setPrimaryOccupation(String primaryOccupation) { this.primaryOccupation = primaryOccupation; }
+
+    public BigDecimal getPrimaryIncome() { return primaryIncome; }
+    public void setPrimaryIncome(BigDecimal primaryIncome) { this.primaryIncome = primaryIncome; }
+
+    // Getters and Setters for Joint Customer details
+    public String getJointFirstName() { return jointFirstName; }
+    public void setJointFirstName(String jointFirstName) { this.jointFirstName = jointFirstName; }
+
+    public String getJointMiddleName() { return jointMiddleName; }
+    public void setJointMiddleName(String jointMiddleName) { this.jointMiddleName = jointMiddleName; }
+
+    public String getJointLastName() { return jointLastName; }
+    public void setJointLastName(String jointLastName) { this.jointLastName = jointLastName; }
+
+    public String getJointEmail() { return jointEmail; }
+    public void setJointEmail(String jointEmail) { this.jointEmail = jointEmail; }
+
+    public String getJointPhone() { return jointPhone; }
+    public void setJointPhone(String jointPhone) { this.jointPhone = jointPhone; }
+
+    public java.time.LocalDate getJointDob() { return jointDob; }
+    public void setJointDob(java.time.LocalDate jointDob) { this.jointDob = jointDob; }
+
+    public String getJointGender() { return jointGender; }
+    public void setJointGender(String jointGender) { this.jointGender = jointGender; }
+
+    public String getJointMaritalStatus() { return jointMaritalStatus; }
+    public void setJointMaritalStatus(String jointMaritalStatus) { this.jointMaritalStatus = jointMaritalStatus; }
+
+    public String getJointPan() { return jointPan; }
+    public void setJointPan(String jointPan) { this.jointPan = jointPan; }
+
+    public String getJointAadhaar() { return jointAadhaar; }
+    public void setJointAadhaar(String jointAadhaar) { this.jointAadhaar = jointAadhaar; }
+
+    public String getJointAddress() { return jointAddress; }
+    public void setJointAddress(String jointAddress) { this.jointAddress = jointAddress; }
+
+    public String getJointCity() { return jointCity; }
+    public void setJointCity(String jointCity) { this.jointCity = jointCity; }
+
+    public String getJointState() { return jointState; }
+    public void setJointState(String jointState) { this.jointState = jointState; }
+
+    public String getJointZip() { return jointZip; }
+    public void setJointZip(String jointZip) { this.jointZip = jointZip; }
+
+    public String getJointOccupation() { return jointOccupation; }
+    public void setJointOccupation(String jointOccupation) { this.jointOccupation = jointOccupation; }
+
+    public BigDecimal getJointIncome() { return jointIncome; }
+    public void setJointIncome(BigDecimal jointIncome) { this.jointIncome = jointIncome; }
 
     @Override
     public String toString() {

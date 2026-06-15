@@ -96,23 +96,9 @@ public class PassbookRequestService {
         request.setRequestType(requestType);
         request.setStatus("pending");
         request.setCharges(charges);
-        request.setChargesPaid(true);
+        request.setChargesPaid(false); // will be paid on approval
 
         try {
-            // Deduct fee
-            BigDecimal newBalance = account.getBalance().subtract(charges);
-            accountDAO.updateBalance(accountId, newBalance);
-
-            // Record transaction fee
-            Transaction transaction = new Transaction();
-            transaction.setFromAccountId(accountId);
-            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_FEE);
-            transaction.setAmount(charges);
-            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-            transaction.setDescription("VGB Passbook " + (requestType.equalsIgnoreCase("renew") ? "Renewal" : "Issuance") + " Fee");
-            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
-
             // Save passbook request
             if (passbookDAO.create(request)) {
                 logger.info("Passbook requested successfully! Request ID: {}, Account ID: {}", request.getRequestId(), request.getAccountId());
@@ -136,6 +122,37 @@ public class PassbookRequestService {
             }
             if (!"pending".equalsIgnoreCase(request.getStatus())) {
                 throw new Exception("Request is not in pending status.");
+            }
+
+            // Debit charges at approval time if not already paid
+            if (!request.isChargesPaid() && request.getCharges().compareTo(BigDecimal.ZERO) > 0) {
+                Account account = accountDAO.getById(request.getAccountId());
+                if (account == null) {
+                    throw new Exception("Linked account not found.");
+                }
+                if (!AppConstants.ACCOUNT_STATUS_ACTIVE.equalsIgnoreCase(account.getStatus())) {
+                    throw new Exception("Linked account is not active.");
+                }
+                if (account.getBalance().compareTo(request.getCharges()) < 0) {
+                    throw new Exception("Insufficient account balance to pay Passbook fee of ₹" + request.getCharges().setScale(2) + ".");
+                }
+
+                // Deduct fee
+                BigDecimal newBalance = account.getBalance().subtract(request.getCharges());
+                accountDAO.updateBalance(request.getAccountId(), newBalance);
+
+                // Record transaction fee
+                Transaction transaction = new Transaction();
+                transaction.setFromAccountId(request.getAccountId());
+                transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_FEE);
+                transaction.setAmount(request.getCharges());
+                transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                transaction.setDescription("VGB Passbook " + (request.getRequestType().equalsIgnoreCase("renew") ? "Renewal" : "New") + " Fee");
+                transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+                transactionDAO.create(transaction);
+
+                // Update charges paid status in DB
+                passbookDAO.updateChargesPaidStatus(requestId, true);
             }
 
             // Update status of passbook_request to 'approved'
