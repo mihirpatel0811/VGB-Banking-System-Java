@@ -2963,30 +2963,18 @@
     <!-- ==========================================
          ACCOUNT STATEMENT LEDGER MODAL
          ========================================== -->
+    <!-- ==========================================
+         ACCOUNT STATEMENT LEDGER MODAL
+         ========================================== -->
     <div class="modal" id="statementModal">
         <div class="modal-content modal-large">
-            <div class="modal-header no-print">
-                <h3 style="font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px;">
-                    <i class="bx bx-receipt" style="color: var(--primary-500);"></i> Bank Account Statement Logs
+            <div class="modal-header no-print" style="padding: 20px 30px; border-bottom: 1px solid var(--gray-100);">
+                <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--gray-900); display: flex; align-items: center; gap: 10px; margin: 0;">
+                    <i class="bx bx-file" style="color: var(--primary-500);"></i> Vertex Galaxy Bank Account Statement
                 </h3>
-                <button type="button" class="close-modal-btn" onclick="closeModal('statementModal')"><i class="bx bx-x"></i></button>
+                <button type="button" class="close-modal-btn" onclick="closeModal('statementModal')" style="font-size: 1.5rem; color: var(--gray-400); cursor: pointer; background: transparent; border: none;"><i class="bx bx-x"></i></button>
             </div>
-            <div class="modal-body">
-                <!-- PRINT HEADER ONLY -->
-                <div style="display:none; align-items:center; justify-content:space-between; margin-bottom:30px; border-bottom:2.5px solid #1e3a8a; padding-bottom:15px;" class="visible-print">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" style="height:35px; width:auto;" alt="VGB Logo">
-                        <div style="line-height:1.2;">
-                            <strong style="font-size:1.15rem; color:#1e3a8a; letter-spacing:1px; display:block;">VERTEX GALAXY BANK</strong>
-                            <small style="font-size:0.6rem; color:#475569; text-transform:uppercase;">Official Account Statement Ledger</small>
-                        </div>
-                    </div>
-                    <div style="text-align:right; font-size:0.7rem; color:#475569;">
-                        <span id="printAccountLabel" style="font-weight:700; display:block; font-size:0.85rem; color:#0f172a;">Account: -</span>
-                        <span id="printDateCompiled">Date: -</span>
-                    </div>
-                </div>
-
+            <div class="modal-body" style="padding: 30px;">
                 <!-- FILTERS BLOCK -->
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:25px;" class="no-print">
                     <div>
@@ -3023,70 +3011,72 @@
                     </div>
                 </div>
 
-                <!-- Metadata Grid -->
-                <div class="statement-meta-grid">
-                    <!-- Customer Profile Box -->
-                    <div style="background:var(--gray-50); border:1.5px solid var(--gray-200); border-radius:var(--radius-md); padding:25px;">
-                        <h4 style="font-size: 1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 15px; border-bottom:1.5px solid var(--gray-200); padding-bottom:8px;">
-                            <i class="bx bx-user-circle"></i> Customer Profile
-                        </h4>
-                        <table style="width:100%; font-size:0.82rem; line-height:1.8;">
-                            <tr>
-                                <td style="color:var(--gray-500); width:35%;">Holder Name:</td>
-                                <td style="font-weight:700; color:var(--gray-800);" id="lblStmtName">-</td>
-                            </tr>
-                            <tr>
-                                <td style="color:var(--gray-500);">Customer ID:</td>
-                                <td style="font-weight:600; font-family:monospace;" id="lblStmtCustId">-</td>
-                            </tr>
-                            <tr>
-                                <td style="color:var(--gray-500);">Account Number:</td>
-                                <td style="font-weight:700; font-family:monospace; color:var(--gray-800);" id="lblStmtAccNum">-</td>
-                            </tr>
-                            <tr>
-                                <td style="color:var(--gray-500);">Account Type:</td>
-                                <td style="font-weight:700; text-transform:uppercase;" id="lblStmtAccType">-</td>
-                            </tr>
-                            <tr>
-                                <td style="color:var(--gray-500);">Phone No:</td>
-                                <td style="font-weight:600;" id="lblStmtPhone">-</td>
-                            </tr>
-                            <tr style="border-top:1px dashed var(--gray-200); margin-top:5px; padding-top:5px;">
-                                <td style="color:var(--primary-500); font-weight:700;">Total Balance:</td>
-                                <td style="font-weight:800; color:var(--primary-500); font-size:1.05rem;" id="lblStmtBalance">-</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- Bank Coordinates Box -->
-                    <div style="border:1.5px solid var(--gray-200); border-radius:var(--radius-md); padding:20px; font-size:0.8rem; color:var(--gray-600); display:flex; flex-direction:column; justify-content:space-between;">
+                <!-- Statement Document Body -->
+                <div class="statement-print-area">
+                    <!-- Official Bank Logo & Name -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
                         <div>
-                            <h5 style="font-size:0.85rem; font-weight:700; color:var(--gray-800); margin-bottom:10px;">
-                                <i class="bx bx-home-alt"></i> Bank Coordinates
-                            </h5>
-                            <p style="margin-bottom:6px;"><strong>Branch:</strong> BHAKTINAGAR, RAJKOT</p>
-                            <p style="margin-bottom:6px;"><strong>Bank:</strong> Vertex Galaxy Bank (VGB)</p>
-                            <p style="margin-bottom:6px;"><strong>IFS Code:</strong> VGB0000171</p>
+                            <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1;">VERTEX GALAXY BANK</h1>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 5px; font-weight: 500;">Secure Credit &amp; Lending Divisions</p>
                         </div>
-                        <p style="margin-top:10px; font-size:0.75rem; color:var(--gray-400);">Statement compiled automatically on VGB core ledger server.</p>
+                        <div style="text-align: right;">
+                            <span style="font-family: monospace; font-size: 0.85rem; color: var(--gray-500); font-weight: 700;" id="lblStmtRef">ACC-REF: -</span>
+                            <p style="font-size: 0.8rem; color: var(--gray-400); margin-top: 3px;">Date Generated: <span id="lblStmtDateGenerated">-</span></p>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Ledger Section -->
-                <div class="statement-ledger-section">
-                    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-bottom: 15px;">
-                        <i class="bx bx-list-ul"></i> Transaction Ledger
-                    </h4>
-                    <div class="table-responsive">
-                        <table id="statementTxnTable">
+                    <!-- Official Header Subtitle (shown in both screen and print) -->
+                    <div style="text-align: center; background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); padding: 10px 15px; margin-bottom: 25px;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-500); text-transform: uppercase; letter-spacing: 1.5px;">Official Account Transaction Ledger Statement</span>
+                    </div>
+
+                    <!-- Details Grid -->
+                    <div class="statement-meta-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 25px; margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; color: var(--gray-700);">
+                        <!-- Left: Bank Information -->
+                        <div style="border-right: 1px dashed var(--gray-300); padding-right: 20px;">
+                            <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Bank Details</span>
+                            <strong style="color: var(--gray-900);">Vertex Galaxy Bank (Corporate HQ)</strong>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">VGB Corporate Towers, BKC Road, Bandra Kurla Complex,<br>Mumbai, Maharashtra - 400051</p>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">IFSC Branch Code: <strong style="font-family: monospace;">VGBK0000001</strong></p>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">Support Toll Free: 1800-VGB-BANK</p>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">Online Portal: www.vertexgalaxybank.com</p>
+                        </div>
+                        
+                        <!-- Right: Customer & Account Details -->
+                        <div>
+                            <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Customer &amp; Account Details</span>
+                            <strong style="color: var(--gray-900); font-size: 0.95rem; text-transform: uppercase;" id="lblStmtName">-</strong>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">Customer ID: <strong style="font-family: monospace;" id="lblStmtCustId">-</strong></p>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">Res. Address: <strong style="color: var(--gray-800); font-weight: 600;" id="lblStmtAddress">-</strong></p>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">Account Reference: <strong style="font-family: monospace;" id="lblStmtAccNum">-</strong> (<span id="lblStmtAccType" style="text-transform: uppercase; font-weight: 600;">-</span> Account)</p>
+                            <p style="margin: 4px 0 0; color: var(--gray-600);">Total Balance: <strong style="color: var(--primary-500); font-size: 1.05rem;" id="lblStmtBalance">-</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Ledger Section Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 15px;">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                            <i class="bx bx-history" style="color: var(--primary-500);"></i> Transaction Ledger Log
+                        </h4>
+                        <button type="button" onclick="window.print()" class="btn btn-primary no-print" style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">
+                            <span>Print Document</span>
+                            <i class="bx bx-printer"></i>
+                        </button>
+                    </div>
+
+                    <!-- Table Responsive Wrapper -->
+                    <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
+                        <table id="statementTxnTable" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;">
                             <thead>
-                                <tr>
-                                    <th style="width: 60px;">Sr No.</th>
-                                    <th>Transaction Details</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th style="text-align: right;">Debit/Credit Amount</th>
-                                    <th style="text-align: right;">Total Balance</th>
+                                <tr style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Transaction Date</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
+                                    <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody id="statementTxnTbody">
@@ -3094,15 +3084,24 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Footer Signatures -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; margin-bottom: 25px;">
+                        <div style="text-align: center; width: 200px;">
+                            <div style="border-bottom: 1.5px solid var(--gray-400); height: 40px; margin-bottom: 8px;"></div>
+                            <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 600; text-transform: capitalize;">Authorized Signatory</span>
+                        </div>
+                        <div style="text-align: center; width: 200px;">
+                            <div style="border-bottom: 1.5px solid var(--gray-400); height: 40px; margin-bottom: 8px;"></div>
+                            <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 600; text-transform: capitalize;">System Generated Seals</span>
+                        </div>
+                    </div>
                 </div>
 
-            </div>
-            <div class="modal-footer no-print">
-                <button type="button" class="btn btn-secondary" onclick="closeModal('statementModal')">Close</button>
-                <button type="button" class="btn btn-primary" onclick="window.print()" style="display:inline-flex; align-items:center; gap:6px;">
-                    <i class="bx bx-printer"></i>
-                    <span>Print Statement</span>
-                </button>
+                <!-- Modal Controls (hidden in print) -->
+                <div style="display: flex; justify-content: center; align-items: center; margin-top: 35px; border-top: 1px solid var(--gray-100); padding-top: 25px;" class="no-print">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('statementModal')" style="border-radius: var(--radius-full); padding: 10px 32px; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; border: 1.5px solid var(--gray-300); background: transparent; color: var(--gray-700); transition: all 0.2s;" onmouseover="this.style.background='var(--gray-100)';" onmouseout="this.style.background='transparent';">Close View</button>
+                </div>
             </div>
         </div>
     </div>
@@ -4212,18 +4211,30 @@
             statementAccountId = accountId;
             statementAccountBalance = totalBalance;
 
-            // Set customer detail labels in statement sidebar
+            var acc = accountsData.find(a => a.accountId === accountId);
+
+            // Set customer detail labels in statement layout
             document.getElementById('lblStmtName').textContent = customerName.toUpperCase();
-            document.getElementById('lblStmtCustId').textContent = "#CUST-" + accountsData.find(a => a.accountId === accountId).customerId;
-            document.getElementById('lblStmtAccNum').textContent = accountNumber;
+            document.getElementById('lblStmtCustId').textContent = "#VGB-CUST-" + acc.customerId;
+            document.getElementById('lblStmtAccNum').textContent = "#" + accountNumber;
             document.getElementById('lblStmtAccType').textContent = accountType;
-            document.getElementById('lblStmtPhone').textContent = accountsData.find(a => a.accountId === accountId).companyPhone || "1800-VGB-BANK";
+            
+            var address = "";
+            if (acc.accountType === 'savings') {
+                address = (acc.primaryAddress || "") + ", " + (acc.primaryCity || "") + ", " + (acc.primaryState || "") + " - " + (acc.primaryZip || "");
+            } else {
+                address = acc.companyAddress || "";
+            }
+            document.getElementById('lblStmtAddress').textContent = address;
             document.getElementById('lblStmtBalance').textContent = "₹ " + totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            // Set print labels
-            document.getElementById('printAccountLabel').textContent = "Account Number: " + accountNumber + " - " + accountType.toUpperCase();
+            // Set print and screen labels
+            document.getElementById('lblStmtRef').textContent = "ACC-REF: #ACC-" + accountId;
             var compiledDate = new Date();
-            document.getElementById('printDateCompiled').textContent = "Date Compiled: " + compiledDate.toLocaleDateString() + " " + compiledDate.toLocaleTimeString();
+            var options = { month: 'long', day: 'numeric', year: 'numeric' };
+            var datePart = compiledDate.toLocaleDateString('en-US', options);
+            var timePart = compiledDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            document.getElementById('lblStmtDateGenerated').textContent = datePart + " at " + timePart;
 
             // Reset filters
             document.getElementById('stmtDateFilter').value = 'all';
@@ -4231,7 +4242,7 @@
             document.getElementById('stmtCustomDateGroup').style.display = 'none';
 
             // Show preloader
-            document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--gray-400);"><i class="bx bx-loader-alt bx-spin" style="font-size:2rem; display:block; margin-bottom:10px;"></i> Fetching ledger entries...</td></tr>';
+            document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--gray-400);"><i class="bx bx-loader-alt bx-spin" style="font-size:2rem; display:block; margin-bottom:10px;"></i> Fetching ledger entries...</td></tr>';
 
             openModal('statementModal');
 
@@ -4246,10 +4257,10 @@
                             runStatementFilter();
                         } catch (e) {
                             console.error("Failed to parse JSON transaction log.", e);
-                            document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="6" style="text-align:center; color:#ef4444; padding:30px;">Error parsing transactions list.</td></tr>';
+                            document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:30px;">Error parsing transactions list.</td></tr>';
                         }
                     } else {
-                        document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="6" style="text-align:center; color:#ef4444; padding:30px;">Failed to fetch transactions from server.</td></tr>';
+                        document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:30px;">Failed to fetch transactions from server.</td></tr>';
                     }
                 }
             };
@@ -4338,25 +4349,28 @@
                     var timeFormatted = txnDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
                     var amountClass = isCredit ? 'txn-deposit' : 'txn-withdrawal';
-                    var amountPrefix = isCredit ? '+ ₹ ' : '- ₹ ';
 
                     var detailsString = t.description;
                     if (t.referenceNumber) {
                         detailsString += ' <small style="display:block; color:var(--gray-400); font-family:monospace;">Ref: ' + t.referenceNumber + '</small>';
                     }
 
+                    var statusPill = '<span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">' + (t.status || 'COMPLETED').toUpperCase() + '</span>';
+
+                    var creditVal = isCredit ? '+ ₹ ' + t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                    var debitVal = isDebit ? '- ₹ ' + t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                    var runningBalFormatted = t.runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
                     var rowHtml = `
                         <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.85rem; color: var(--gray-700);">
-                            <td style="padding: 10px 12px; font-weight:600; color:var(--gray-400);">\${filteredCount}</td>
-                            <td style="padding: 10px 12px;">\${detailsString}</td>
-                            <td style="padding: 10px 12px;">\${dateFormatted}</td>
-                            <td style="padding: 10px 12px;">\${timeFormatted}</td>
-                            <td style="padding: 10px 12px; text-align:right; font-weight:700;" class="\${amountClass}">
-                                \${amountPrefix}\${t.amount.toFixed(2)}
-                            </td>
-                            <td style="padding: 10px 12px; text-align:right; font-weight:700; color:var(--gray-800);">
-                                ₹ \${t.runningBalance.toFixed(2)}
-                            </td>
+                            <td style="padding: 14px 16px; font-weight:600; color:var(--gray-400);"><span class="badge-id">#\${filteredCount}</span></td>
+                            <td style="padding: 14px 16px;">\${dateFormatted} \${timeFormatted}</td>
+                            <td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;"><span class="\${amountClass}">\${t.transactionType}</span></td>
+                            <td style="padding: 14px 16px;">\${detailsString}</td>
+                            <td style="padding: 14px 16px;">\${statusPill}</td>
+                            <td style="padding: 14px 16px; text-align:right; font-weight:700; color: #10b981;">\${creditVal}</td>
+                            <td style="padding: 14px 16px; text-align:right; font-weight:700; color: #ef4444;">\${debitVal}</td>
+                            <td style="padding: 14px 16px; text-align:right; font-weight:700; color: #1e3a8a; font-family: monospace;">₹ \${runningBalFormatted}</td>
                         </tr>
                     `;
                     tbody.insertAdjacentHTML('beforeend', rowHtml);
@@ -4364,7 +4378,7 @@
             }
 
             if (filteredCount === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--gray-400);">No transactions match selected filter queries.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--gray-400);">No transactions match selected filter queries.</td></tr>';
             }
         }
 

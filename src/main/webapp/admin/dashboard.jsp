@@ -634,7 +634,7 @@
                         <span style="font-size: 0.8rem; background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 10px; border-radius: var(--radius-sm); font-weight: 600;">Total: ${totalCustomers}</span>
                     </h4>
                     
-                    <c:set var="activePercentage" value="${totalCustomers > 0 ? (totalActiveCustomers / totalCustomers) * 100 : 0}" />
+                    <c:set var="activePercentage" value="${totalCustomers gt 0 ? (totalActiveCustomers div totalCustomers) * 100 : 0}" />
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -642,7 +642,7 @@
                                 <span style="font-weight: 600; color: var(--gray-800);">${totalActiveCustomers}</span>
                             </div>
                             <div class="progress-bar-container">
-                                <div class="progress-bar-fill" style="width: ${activePercentage}%; background: var(--gradient-primary);"></div>
+                                <div class="progress-bar-fill" style="--active-width: ${activePercentage}%; width: var(--active-width); background: var(--gradient-primary);"></div>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -659,8 +659,8 @@
                         <span style="font-size: 0.8rem; background: rgba(236, 72, 153, 0.1); color: var(--secondary-500); padding: 4px 10px; border-radius: var(--radius-sm); font-weight: 600;">Total: ${totalAccounts}</span>
                     </h4>
                     
-                    <c:set var="savingsPercentage" value="${totalAccounts > 0 ? (totalSavingsAccounts / totalAccounts) * 100 : 0}" />
-                    <c:set var="currentPercentage" value="${totalAccounts > 0 ? (totalCurrentAccounts / totalAccounts) * 100 : 0}" />
+                    <c:set var="savingsPercentage" value="${totalAccounts gt 0 ? (totalSavingsAccounts div totalAccounts) * 100 : 0}" />
+                    <c:set var="currentPercentage" value="${totalAccounts gt 0 ? (totalCurrentAccounts div totalAccounts) * 100 : 0}" />
                     
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -668,14 +668,14 @@
                                 <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Savings</span>
                                 <strong style="font-size: 1.25rem; color: var(--gray-700);">${totalSavingsAccounts}</strong>
                                 <div class="progress-bar-container" style="height: 4px; margin-top: 6px;">
-                                    <div class="progress-bar-fill" style="width: ${savingsPercentage}%; background: var(--accent-emerald);"></div>
+                                    <div class="progress-bar-fill" style="--savings-width: ${savingsPercentage}%; width: var(--savings-width); background: var(--accent-emerald);"></div>
                                 </div>
                             </div>
                             <div style="background: rgba(99, 102, 241, 0.03); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); text-align: center;">
                                 <span style="display: block; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600;">Current</span>
                                 <strong style="font-size: 1.25rem; color: var(--gray-700);">${totalCurrentAccounts}</strong>
                                 <div class="progress-bar-container" style="height: 4px; margin-top: 6px;">
-                                    <div class="progress-bar-fill" style="width: ${currentPercentage}%; background: var(--secondary-500);"></div>
+                                    <div class="progress-bar-fill" style="--current-width: ${currentPercentage}%; width: var(--current-width); background: var(--secondary-500);"></div>
                                 </div>
                             </div>
                         </div>

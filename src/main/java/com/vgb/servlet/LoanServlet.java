@@ -91,6 +91,9 @@ public class LoanServlet extends BaseServlet {
                 case "disburse":
                     disburseLoan(request, response);
                     break;
+                case "update":
+                    updateLoan(request, response);
+                    break;
                 default:
                     response.sendRedirect(request.getContextPath() + "/loan");
             }
@@ -103,6 +106,37 @@ public class LoanServlet extends BaseServlet {
                 logger.error("Failed to list loans in doPost error handler", ex);
             }
         }
+    }
+
+    private void updateLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long loanId = Long.parseLong(getParameter(request, "loanId", "0"));
+        Loan loan = loanService.getLoanById(loanId);
+        if (loan == null) {
+            throw new IllegalArgumentException("Loan not found for ID: " + loanId);
+        }
+
+        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        int termMonths = Integer.parseInt(getParameter(request, "termMonths", "120"));
+        BigDecimal interestRate = new BigDecimal(getParameter(request, "interestRate", "7.5"));
+        String formDetails = getParameter(request, "formDetails", "");
+        String loanType = getParameter(request, "loanType", loan.getLoanType());
+
+        loan.setPrincipalAmount(amount);
+        // Sync remaining balance with principal if the loan has not been disbursed or is pending
+        if ("pending_approval".equalsIgnoreCase(loan.getStatus()) || "approved".equalsIgnoreCase(loan.getStatus())) {
+            loan.setRemainingBalance(amount);
+        }
+        loan.setInterestRate(interestRate);
+        loan.setTermMonths(termMonths);
+        loan.setFormDetails(formDetails);
+        loan.setLoanType(loanType);
+
+        if (loanService.updateLoan(loan)) {
+            request.getSession().setAttribute("success", "Loan details for #LN-" + loanId + " updated successfully!");
+        } else {
+            request.getSession().setAttribute("error", "Failed to update loan details.");
+        }
+        response.sendRedirect(request.getContextPath() + "/loan");
     }
 
     private void listLoans(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
@@ -186,6 +220,7 @@ public class LoanServlet extends BaseServlet {
             }
             request.setAttribute("customerNames", customerNames);
             request.setAttribute("customerPhones", customerPhones);
+            request.setAttribute("customers", customersList);
         } catch (Exception e) {
             logger.error("Failed to load customer metadata maps in LoanServlet", e);
         }
@@ -197,6 +232,17 @@ public class LoanServlet extends BaseServlet {
 
     private void applyLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Long customerId = getUserId(request);
+        if (customerId == null && getAdminId(request) != null) {
+            String custIdParam = getParameter(request, "customerId", "");
+            if (!custIdParam.isEmpty()) {
+                customerId = Long.parseLong(custIdParam);
+            }
+        }
+
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID is required to apply for a loan.");
+        }
+
         String loanType = getParameter(request, "loanType", "");
         BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
         int termMonths = Integer.parseInt(getParameter(request, "termMonths", "120"));

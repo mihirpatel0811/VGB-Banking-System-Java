@@ -29,7 +29,7 @@ public class LoanDAOImpl implements LoanDAO {
     private static final String GET_ALL_LOANS = 
         "SELECT * FROM loan ORDER BY created_at DESC";
     private static final String UPDATE_LOAN = 
-        "UPDATE loan SET principal_amount = ?, interest_rate = ?, term_months = ? WHERE loan_id = ?";
+        "UPDATE loan SET principal_amount = ?, remaining_balance = ?, interest_rate = ?, term_months = ?, form_details = ?, loan_type = ? WHERE loan_id = ?";
     private static final String UPDATE_LOAN_STATUS = 
         "UPDATE loan SET status = ? WHERE loan_id = ?";
     private static final String UPDATE_REMAINING_BALANCE = 
@@ -207,9 +207,12 @@ public class LoanDAOImpl implements LoanDAO {
             conn = dbConfig.getConnection();
             stmt = conn.prepareStatement(UPDATE_LOAN);
             stmt.setBigDecimal(1, loan.getPrincipalAmount());
-            stmt.setBigDecimal(2, loan.getInterestRate());
-            stmt.setInt(3, loan.getTermMonths());
-            stmt.setLong(4, loan.getLoanId());
+            stmt.setBigDecimal(2, loan.getRemainingBalance());
+            stmt.setBigDecimal(3, loan.getInterestRate());
+            stmt.setInt(4, loan.getTermMonths());
+            stmt.setString(5, loan.getFormDetails());
+            stmt.setString(6, loan.getLoanType());
+            stmt.setLong(7, loan.getLoanId());
 
             int result = stmt.executeUpdate();
             logger.info("Loan updated: {}", loan.getLoanId());

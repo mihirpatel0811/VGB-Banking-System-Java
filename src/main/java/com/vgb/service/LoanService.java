@@ -514,4 +514,16 @@ public class LoanService {
             throw new Exception("Failed to fetch all repayments", e);
         }
     }
+
+    /**
+     * Update loan details (admin)
+     */
+    public boolean updateLoan(Loan loan) throws Exception {
+        try {
+            return loanDAO.update(loan);
+        } catch (Exception e) {
+            logger.error("Error updating loan", e);
+            throw new Exception("Failed to update loan details: " + e.getMessage(), e);
+        }
+    }
 }
