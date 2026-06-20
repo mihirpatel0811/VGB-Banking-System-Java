@@ -28,7 +28,7 @@
                         font-family: 'Poppins', sans-serif;
                         transition: background-color 0.3s ease, color 0.3s ease;
                     }
-                    
+
                     body.dark-mode {
                         --glass-bg: rgba(30, 41, 59, 0.45);
                         --glass-border: rgba(255, 255, 255, 0.08);
@@ -42,6 +42,7 @@
                         background: #f6f8fc;
                         z-index: 9999;
                     }
+
                     body.dark-mode .preloader {
                         background: #0f172a;
                     }
@@ -58,6 +59,7 @@
                         z-index: 1;
                         transition: left 0.1s ease-out, top 0.1s ease-out;
                     }
+
                     body.dark-mode .cursor-glow {
                         background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
                     }
@@ -73,7 +75,7 @@
                         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                         z-index: 1000;
                     }
-                    
+
                     body.dark-mode .header {
                         background: rgba(15, 23, 42, 0.6) !important;
                         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
@@ -85,7 +87,7 @@
                         border-bottom-color: rgba(99, 102, 241, 0.15) !important;
                         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
                     }
-                    
+
                     body.dark-mode .header.scrolled {
                         background: rgba(15, 23, 42, 0.8) !important;
                         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -104,7 +106,7 @@
                         border: 1px solid rgba(99, 102, 241, 0.1);
                         transition: all 0.3s ease;
                     }
-                    
+
                     body.dark-mode .mobile-nav-toggle {
                         color: var(--gray-300) !important;
                         border-color: rgba(255, 255, 255, 0.08) !important;
@@ -130,7 +132,7 @@
                         box-shadow: var(--panel-shadow);
                         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     }
-                    
+
                     body.dark-mode .sidebar {
                         background: rgba(15, 23, 42, 0.45) !important;
                     }
@@ -165,7 +167,7 @@
                         border-color: rgba(99, 102, 241, 0.1);
                         transform: translateX(4px);
                     }
-                    
+
                     body.dark-mode .sidebar-menu a:hover {
                         background: rgba(255, 255, 255, 0.03);
                         color: var(--white) !important;
@@ -208,7 +210,7 @@
                         margin-bottom: 30px;
                         transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
                     }
-                    
+
                     body.dark-mode .glass-card {
                         border: 1px solid rgba(255, 255, 255, 0.06) !important;
                         box-shadow: var(--panel-shadow);
@@ -355,7 +357,7 @@
                         font-family: 'Times New Roman', Times, serif;
                         font-size: 0.95rem;
                         line-height: 1.6;
-                        box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-lg);
+                        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02), var(--shadow-lg);
                         position: relative;
                         max-width: 800px;
                         margin: 0 auto;
@@ -369,7 +371,10 @@
                         box-shadow: var(--shadow-xl);
                     }
 
-                    .loan-paper-form h1, .loan-paper-form h2, .loan-paper-form h3, .loan-paper-form h4 {
+                    .loan-paper-form h1,
+                    .loan-paper-form h2,
+                    .loan-paper-form h3,
+                    .loan-paper-form h4 {
                         font-family: 'Poppins', sans-serif;
                         color: #0f172a;
                     }
@@ -424,7 +429,11 @@
                         vertical-align: middle;
                     }
 
-                    .loan-paper-form input[type="text"], .loan-paper-form input[type="date"], .loan-paper-form input[type="number"], .loan-paper-form select, .loan-paper-form textarea {
+                    .loan-paper-form input[type="text"],
+                    .loan-paper-form input[type="date"],
+                    .loan-paper-form input[type="number"],
+                    .loan-paper-form select,
+                    .loan-paper-form textarea {
                         border: none;
                         border-bottom: 1px dotted #475569 !important;
                         background: transparent;
@@ -447,7 +456,9 @@
                     }
 
                     /* --- INPUTS AND SELECTS --- */
-                    .form-control, .control-select, .control-input {
+                    .form-control,
+                    .control-select,
+                    .control-input {
                         width: 100%;
                         padding: 12px 15px;
                         border: 1.5px solid var(--gray-200);
@@ -466,7 +477,9 @@
                         color: white !important;
                     }
 
-                    .form-control:focus, .control-select:focus, .control-input:focus {
+                    .form-control:focus,
+                    .control-select:focus,
+                    .control-input:focus {
                         border-color: var(--primary-500);
                         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
                     }
@@ -484,6 +497,7 @@
                         align-items: center;
                         gap: 4px;
                     }
+
                     .badge-approved {
                         background: rgba(16, 185, 129, 0.12);
                         color: var(--accent-emerald);
@@ -496,6 +510,7 @@
                         align-items: center;
                         gap: 4px;
                     }
+
                     .badge-rejected {
                         background: rgba(239, 68, 68, 0.12);
                         color: #ef4444;
@@ -508,6 +523,7 @@
                         align-items: center;
                         gap: 4px;
                     }
+
                     .badge-id {
                         font-family: monospace;
                         font-weight: 600;
@@ -518,6 +534,7 @@
                         border-radius: var(--radius-sm);
                         font-size: 0.8rem;
                     }
+
                     body.dark-mode .badge-id {
                         background: rgba(99, 102, 241, 0.15);
                         color: var(--primary-400);
@@ -577,19 +594,23 @@
                         .mobile-nav-toggle {
                             display: flex !important;
                         }
+
                         .sidebar {
                             left: -280px !important;
                             top: 80px;
                             height: calc(100vh - 80px);
                             z-index: 1000;
                         }
+
                         .sidebar.active {
                             left: 0 !important;
                         }
+
                         .main-content {
                             margin-left: 0 !important;
                             padding: 120px 20px 40px !important;
                         }
+
                         .footer {
                             margin-left: 0 !important;
                         }
@@ -617,14 +638,14 @@
                         border: 1px solid rgba(99, 102, 241, 0.2);
                         width: 100%;
                         border-radius: var(--radius-lg);
-                        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+                        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
                         animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
                         overflow: hidden;
                         max-height: 90vh;
                         display: flex;
                         flex-direction: column;
                     }
-                    
+
                     body.dark-mode .modal-content {
                         background: rgba(15, 23, 42, 0.85) !important;
                         border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -639,14 +660,22 @@
                         border-radius: var(--radius-lg);
                         padding: 35px;
                     }
+
                     body.dark-mode .modal-card {
                         background: rgba(15, 23, 42, 0.92) !important;
                         border-color: rgba(255, 255, 255, 0.08) !important;
                     }
 
                     @keyframes modalScaleUp {
-                        from { transform: scale(0.9) translateY(10px); opacity: 0; }
-                        to { transform: scale(1) translateY(0); opacity: 1; }
+                        from {
+                            transform: scale(0.9) translateY(10px);
+                            opacity: 0;
+                        }
+
+                        to {
+                            transform: scale(1) translateY(0);
+                            opacity: 1;
+                        }
                     }
 
                     .close-btn {
@@ -657,9 +686,11 @@
                         cursor: pointer;
                         transition: color 0.2s;
                     }
+
                     .close-btn:hover {
                         color: var(--gray-900);
                     }
+
                     body.dark-mode .close-btn:hover {
                         color: white;
                     }
@@ -669,10 +700,12 @@
                         body.print-admin-active * {
                             visibility: hidden !important;
                         }
+
                         body.print-admin-active #adminViewModal,
                         body.print-admin-active #adminViewModal * {
                             visibility: visible !important;
                         }
+
                         body.print-admin-active #adminViewModal {
                             position: absolute !important;
                             left: 0 !important;
@@ -684,6 +717,7 @@
                             padding: 0 !important;
                             display: flex !important;
                         }
+
                         body.print-admin-active #adminViewModal .modal-content {
                             box-shadow: none !important;
                             border: none !important;
@@ -693,11 +727,13 @@
                             margin: 0 !important;
                             background: white !important;
                         }
+
                         body.print-admin-active #adminViewModal .modal-body {
                             overflow: visible !important;
                             max-height: none !important;
                             padding: 0 !important;
                         }
+
                         body.print-admin-active #adminViewModal .loan-paper-form {
                             border: none !important;
                             box-shadow: none !important;
@@ -710,6 +746,7 @@
                     .txn-deposit {
                         color: var(--accent-emerald) !important;
                     }
+
                     .txn-withdrawal {
                         color: var(--secondary-500) !important;
                     }
@@ -721,6 +758,7 @@
                         gap: 20px;
                         margin-bottom: 30px;
                     }
+
                     .loan-product-card {
                         background: white;
                         border: 1px solid var(--gray-200);
@@ -734,11 +772,13 @@
                         flex-direction: column;
                         justify-content: space-between;
                     }
+
                     .loan-product-card:hover {
                         transform: translateY(-5px);
                         border-color: var(--primary-500);
                         box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
                     }
+
                     .loan-product-card h4 {
                         font-size: 1rem;
                         font-weight: 700;
@@ -746,6 +786,7 @@
                         margin-bottom: 8px;
                         font-family: 'Poppins', sans-serif;
                     }
+
                     .loan-product-card p {
                         font-size: 0.75rem;
                         color: var(--gray-400);
@@ -753,17 +794,20 @@
                         margin-bottom: 15px;
                         flex-grow: 1;
                     }
+
                     .loan-product-card .rate-badge {
                         font-size: 1.25rem;
                         font-weight: 800;
                         color: var(--primary-500);
                         margin-bottom: 12px;
                     }
+
                     .loan-product-card .btn {
                         margin-top: auto;
                     }
 
-                    .loan-paper-form input[type="radio"], .loan-paper-form input[type="checkbox"] {
+                    .loan-paper-form input[type="radio"],
+                    .loan-paper-form input[type="checkbox"] {
                         cursor: pointer;
                         margin-right: 5px;
                         width: auto !important;
@@ -774,10 +818,12 @@
                         body.print-admin-apply-active * {
                             visibility: hidden !important;
                         }
+
                         body.print-admin-apply-active #adminApplyModal,
                         body.print-admin-apply-active #adminApplyModal * {
                             visibility: visible !important;
                         }
+
                         body.print-admin-apply-active #adminApplyModal {
                             position: absolute !important;
                             left: 0 !important;
@@ -789,6 +835,7 @@
                             padding: 0 !important;
                             display: flex !important;
                         }
+
                         body.print-admin-apply-active #adminApplyModal .modal-content {
                             box-shadow: none !important;
                             border: none !important;
@@ -798,11 +845,13 @@
                             margin: 0 !important;
                             background: white !important;
                         }
+
                         body.print-admin-apply-active #adminApplyModal .modal-body {
                             overflow: visible !important;
                             max-height: none !important;
                             padding: 0 !important;
                         }
+
                         body.print-admin-apply-active #adminApplyModal .loan-paper-form {
                             border: none !important;
                             box-shadow: none !important;
@@ -816,9 +865,11 @@
                     .mode-toggle-btn {
                         color: var(--gray-500);
                     }
+
                     .mode-toggle-btn.active {
                         color: var(--primary-600) !important;
                     }
+
                     .mode-toggle-btn::after {
                         content: '';
                         position: absolute;
@@ -832,8 +883,21 @@
                     .mode-toggle-btn.active::after {
                         background: linear-gradient(90deg, var(--primary-500), var(--secondary-500)) !important;
                     }
-                    body.dark-mode .mode-toggle-btn.active {
+
+                     body.dark-mode .mode-toggle-btn.active {
                         color: var(--primary-400) !important;
+                    }
+
+                    body.dark-mode .loan-product-card {
+                        background: rgba(30, 41, 59, 0.6) !important;
+                        border-color: rgba(255, 255, 255, 0.08) !important;
+                    }
+                    body.dark-mode .loan-product-card h4 {
+                        color: white !important;
+                    }
+                    .edit-specs-btn:hover {
+                        background: var(--primary-500) !important;
+                        color: white !important;
                     }
                 </style>
             </head>
@@ -851,17 +915,23 @@
                 <!-- Header -->
                 <header class="header scrolled">
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation"
+                            style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
                             <i class="bx bx-menu"></i>
                         </button>
-                        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center;">
-                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
+                        <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo"
+                            style="display: flex; align-items: center;">
+                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
+                                alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
                         </a>
                     </div>
                     <div class="nav-actions">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
-                            <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
+                            <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png"
+                                alt="Admin Profile Avatar"
+                                style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
+                            <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i>
+                                Admin Workspace</span>
                         </div>
                         <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
                         <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary"
@@ -878,9 +948,12 @@
                                 class="bx bx-user-check"></i> Manage Accounts</a>
                         <a href="${pageContext.request.contextPath}/admin/transfer.jsp"><i
                                 class="bx bx-transfer-alt"></i> Admin Counter</a>
-                        <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i> Manage Cards</a>
-                        <a href="${pageContext.request.contextPath}/chequebook?action=list"><i class="bx bx-book-bookmark"></i> Cheque Requests</a>
-                        <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
+                        <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i>
+                            Manage Cards</a>
+                        <a href="${pageContext.request.contextPath}/chequebook?action=list"><i
+                                class="bx bx-book-bookmark"></i> Cheque Requests</a>
+                        <a href="${pageContext.request.contextPath}/passbook?action=list"><i
+                                class="bx bx-book-open"></i> Passbook Requests</a>
                         <a href="${pageContext.request.contextPath}/loan?action=list" class="active"><i
                                 class="bx bx-building-house"></i> Review Loans</a>
                         <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My
@@ -898,14 +971,18 @@
                 <!-- Main Content -->
                 <main class="main-content">
                     <div class="container" style="max-width: 1200px; padding: 0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;" class="no-print">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;"
+                            class="no-print">
                             <div>
-                                <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">System Loan Portfolios</h2>
-                                <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Analyze credit applications, execute disbursements, or reject failed file ratings.</p>
+                                <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">System Loan
+                                    Portfolios</h2>
+                                <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Analyze credit
+                                    applications, execute disbursements, or reject failed file ratings.</p>
                             </div>
-                             <button type="button" onclick="switchTab('apply')" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600; border-radius: var(--radius-md); display: inline-flex; align-items: center; gap: 8px;">
+                            <button type="button" onclick="switchTab('apply')" class="btn btn-primary"
+                                style="padding: 10px 20px; font-weight: 600; border-radius: var(--radius-md); display: inline-flex; align-items: center; gap: 8px;">
                                 <i class="bx bx-plus-circle" style="font-size: 1.25rem;"></i>
-                                <span>Create or Update Loan</span>
+                                <span>Apply New Loan</span>
                             </button>
                         </div>
 
@@ -965,7 +1042,7 @@
                             <button type="button" class="tab-btn" onclick="switchTab('apply')" id="tab-apply"
                                 style="padding: 12px 20px; font-family: var(--font-family); font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px;">
                                 <i class="bx bx-plus-circle" style="font-size: 1.1rem;"></i>
-                                <span>Create or Update Loan</span>
+                                <span>Apply New Loan</span>
                             </button>
 
                         </div>
@@ -1002,8 +1079,8 @@
                                                     data-loan-category="${loan.loanType}"
                                                     data-customer-name="${customerNames[loan.customerId]}"
                                                     data-customer-phone="${customerPhones[loan.customerId]}">
-                                                    <td
-                                                        style="padding: 15px;"><span class="badge-id">#${pendingCount}</span></td>
+                                                    <td style="padding: 15px;"><span
+                                                            class="badge-id">#${pendingCount}</span></td>
                                                     <td
                                                         style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                         ${customerNames[loan.customerId]}</td>
@@ -1028,7 +1105,13 @@
                                                     </td>
                                                     <td style="padding: 15px; text-align: center;">
                                                         <div style="display: flex; gap: 8px; justify-content: center;">
-                                                            <button type="button" class="btn btn-secondary" onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i class="bx bx-show"></i> View</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')"
+                                                                data-form-details="<c:out value="
+                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
+                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
+                                                            var(--primary-500);"><i class="bx bx-show"></i>
+                                                            View</button>
                                                             <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}"
                                                                 class="btn btn-secondary"
                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald);"><i
@@ -1089,8 +1172,8 @@
                                                     data-loan-category="${loan.loanType}"
                                                     data-customer-name="${customerNames[loan.customerId]}"
                                                     data-customer-phone="${customerPhones[loan.customerId]}">
-                                                    <td
-                                                        style="padding: 15px;"><span class="badge-id">#${approvedCount}</span></td>
+                                                    <td style="padding: 15px;"><span
+                                                            class="badge-id">#${approvedCount}</span></td>
                                                     <td
                                                         style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                         ${customerNames[loan.customerId]}</td>
@@ -1155,7 +1238,13 @@
                                                                     style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-amber); color: var(--accent-amber);"><i
                                                                         class="bx bx-wallet-alt"></i> Repay</button>
                                                             </c:if>
-                                                            <button type="button" class="btn btn-secondary" onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i class="bx bx-show"></i> View</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')"
+                                                                data-form-details="<c:out value="
+                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
+                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
+                                                            var(--primary-500);"><i class="bx bx-show"></i>
+                                                            View</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1206,8 +1295,8 @@
                                                     data-loan-category="${loan.loanType}"
                                                     data-customer-name="${customerNames[loan.customerId]}"
                                                     data-customer-phone="${customerPhones[loan.customerId]}">
-                                                    <td
-                                                        style="padding: 15px;"><span class="badge-id">#${closedCount}</span></td>
+                                                    <td style="padding: 15px;"><span
+                                                            class="badge-id">#${closedCount}</span></td>
                                                     <td
                                                         style="padding: 15px; font-weight: 600; color: var(--gray-900);">
                                                         ${customerNames[loan.customerId]}</td>
@@ -1247,7 +1336,13 @@
                                                     </td>
                                                     <td style="padding: 15px; text-align: center;">
                                                         <div style="display: flex; gap: 8px; justify-content: center;">
-                                                            <button type="button" class="btn btn-secondary" onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i class="bx bx-show"></i> View</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')"
+                                                                data-form-details="<c:out value="
+                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
+                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
+                                                            var(--primary-500);"><i class="bx bx-show"></i>
+                                                            View</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1267,44 +1362,53 @@
 
                         <!-- Tab Content 4: Apply New Loan -->
                         <div class="loan-tab-content no-print" id="content-apply" style="display: none;">
-                            <!-- Segmented Toggle to Switch between Create (Apply) and Update Mode -->
-                            <div class="no-print" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid var(--gray-200); padding-bottom: 15px;">
-                                <button type="button" class="mode-toggle-btn active" id="btn-mode-create" onclick="setApplyMode('create')" style="padding: 10px 24px; font-weight: 700; font-size: 0.95rem; border: none; background: transparent; cursor: pointer; transition: all 0.3s ease; position: relative;">
-                                    <i class="bx bx-plus-circle" style="font-size: 1.15rem; vertical-align: middle; margin-right: 6px;"></i>Create New Loan
-                                </button>
-                                <button type="button" class="mode-toggle-btn" id="btn-mode-update" onclick="setApplyMode('update')" style="padding: 10px 24px; font-weight: 700; font-size: 0.95rem; border: none; background: transparent; cursor: pointer; transition: all 0.3s ease; position: relative;">
-                                    <i class="bx bx-edit" style="font-size: 1.15rem; vertical-align: middle; margin-right: 6px;"></i>Update Existing Loan
-                                </button>
-                            </div>
 
                             <!-- Mode 1: Create New Loan Container -->
                             <div id="apply-new-mode-container">
-                                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-bottom: 35px;" class="mobile-grid-1">
+                                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-bottom: 35px;"
+                                    class="mobile-grid-1">
                                     <!-- EMI Calculator -->
                                     <div class="glass-card" style="margin-bottom: 0;">
-                                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;"><i class="bx bx-calculator"></i> VGB Premium EMI Calculator</h3>
-                                        
+                                        <h3
+                                            style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;">
+                                            <i class="bx bx-calculator"></i> VGB Premium EMI Calculator</h3>
+
                                         <div class="form-group" style="margin-bottom: 15px;">
-                                            <label for="calcAmount" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Principal Amount (₹)</label>
-                                            <input type="number" id="calcAmount" value="500000" min="50000" max="50000000" oninput="calculateEMI()" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                            <label for="calcAmount"
+                                                style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Principal
+                                                Amount (₹)</label>
+                                            <input type="number" id="calcAmount" value="500000" min="50000"
+                                                max="50000000" oninput="calculateEMI()"
+                                                style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
                                         </div>
 
-                                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px;" class="mobile-grid-1">
+                                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px;"
+                                            class="mobile-grid-1">
                                             <div class="form-group">
-                                                <label for="calcRate" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Annual Interest Rate (%)</label>
-                                                <select id="calcRate" onchange="calculateEMI()" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
-                                                    <option value="7.50" selected>Home Secure Loan (7.50%)</option>
-                                                    <option value="8.50">Vehicle Purchase Loan (8.50%)</option>
-                                                    <option value="6.50">Higher Education Loan (6.50%)</option>
-                                                    <option value="12.00">Personal Cash Loan (12.00%)</option>
-                                                    <option value="10.50">Business Capital Loan (10.50%)</option>
+                                                <label for="calcRate"
+                                                    style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Annual
+                                                    Interest Rate (%)</label>
+                                                <select id="calcRate" onchange="calculateEMI()"
+                                                    style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                                                    <option id="opt-calc-home" value="7.50" selected>Home Secure Loan (7.50%)</option>
+                                                    <option id="opt-calc-vehicle" value="8.50">Vehicle Purchase Loan (8.50%)</option>
+                                                    <option id="opt-calc-education" value="6.50">Higher Education Loan (6.50%)</option>
+                                                    <option id="opt-calc-personal" value="12.00">Personal Cash Loan (12.00%)</option>
+                                                    <option id="opt-calc-business" value="10.50">Business Capital Loan (10.50%)</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="displayCalcTermVal" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Tenure Duration</label>
+                                                <label for="displayCalcTermVal"
+                                                    style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Tenure
+                                                    Duration</label>
                                                 <div style="display: flex; gap: 10px;">
-                                                    <input type="number" id="displayCalcTermVal" value="10" min="1" max="30" required style="flex-grow: 1; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;" oninput="syncCalcTerm()">
-                                                    <select id="calcTermUnit" style="width: 100px; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;" onchange="syncCalcTerm()">
+                                                    <input type="number" id="displayCalcTermVal" value="10" min="1"
+                                                        max="30" required
+                                                        style="flex-grow: 1; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;"
+                                                        oninput="syncCalcTerm()">
+                                                    <select id="calcTermUnit"
+                                                        style="width: 100px; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;"
+                                                        onchange="syncCalcTerm()">
                                                         <option value="years" selected>Years</option>
                                                         <option value="months">Months</option>
                                                     </select>
@@ -1312,132 +1416,217 @@
                                                 <input type="hidden" id="calcTerm" value="120">
                                             </div>
                                         </div>
-                                        <div style="background: var(--gradient-secondary); padding: 20px; border-radius: var(--radius-md); color: white; text-align: center; margin-top: 25px; box-shadow: var(--shadow-sm);">
-                                            <span style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Estimated Monthly Payment</span>
-                                            <strong style="font-size: 2.2rem; font-weight: 800; display: block; margin-top: 5px;" id="emiResult">₹ 5,935.09</strong>
-                                            <span style="font-size: 0.75rem; opacity: 0.85; display: block; margin-top: 3px;">Subject to terms &amp; final physical document verification.</span>
+                                        <div
+                                            style="background: var(--gradient-secondary); padding: 20px; border-radius: var(--radius-md); color: white; text-align: center; margin-top: 25px; box-shadow: var(--shadow-sm);">
+                                            <span
+                                                style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Estimated
+                                                Monthly Payment</span>
+                                            <strong
+                                                style="font-size: 2.2rem; font-weight: 800; display: block; margin-top: 5px;"
+                                                id="emiResult">₹ 5,935.09</strong>
+                                            <span
+                                                style="font-size: 0.75rem; opacity: 0.85; display: block; margin-top: 3px;">Subject
+                                                to terms &amp; final physical document verification.</span>
                                         </div>
                                     </div>
 
                                     <!-- Promotional Info Column -->
-                                    <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%); margin-bottom: 0;">
+                                    <div class="glass-card"
+                                        style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%); margin-bottom: 0;">
                                         <div>
-                                            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;"><i class="bx bx-star" style="color: #eab308;"></i> Why VGB Premium Lending?</h3>
-                                            <p style="font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 20px;">
-                                                Vertex Galaxy Bank offers custom-tailored credit solutions featuring highly competitive fixed interest rates, flexible tenure options up to 30 years, and instant digital credit assessment. 
+                                            <h3
+                                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;">
+                                                <i class="bx bx-star" style="color: #eab308;"></i> Why VGB Premium
+                                                Lending?</h3>
+                                            <p
+                                                style="font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 20px;">
+                                                Vertex Galaxy Bank offers custom-tailored credit solutions featuring
+                                                highly competitive fixed interest rates, flexible tenure options up to
+                                                30 years, and instant digital credit assessment.
                                             </p>
                                             <div style="display: flex; flex-direction: column; gap: 12px;">
-                                                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                                    <i class="bx bx-check-double" style="color: var(--primary-500); font-size: 1.2rem;"></i>
+                                                <div
+                                                    style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
+                                                    <i class="bx bx-check-double"
+                                                        style="color: var(--primary-500); font-size: 1.2rem;"></i>
                                                     <span>Zero hidden charges &amp; fully transparent terms</span>
                                                 </div>
-                                                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                                    <i class="bx bx-check-double" style="color: var(--primary-500); font-size: 1.2rem;"></i>
+                                                <div
+                                                    style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
+                                                    <i class="bx bx-check-double"
+                                                        style="color: var(--primary-500); font-size: 1.2rem;"></i>
                                                     <span>Flexible EMI repayments auto-debited securely</span>
                                                 </div>
-                                                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                                    <i class="bx bx-check-double" style="color: var(--primary-500); font-size: 1.2rem;"></i>
+                                                <div
+                                                    style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
+                                                    <i class="bx bx-check-double"
+                                                        style="color: var(--primary-500); font-size: 1.2rem;"></i>
                                                     <span>Direct administrative verification with instant updates</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div style="border-top: 1px solid rgba(99, 102, 241, 0.1); padding-top: 15px; margin-top: 20px; font-size: 0.85rem; color: var(--gray-500); font-style: italic;">
-                                            Please select one of the loan products below to fill in the formal application form for the customer.
+                                        <div
+                                            style="border-top: 1px solid rgba(99, 102, 241, 0.1); padding-top: 15px; margin-top: 20px; font-size: 0.85rem; color: var(--gray-500); font-style: italic;">
+                                            Please select one of the loan products below to fill in the formal
+                                            application form for the customer.
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Select Loan Product Grid -->
                                 <div style="margin-bottom: 20px;">
-                                    <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                    <h3
+                                        style="font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
                                         <i class="bx bx-gift" style="color: var(--primary-500);"></i>
                                         <span>Select a Premium Loan Solution</span>
                                     </h3>
                                     <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px;">Choose a specialized loan product based on your financial goals. Click **Apply Now** to open the formal application form.</p>
-                                    
                                     <div class="loans-category-grid">
                                         <!-- Personal Loan -->
-                                        <div class="loan-product-card" onclick="showAdminLoanDetails('personal', 12.00, 1500000)">
+                                        <div class="loan-product-card" id="card-personal"
+                                            onclick="showAdminLoanDetails('personal', 12.00, 1500000)">
                                             <div>
                                                 <h4>Personal Cash Loan</h4>
-                                                <p>Unsecured personal financing for instant cash requirements, medical expenses, or emergency funds.</p>
+                                                <p>Unsecured personal financing for instant cash requirements, medical
+                                                    expenses, or emergency funds.</p>
                                             </div>
                                             <div>
-                                                <div class="rate-badge">12.00% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                                                <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 15,00,000</div>
-                                                <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                                <div class="rate-badge" id="badge-rate-personal">12.00% <span
+                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
+                                                </div>
+                                                <div id="badge-max-personal"
+                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
+                                                    Max: ₹ 15,00,000</div>
+                                                <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                                     <button type="button" class="btn btn-primary"
+                                                         onclick="event.stopPropagation(); openAdminLoanForm('personal', getSpecValue('personal', 'rate'), getSpecValue('personal', 'max'))"
+                                                         style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
+                                                         Now</button>
+                                                     <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('personal')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
+                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Home Loan -->
-                                        <div class="loan-product-card" onclick="showAdminLoanDetails('home', 7.50, 50000000)">
+                                        <div class="loan-product-card" id="card-home"
+                                            onclick="showAdminLoanDetails('home', 7.50, 50000000)">
                                             <div>
                                                 <h4>Home Secure Loan</h4>
-                                                <p>Realize your dream home with low rates, customized repayment timelines, and easy paper processing.</p>
+                                                <p>Realize your dream home with low rates, customized repayment
+                                                    timelines, and easy paper processing.</p>
                                             </div>
                                             <div>
-                                                <div class="rate-badge">7.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                                                <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 5,00,00,000</div>
-                                                <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                                <div class="rate-badge" id="badge-rate-home">7.50% <span
+                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
+                                                </div>
+                                                <div id="badge-max-home"
+                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
+                                                    Max: ₹ 5,00,00,000</div>
+                                                <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                                     <button type="button" class="btn btn-primary"
+                                                         onclick="event.stopPropagation(); openAdminLoanForm('home', getSpecValue('home', 'rate'), getSpecValue('home', 'max'))"
+                                                         style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
+                                                         Now</button>
+                                                     <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('home')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
+                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Vehicle Loan -->
-                                        <div class="loan-product-card" onclick="showAdminLoanDetails('vehicle', 8.50, 5000000)">
+                                        <div class="loan-product-card" id="card-vehicle"
+                                            onclick="showAdminLoanDetails('vehicle', 8.50, 5000000)">
                                             <div>
                                                 <h4>Vehicle Purchase Loan</h4>
-                                                <p>Drive your dream car or vehicle home with instant disbursals, high limits, and flexible tenure plans.</p>
+                                                <p>Drive your dream car or vehicle home with instant disbursals, high
+                                                    limits, and flexible tenure plans.</p>
                                             </div>
                                             <div>
-                                                <div class="rate-badge">8.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                                                <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 50,00,000</div>
-                                                <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                                <div class="rate-badge" id="badge-rate-vehicle">8.50% <span
+                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
+                                                </div>
+                                                <div id="badge-max-vehicle"
+                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
+                                                    Max: ₹ 50,00,000</div>
+                                                <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                                     <button type="button" class="btn btn-primary"
+                                                         onclick="event.stopPropagation(); openAdminLoanForm('vehicle', getSpecValue('vehicle', 'rate'), getSpecValue('vehicle', 'max'))"
+                                                         style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
+                                                         Now</button>
+                                                     <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('vehicle')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
+                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Education Loan -->
-                                        <div class="loan-product-card" onclick="showAdminLoanDetails('education', 6.50, 4000000)">
+                                        <div class="loan-product-card" id="card-education"
+                                            onclick="showAdminLoanDetails('education', 6.50, 4000000)">
                                             <div>
                                                 <h4>Higher Education Loan</h4>
-                                                <p>Fund premium global academic pursuits, covering university fees, travel, and accommodation costs.</p>
+                                                <p>Fund premium global academic pursuits, covering university fees,
+                                                    travel, and accommodation costs.</p>
                                             </div>
                                             <div>
-                                                <div class="rate-badge">6.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                                                <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 40,00,000</div>
-                                                <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                                <div class="rate-badge" id="badge-rate-education">6.50% <span
+                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
+                                                </div>
+                                                <div id="badge-max-education"
+                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
+                                                    Max: ₹ 40,00,000</div>
+                                                <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                                     <button type="button" class="btn btn-primary"
+                                                         onclick="event.stopPropagation(); openAdminLoanForm('education', getSpecValue('education', 'rate'), getSpecValue('education', 'max'))"
+                                                         style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
+                                                         Now</button>
+                                                     <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('education')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
+                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Business Loan -->
-                                        <div class="loan-product-card" onclick="showAdminLoanDetails('business', 10.50, 10000000)">
+                                        <div class="loan-product-card" id="card-business"
+                                            onclick="showAdminLoanDetails('business', 10.50, 10000000)">
                                             <div>
                                                 <h4>Business Capital Loan</h4>
-                                                <p>Power your business venture, purchase heavy equipment, expand infrastructure, or boost cashflow.</p>
+                                                <p>Power your business venture, purchase heavy equipment, expand
+                                                    infrastructure, or boost cashflow.</p>
                                             </div>
                                             <div>
-                                                <div class="rate-badge">10.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                                                <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 1,00,00,000</div>
-                                                <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                                <div class="rate-badge" id="badge-rate-business">10.50% <span
+                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
+                                                </div>
+                                                <div id="badge-max-business"
+                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
+                                                    Max: ₹ 1,00,00,000</div>
+                                                <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                                     <button type="button" class="btn btn-primary"
+                                                         onclick="event.stopPropagation(); openAdminLoanForm('business', getSpecValue('business', 'rate'), getSpecValue('business', 'max'))"
+                                                         style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
+                                                         Now</button>
+                                                     <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('business')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
+                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                    </div>
                                 </div>
                             </div>
 
                             <!-- Mode 2: Update Existing Loan Container -->
                             <div id="update-existing-mode-container" style="display: none;">
                                 <div class="glass-card" style="padding: 25px; border-radius: var(--radius-md);">
-                                    <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                                    <h3
+                                        style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                                         <i class="bx bx-list-ul" style="color: var(--primary-500);"></i>
                                         <span>Select a Loan Portfolio to Update</span>
                                     </h3>
                                     <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px;">
-                                        Choose a customer's active, approved, or pending loan portfolio below to edit details.
+                                        Choose a customer's active, approved, or pending loan portfolio below to edit
+                                        details.
                                     </p>
                                     <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                                         <table style="width: 100%; border-collapse: collapse; text-align: left;">
                                             <thead>
-                                                <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
+                                                <tr
+                                                    style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
                                                     <th style="padding: 12px 15px; width: 120px;">Loan ID</th>
                                                     <th style="padding: 12px 15px;">Customer Name</th>
                                                     <th style="padding: 12px 15px;">Loan Category</th>
@@ -1449,39 +1638,61 @@
                                             </thead>
                                             <tbody>
                                                 <c:forEach var="loan" items="${loans}">
-                                                    <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                                        <td style="padding: 15px;"><span class="badge-id">#LN-${loan.loanId}</span></td>
-                                                        <td style="padding: 15px; font-weight: 600; color: var(--gray-900);">${customerNames[loan.customerId]}</td>
-                                                        <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">${loan.loanType}</td>
-                                                        <td style="padding: 15px; font-weight: 600;">₹<fmt:formatNumber value="${loan.principalAmount}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                                    <tr
+                                                        style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
+                                                        <td style="padding: 15px;"><span
+                                                                class="badge-id">#LN-${loan.loanId}</span></td>
+                                                        <td
+                                                            style="padding: 15px; font-weight: 600; color: var(--gray-900);">
+                                                            ${customerNames[loan.customerId]}</td>
+                                                        <td
+                                                            style="padding: 15px; text-transform: capitalize; font-weight: 600;">
+                                                            ${loan.loanType}</td>
+                                                        <td style="padding: 15px; font-weight: 600;">₹
+                                                            <fmt:formatNumber value="${loan.principalAmount}"
+                                                                minFractionDigits="2" maxFractionDigits="2" />
+                                                        </td>
                                                         <td style="padding: 15px;">${loan.termMonths} Months</td>
                                                         <td style="padding: 15px; text-align: center;">
                                                             <c:choose>
                                                                 <c:when test="${loan.status == 'pending_approval'}">
-                                                                    <span style="background: rgba(245, 158, 11, 0.1); color: var(--accent-amber); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Pending</span>
+                                                                    <span
+                                                                        style="background: rgba(245, 158, 11, 0.1); color: var(--accent-amber); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Pending</span>
                                                                 </c:when>
                                                                 <c:when test="${loan.status == 'approved'}">
-                                                                    <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Approved</span>
+                                                                    <span
+                                                                        style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Approved</span>
                                                                 </c:when>
-                                                                <c:when test="${loan.status == 'active' or loan.status == 'disbursed'}">
-                                                                    <span style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Active</span>
+                                                                <c:when
+                                                                    test="${loan.status == 'active' or loan.status == 'disbursed'}">
+                                                                    <span
+                                                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Active</span>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${loan.status}</span>
+                                                                    <span
+                                                                        style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${loan.status}</span>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </td>
                                                         <td style="padding: 15px; text-align: center;">
-                                                            <button type="button" class="btn btn-secondary" onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); display: inline-flex; align-items: center; gap: 4px;">
-                                                                <i class="bx bx-edit"></i>
-                                                                <span>Update Details</span>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
+                                                                data-form-details="<c:out value="
+                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
+                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
+                                                            var(--primary-500); display: inline-flex; align-items:
+                                                            center; gap: 4px;">
+                                                            <i class="bx bx-edit"></i>
+                                                            <span>Update Details</span>
                                                             </button>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
                                                 <c:if test="${empty loans}">
                                                     <tr>
-                                                        <td colspan="7" style="text-align: center; padding: 30px; color: var(--gray-400);">No loans registered in the system.</td>
+                                                        <td colspan="7"
+                                                            style="text-align: center; padding: 30px; color: var(--gray-400);">
+                                                            No loans registered in the system.</td>
                                                     </tr>
                                                 </c:if>
                                             </tbody>
@@ -1505,7 +1716,8 @@
 
                                 <h3
                                     style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
-                                    <i class="bx bx-wallet" style="color: var(--primary-500); font-size: 1.5rem;"></i> Execute Loan Disbursement
+                                    <i class="bx bx-wallet" style="color: var(--primary-500); font-size: 1.5rem;"></i>
+                                    Execute Loan Disbursement
                                 </h3>
                                 <form action="${pageContext.request.contextPath}/loan?action=disburse" method="post"
                                     id="disburseForm">
@@ -1524,7 +1736,8 @@
                                         <label for="disburseAccount"
                                             style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Select
                                             Target Customer Account</label>
-                                        <select name="accountId" id="disburseAccount" required class="control-select" style="font-weight: 500;">
+                                        <select name="accountId" id="disburseAccount" required class="control-select"
+                                            style="font-weight: 500;">
                                             <option value="">-- Select Active Account --</option>
                                         </select>
                                         <span
@@ -1558,7 +1771,9 @@
 
                                 <h3
                                     style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
-                                    <i class="bx bx-wallet-alt" style="color: var(--primary-500); font-size: 1.5rem;"></i> Execute Loan Repayment
+                                    <i class="bx bx-wallet-alt"
+                                        style="color: var(--primary-500); font-size: 1.5rem;"></i> Execute Loan
+                                    Repayment
                                 </h3>
                                 <form action="${pageContext.request.contextPath}/loan?action=repayment" method="post"
                                     id="repayForm">
@@ -1578,7 +1793,8 @@
                                         <label for="repayAccount"
                                             style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Select
                                             Customer Account to Debit</label>
-                                        <select name="accountId" id="repayAccount" required class="control-select" style="font-weight: 500;">
+                                        <select name="accountId" id="repayAccount" required class="control-select"
+                                            style="font-weight: 500;">
                                             <option value="">-- Select Active Account --</option>
                                         </select>
                                     </div>
@@ -1603,6 +1819,58 @@
                                 </form>
                             </div>
                         </div>
+
+                        <!-- Edit Loan Specs Modal Overlay (Admin Page Custom Specs Editor) -->
+                        <div id="editSpecsModal"
+                            style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;"
+                            class="no-print">
+                            <div class="modal-card"
+                                style="width: 100%; max-width: 450px; position: relative; margin-bottom: 0;">
+                                <button type="button" onclick="closeEditSpecsModal()" class="close-btn"
+                                    style="position: absolute; top: 25px; right: 25px; font-size: 1.5rem; line-height: 1;"><i
+                                        class="bx bx-x"></i></button>
+
+                                <h3
+                                    style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
+                                    <i class="bx bx-cog"
+                                        style="color: var(--primary-500); font-size: 1.5rem;"></i> Edit Loan Specifications
+                                </h3>
+                                <form id="editSpecsForm" onsubmit="saveSpecsChanges(event)">
+                                    <input type="hidden" id="editSpecsType">
+                                    
+                                    <div class="form-group" style="margin-bottom: 20px;">
+                                        <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Loan Category</label>
+                                        <input type="text" id="editSpecsTitle" readonly class="control-input"
+                                            style="font-weight: 700; color: var(--gray-900); background: rgba(99, 102, 241, 0.04); border-color: rgba(99, 102, 241, 0.15);">
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 20px;">
+                                        <label for="editSpecsRate"
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Interest Rate (% Fixed P.A.)</label>
+                                        <input type="number" step="0.01" min="0.1" max="99.9" id="editSpecsRate" required
+                                            class="control-input" style="font-weight: 600;">
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 25px;">
+                                        <label for="editSpecsMax"
+                                            style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Maximum Limit Amount (₹)</label>
+                                        <input type="number" min="1000" max="999999999" id="editSpecsMax" required
+                                            class="control-input" style="font-weight: 600;">
+                                    </div>
+
+                                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                                        <button type="button" class="btn btn-secondary" onclick="closeEditSpecsModal()"
+                                            style="background: transparent !important; border: none !important; color: var(--gray-600) !important; padding: 10px 24px; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; transition: color 0.2s ease;">Cancel</button>
+                                        <button type="submit" class="btn btn-primary"
+                                            style="background: var(--gradient-primary) !important; border: none !important; color: white !important; padding: 10px 24px; font-weight: 700; border-radius: var(--radius-full); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25); transition: all 0.3s ease;">
+                                            <span>Save Changes</span>
+                                            <i class="bx bx-check-double" style="font-size: 1.1rem;"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
 
                         <!-- Loan Statement Modal Overlay -->
                         <c:if test="${not empty statementLoan}">
@@ -1651,33 +1919,70 @@
                                         </div>
 
                                         <!-- Official Header Subtitle (shown in both screen and print) -->
-                                        <div style="text-align: center; background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); padding: 10px 15px; margin-bottom: 25px;">
-                                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-500); text-transform: uppercase; letter-spacing: 1.5px;">Official Loan Amortization &amp; Repayment Statement</span>
+                                        <div
+                                            style="text-align: center; background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); padding: 10px 15px; margin-bottom: 25px;">
+                                            <span
+                                                style="font-size: 0.85rem; font-weight: 700; color: var(--primary-500); text-transform: uppercase; letter-spacing: 1.5px;">Official
+                                                Loan Amortization &amp; Repayment Statement</span>
                                         </div>
 
                                         <!-- Details grid (Bank details vs Borrower details) -->
-                                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 25px; margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; color: var(--gray-700);" class="mobile-grid-1">
+                                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 25px; margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; color: var(--gray-700);"
+                                            class="mobile-grid-1">
                                             <!-- Left: Bank Information -->
                                             <div style="border-right: 1px dashed var(--gray-300); padding-right: 20px;">
-                                                <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Bank Details</span>
-                                                <strong style="color: var(--gray-900);">Vertex Galaxy Bank (Corporate HQ)</strong>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">VGB Corporate Towers, BKC Road, Bandra Kurla Complex,<br>Mumbai, Maharashtra - 400051</p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">IFSC Branch Code: <strong style="font-family: monospace;">VGBK0000001</strong></p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Support Toll Free: 1800-VGB-BANK</p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Online Portal: www.vertexgalaxybank.com</p>
+                                                <span
+                                                    style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Bank
+                                                    Details</span>
+                                                <strong style="color: var(--gray-900);">Vertex Galaxy Bank (Corporate
+                                                    HQ)</strong>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">VGB Corporate
+                                                    Towers, BKC Road, Bandra Kurla Complex,<br>Mumbai, Maharashtra -
+                                                    400051</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">IFSC Branch Code:
+                                                    <strong style="font-family: monospace;">VGBK0000001</strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Support Toll Free:
+                                                    1800-VGB-BANK</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Online Portal:
+                                                    www.vertexgalaxybank.com</p>
                                             </div>
-                                            
+
                                             <!-- Right: Customer & Loan Details -->
                                             <div>
-                                                <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Customer &amp; Loan Details</span>
-                                                <strong style="color: var(--gray-900); font-size: 0.95rem; text-transform: uppercase;">${statementCustomer.firstName} ${statementCustomer.lastName}</strong>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Customer ID: <strong style="font-family: monospace;">#VGB-CUST-${statementCustomer.customerId}</strong></p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Res. Address: ${statementCustomer.address}, ${statementCustomer.city}, ${statementCustomer.state} - ${statementCustomer.zipCode}</p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Loan Reference: <strong style="font-family: monospace;">#LN-${statementLoan.loanId}</strong> (${statementLoan.loanType} Loan)</p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Principal Amount: <strong>₹<fmt:formatNumber value="${statementLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Interest Rate / Term: <strong>${statementLoan.interestRate}% P.A. / ${statementLoan.termMonths} Mos</strong></p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Accumulated Repaid: <strong style="color: var(--accent-emerald);">₹<fmt:formatNumber value="${totalRepaid}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
-                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Outstanding Balance: <strong style="color: var(--secondary-500);">₹<fmt:formatNumber value="${statementLoan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                                                <span
+                                                    style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px;">Customer
+                                                    &amp; Loan Details</span>
+                                                <strong
+                                                    style="color: var(--gray-900); font-size: 0.95rem; text-transform: uppercase;">${statementCustomer.firstName}
+                                                    ${statementCustomer.lastName}</strong>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Customer ID: <strong
+                                                        style="font-family: monospace;">#VGB-CUST-${statementCustomer.customerId}</strong>
+                                                </p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Res. Address:
+                                                    ${statementCustomer.address}, ${statementCustomer.city},
+                                                    ${statementCustomer.state} - ${statementCustomer.zipCode}</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Loan Reference:
+                                                    <strong
+                                                        style="font-family: monospace;">#LN-${statementLoan.loanId}</strong>
+                                                    (${statementLoan.loanType} Loan)</p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Principal Amount:
+                                                    <strong>₹
+                                                        <fmt:formatNumber value="${statementLoan.principalAmount}"
+                                                            minFractionDigits="2" maxFractionDigits="2" />
+                                                    </strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Interest Rate /
+                                                    Term: <strong>${statementLoan.interestRate}% P.A. /
+                                                        ${statementLoan.termMonths} Mos</strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Accumulated Repaid:
+                                                    <strong style="color: var(--accent-emerald);">₹
+                                                        <fmt:formatNumber value="${totalRepaid}" minFractionDigits="2"
+                                                            maxFractionDigits="2" />
+                                                    </strong></p>
+                                                <p style="margin: 4px 0 0; color: var(--gray-600);">Outstanding Balance:
+                                                    <strong style="color: var(--secondary-500);">₹
+                                                        <fmt:formatNumber value="${statementLoan.remainingBalance}"
+                                                            minFractionDigits="2" maxFractionDigits="2" />
+                                                    </strong></p>
                                             </div>
                                         </div>
 
@@ -1686,82 +1991,148 @@
                                             style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 15px;">
                                             <h4
                                                 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
-                                                <i class="bx bx-history" style="color: var(--primary-500);"></i> Repayment Ledger Log
+                                                <i class="bx bx-history" style="color: var(--primary-500);"></i>
+                                                Repayment Ledger Log
                                             </h4>
-                                            <button type="button" onclick="window.print()" class="btn btn-primary no-print"
+                                            <button type="button" onclick="window.print()"
+                                                class="btn btn-primary no-print"
                                                 style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px;">
                                                 <span>Print Document</span>
                                                 <i class="bx bx-printer"></i>
                                             </button>
                                         </div>
-                                        <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
+                                        <div
+                                            style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
                                             <table
                                                 style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;">
                                                 <thead>
                                                     <tr
                                                         style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Payment Date</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
-                                                        <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">
+                                                            Sr. No.</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Payment Date</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Type</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Description</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Status</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">
+                                                            Credit Amount</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">
+                                                            Debit Amount</th>
+                                                        <th
+                                                            style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">
+                                                            Total Amount</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <c:choose>
-                                                        <c:when test="${not empty statementRepayments || not empty statementLoan}">
+                                                        <c:when
+                                                            test="${not empty statementRepayments || not empty statementLoan}">
                                                             <c:set var="repaySr" value="0" />
-                                                            <c:set var="runningLoanBal" value="${statementLoan.remainingBalance}" />
-                                                            
+                                                            <c:set var="runningLoanBal"
+                                                                value="${statementLoan.remainingBalance}" />
+
                                                             <!-- Repayment rows -->
                                                             <c:forEach var="repay" items="${statementRepayments}">
                                                                 <c:set var="repaySr" value="${repaySr + 1}" />
                                                                 <tr
                                                                     style="border-bottom: 1px solid var(--gray-200); color: var(--gray-700); transition: background 0.15s ease;">
                                                                     <td
-                                                                        style="padding: 14px 16px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
-                                                                    <td style="padding: 14px 16px;">${repay.formattedRepaymentDate}</td>
-                                                                    <td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;">
-                                                                        <span class="txn-deposit" style="color: var(--accent-emerald) !important;">Repayment</span>
-                                                                    </td>
-                                                                    <td style="padding: 14px 16px;">EMI Repayment (Principal: ₹<fmt:formatNumber value="${repay.principalComponent}" minFractionDigits="2" maxFractionDigits="2"/>, Interest: ₹<fmt:formatNumber value="${repay.interestComponent}" minFractionDigits="2" maxFractionDigits="2"/>)</td>
+                                                                        style="padding: 14px 16px; font-weight: 600; color: var(--gray-500);">
+                                                                        <span class="badge-id">#${repaySr}</span></td>
                                                                     <td style="padding: 14px 16px;">
-                                                                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
+                                                                        ${repay.formattedRepaymentDate}</td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;">
+                                                                        <span class="txn-deposit"
+                                                                            style="color: var(--accent-emerald) !important;">Repayment</span>
                                                                     </td>
-                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #10b981;">
-                                                                        + ₹<fmt:formatNumber value="${repay.amountPaid}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    <td style="padding: 14px 16px;">EMI Repayment
+                                                                        (Principal: ₹
+                                                                        <fmt:formatNumber
+                                                                            value="${repay.principalComponent}"
+                                                                            minFractionDigits="2"
+                                                                            maxFractionDigits="2" />, Interest: ₹
+                                                                        <fmt:formatNumber
+                                                                            value="${repay.interestComponent}"
+                                                                            minFractionDigits="2"
+                                                                            maxFractionDigits="2" />)
                                                                     </td>
-                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444;">-</td>
-                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
-                                                                        ₹<fmt:formatNumber value="${runningLoanBal}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    <td style="padding: 14px 16px;">
+                                                                        <span
+                                                                            style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
+                                                                    </td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-align: right; font-weight: 700; color: #10b981;">
+                                                                        + ₹
+                                                                        <fmt:formatNumber value="${repay.amountPaid}"
+                                                                            minFractionDigits="2"
+                                                                            maxFractionDigits="2" />
+                                                                    </td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444;">
+                                                                        -</td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                                                        ₹
+                                                                        <fmt:formatNumber value="${runningLoanBal}"
+                                                                            minFractionDigits="2"
+                                                                            maxFractionDigits="2" />
                                                                     </td>
                                                                 </tr>
-                                                                <c:set var="runningLoanBal" value="${runningLoanBal + repay.principalComponent}" />
+                                                                <c:set var="runningLoanBal"
+                                                                    value="${runningLoanBal + repay.principalComponent}" />
                                                             </c:forEach>
-                                                            
+
                                                             <!-- Initial Disbursal row -->
                                                             <c:if test="${not empty statementLoan}">
                                                                 <c:set var="repaySr" value="${repaySr + 1}" />
                                                                 <tr
                                                                     style="border-bottom: 1px solid var(--gray-200); color: var(--gray-700); transition: background 0.15s ease;">
-                                                                    <td style="padding: 14px 16px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
-                                                                    <td style="padding: 14px 16px;">${statementLoan.startDate}</td>
-                                                                    <td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;">
-                                                                        <span class="txn-withdrawal" style="color: var(--secondary-500) !important;">Disbursal</span>
-                                                                    </td>
-                                                                    <td style="padding: 14px 16px;">Initial ${statementLoan.loanType} Loan Disbursal</td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; font-weight: 600; color: var(--gray-500);">
+                                                                        <span class="badge-id">#${repaySr}</span></td>
                                                                     <td style="padding: 14px 16px;">
-                                                                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
+                                                                        ${statementLoan.startDate}</td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;">
+                                                                        <span class="txn-withdrawal"
+                                                                            style="color: var(--secondary-500) !important;">Disbursal</span>
                                                                     </td>
-                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #10b981;">-</td>
-                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444;">
-                                                                        - ₹<fmt:formatNumber value="${statementLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    <td style="padding: 14px 16px;">Initial
+                                                                        ${statementLoan.loanType} Loan Disbursal</td>
+                                                                    <td style="padding: 14px 16px;">
+                                                                        <span
+                                                                            style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
                                                                     </td>
-                                                                    <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
-                                                                        ₹<fmt:formatNumber value="${statementLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-align: right; font-weight: 700; color: #10b981;">
+                                                                        -</td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444;">
+                                                                        - ₹
+                                                                        <fmt:formatNumber
+                                                                            value="${statementLoan.principalAmount}"
+                                                                            minFractionDigits="2"
+                                                                            maxFractionDigits="2" />
+                                                                    </td>
+                                                                    <td
+                                                                        style="padding: 14px 16px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                                                        ₹
+                                                                        <fmt:formatNumber
+                                                                            value="${statementLoan.principalAmount}"
+                                                                            minFractionDigits="2"
+                                                                            maxFractionDigits="2" />
                                                                     </td>
                                                                 </tr>
                                                             </c:if>
@@ -1770,7 +2141,8 @@
                                                             <tr>
                                                                 <td colspan="8"
                                                                     style="text-align: center; padding: 35px; color: var(--gray-400); font-style: italic;">
-                                                                    <i class="bx bx-info-circle" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i>
+                                                                    <i class="bx bx-info-circle"
+                                                                        style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i>
                                                                     No repayments recorded on this loan account ledger.
                                                                 </td>
                                                             </tr>
@@ -1805,102 +2177,151 @@
                                     <!-- Modal Controls (hidden in print) -->
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;"
                                         class="no-print">
-                                        <button type="button" class="btn btn-secondary"
-                                            onclick="closeStatementModal()" style="border-radius: var(--radius-full); padding: 10px 24px;">Close View</button>
+                                        <button type="button" class="btn btn-secondary" onclick="closeStatementModal()"
+                                            style="border-radius: var(--radius-full); padding: 10px 24px;">Close
+                                            View</button>
                                     </div>
                                 </div>
                             </div>
                         </c:if>
-                        
+
                         <!-- High-Fidelity Premium Loan Details Modal (Admin Side) -->
-                        <div id="adminLoanDetailsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1050; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-                            <div class="modal-content" style="width: 100%; max-width: 650px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; overflow: hidden;">
+                        <div id="adminLoanDetailsModal"
+                            style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1050; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
+                            <div class="modal-content"
+                                style="width: 100%; max-width: 650px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; overflow: hidden;">
                                 <!-- Header with premium gradient background -->
-                                <div style="padding: 25px 30px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); display: flex; justify-content: space-between; align-items: center; color: white;">
-                                    <h3 id="adminDetailsModalTitle" style="font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 10px; margin: 0; letter-spacing: 0.5px;">
+                                <div
+                                    style="padding: 25px 30px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); display: flex; justify-content: space-between; align-items: center; color: white;">
+                                    <h3 id="adminDetailsModalTitle"
+                                        style="font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 10px; margin: 0; letter-spacing: 0.5px;">
                                         <i class="bx bx-info-circle" style="font-size: 1.6rem;"></i>
                                         <span>Loan Product Specification</span>
                                     </h3>
-                                    <button type="button" onclick="closeAdminDetailsModal()" style="font-size: 1.6rem; color: rgba(255, 255, 255, 0.8); cursor: pointer; background: transparent; border: none; outline: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255, 255, 255, 0.8)'"><i class="bx bx-x"></i></button>
+                                    <button type="button" onclick="closeAdminDetailsModal()"
+                                        style="font-size: 1.6rem; color: rgba(255, 255, 255, 0.8); cursor: pointer; background: transparent; border: none; outline: none; transition: color 0.2s;"
+                                        onmouseover="this.style.color='#fff'"
+                                        onmouseout="this.style.color='rgba(255, 255, 255, 0.8)'"><i
+                                            class="bx bx-x"></i></button>
                                 </div>
-                                
+
                                 <!-- Body with loan type specifications -->
-                                <div style="padding: 30px; background: var(--gray-50); flex-grow: 1; max-height: 70vh; overflow-y: auto;">
+                                <div
+                                    style="padding: 30px; background: var(--gray-50); flex-grow: 1; max-height: 70vh; overflow-y: auto;">
                                     <!-- Overview Section -->
-                                    <div style="background: white; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--gray-200); margin-bottom: 20px;">
-                                        <p id="adminDetailsDescription" style="font-size: 0.95rem; color: var(--gray-700); line-height: 1.6; margin: 0;"></p>
+                                    <div
+                                        style="background: white; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--gray-200); margin-bottom: 20px;">
+                                        <p id="adminDetailsDescription"
+                                            style="font-size: 0.95rem; color: var(--gray-700); line-height: 1.6; margin: 0;">
+                                        </p>
                                     </div>
-                                    
+
                                     <!-- Rate & Limit badges -->
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-                                        <div style="background: rgba(99, 102, 241, 0.05); border: 1.5px solid rgba(99, 102, 241, 0.15); padding: 15px; border-radius: var(--radius-md); text-align: center;">
-                                            <span style="font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Fixed Interest Rate</span>
-                                            <strong id="adminDetailsInterestRate" style="font-size: 1.6rem; color: var(--primary-600); font-weight: 800; display: block; margin-top: 5px;"></strong>
+                                    <div
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                                        <div
+                                            style="background: rgba(99, 102, 241, 0.05); border: 1.5px solid rgba(99, 102, 241, 0.15); padding: 15px; border-radius: var(--radius-md); text-align: center;">
+                                            <span
+                                                style="font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Fixed
+                                                Interest Rate</span>
+                                            <strong id="adminDetailsInterestRate"
+                                                style="font-size: 1.6rem; color: var(--primary-600); font-weight: 800; display: block; margin-top: 5px;"></strong>
                                         </div>
-                                        <div style="background: rgba(16, 185, 129, 0.05); border: 1.5px solid rgba(16, 185, 129, 0.15); padding: 15px; border-radius: var(--radius-md); text-align: center;">
-                                            <span style="font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Maximum Credit Limit</span>
-                                            <strong id="adminDetailsMaxLimit" style="font-size: 1.6rem; color: var(--accent-emerald); font-weight: 800; display: block; margin-top: 5px;"></strong>
+                                        <div
+                                            style="background: rgba(16, 185, 129, 0.05); border: 1.5px solid rgba(16, 185, 129, 0.15); padding: 15px; border-radius: var(--radius-md); text-align: center;">
+                                            <span
+                                                style="font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Maximum
+                                                Credit Limit</span>
+                                            <strong id="adminDetailsMaxLimit"
+                                                style="font-size: 1.6rem; color: var(--accent-emerald); font-weight: 800; display: block; margin-top: 5px;"></strong>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Benefits grid -->
                                     <div style="margin-bottom: 25px;">
-                                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                                            <i class="bx bx-check-shield" style="color: var(--primary-500); font-size: 1.25rem;"></i>
+                                        <h4
+                                            style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                            <i class="bx bx-check-shield"
+                                                style="color: var(--primary-500); font-size: 1.25rem;"></i>
                                             <span>Key Product Benefits</span>
                                         </h4>
-                                        <ul id="adminDetailsBenefits" style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 8px;">
+                                        <ul id="adminDetailsBenefits"
+                                            style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 8px;">
                                         </ul>
                                     </div>
 
                                     <!-- Eligibility & Docs columns -->
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="mobile-grid-1">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;"
+                                        class="mobile-grid-1">
                                         <div>
-                                            <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                                                <i class="bx bx-user" style="color: var(--primary-500); font-size: 1.25rem;"></i>
+                                            <h4
+                                                style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                                <i class="bx bx-user"
+                                                    style="color: var(--primary-500); font-size: 1.25rem;"></i>
                                                 <span>Eligibility Criteria</span>
                                             </h4>
-                                            <ul id="adminDetailsEligibility" style="padding-left: 20px; margin: 0; font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
+                                            <ul id="adminDetailsEligibility"
+                                                style="padding-left: 20px; margin: 0; font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
                                             </ul>
                                         </div>
                                         <div>
-                                            <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                                                <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.25rem;"></i>
+                                            <h4
+                                                style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                                <i class="bx bx-file"
+                                                    style="color: var(--primary-500); font-size: 1.25rem;"></i>
                                                 <span>Required Documentation</span>
                                             </h4>
-                                            <ul id="adminDetailsDocuments" style="padding-left: 20px; margin: 0; font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
+                                            <ul id="adminDetailsDocuments"
+                                                style="padding-left: 20px; margin: 0; font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Footer buttons -->
-                                <div style="padding: 20px 30px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 15px; background: white;">
-                                    <button type="button" class="btn btn-secondary" onclick="closeAdminDetailsModal()" style="padding: 10px 22px;">Close</button>
-                                    <button type="button" id="adminDetailsApplyBtn" class="btn btn-primary" style="padding: 10px 25px; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
+                                <div
+                                    style="padding: 20px 30px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 15px; background: white; align-items: center;">
+                                    <button type="button" class="btn btn-secondary" onclick="closeAdminDetailsModal()"
+                                        style="padding: 10px 22px;">Close</button>
+                                    <button type="button" id="adminDetailsEditSpecsBtn" class="edit-specs-btn"
+                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                                        title="Edit Interest Rate and Max Limit">
+                                        <i class="bx bx-cog" style="font-size: 1.35rem; vertical-align: middle;"></i>
+                                    </button>
+                                    <button type="button" id="adminDetailsApplyBtn" class="btn btn-primary"
+                                        style="padding: 10px 25px; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
                                         <span>Apply Now</span>
                                         <i class="bx bx-chevron-right"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Admin Apply Loan Modal -->
-                        <div id="adminApplyModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-                            <div class="modal-content" style="width: 100%; max-width: 850px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; max-height: 90vh;">
-                                <div class="modal-header no-print" style="padding: 20px 30px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);">
-                                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px; margin: 0;">
+                        <div id="adminApplyModal"
+                            style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
+                            <div class="modal-content"
+                                style="width: 100%; max-width: 850px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; max-height: 90vh;">
+                                <div class="modal-header no-print"
+                                    style="padding: 20px 30px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);">
+                                    <h3
+                                        style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px; margin: 0;">
                                         <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.5rem;"></i>
-                                        <span id="adminApplyModalTitle">Official Loan Application Form (Admin Portal)</span>
+                                        <span id="adminApplyModalTitle">Official Loan Application Form (Admin
+                                            Portal)</span>
                                     </h3>
-                                    <button type="button" onclick="closeAdminApplyModal()" style="font-size: 1.5rem; color: var(--gray-400); cursor: pointer; background: transparent; border: none; outline: none;"><i class="bx bx-x"></i></button>
+                                    <button type="button" onclick="closeAdminApplyModal()"
+                                        style="font-size: 1.5rem; color: var(--gray-400); cursor: pointer; background: transparent; border: none; outline: none;"><i
+                                            class="bx bx-x"></i></button>
                                 </div>
-                                <div class="modal-body" style="padding: 30px; overflow-y: auto; flex-grow: 1; background: var(--gray-100);">
-                                    <form id="adminApplyForm" action="${pageContext.request.contextPath}/loan" method="post" onsubmit="return serializeAdminLoanForm(event)">
+                                <div class="modal-body"
+                                    style="padding: 30px; overflow-y: auto; flex-grow: 1; background: var(--gray-100);">
+                                    <form id="adminApplyForm" action="${pageContext.request.contextPath}/loan"
+                                        method="post" onsubmit="return serializeAdminLoanForm(event)">
                                         <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                                         <input type="hidden" id="submitFormAction" name="action" value="apply">
                                         <input type="hidden" id="submitAdminLoanId" name="loanId" value="">
-                                        
+
                                         <!-- Main hidden inputs submitted to server -->
                                         <input type="hidden" id="submitAdminLoanType" name="loanType">
                                         <input type="hidden" id="submitAdminAmount" name="amount">
@@ -1909,24 +2330,23 @@
                                         <input type="hidden" id="adminSubmitFormDetails" name="formDetails">
 
                                         <!-- Select Customer Dropdown (outside printable page area but inside form) -->
-                                        <div class="no-print" style="background: white; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow-sm);">
-                                            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--gray-700); margin-bottom: 8px;">Select Customer Profile to Apply For:</label>
-                                            <select id="adminApplyCustomerId" name="customerId" required onchange="syncAdminCustomerDetails(this)" class="control-select" style="font-weight: 600;">
+                                        <div class="no-print"
+                                            style="background: white; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow-sm);">
+                                            <label
+                                                style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--gray-700); margin-bottom: 8px;">Select
+                                                Customer Profile to Apply For:</label>
+                                            <select id="adminApplyCustomerId" name="customerId" required
+                                                onchange="syncAdminCustomerDetails(this)" class="control-select"
+                                                style="font-weight: 600;">
                                                 <option value="" disabled selected>-- Choose Customer --</option>
                                                 <c:forEach var="cust" items="${customers}">
-                                                    <option value="${cust.customerId}"
-                                                            data-fullname="${cust.fullName}"
-                                                            data-phone="${cust.phoneNo}"
-                                                            data-email="${cust.email}"
-                                                            data-aadhaar="${cust.aadhaarCard}"
-                                                            data-pan="${cust.panCard}"
-                                                            data-address="${cust.address}"
-                                                            data-city="${cust.city}"
-                                                            data-state="${cust.state}"
-                                                            data-zipcode="${cust.zipCode}"
-                                                            data-dob="${cust.dob}"
-                                                            data-gender="${cust.gender}"
-                                                            data-occupation="${cust.occupation}">
+                                                    <option value="${cust.customerId}" data-fullname="${cust.fullName}"
+                                                        data-phone="${cust.phoneNo}" data-email="${cust.email}"
+                                                        data-aadhaar="${cust.aadhaarCard}" data-pan="${cust.panCard}"
+                                                        data-address="${cust.address}" data-city="${cust.city}"
+                                                        data-state="${cust.state}" data-zipcode="${cust.zipCode}"
+                                                        data-dob="${cust.dob}" data-gender="${cust.gender}"
+                                                        data-occupation="${cust.occupation}">
                                                         ${cust.fullName} (ID: #${cust.customerId})
                                                     </option>
                                                 </c:forEach>
@@ -1941,64 +2361,83 @@
                                             <table>
                                                 <tr>
                                                     <td style="width: 30%; font-weight: bold;">Full Name:</td>
-                                                    <td style="width: 70%;"><input type="text" id="adminFormFullName" readonly style="font-weight: 600;"></td>
+                                                    <td style="width: 70%;"><input type="text" id="adminFormFullName"
+                                                            readonly style="font-weight: 600;"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight: bold;">Father's / Husband's Name:</td>
-                                                    <td><input type="text" id="adminFormRelationName" placeholder="___________________________" required></td>
+                                                    <td style="width: 30%; font-weight: bold;">Father's / Husband's Name:</td>
+                                                    <td style="width: 70%;"><input type="text" id="adminFormRelationName"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight: bold;">Date of Birth:</td>
-                                                    <td><input type="date" id="adminFormDob" required></td>
+                                                    <td style="width: 30%; font-weight: bold;">Date of Birth:</td>
+                                                    <td style="width: 70%;"><input type="date" id="adminFormDob" required></td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight: bold;">Gender:</td>
-                                                    <td>
+                                                    <td style="width: 30%; font-weight: bold;">Gender:</td>
+                                                    <td style="width: 70%;">
                                                         <div style="display: flex; gap: 20px;">
-                                                            <label><input type="radio" name="adminFormGender" value="Male" required> Male</label>
-                                                            <label><input type="radio" name="adminFormGender" value="Female"> Female</label>
-                                                            <label><input type="radio" name="adminFormGender" value="Other"> Other</label>
+                                                            <label><input type="radio" name="adminFormGender"
+                                                                    value="Male" required> Male</label>
+                                                            <label><input type="radio" name="adminFormGender"
+                                                                    value="Female"> Female</label>
+                                                            <label><input type="radio" name="adminFormGender"
+                                                                    value="Other"> Other</label>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight: bold;">Mobile Number:</td>
-                                                    <td><input type="text" id="adminFormMobile" readonly></td>
+                                                    <td style="width: 30%; font-weight: bold;">Mobile Number:</td>
+                                                    <td style="width: 70%;"><input type="text" id="adminFormMobile" readonly></td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="font-weight: bold;">Email Address:</td>
-                                                    <td><input type="text" id="adminFormEmail" readonly></td>
+                                                    <td style="width: 30%; font-weight: bold;">Email Address:</td>
+                                                    <td style="width: 70%;"><input type="text" id="adminFormEmail" readonly></td>
                                                 </tr>
                                             </table>
 
                                             <!-- 2. Address Details -->
                                             <h2>2. Address Details</h2>
-                                            <h3 style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 10px 0 5px 0;">Current Address</h3>
-                                            <div id="adminFormCurrentAddressDisplay" style="border-bottom: 1px dotted #475569; padding: 5px 0 10px 0; margin-bottom: 10px; font-weight: 600; min-height: 25px;"></div>
+                                            <h3
+                                                style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 10px 0 5px 0;">
+                                                Current Address</h3>
+                                            <div id="adminFormCurrentAddressDisplay"
+                                                style="border-bottom: 1px dotted #475569; padding: 5px 0 10px 0; margin-bottom: 10px; font-weight: 600; min-height: 25px;">
+                                            </div>
                                             <input type="hidden" id="adminFormCurrentAddressHidden">
 
-                                            <h3 style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 15px 0 5px 0;">Permanent Address</h3>
+                                            <h3
+                                                style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 15px 0 5px 0;">
+                                                Permanent Address</h3>
                                             <div style="margin-bottom: 10px;" class="no-print">
                                                 <label style="font-size: 0.85rem; font-weight: 600; cursor: pointer;">
-                                                    <input type="checkbox" id="adminFormSameAsCurrent" onchange="copyAdminCurrentAddress(this)"> Same as Current Address
+                                                    <input type="checkbox" id="adminFormSameAsCurrent"
+                                                        onchange="copyAdminCurrentAddress(this)"> Same as Current
+                                                    Address
                                                 </label>
                                             </div>
-                                            <textarea id="adminFormPermanentAddress" placeholder="______________________________________________________" required style="width: 100%; border: none; border-bottom: 1px dotted #475569; font-family: inherit; font-size: inherit; font-weight: 600; outline: none; background: transparent; resize: none; height: 50px;"></textarea>
+                                            <textarea id="adminFormPermanentAddress"
+                                                placeholder="______________________________________________________"
+                                                required
+                                                style="width: 100%; border: none; border-bottom: 1px dotted #475569; font-family: inherit; font-size: inherit; font-weight: 600; outline: none; background: transparent; resize: none; height: 50px;"></textarea>
 
                                             <!-- 3. Identity Details -->
                                             <h2>3. Identity Details</h2>
                                             <table>
                                                 <tr>
                                                     <td style="width: 35%; font-weight: bold;">Aadhaar Number:</td>
-                                                    <td style="width: 65%;"><input type="text" id="adminFormAadhaar" readonly></td>
+                                                    <td style="width: 65%;"><input type="text" id="adminFormAadhaar"
+                                                            readonly></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">PAN Number:</td>
-                                                    <td><input type="text" id="adminFormPan" readonly style="text-transform: uppercase;"></td>
+                                                    <td><input type="text" id="adminFormPan" readonly
+                                                            style="text-transform: uppercase;"></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Voter ID / Driving License No.:</td>
-                                                    <td><input type="text" id="adminFormVoterDl" placeholder="___________________________" required></td>
+                                                    <td><input type="text" id="adminFormVoterDl"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                             </table>
 
@@ -2007,49 +2446,65 @@
                                             <table>
                                                 <tr>
                                                     <td style="width: 35%; font-weight: bold;">Occupation:</td>
-                                                    <td style="width: 65%;"><input type="text" id="adminFormOccupation" placeholder="___________________________" required></td>
+                                                    <td style="width: 65%;"><input type="text" id="adminFormOccupation"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Company / Business Name:</td>
-                                                    <td><input type="text" id="adminFormCompanyName" placeholder="___________________________" required></td>
+                                                    <td><input type="text" id="adminFormCompanyName"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Monthly Income:</td>
-                                                    <td><input type="number" id="adminFormMonthlyIncome" placeholder="₹ ______________________" required min="1000"></td>
+                                                    <td><input type="number" id="adminFormMonthlyIncome"
+                                                            placeholder="₹ ______________________" required min="1000">
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Work Experience:</td>
-                                                    <td><input type="text" id="adminFormExperience" placeholder="_____________________" required></td>
+                                                    <td><input type="text" id="adminFormExperience"
+                                                            placeholder="_____________________" required></td>
                                                 </tr>
                                             </table>
 
                                             <!-- 5. Bank Account Details -->
                                             <h2>5. Bank Account Details</h2>
-                                            <p style="font-size: 0.85rem; font-style: italic; color: #64748b; margin-bottom: 10px;" class="no-print">Choose one of the customer's active VGB savings or checking accounts to link with this loan for disbursal and EMI payments.</p>
+                                            <p style="font-size: 0.85rem; font-style: italic; color: #64748b; margin-bottom: 10px;"
+                                                class="no-print">Choose one of the customer's active VGB savings or
+                                                checking accounts to link with this loan for disbursal and EMI payments.
+                                            </p>
                                             <table>
                                                 <tr class="no-print">
-                                                    <td style="width: 35%; font-weight: bold;">Select Account to Link:</td>
+                                                    <td style="width: 35%; font-weight: bold;">Select Account to Link:
+                                                    </td>
                                                     <td style="width: 65%;">
-                                                        <select id="adminFormLinkAccount" onchange="syncAdminLinkedAccountDetails(this)" style="font-weight: 600; padding: 5px; cursor: pointer;">
-                                                            <option value="" disabled selected>-- Select Customer VGB Account --</option>
+                                                        <select id="adminFormLinkAccount"
+                                                            onchange="syncAdminLinkedAccountDetails(this)"
+                                                            style="font-weight: 600; padding: 5px; cursor: pointer;">
+                                                            <option value="" disabled selected>-- Select Customer VGB
+                                                                Account --</option>
                                                         </select>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width: 35%; font-weight: bold;">Account Holder Name:</td>
-                                                    <td style="width: 65%;"><input type="text" id="adminFormAccHolderName" readonly></td>
+                                                    <td style="width: 65%;"><input type="text"
+                                                            id="adminFormAccHolderName" readonly></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Account Number:</td>
-                                                    <td><input type="text" id="adminFormAccNo" readonly placeholder="___________________________" required></td>
+                                                    <td><input type="text" id="adminFormAccNo" readonly
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">IFSC Code:</td>
-                                                    <td><input type="text" id="adminFormIfsc" readonly placeholder="___________________________" required></td>
+                                                    <td><input type="text" id="adminFormIfsc" readonly
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Branch:</td>
-                                                    <td><input type="text" id="adminFormBranch" readonly value="VGB Main Branch" style="font-weight: 600;"></td>
+                                                    <td><input type="text" id="adminFormBranch" readonly
+                                                            value="VGB Main Branch" style="font-weight: 600;"></td>
                                                 </tr>
                                             </table>
 
@@ -2058,18 +2513,26 @@
                                             <table>
                                                 <tr>
                                                     <td style="width: 35%; font-weight: bold;">Loan Type:</td>
-                                                    <td style="width: 65%;"><input type="text" id="adminFormLoanTypeDisplay" readonly style="font-weight: bold; text-transform: uppercase;"></td>
+                                                    <td style="width: 65%;"><input type="text"
+                                                            id="adminFormLoanTypeDisplay" readonly
+                                                            style="font-weight: bold; text-transform: uppercase;"></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Requested Amount (₹):</td>
-                                                    <td><input type="number" id="adminFormLoanAmount" placeholder="______________________" required oninput="calculateAdminPaperEMI()"></td>
+                                                    <td><input type="number" id="adminFormLoanAmount"
+                                                            placeholder="______________________" required
+                                                            oninput="calculateAdminPaperEMI()"></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Tenure Duration:</td>
                                                     <td>
                                                         <div style="display: flex; gap: 10px;">
-                                                            <input type="number" id="adminFormLoanTermVal" placeholder="Tenure" required style="width: 60%;" oninput="syncAdminPaperTermMonths()">
-                                                            <select id="adminFormLoanTermUnit" style="width: 40%; font-weight: 600;" onchange="syncAdminPaperTermMonths()">
+                                                            <input type="number" id="adminFormLoanTermVal"
+                                                                placeholder="Tenure" required style="width: 60%;"
+                                                                oninput="syncAdminPaperTermMonths()">
+                                                            <select id="adminFormLoanTermUnit"
+                                                                style="width: 40%; font-weight: 600;"
+                                                                onchange="syncAdminPaperTermMonths()">
                                                                 <option value="years" selected>Years</option>
                                                                 <option value="months">Months</option>
                                                             </select>
@@ -2079,15 +2542,18 @@
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Fixed Interest Rate:</td>
-                                                    <td><input type="text" id="adminFormLoanRate" readonly style="font-weight: 600; color: var(--primary-500);"></td>
+                                                    <td><input type="text" id="adminFormLoanRate" readonly
+                                                            style="font-weight: 600; color: var(--primary-500);"></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Purpose of Loan:</td>
-                                                    <td><input type="text" id="adminFormLoanPurpose" placeholder="___________________________" required></td>
+                                                    <td><input type="text" id="adminFormLoanPurpose"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Estimated Monthly EMI:</td>
-                                                    <td style="font-weight: bold; font-size: 1.1rem; color: #0f172a;" id="adminFormPaperEmiDisplay">₹ 0.00</td>
+                                                    <td style="font-weight: bold; font-size: 1.1rem; color: #0f172a;"
+                                                        id="adminFormPaperEmiDisplay">₹ 0.00</td>
                                                 </tr>
                                             </table>
 
@@ -2096,55 +2562,83 @@
                                             <table>
                                                 <tr>
                                                     <td style="width: 35%; font-weight: bold;">Nominee Name:</td>
-                                                    <td style="width: 65%;"><input type="text" id="adminFormNomineeName" placeholder="___________________________" required></td>
+                                                    <td style="width: 65%;"><input type="text" id="adminFormNomineeName"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Relationship with Applicant:</td>
-                                                    <td><input type="text" id="adminFormNomineeRelationship" placeholder="___________________________" required></td>
+                                                    <td><input type="text" id="adminFormNomineeRelationship"
+                                                            placeholder="___________________________" required></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Nominee Mobile Number:</td>
-                                                    <td><input type="text" id="adminFormNomineeMobile" placeholder="___________________________" required pattern="[0-9]{10}"></td>
+                                                    <td><input type="text" id="adminFormNomineeMobile"
+                                                            placeholder="___________________________" required
+                                                            pattern="[0-9]{10}"></td>
                                                 </tr>
                                             </table>
 
                                             <!-- 8. Declaration -->
                                             <h2>8. Declaration</h2>
-                                            <div style="margin-bottom: 20px; font-size: 0.9rem; text-align: justify; line-height: 1.5; color: #334155;">
-                                                <label style="cursor: pointer; display: flex; gap: 10px; align-items: flex-start;">
-                                                    <input type="checkbox" id="adminFormDeclarationCheckbox" required style="margin-top: 4px;">
-                                                    <span>I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief and I undertake to inform Vertex Galaxy Bank of any changes therein, immediately. In case any of the above information is found to be false or untrue or misleading, I am aware that I may be held liable for it. I authorize the Bank to debit my linked account for recovery of EMI.</span>
+                                            <div
+                                                style="margin-bottom: 20px; font-size: 0.9rem; text-align: justify; line-height: 1.5; color: #334155;">
+                                                <label
+                                                    style="cursor: pointer; display: flex; gap: 10px; align-items: flex-start;">
+                                                    <input type="checkbox" id="adminFormDeclarationCheckbox" required
+                                                        style="margin-top: 4px;">
+                                                    <span>I hereby declare that the details furnished above are true and
+                                                        correct to the best of my knowledge and belief and I undertake
+                                                        to inform Vertex Galaxy Bank of any changes therein,
+                                                        immediately. In case any of the above information is found to be
+                                                        false or untrue or misleading, I am aware that I may be held
+                                                        liable for it. I authorize the Bank to debit my linked account
+                                                        for recovery of EMI.</span>
                                                 </label>
                                             </div>
 
-                                            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px;">
+                                            <div
+                                                style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px;">
                                                 <div>
                                                     <table style="margin-bottom: 0;">
                                                         <tr>
                                                             <td style="width: 30%; font-weight: bold;">Date:</td>
-                                                            <td style="width: 70%;"><input type="text" id="adminFormDeclarationDate" readonly></td>
+                                                            <td style="width: 70%;"><input type="text"
+                                                                    id="adminFormDeclarationDate" readonly></td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold;">Place:</td>
-                                                            <td><input type="text" id="adminFormDeclarationPlace" placeholder="___________________________" required></td>
+                                                            <td><input type="text" id="adminFormDeclarationPlace"
+                                                                    placeholder="___________________________" required>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </div>
-                                                <div style="text-align: center; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
-                                                    <input type="text" id="adminFormSignature" placeholder="Type to sign" required style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.5rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
-                                                    <span style="font-size: 0.75rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px; display: block;">Applicant's Signature</span>
+                                                <div
+                                                    style="text-align: center; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+                                                    <input type="text" id="adminFormSignature"
+                                                        placeholder="Type to sign" required
+                                                        style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.5rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
+                                                    <span
+                                                        style="font-size: 0.75rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px; display: block;">Applicant's
+                                                        Signature</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Action Buttons (inside form, shown only on screen) -->
-                                        <div class="no-print" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
-                                            <button type="button" class="btn btn-secondary" onclick="closeAdminApplyModal()" style="padding: 10px 22px;">Close</button>
-                                            <button type="button" class="btn btn-secondary" onclick="printAdminApplyForm()" style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
+                                        <div class="no-print"
+                                            style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                                            <button type="button" class="btn btn-secondary"
+                                                onclick="closeAdminApplyModal()"
+                                                style="padding: 10px 22px;">Close</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                onclick="printAdminApplyForm()"
+                                                style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
                                                 <i class="bx bx-printer"></i>
                                                 <span>Print Form</span>
                                             </button>
-                                            <button type="submit" class="btn btn-primary" style="padding: 10px 25px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none;">
+                                            <button type="submit" class="btn btn-primary"
+                                                style="padding: 10px 25px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none;">
                                                 <span>Submit Application</span>
                                                 <i class="bx bx-paper-plane"></i>
                                             </button>
@@ -2155,29 +2649,39 @@
                         </div>
 
                         <!-- Admin View Loan Application Modal -->
-                        <div id="adminViewModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-                            <div class="modal-content" style="width: 100%; max-width: 850px; display: flex; flex-direction: column; max-height: 90vh;">
+                        <div id="adminViewModal"
+                            style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
+                            <div class="modal-content"
+                                style="width: 100%; max-width: 850px; display: flex; flex-direction: column; max-height: 90vh;">
                                 <div class="modal-header no-print">
-                                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px;">
+                                    <h3
+                                        style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px;">
                                         <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.5rem;"></i>
                                         <span>Review Loan Application File</span>
                                     </h3>
-                                    <button type="button" onclick="closeAdminViewModal()" style="font-size: 1.5rem; color: var(--gray-400); cursor: pointer; background: transparent; border: none; outline: none; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-900)'" onmouseout="this.style.color='var(--gray-400)'"><i class="bx bx-x"></i></button>
+                                    <button type="button" onclick="closeAdminViewModal()"
+                                        style="font-size: 1.5rem; color: var(--gray-400); cursor: pointer; background: transparent; border: none; outline: none; transition: color 0.2s;"
+                                        onmouseover="this.style.color='var(--gray-900)'"
+                                        onmouseout="this.style.color='var(--gray-400)'"><i class="bx bx-x"></i></button>
                                 </div>
-                                
-                                <div class="modal-body" style="padding: 30px; overflow-y: auto; flex-grow: 1; background: var(--gray-100);">
+
+                                <div class="modal-body"
+                                    style="padding: 30px; overflow-y: auto; flex-grow: 1; background: var(--gray-100);">
                                     <div class="loan-paper-form">
-                                        <div style="text-align: right; font-family: monospace; font-size: 0.8rem; color: var(--gray-500); margin-bottom: 10px;">
-                                            LOAN APPLICATION REF: <span id="adminViewLoanId" style="font-weight: bold;"></span>
+                                        <div
+                                            style="text-align: right; font-family: monospace; font-size: 0.8rem; color: var(--gray-500); margin-bottom: 10px;">
+                                            LOAN APPLICATION REF: <span id="adminViewLoanId"
+                                                style="font-weight: bold;"></span>
                                         </div>
                                         <h1>Loan Application Form</h1>
-                                        
+
                                         <!-- 1. Applicant Information -->
                                         <h2>1. Applicant Information</h2>
                                         <table>
                                             <tr>
                                                 <td style="width: 30%; font-weight: bold;">Full Name:</td>
-                                                <td style="width: 70%;"><input type="text" id="adminFormFullName" readonly style="font-weight: 600;"></td>
+                                                <td style="width: 70%;"><input type="text" id="adminFormFullName"
+                                                        readonly style="font-weight: 600;"></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Father's / Husband's Name:</td>
@@ -2203,22 +2707,32 @@
 
                                         <!-- 2. Address Details -->
                                         <h2>2. Address Details</h2>
-                                        <h3 style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 10px 0 5px 0;">Current Address</h3>
-                                        <div id="adminFormCurrentAddress" style="border-bottom: 1px dotted #475569; padding: 5px 0; font-weight: 600;"></div>
+                                        <h3
+                                            style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 10px 0 5px 0;">
+                                            Current Address</h3>
+                                        <div id="adminFormCurrentAddress"
+                                            style="border-bottom: 1px dotted #475569; padding: 5px 0; font-weight: 600;">
+                                        </div>
 
-                                        <h3 style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 15px 0 5px 0;">Permanent Address</h3>
-                                        <div id="adminFormPermanentAddress" style="border-bottom: 1px dotted #475569; padding: 5px 0; font-weight: 600; min-height: 25px;"></div>
+                                        <h3
+                                            style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 15px 0 5px 0;">
+                                            Permanent Address</h3>
+                                        <div id="adminFormPermanentAddress"
+                                            style="border-bottom: 1px dotted #475569; padding: 5px 0; font-weight: 600; min-height: 25px;">
+                                        </div>
 
                                         <!-- 3. Identity Details -->
                                         <h2>3. Identity Details</h2>
                                         <table>
                                             <tr>
                                                 <td style="width: 35%; font-weight: bold;">Aadhaar Number:</td>
-                                                <td style="width: 65%;"><input type="text" id="adminFormAadhaar" readonly></td>
+                                                <td style="width: 65%;"><input type="text" id="adminFormAadhaar"
+                                                        readonly></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">PAN Number:</td>
-                                                <td><input type="text" id="adminFormPan" readonly style="text-transform: uppercase;"></td>
+                                                <td><input type="text" id="adminFormPan" readonly
+                                                        style="text-transform: uppercase;"></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Voter ID / Driving License No.:</td>
@@ -2231,7 +2745,8 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 35%; font-weight: bold;">Occupation:</td>
-                                                <td style="width: 65%;"><input type="text" id="adminFormOccupation" readonly></td>
+                                                <td style="width: 65%;"><input type="text" id="adminFormOccupation"
+                                                        readonly></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Company / Business Name:</td>
@@ -2239,7 +2754,8 @@
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Monthly Income:</td>
-                                                <td><input type="text" id="adminFormMonthlyIncome" readonly style="font-weight: 600;"></td>
+                                                <td><input type="text" id="adminFormMonthlyIncome" readonly
+                                                        style="font-weight: 600;"></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Work Experience:</td>
@@ -2252,7 +2768,8 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 35%; font-weight: bold;">Account Holder Name:</td>
-                                                <td style="width: 65%;"><input type="text" id="adminFormAccHolderName" readonly></td>
+                                                <td style="width: 65%;"><input type="text" id="adminFormAccHolderName"
+                                                        readonly></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Account Number:</td>
@@ -2273,11 +2790,14 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 35%; font-weight: bold;">Loan Type:</td>
-                                                <td style="width: 65%;"><input type="text" id="adminFormLoanType" readonly style="font-weight: bold; text-transform: uppercase;"></td>
+                                                <td style="width: 65%;"><input type="text" id="adminFormLoanType"
+                                                        readonly style="font-weight: bold; text-transform: uppercase;">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Requested Amount (₹):</td>
-                                                <td><input type="text" id="adminFormLoanAmount" readonly style="font-weight: bold;"></td>
+                                                <td><input type="text" id="adminFormLoanAmount" readonly
+                                                        style="font-weight: bold;"></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Tenure Duration:</td>
@@ -2285,7 +2805,8 @@
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Fixed Interest Rate:</td>
-                                                <td><input type="text" id="adminFormLoanRate" readonly style="font-weight: 600; color: var(--primary-500);"></td>
+                                                <td><input type="text" id="adminFormLoanRate" readonly
+                                                        style="font-weight: 600; color: var(--primary-500);"></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Purpose of Loan:</td>
@@ -2293,7 +2814,8 @@
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Estimated Monthly EMI:</td>
-                                                <td style="font-weight: bold; font-size: 1.1rem; color: #0f172a;" id="adminFormPaperEmiDisplay">₹ 0.00</td>
+                                                <td style="font-weight: bold; font-size: 1.1rem; color: #0f172a;"
+                                                    id="adminFormPaperEmiDisplay">₹ 0.00</td>
                                             </tr>
                                         </table>
 
@@ -2302,7 +2824,8 @@
                                         <table>
                                             <tr>
                                                 <td style="width: 35%; font-weight: bold;">Nominee Name:</td>
-                                                <td style="width: 65%;"><input type="text" id="adminFormNomineeName" readonly></td>
+                                                <td style="width: 65%;"><input type="text" id="adminFormNomineeName"
+                                                        readonly></td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight: bold;">Relationship with Applicant:</td>
@@ -2316,42 +2839,61 @@
 
                                         <!-- 8. Declaration -->
                                         <h2>8. Declaration</h2>
-                                        <div style="margin-bottom: 20px; font-size: 0.9rem; text-align: justify; line-height: 1.5; color: #334155;">
-                                            <span>I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief and I undertake to inform Vertex Galaxy Bank of any changes therein, immediately. In case any of the above information is found to be false or untrue or misleading, I am aware that I may be held liable for it. I authorize the Bank to debit my linked account for recovery of EMI.</span>
+                                        <div
+                                            style="margin-bottom: 20px; font-size: 0.9rem; text-align: justify; line-height: 1.5; color: #334155;">
+                                            <span>I hereby declare that the details furnished above are true and correct
+                                                to the best of my knowledge and belief and I undertake to inform Vertex
+                                                Galaxy Bank of any changes therein, immediately. In case any of the
+                                                above information is found to be false or untrue or misleading, I am
+                                                aware that I may be held liable for it. I authorize the Bank to debit my
+                                                linked account for recovery of EMI.</span>
                                         </div>
 
-                                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px;">
+                                        <div
+                                            style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px;">
                                             <div>
                                                 <table style="margin-bottom: 0;">
                                                     <tr>
                                                         <td style="width: 30%; font-weight: bold;">Date:</td>
-                                                        <td style="width: 70%;"><input type="text" id="adminFormDeclarationDate" readonly></td>
+                                                        <td style="width: 70%;"><input type="text"
+                                                                id="adminFormDeclarationDate" readonly></td>
                                                     </tr>
                                                     <tr>
                                                         <td style="font-weight: bold;">Place:</td>
-                                                        <td><input type="text" id="adminFormDeclarationPlace" readonly></td>
+                                                        <td><input type="text" id="adminFormDeclarationPlace" readonly>
+                                                        </td>
                                                     </tr>
                                                 </table>
                                             </div>
-                                            <div style="text-align: center; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
-                                                <input type="text" id="adminFormSignature" readonly style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.5rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
-                                                <span style="font-size: 0.75rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px; display: block;">Applicant's Signature</span>
+                                            <div
+                                                style="text-align: center; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+                                                <input type="text" id="adminFormSignature" readonly
+                                                    style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.5rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
+                                                <span
+                                                    style="font-size: 0.75rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px; display: block;">Applicant's
+                                                    Signature</span>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Action Buttons (shown only on screen) -->
-                                    <div class="no-print" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
-                                        <button type="button" class="btn btn-secondary" onclick="closeAdminViewModal()" style="padding: 10px 22px;">Close</button>
-                                        <button type="button" class="btn btn-secondary" onclick="printAdminApplicationForm()" style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
+                                    <div class="no-print"
+                                        style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                                        <button type="button" class="btn btn-secondary" onclick="closeAdminViewModal()"
+                                            style="padding: 10px 22px;">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            onclick="printAdminApplicationForm()"
+                                            style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
                                             <i class="bx bx-printer"></i>
                                             <span>Print Application Form</span>
                                         </button>
-                                        <a href="#" id="adminModalApproveBtn" class="btn" style="padding: 10px 22px; display: none; align-items: center; gap: 8px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; font-weight: 600; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); transition: all 0.2s; text-decoration: none; justify-content: center;">
+                                        <a href="#" id="adminModalApproveBtn" class="btn"
+                                            style="padding: 10px 22px; display: none; align-items: center; gap: 8px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; font-weight: 600; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); transition: all 0.2s; text-decoration: none; justify-content: center;">
                                             <i class="bx bx-check" style="font-size: 1.2rem;"></i>
                                             <span>Approve Application</span>
                                         </a>
-                                        <a href="#" id="adminModalRejectBtn" class="btn" style="padding: 10px 22px; display: none; align-items: center; gap: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; font-weight: 600; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); transition: all 0.2s; text-decoration: none; justify-content: center;">
+                                        <a href="#" id="adminModalRejectBtn" class="btn"
+                                            style="padding: 10px 22px; display: none; align-items: center; gap: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; font-weight: 600; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); transition: all 0.2s; text-decoration: none; justify-content: center;">
                                             <i class="bx bx-x" style="font-size: 1.2rem;"></i>
                                             <span>Reject Application</span>
                                         </a>
@@ -2392,7 +2934,7 @@
 
                     function openViewModal(loanId, customerName, customerPhone, loanType, principal, interestRate, termMonths, formDetailsStr, loanStatus) {
                         document.getElementById('adminViewLoanId').textContent = "#LN-" + loanId;
-                        
+
                         // Re-populate basic/fallback details
                         document.getElementById('adminFormFullName').value = customerName;
                         document.getElementById('adminFormMobile').value = customerPhone;
@@ -2405,18 +2947,18 @@
                         // Configure Modal Action Buttons dynamically
                         const approveBtn = document.getElementById('adminModalApproveBtn');
                         const rejectBtn = document.getElementById('adminModalRejectBtn');
-                        
+
                         if (loanStatus === 'pending_approval') {
                             approveBtn.style.display = 'inline-flex';
                             rejectBtn.style.display = 'inline-flex';
                             approveBtn.href = '${pageContext.request.contextPath}/loan?action=approve&id=' + loanId;
                             rejectBtn.href = '${pageContext.request.contextPath}/loan?action=reject&id=' + loanId;
-                            
+
                             // Setup confirmations on click
-                            approveBtn.onclick = function() {
+                            approveBtn.onclick = function () {
                                 return confirm('Are you sure you want to APPROVE this loan application (Ref: #LN-' + loanId + ')?');
                             };
-                            rejectBtn.onclick = function() {
+                            rejectBtn.onclick = function () {
                                 return confirm('Are you sure you want to REJECT this loan application (Ref: #LN-' + loanId + ')?');
                             };
                         } else {
@@ -2438,36 +2980,36 @@
                             document.getElementById('adminFormRelationName').value = parsed.relationName || '___________________________';
                             document.getElementById('adminFormDob').value = parsed.dob || '___________________________';
                             document.getElementById('adminFormGender').value = parsed.gender || '___________________________';
-                            
+
                             // Email prefill from basic or parsed
                             document.getElementById('adminFormEmail').value = parsed.email || '';
-                            
+
                             document.getElementById('adminFormCurrentAddress').textContent = parsed.currentAddress || 'N/A';
                             document.getElementById('adminFormPermanentAddress').textContent = parsed.permanentAddress || '______________________________________________________';
-                            
+
                             document.getElementById('adminFormAadhaar').value = parsed.aadhaar || '';
                             document.getElementById('adminFormPan').value = parsed.pan || '';
                             document.getElementById('adminFormVoterDl').value = parsed.voterDlNo || '___________________________';
-                            
+
                             document.getElementById('adminFormOccupation').value = parsed.occupation || '___________________________';
                             document.getElementById('adminFormCompanyName').value = parsed.companyName || '___________________________';
                             document.getElementById('adminFormMonthlyIncome').value = parsed.monthlyIncome ? "₹ " + parseFloat(parsed.monthlyIncome).toLocaleString('en-IN') : '₹ ______________________';
                             document.getElementById('adminFormExperience').value = parsed.workExperience || '_____________________';
-                            
+
                             document.getElementById('adminFormAccNo').value = parsed.linkedAccountNo || '___________________________';
                             document.getElementById('adminFormIfsc').value = parsed.linkedIfsc || '___________________________';
                             document.getElementById('adminFormBranch').value = parsed.linkedBranch || 'VGB Main Branch';
-                            
+
                             document.getElementById('adminFormLoanPurpose').value = parsed.loanPurpose || '___________________________';
-                            
+
                             document.getElementById('adminFormNomineeName').value = parsed.nomineeName || '___________________________';
                             document.getElementById('adminFormNomineeRelationship').value = parsed.nomineeRelationship || '___________________________';
                             document.getElementById('adminFormNomineeMobile').value = parsed.nomineeMobile || '___________________________';
-                            
+
                             document.getElementById('adminFormDeclarationDate').value = parsed.declarationDate || '';
                             document.getElementById('adminFormDeclarationPlace').value = parsed.declarationPlace || '___________________________';
                             document.getElementById('adminFormSignature').value = parsed.signature || '';
-                            
+
                             // Calculate paper EMI
                             const monthlyRate = (parseFloat(interestRate) / 12) / 100;
                             const emi = (parseFloat(principal) * monthlyRate * Math.pow(1 + monthlyRate, parseInt(termMonths))) / (Math.pow(1 + monthlyRate, parseInt(termMonths)) - 1);
@@ -2483,26 +3025,26 @@
                             document.getElementById('adminFormAadhaar').value = 'N/A';
                             document.getElementById('adminFormPan').value = 'N/A';
                             document.getElementById('adminFormVoterDl').value = 'N/A';
-                            
+
                             document.getElementById('adminFormOccupation').value = 'N/A';
                             document.getElementById('adminFormCompanyName').value = 'N/A';
                             document.getElementById('adminFormMonthlyIncome').value = 'N/A';
                             document.getElementById('adminFormExperience').value = 'N/A';
-                            
+
                             document.getElementById('adminFormAccNo').value = 'N/A';
                             document.getElementById('adminFormIfsc').value = 'N/A';
                             document.getElementById('adminFormBranch').value = 'VGB Main Branch';
-                            
+
                             document.getElementById('adminFormLoanPurpose').value = 'N/A (Legacy Record)';
-                            
+
                             document.getElementById('adminFormNomineeName').value = 'N/A';
                             document.getElementById('adminFormNomineeRelationship').value = 'N/A';
                             document.getElementById('adminFormNomineeMobile').value = 'N/A';
-                            
+
                             document.getElementById('adminFormDeclarationDate').value = 'N/A';
                             document.getElementById('adminFormDeclarationPlace').value = 'N/A';
                             document.getElementById('adminFormSignature').value = 'N/A';
-                            
+
                             document.getElementById('adminFormPaperEmiDisplay').textContent = 'N/A';
                         }
 
@@ -2707,6 +3249,9 @@
                                 });
                             });
                         }
+
+                        // Load Custom Loan Specifications (Interest Rates & Max Limits)
+                        loadLoanSpecs();
                     });
 
                     // Global accounts map to associate customer IDs with account numbers in search
@@ -2773,15 +3318,15 @@
                         const rate = parseFloat(document.getElementById('calcRate').value) || 0;
                         const term = parseInt(document.getElementById('calcTerm').value) || 0;
                         const emiResult = document.getElementById('emiResult');
-                        
+
                         if (amount <= 0 || rate <= 0 || term <= 0) {
                             emiResult.textContent = "₹ 0.00";
                             return;
                         }
-                        
+
                         const monthlyRate = (rate / 12) / 100;
                         const emi = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
-                        
+
                         emiResult.textContent = "₹ " + emi.toLocaleString('en-IN', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
@@ -2791,7 +3336,7 @@
                     function syncCalcTerm() {
                         const valInput = document.getElementById('displayCalcTermVal');
                         const unit = document.getElementById('calcTermUnit').value;
-                        
+
                         if (unit === 'years') {
                             valInput.min = "1";
                             valInput.max = "30";
@@ -2801,7 +3346,7 @@
                             valInput.max = "360";
                             if (parseFloat(valInput.value) > 360) valInput.value = "360";
                         }
-                        
+
                         const val = parseInt(valInput.value) || 0;
                         let months = val;
                         if (unit === 'years') {
@@ -2924,12 +3469,12 @@
                     function showAdminLoanDetails(type, rate, maxLimit) {
                         const spec = loanSpecs[type];
                         if (!spec) return;
-                        
+
                         document.getElementById('adminDetailsModalTitle').querySelector('span').textContent = spec.title + " Specification";
                         document.getElementById('adminDetailsDescription').textContent = spec.description;
                         document.getElementById('adminDetailsInterestRate').textContent = rate.toFixed(2) + "% Fixed P.A.";
                         document.getElementById('adminDetailsMaxLimit').textContent = "₹ " + maxLimit.toLocaleString('en-IN');
-                        
+
                         // Benefits list
                         const benefitsList = document.getElementById('adminDetailsBenefits');
                         benefitsList.innerHTML = '';
@@ -2944,7 +3489,7 @@
                             li.innerHTML = '<i class="bx bx-check" style="color: var(--accent-emerald); font-size: 1.25rem; margin-top: 2px;"></i><span>' + benefit + '</span>';
                             benefitsList.appendChild(li);
                         });
-                        
+
                         // Eligibility list
                         const eligibilityList = document.getElementById('adminDetailsEligibility');
                         eligibilityList.innerHTML = '';
@@ -2953,7 +3498,7 @@
                             li.textContent = el;
                             eligibilityList.appendChild(li);
                         });
-                        
+
                         // Documents list
                         const documentsList = document.getElementById('adminDetailsDocuments');
                         documentsList.innerHTML = '';
@@ -2962,14 +3507,23 @@
                             li.textContent = doc;
                             documentsList.appendChild(li);
                         });
-                        
+
                         // Bind the Apply Button action
                         const applyBtn = document.getElementById('adminDetailsApplyBtn');
-                        applyBtn.onclick = function() {
+                        applyBtn.onclick = function () {
                             closeAdminDetailsModal();
                             openAdminLoanForm(type, rate, maxLimit);
                         };
-                        
+
+                        // Bind the Edit Specs Button action
+                        const editSpecsBtn = document.getElementById('adminDetailsEditSpecsBtn');
+                        if (editSpecsBtn) {
+                            editSpecsBtn.onclick = function () {
+                                closeAdminDetailsModal();
+                                openEditSpecsModal(type);
+                            };
+                        }
+
                         document.getElementById('adminLoanDetailsModal').style.display = 'flex';
                     }
 
@@ -2982,52 +3536,52 @@
                         const btnUpdate = document.getElementById('btn-mode-update');
                         const containerCreate = document.getElementById('apply-new-mode-container');
                         const containerUpdate = document.getElementById('update-existing-mode-container');
-                        
+
                         if (mode === 'create') {
-                            btnCreate.classList.add('active');
-                            btnUpdate.classList.remove('active');
-                            containerCreate.style.display = 'block';
-                            containerUpdate.style.display = 'none';
+                            if (btnCreate) btnCreate.classList.add('active');
+                            if (btnUpdate) btnUpdate.classList.remove('active');
+                            if (containerCreate) containerCreate.style.display = 'block';
+                            if (containerUpdate) containerUpdate.style.display = 'none';
                         } else {
-                            btnUpdate.classList.add('active');
-                            btnCreate.classList.remove('active');
-                            containerCreate.style.display = 'none';
-                            containerUpdate.style.display = 'block';
+                            if (btnUpdate) btnUpdate.classList.add('active');
+                            if (btnCreate) btnCreate.classList.remove('active');
+                            if (containerCreate) containerCreate.style.display = 'none';
+                            if (containerUpdate) containerUpdate.style.display = 'block';
                         }
                     }
 
                     function openAdminLoanUpdateForm(loanId, customerId, loanType, principal, interestRate, termMonths, formDetailsStr) {
                         // Reset form fields
                         document.getElementById('adminApplyForm').reset();
-                        
+
                         // Configure Mode Parameters
                         document.getElementById('submitFormAction').value = 'update';
                         document.getElementById('submitAdminLoanId').value = loanId;
                         document.getElementById('adminApplyModalTitle').textContent = 'Modify Loan Details (Ref: #LN-' + loanId + ')';
-                        
+
                         const submitBtn = document.getElementById('adminApplyForm').querySelector('button[type="submit"] span');
                         if (submitBtn) {
                             submitBtn.textContent = 'Save Changes';
                         }
-                        
+
                         // Populate & Disable Customer Selector
                         const custSelect = document.getElementById('adminApplyCustomerId');
                         custSelect.value = customerId;
                         custSelect.disabled = true;
                         custSelect.required = false;
-                        
+
                         // Sync profile data fields
                         syncAdminCustomerDetails(custSelect);
-                        
+
                         // Map core fields
                         document.getElementById('adminFormLoanTypeDisplay').value = loanType;
                         document.getElementById('submitAdminLoanType').value = loanType;
                         document.getElementById('adminFormLoanRate').value = parseFloat(interestRate).toFixed(2) + "% Fixed P.A.";
                         document.getElementById('submitAdminInterestRate').value = interestRate;
-                        
+
                         document.getElementById('adminFormLoanAmount').value = principal;
                         document.getElementById('submitAdminAmount').value = principal;
-                        
+
                         if (parseInt(termMonths) % 12 === 0) {
                             document.getElementById('adminFormLoanTermVal').value = parseInt(termMonths) / 12;
                             document.getElementById('adminFormLoanTermUnit').value = 'years';
@@ -3037,7 +3591,7 @@
                         }
                         document.getElementById('adminFormLoanTermMonths').value = termMonths;
                         document.getElementById('submitAdminTermMonths').value = termMonths;
-                        
+
                         // Parse JSON details
                         let parsed = null;
                         if (formDetailsStr && formDetailsStr.trim() !== '') {
@@ -3047,23 +3601,23 @@
                                 console.error("Failed to parse formDetails JSON string", e);
                             }
                         }
-                        
+
                         if (parsed) {
                             document.getElementById('adminFormRelationName').value = parsed.relationName || '';
                             document.getElementById('adminFormDob').value = parsed.dob || '';
-                            
+
                             if (parsed.gender) {
                                 const radio = document.querySelector('input[name="adminFormGender"][value="' + parsed.gender + '"]');
                                 if (radio) radio.checked = true;
                             }
-                            
+
                             document.getElementById('adminFormPermanentAddress').value = parsed.permanentAddress || '';
                             document.getElementById('adminFormVoterDl').value = parsed.voterDlNo || '';
                             document.getElementById('adminFormOccupation').value = parsed.occupation || '';
                             document.getElementById('adminFormCompanyName').value = parsed.companyName || '';
                             document.getElementById('adminFormMonthlyIncome').value = parsed.monthlyIncome || '';
                             document.getElementById('adminFormExperience').value = parsed.workExperience || '';
-                            
+
                             // Select linked account after dropdown population delay
                             setTimeout(() => {
                                 const accSelect = document.getElementById('adminFormLinkAccount');
@@ -3072,7 +3626,7 @@
                                     syncAdminLinkedAccountDetails(accSelect);
                                 }
                             }, 100);
-                            
+
                             document.getElementById('adminFormLoanPurpose').value = parsed.loanPurpose || '';
                             document.getElementById('adminFormNomineeName').value = parsed.nomineeName || '';
                             document.getElementById('adminFormNomineeRelationship').value = parsed.nomineeRelationship || '';
@@ -3082,11 +3636,11 @@
                             document.getElementById('adminFormSignature').value = parsed.signature || '';
                             document.getElementById('adminFormDeclarationCheckbox').checked = true;
                         }
-                        
+
                         // Recalculate EMI and limits
                         adminCurrentMaxLimit = 999999999; // bypass limit validation on updates
                         calculateAdminPaperEMI();
-                        
+
                         document.getElementById('adminApplyModal').style.display = 'flex';
                     }
 
@@ -3095,12 +3649,12 @@
                         document.getElementById('submitFormAction').value = 'apply';
                         document.getElementById('submitAdminLoanId').value = '';
                         document.getElementById('adminApplyModalTitle').textContent = 'Official Loan Application Form (Admin Portal)';
-                        
+
                         const submitBtn = document.getElementById('adminApplyForm').querySelector('button[type="submit"] span');
                         if (submitBtn) {
                             submitBtn.textContent = 'Submit Application';
                         }
-                        
+
                         // Enable Customer Selector
                         const custSelect = document.getElementById('adminApplyCustomerId');
                         custSelect.disabled = false;
@@ -3109,7 +3663,7 @@
                         adminCurrentMaxLimit = maxLimit;
                         document.getElementById('adminFormLoanTypeDisplay').value = type;
                         document.getElementById('submitAdminLoanType').value = type;
-                        
+
                         document.getElementById('adminFormLoanRate').value = rate.toFixed(2) + "% Fixed P.A.";
                         document.getElementById('submitAdminInterestRate').value = rate;
 
@@ -3129,7 +3683,7 @@
 
                         // Reset form fields
                         document.getElementById('adminApplyForm').reset();
-                        
+
                         // Re-fill values set above
                         document.getElementById('adminFormLoanTypeDisplay').value = type;
                         document.getElementById('submitAdminLoanType').value = type;
@@ -3137,7 +3691,7 @@
                         document.getElementById('submitAdminInterestRate').value = rate;
                         document.getElementById('adminFormDeclarationDate').value = dd + '/' + mm + '/' + yyyy;
                         document.getElementById('adminFormBranch').value = "VGB Main Branch";
-                        
+
                         // Clear customer selector & related details
                         document.getElementById('adminApplyCustomerId').value = "";
                         syncAdminCustomerDetails(document.getElementById('adminApplyCustomerId'));
@@ -3164,24 +3718,24 @@
                             document.getElementById('adminFormPan').value = "";
                             document.getElementById('adminFormCurrentAddressDisplay').textContent = "";
                             document.getElementById('adminFormCurrentAddressHidden').value = "";
-                            
+
                             // Reset permanent address checkbox & field
                             document.getElementById('adminFormSameAsCurrent').checked = false;
                             document.getElementById('adminFormPermanentAddress').value = "";
-                            
+
                             // Reset other customer-specific fields
                             document.getElementById('adminFormDob').value = "";
                             document.querySelectorAll('input[name="adminFormGender"]').forEach(r => r.checked = false);
                             document.getElementById('adminFormOccupation').value = "";
                             document.getElementById('adminFormAccHolderName').value = "";
-                            
+
                             // Reset Linked Account select
                             document.getElementById('adminFormLinkAccount').innerHTML = '<option value="" disabled selected>-- Select Customer VGB Account --</option>';
                             document.getElementById('adminFormAccNo').value = "";
                             document.getElementById('adminFormIfsc').value = "";
                             return;
                         }
-                        
+
                         const selectedOpt = select.options[select.selectedIndex];
                         const fullname = selectedOpt.getAttribute('data-fullname') || '';
                         const phone = selectedOpt.getAttribute('data-phone') || '';
@@ -3192,31 +3746,31 @@
                         const city = selectedOpt.getAttribute('data-city') || '';
                         const state = selectedOpt.getAttribute('data-state') || '';
                         const zipcode = selectedOpt.getAttribute('data-zipcode') || '';
-                        
+
                         const dob = selectedOpt.getAttribute('data-dob') || '';
                         const gender = selectedOpt.getAttribute('data-gender') || '';
                         const occupation = selectedOpt.getAttribute('data-occupation') || '';
-                        
+
                         // Populate
                         document.getElementById('adminFormFullName').value = fullname;
                         document.getElementById('adminFormMobile').value = phone;
                         document.getElementById('adminFormEmail').value = email;
                         document.getElementById('adminFormAadhaar').value = aadhaar;
                         document.getElementById('adminFormPan').value = pan;
-                        
+
                         const fullAddr = address + (city ? ", " + city : "") + (state ? ", " + state : "") + (zipcode ? " - " + zipcode : "");
                         document.getElementById('adminFormCurrentAddressDisplay').textContent = fullAddr;
                         document.getElementById('adminFormCurrentAddressHidden').value = fullAddr;
-                        
+
                         document.getElementById('adminFormAccHolderName').value = fullname;
-                        
+
                         // Set DOB if it matches yyyy-MM-dd format
                         if (dob && dob !== 'null') {
                             document.getElementById('adminFormDob').value = dob;
                         } else {
                             document.getElementById('adminFormDob').value = "";
                         }
-                        
+
                         // Set Gender
                         if (gender) {
                             const genUpper = gender.toUpperCase();
@@ -3224,27 +3778,27 @@
                             if (genUpper.startsWith("M")) radioVal = "Male";
                             else if (genUpper.startsWith("F")) radioVal = "Female";
                             else radioVal = "Other";
-                            
+
                             const radio = document.querySelector('input[name="adminFormGender"][value="' + radioVal + '"]');
                             if (radio) radio.checked = true;
                         } else {
                             document.querySelectorAll('input[name="adminFormGender"]').forEach(r => r.checked = false);
                         }
-                        
+
                         // Set Occupation
                         if (occupation && occupation !== 'null') {
                             document.getElementById('adminFormOccupation').value = occupation;
                         } else {
                             document.getElementById('adminFormOccupation').value = "";
                         }
-                        
+
                         // Populate Linked Accounts list dynamically
                         const customerId = parseInt(select.value);
                         const linkSelect = document.getElementById('adminFormLinkAccount');
                         linkSelect.innerHTML = '<option value="" disabled selected>-- Select Customer VGB Account --</option>';
                         document.getElementById('adminFormAccNo').value = "";
                         document.getElementById('adminFormIfsc').value = "";
-                        
+
                         const customerAccounts = allAccounts.filter(acc => parseInt(acc.customerId) === customerId && acc.status.toLowerCase() === 'active');
                         if (customerAccounts.length === 0) {
                             const opt = document.createElement('option');
@@ -3280,7 +3834,7 @@
                         const selectedOpt = select.options[select.selectedIndex];
                         const accNo = selectedOpt.getAttribute('data-acc-no');
                         const ifsc = selectedOpt.getAttribute('data-ifsc');
-                        
+
                         document.getElementById('adminFormAccNo').value = accNo;
                         document.getElementById('adminFormIfsc').value = ifsc;
                     }
@@ -3288,7 +3842,7 @@
                     function syncAdminPaperTermMonths() {
                         const valInput = document.getElementById('adminFormLoanTermVal');
                         const unit = document.getElementById('adminFormLoanTermUnit').value;
-                        
+
                         if (unit === 'years') {
                             valInput.min = "1";
                             valInput.max = "30";
@@ -3298,7 +3852,7 @@
                             valInput.max = "360";
                             if (parseFloat(valInput.value) > 360) valInput.value = "360";
                         }
-                        
+
                         const val = parseInt(valInput.value) || 0;
                         let months = val;
                         if (unit === 'years') {
@@ -3314,9 +3868,9 @@
                         const rateStr = document.getElementById('submitAdminInterestRate').value;
                         const rate = parseFloat(rateStr) || 0;
                         const term = parseInt(document.getElementById('adminFormLoanTermMonths').value) || 0;
-                        
+
                         const emiDisplay = document.getElementById('adminFormPaperEmiDisplay');
-                        
+
                         if (amount <= 0 || rate <= 0 || term <= 0) {
                             emiDisplay.textContent = "₹ 0.00";
                             return;
@@ -3324,7 +3878,7 @@
 
                         const monthlyRate = (rate / 12) / 100;
                         const emi = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
-                        
+
                         emiDisplay.textContent = "₹ " + emi.toLocaleString('en-IN', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
@@ -3343,7 +3897,7 @@
                             event.preventDefault();
                             return false;
                         }
-                        
+
                         const linkAccSelect = document.getElementById('adminFormLinkAccount');
                         const linkAcc = linkAccSelect.value;
                         if (!linkAcc) {
@@ -3351,7 +3905,7 @@
                             event.preventDefault();
                             return false;
                         }
-                        
+
                         // Gather all details for JSON serialization matching customer style
                         const details = {
                             relationName: document.getElementById('adminFormRelationName').value,
@@ -3375,16 +3929,107 @@
                             declarationDate: document.getElementById('adminFormDeclarationDate').value,
                             signature: document.getElementById('adminFormSignature').value
                         };
-                        
+
                         document.getElementById('adminSubmitFormDetails').value = JSON.stringify(details);
                         document.getElementById('submitAdminAmount').value = amount;
                         document.getElementById('submitAdminTermMonths').value = document.getElementById('adminFormLoanTermMonths').value;
-                        
+
                         // Enable customer selector right before submit so it gets sent in POST
                         document.getElementById('adminApplyCustomerId').disabled = false;
-                        
+
                         return true;
                     }
+
+                     const defaultSpecs = {
+                         personal: { rate: 12.00, max: 1500000, title: 'Personal Cash Loan' },
+                         home: { rate: 7.50, max: 50000000, title: 'Home Secure Loan' },
+                         vehicle: { rate: 8.50, max: 5000000, title: 'Vehicle Purchase Loan' },
+                         education: { rate: 6.50, max: 4000000, title: 'Higher Education Loan' },
+                         business: { rate: 10.50, max: 10000000, title: 'Business Capital Loan' }
+                     };
+
+                     function getSpecValue(type, property) {
+                         const localVal = localStorage.getItem('vgb_loan_' + property + '_' + type);
+                         if (localVal) {
+                             return parseFloat(localVal);
+                         }
+                         return defaultSpecs[type][property];
+                     }
+
+                     function loadLoanSpecs() {
+                         const types = ['personal', 'home', 'vehicle', 'education', 'business'];
+                         types.forEach(type => {
+                             const rate = getSpecValue(type, 'rate');
+                             const max = getSpecValue(type, 'max');
+
+                             // Update card badges/texts
+                             const rateEl = document.getElementById('badge-rate-' + type);
+                             if (rateEl) {
+                                 rateEl.innerHTML = rate.toFixed(2) + '% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>';
+                             }
+                             const maxEl = document.getElementById('badge-max-' + type);
+                             if (maxEl) {
+                                 maxEl.textContent = 'Max: ₹ ' + max.toLocaleString('en-IN');
+                             }
+
+                             // Update the card's onclick attribute dynamically
+                             const card = document.getElementById('card-' + type);
+                             if (card) {
+                                 card.onclick = function() {
+                                     showAdminLoanDetails(type, rate, max);
+                                 };
+                             }
+
+                             // Update EMI calculator options
+                             const optEl = document.getElementById('opt-calc-' + type);
+                             if (optEl) {
+                                 optEl.value = rate.toFixed(2);
+                                 const title = defaultSpecs[type].title;
+                                 optEl.textContent = title + ' (' + rate.toFixed(2) + '%)';
+                             }
+                         });
+                         // Recalculate EMI if calculator is visible
+                         if (typeof calculateEMI === 'function') {
+                             calculateEMI();
+                         }
+                     }
+
+                     function openEditSpecsModal(type) {
+                         const spec = defaultSpecs[type];
+                         if (!spec) return;
+
+                         const currentRate = getSpecValue(type, 'rate');
+                         const currentMax = getSpecValue(type, 'max');
+
+                         document.getElementById('editSpecsType').value = type;
+                         document.getElementById('editSpecsTitle').value = spec.title;
+                         document.getElementById('editSpecsRate').value = currentRate.toFixed(2);
+                         document.getElementById('editSpecsMax').value = currentMax;
+
+                         document.getElementById('editSpecsModal').style.display = 'flex';
+                     }
+
+                     function closeEditSpecsModal() {
+                         document.getElementById('editSpecsModal').style.display = 'none';
+                     }
+
+                     function saveSpecsChanges(event) {
+                         event.preventDefault();
+                         const type = document.getElementById('editSpecsType').value;
+                         const rate = parseFloat(document.getElementById('editSpecsRate').value) || 0;
+                         const max = parseFloat(document.getElementById('editSpecsMax').value) || 0;
+
+                         if (rate <= 0 || max <= 0) {
+                             alert("Please enter valid positive values.");
+                             return;
+                         }
+
+                         localStorage.setItem('vgb_loan_rate_' + type, rate);
+                         localStorage.setItem('vgb_loan_max_' + type, max);
+
+                         loadLoanSpecs();
+                         closeEditSpecsModal();
+                     }
 
                     function printAdminApplyForm() {
                         document.body.classList.add('print-admin-apply-active');

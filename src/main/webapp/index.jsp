@@ -1133,8 +1133,8 @@
         <!-- Header Navigation -->
         <header class="header">
             <a href="#home" class="logo" aria-label="Vertex Galaxy Bank Home"
-                style="display: flex; align-items: center;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Vertex Galaxy Bank Logo">
+                style="display: flex; align-items: center; text-decoration: none;">
+                <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
             </a>
 
             <nav class="navbar" aria-label="Main navigation">
