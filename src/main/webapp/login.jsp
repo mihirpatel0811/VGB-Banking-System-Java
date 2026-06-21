@@ -568,10 +568,6 @@
                         Services</a>
                 </nav>
                 <div class="nav-actions">
-                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme"
-                        style="display: none;">
-                        <i class="bx bx-moon"></i>
-                    </button>
                 </div>
             </header>
 

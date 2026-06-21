@@ -935,7 +935,6 @@
                             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i>
                                 Admin Workspace</span>
                         </div>
-                        <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
                         <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary"
                             style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
                     </div>
@@ -3219,32 +3218,7 @@
                             dateEl.textContent = d.toLocaleDateString('en-US', options);
                         }
 
-                        // Theme switch toggle logic with localStorage sync
-                        const themeBtn = document.getElementById('themeToggle');
-                        if (themeBtn) {
-                            themeBtn.style.setProperty('display', 'flex', 'important');
-                            themeBtn.onclick = function () {
-                                document.body.classList.toggle('dark-mode');
-                                const isDark = document.body.classList.contains('dark-mode');
-                                const icon = themeBtn.querySelector('i');
-                                if (icon) {
-                                    icon.className = isDark ? 'bx bx-sun' : 'bx bx-moon';
-                                }
-                                localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
-                            };
 
-                            // Sync with stored theme preference on load
-                            const savedTheme = localStorage.getItem('admin-theme');
-                            if (savedTheme === 'dark') {
-                                document.body.classList.add('dark-mode');
-                                const icon = themeBtn.querySelector('i');
-                                if (icon) icon.className = 'bx bx-sun';
-                            } else {
-                                document.body.classList.remove('dark-mode');
-                                const icon = themeBtn.querySelector('i');
-                                if (icon) icon.className = 'bx bx-moon';
-                            }
-                        }
 
                         // Mobile menu drawer toggle handler with outside click collapse
                         const mobileToggle = document.getElementById('mobileNavToggle');

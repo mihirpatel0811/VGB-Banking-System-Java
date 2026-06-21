@@ -126,7 +126,6 @@
         </a>
         <div class="nav-actions">
             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>
-            <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
         </div>
     </header>

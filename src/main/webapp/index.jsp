@@ -1145,11 +1145,6 @@
             </nav>
 
             <div class="nav-actions">
-                <!-- Hidden theme toggle button (Display hidden globally via style override in styles.css) -->
-                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme"
-                    style="display: none;">
-                    <i class="bx bx-moon"></i>
-                </button>
                 <button class="mobile-menu-btn" type="button" aria-label="Open menu">
                     <i class="bx bx-menu"></i>
                 </button>

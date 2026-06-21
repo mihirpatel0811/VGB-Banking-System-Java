@@ -194,11 +194,6 @@ const App = {
         
         // Clean up any previously stored theme preferences
         localStorage.removeItem('theme');
-        
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.style.display = 'none';
-        }
     },
 
     /* ==========================================================================

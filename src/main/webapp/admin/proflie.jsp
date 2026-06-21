@@ -321,7 +321,6 @@
                 <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
                 <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
             </div>
-            <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
         </div>
     </header>
@@ -810,28 +809,7 @@
                 });
             }
 
-            // Theme toggle script
-            const themeBtn = document.getElementById('themeToggle');
-            if (themeBtn) {
-                themeBtn.style.setProperty('display', 'flex', 'important');
-                themeBtn.onclick = function () {
-                    document.body.classList.toggle('dark-mode');
-                    const isDark = document.body.classList.contains('dark-mode');
-                    const icon = themeBtn.querySelector('i');
-                    if (icon) {
-                        icon.className = isDark ? 'bx bx-sun' : 'bx bx-moon';
-                    }
-                    localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
-                };
 
-                // Sync stored local setting
-                const savedTheme = localStorage.getItem('admin-theme');
-                if (savedTheme === 'dark') {
-                    document.body.classList.add('dark-mode');
-                    const icon = themeBtn.querySelector('i');
-                    if (icon) icon.className = 'bx bx-sun';
-                }
-            }
 
             // Cursor glow glow position tracking
             const glow = document.querySelector('.cursor-glow');

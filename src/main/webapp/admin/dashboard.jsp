@@ -494,7 +494,6 @@
                 <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
                 <span style="font-weight: 600; color: var(--gray-700);" class="admin-label"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
             </div>
-            <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
         </div>
     </header>
