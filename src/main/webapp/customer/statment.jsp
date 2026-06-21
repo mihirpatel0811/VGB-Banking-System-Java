@@ -1,6 +1,23 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%
+    if (request.getAttribute("customer") == null) {
+        Long customerId = null;
+        Object sessionUser = session.getAttribute(com.vgb.constants.AppConstants.USER_SESSION_KEY);
+        if (sessionUser != null) {
+            customerId = Long.parseLong(sessionUser.toString());
+        }
+        if (customerId != null) {
+            try {
+                com.vgb.model.Customer sessionCustomer = new com.vgb.service.CustomerService().getCustomerById(customerId);
+                request.setAttribute("customer", sessionCustomer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +31,10 @@
     <style>
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
@@ -26,41 +44,128 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 20px;
-            color: var(--gray-600);
+            padding: 12px 18px;
+            color: var(--gray-600) !important;
             font-weight: 500;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
             transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
         }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+        .sidebar-menu a i {
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+        .sidebar-menu a:hover {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateX(4px);
+        }
+        .sidebar-menu a:hover i {
+            transform: scale(1.1);
+        }
+        .sidebar-menu a.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+            border-color: transparent;
         }
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
             background: var(--gray-50);
+            transition: all 0.3s ease;
+        }
+        .footer {
+            margin-left: 280px;
+            background: white;
+            border-top: 1px solid rgba(99, 102, 241, 0.15);
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .mobile-nav-toggle {
+            display: none !important;
         }
         @media (max-width: 991px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 120px 20px 20px; }
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: var(--radius-lg);
-            padding: 25px;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
+            padding: 28px;
+            box-shadow: var(--shadow-md), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+        .btn-logout {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid rgba(99, 102, 241, 0.2) !important;
+            background: transparent;
+            color: var(--gray-700) !important;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-logout:hover {
+            border-color: transparent !important;
+            background: var(--gradient-primary);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+        .btn-logout i {
+            font-size: 1.05rem;
+            transition: transform var(--transition-fast);
+        }
+        .btn-logout:hover i {
+            transform: translateX(3px);
+        }
+        @media (max-width: 480px) {
+            .mobile-hide {
+                display: none !important;
+            }
         }
         .statement-type-btn {
             padding: 12px 25px;
@@ -79,11 +184,15 @@
             box-shadow: var(--shadow-md);
         }
 
+        .print-only {
+            display: none !important;
+        }
+
         /* Print Optimized CSS */
         @media print {
             body {
-                background: white;
-                color: black;
+                background: white !important;
+                color: black !important;
             }
             .sidebar, .header, .footer, .no-print {
                 display: none !important;
@@ -91,14 +200,58 @@
             .main-content {
                 margin-left: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
             }
             .glass-card {
                 border: none !important;
                 box-shadow: none !important;
                 padding: 0 !important;
+                background: transparent !important;
             }
             .print-header {
                 display: block !important;
+            }
+            .print-only {
+                display: flex !important;
+            }
+            
+            /* Table formatting to fit portrait page */
+            #txnTable, #regularStatement table, #loanStatement table {
+                table-layout: fixed !important;
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            #txnTable th, #txnTable td, 
+            #regularStatement table th, #regularStatement table td,
+            #loanStatement table th, #loanStatement table td {
+                padding: 6px 4px !important;
+                font-size: 10px !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+            }
+            
+            /* Column widths for standard portrait layout */
+            #txnTable th:nth-child(1), #txnTable td:nth-child(1),
+            #loanStatement table th:nth-child(1), #loanStatement table td:nth-child(1) { width: 5% !important; }
+            #txnTable th:nth-child(2), #txnTable td:nth-child(2),
+            #loanStatement table th:nth-child(2), #loanStatement table td:nth-child(2) { width: 16% !important; }
+            #txnTable th:nth-child(3), #txnTable td:nth-child(3),
+            #loanStatement table th:nth-child(3), #loanStatement table td:nth-child(3) { width: 8% !important; }
+            #txnTable th:nth-child(4), #txnTable td:nth-child(4),
+            #loanStatement table th:nth-child(4), #loanStatement table td:nth-child(4) { width: 27% !important; }
+            #txnTable th:nth-child(5), #txnTable td:nth-child(5),
+            #loanStatement table th:nth-child(5), #loanStatement table td:nth-child(5) { width: 8% !important; }
+            #txnTable th:nth-child(6), #txnTable td:nth-child(6),
+            #loanStatement table th:nth-child(6), #loanStatement table td:nth-child(6) { width: 12% !important; }
+            #txnTable th:nth-child(7), #txnTable td:nth-child(7),
+            #loanStatement table th:nth-child(7), #loanStatement table td:nth-child(7) { width: 12% !important; }
+            #txnTable th:nth-child(8), #txnTable td:nth-child(8),
+            #loanStatement table th:nth-child(8), #loanStatement table td:nth-child(8) { width: 12% !important; }
+
+            .badge-id, .txn-deposit, .txn-withdrawal, span[style*="background"] {
+                background: transparent !important;
+                padding: 0 !important;
             }
         }
         .txn-deposit {
@@ -113,7 +266,8 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader-ring"></div>
-            <span>VGB</span>
+            <div class="loader-ring-outer"></div>
+            <span class="loader-watermark">VGB</span>
         </div>
     </div>
 
@@ -121,12 +275,48 @@
 
     <!-- Header -->
     <header class="header scrolled no-print">
-        <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
-        </a>
-        <div class="nav-actions">
-            <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>
-            <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                <i class="bx bx-menu"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+            </a>
+        </div>
+        <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <c:choose>
+                    <c:when test="${not empty customer}">
+                        <c:choose>
+                            <c:when test="${not empty customer.avatarPath}">
+                                <img src="${pageContext.request.contextPath}${customer.avatarPath}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                            </c:when>
+                            <c:otherwise>
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; border: 2px solid white; box-shadow: var(--shadow-sm); text-transform: uppercase;">
+                                    ${customer.fullName.substring(0, 1)}
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
+                            <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">${customer.fullName}</span>
+                            <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); display: inline-block;"></span>
+                                Customer Space
+                            </span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gray-100); color: var(--gray-500); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1.5px solid var(--gray-200);">
+                            <i class="bx bx-user"></i>
+                        </div>
+                        <span style="font-weight: 600; color: var(--gray-700); font-size: 0.85rem;" class="mobile-hide">Customer Space</span>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
+                <i class="bx bx-log-out"></i>
+                <span>Logout</span>
+            </a>
         </div>
     </header>
 
@@ -517,12 +707,12 @@
                         <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">System Generated Seals</span>
                     </div>
                 </div>
-            </div>button>
+            </div>
             </div>
         </div>
     </main>
 
-    <footer class="footer no-print" style="padding: 20px 0; margin-left: 280px; background: white; border-top: 1px solid rgba(99, 102, 241, 0.15);">
+    <footer class="footer no-print">
         <div class="container" style="text-align: center; max-width: 1200px; padding: 0;">
             <p style="font-size: 0.85rem; color: var(--gray-500);">&copy; <span data-current-year>2026</span> Vertex Galaxy Bank. All rights reserved.</p>
         </div>
@@ -641,6 +831,32 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile sidebar toggle handler
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (sidebar.classList.contains('active')) {
+                        icon.className = 'bx bx-x';
+                    } else {
+                        icon.className = 'bx bx-menu';
+                    }
+                });
+                
+                // Close sidebar if clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        mobileToggle.querySelector('i').className = 'bx bx-menu';
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

@@ -1282,7 +1282,8 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader-ring"></div>
-            <span>VGB</span>
+            <div class="loader-ring-outer"></div>
+            <span class="loader-watermark">VGB</span>
         </div>
     </div>
 
@@ -1425,11 +1426,8 @@
                                 <!-- 1. Back Cover -->
                                 <div class="chequebook-back">
                                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 2;">
-                                        <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
-                                            <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                                <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                                <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                            </svg>
+                                        <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
+                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                         </div>
                                         <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
                                         <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
@@ -1659,11 +1657,8 @@
                                             Your Trust, Our Priority
                                         </div>
                                         
-                                        <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px;">
-                                            <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                                <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                                <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                            </svg>
+                                        <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px; display: flex; align-items: center; justify-content: center;">
+                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                         </div>
                                         <div class="chequebook-cover-title" style="text-align: center;">
                                             <h2>CHEQUE BOOK</h2>
@@ -1926,11 +1921,8 @@
                             <!-- 1. Back Cover -->
                             <div class="chequebook-back">
                                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 2;">
-                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
                                     <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
@@ -2160,11 +2152,8 @@
                                         Your Trust, Our Priority
                                     </div>
                                     
-                                    <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px;">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <div class="chequebook-cover-title" style="text-align: center;">
                                         <h2>CHEQUE BOOK</h2>

@@ -1,6 +1,23 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%
+    if (request.getAttribute("customer") == null) {
+        Long customerId = null;
+        Object sessionUser = session.getAttribute(com.vgb.constants.AppConstants.USER_SESSION_KEY);
+        if (sessionUser != null) {
+            customerId = Long.parseLong(sessionUser.toString());
+        }
+        if (customerId != null) {
+            try {
+                com.vgb.model.Customer sessionCustomer = new com.vgb.service.CustomerService().getCustomerById(customerId);
+                request.setAttribute("customer", sessionCustomer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +31,10 @@
     <style>
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
@@ -26,41 +44,128 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 14px 20px;
-            color: var(--gray-600);
+            padding: 12px 18px;
+            color: var(--gray-600) !important;
             font-weight: 500;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
             transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
         }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+        .sidebar-menu a i {
+            font-size: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+        .sidebar-menu a:hover {
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500) !important;
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateX(4px);
+        }
+        .sidebar-menu a:hover i {
+            transform: scale(1.1);
+        }
+        .sidebar-menu a.active {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+            border-color: transparent;
         }
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
             background: var(--gray-50);
+            transition: all 0.3s ease;
+        }
+        .footer {
+            margin-left: 280px;
+            background: white;
+            border-top: 1px solid rgba(99, 102, 241, 0.15);
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .mobile-nav-toggle {
+            display: none !important;
         }
         @media (max-width: 991px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 120px 20px 20px; }
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: var(--radius-lg);
-            padding: 25px;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
+            padding: 28px;
+            box-shadow: var(--shadow-md), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+        .btn-logout {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid rgba(99, 102, 241, 0.2) !important;
+            background: transparent;
+            color: var(--gray-700) !important;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-logout:hover {
+            border-color: transparent !important;
+            background: var(--gradient-primary);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+        .btn-logout i {
+            font-size: 1.05rem;
+            transition: transform var(--transition-fast);
+        }
+        .btn-logout:hover i {
+            transform: translateX(3px);
+        }
+        @media (max-width: 480px) {
+            .mobile-hide {
+                display: none !important;
+            }
         }
 
         .services-info-grid {
@@ -1060,7 +1165,8 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader-ring"></div>
-            <span>VGB</span>
+            <div class="loader-ring-outer"></div>
+            <span class="loader-watermark">VGB</span>
         </div>
     </div>
 
@@ -1068,12 +1174,48 @@
 
     <!-- Header -->
     <header class="header scrolled">
-        <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
-        </a>
-        <div class="nav-actions">
-            <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>
-            <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.8rem;"><i class="bx bx-log-out"></i> Logout</a>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
+                <i class="bx bx-menu"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+            </a>
+        </div>
+        <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <c:choose>
+                    <c:when test="${not empty customer}">
+                        <c:choose>
+                            <c:when test="${not empty customer.avatarPath}">
+                                <img src="${pageContext.request.contextPath}${customer.avatarPath}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                            </c:when>
+                            <c:otherwise>
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; border: 2px solid white; box-shadow: var(--shadow-sm); text-transform: uppercase;">
+                                    ${customer.fullName.substring(0, 1)}
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
+                            <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">${customer.fullName}</span>
+                            <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); display: inline-block;"></span>
+                                Customer Space
+                            </span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gray-100); color: var(--gray-500); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1.5px solid var(--gray-200);">
+                            <i class="bx bx-user"></i>
+                        </div>
+                        <span style="font-weight: 600; color: var(--gray-700); font-size: 0.85rem;" class="mobile-hide">Customer Space</span>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
+                <i class="bx bx-log-out"></i>
+                <span>Logout</span>
+            </a>
         </div>
     </header>
 
@@ -1164,11 +1306,8 @@
                             <!-- 1. Back Cover -->
                             <div class="chequebook-back">
                                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 2;">
-                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
                                     <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
@@ -1401,11 +1540,8 @@
                                         Your Trust, Our Priority
                                     </div>
                                     
-                                    <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px;">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <div class="chequebook-cover-title" style="text-align: center;">
                                         <h2>CHEQUE BOOK</h2>
@@ -1898,11 +2034,8 @@
                             <!-- 1. Back Cover -->
                             <div class="chequebook-back">
                                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 2;">
-                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
                                     <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
@@ -2132,11 +2265,8 @@
                                         Your Trust, Our Priority
                                     </div>
                                     
-                                    <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px;">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg" style="width: 100%; height: 100%;">
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div class="cover-logo" style="align-self: center; width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); margin-top: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <div class="chequebook-cover-title" style="text-align: center;">
                                         <h2>CHEQUE BOOK</h2>
@@ -2417,6 +2547,30 @@
                     requestAnimationFrame(() => {
                         book.style.transform = 'rotateX(12deg) rotateY(-18deg) scale(1)';
                     });
+                });
+            }
+
+            // Mobile sidebar toggle handler
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (sidebar.classList.contains('active')) {
+                        icon.className = 'bx bx-x';
+                    } else {
+                        icon.className = 'bx bx-menu';
+                    }
+                });
+                
+                // Close sidebar if clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        mobileToggle.querySelector('i').className = 'bx bx-menu';
+                    }
                 });
             }
         });

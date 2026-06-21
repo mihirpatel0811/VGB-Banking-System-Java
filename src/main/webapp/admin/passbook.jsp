@@ -831,7 +831,8 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader-ring"></div>
-            <span>VGB</span>
+            <div class="loader-ring-outer"></div>
+            <span class="loader-watermark">VGB</span>
         </div>
     </div>
 
@@ -1041,20 +1042,8 @@
                                         <span class="bank-abbrev">VGB</span>
                                         <span class="chip-icon"><i class="bx bx-chip"></i></span>
                                     </div>
-                                    <div class="cover-logo">
-                                        <svg viewBox="0 0 100 100" class="v-logo-svg">
-                                            <defs>
-                                                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stop-color="#bf953f" />
-                                                    <stop offset="25%" stop-color="#fcf6ba" />
-                                                    <stop offset="50%" stop-color="#b38728" />
-                                                    <stop offset="75%" stop-color="#fbf5b7" />
-                                                    <stop offset="100%" stop-color="#aa771c" />
-                                                </linearGradient>
-                                            </defs>
-                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGrad)" />
-                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGrad)" />
-                                        </svg>
+                                    <div class="cover-logo" style="display: flex; align-items: center; justify-content: center;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                     <div class="cover-title">
                                         <h2>PASSBOOK</h2>

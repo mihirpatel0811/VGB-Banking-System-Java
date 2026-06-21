@@ -299,7 +299,8 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader-ring"></div>
-            <span>VGB</span>
+            <div class="loader-ring-outer"></div>
+            <span class="loader-watermark">VGB</span>
         </div>
     </div>
 
@@ -698,6 +699,13 @@
         // Submitting Password Update Request (Preserved Backend Integration)
         function submitPasswordUpdate(e) {
             e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            if (btn) {
+                btn.classList.add('btn-loading');
+                btn.disabled = true;
+                btn.setAttribute('data-orig-html', btn.innerHTML);
+                btn.innerHTML = '<span>Updating...</span>';
+            }
             
             const oldPassword = document.getElementById('oldPasswordInput').value;
             const newPassword = document.getElementById('newPasswordInput').value;
@@ -721,11 +729,21 @@
                 return response.json();
             })
             .then(data => {
+                if (btn) {
+                    btn.classList.remove('btn-loading');
+                    btn.disabled = false;
+                    btn.innerHTML = btn.getAttribute('data-orig-html');
+                }
                 showResponseToast(data.message || 'Password changed successfully!', true);
                 document.getElementById('passwordUpdateForm').reset();
                 updatePasswordStrengthMeter('');
             })
             .catch(error => {
+                if (btn) {
+                    btn.classList.remove('btn-loading');
+                    btn.disabled = false;
+                    btn.innerHTML = btn.getAttribute('data-orig-html');
+                }
                 showResponseToast(error.message, false);
             });
         }
@@ -733,6 +751,13 @@
         // Submitting PIN Update Request (Preserved Backend Integration)
         function submitPinUpdate(e) {
             e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            if (btn) {
+                btn.classList.add('btn-loading');
+                btn.disabled = true;
+                btn.setAttribute('data-orig-html', btn.innerHTML);
+                btn.innerHTML = '<span>Updating...</span>';
+            }
             
             const newPin = document.getElementById('newPinInput').value;
             
@@ -754,10 +779,20 @@
                 return response.json();
             })
             .then(data => {
+                if (btn) {
+                    btn.classList.remove('btn-loading');
+                    btn.disabled = false;
+                    btn.innerHTML = btn.getAttribute('data-orig-html');
+                }
                 showResponseToast(data.message || 'Transaction PIN updated successfully!', true);
                 document.getElementById('pinUpdateForm').reset();
             })
             .catch(error => {
+                if (btn) {
+                    btn.classList.remove('btn-loading');
+                    btn.disabled = false;
+                    btn.innerHTML = btn.getAttribute('data-orig-html');
+                }
                 showResponseToast(error.message, false);
             });
         }

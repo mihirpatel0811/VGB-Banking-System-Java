@@ -214,12 +214,18 @@ public class LoanServlet extends BaseServlet {
             java.util.List<com.vgb.model.Customer> customersList = new com.vgb.service.CustomerService().getAllCustomers();
             java.util.Map<Long, String> customerNames = new java.util.HashMap<>();
             java.util.Map<Long, String> customerPhones = new java.util.HashMap<>();
+            java.util.Map<Long, String> customerAadhaars = new java.util.HashMap<>();
+            java.util.Map<Long, String> customerPans = new java.util.HashMap<>();
             for (com.vgb.model.Customer c : customersList) {
                 customerNames.put(c.getCustomerId(), c.getFullName());
                 customerPhones.put(c.getCustomerId(), c.getPhoneNo());
+                customerAadhaars.put(c.getCustomerId(), c.getAadhaarCard());
+                customerPans.put(c.getCustomerId(), c.getPanCard());
             }
             request.setAttribute("customerNames", customerNames);
             request.setAttribute("customerPhones", customerPhones);
+            request.setAttribute("customerAadhaars", customerAadhaars);
+            request.setAttribute("customerPans", customerPans);
             request.setAttribute("customers", customersList);
         } catch (Exception e) {
             logger.error("Failed to load customer metadata maps in LoanServlet", e);

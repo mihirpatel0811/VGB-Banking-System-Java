@@ -909,7 +909,8 @@
                 <div class="preloader">
                     <div class="loader">
                         <div class="loader-ring"></div>
-                        <span>VGB</span>
+                        <div class="loader-ring-outer"></div>
+                        <span class="loader-watermark">VGB</span>
                     </div>
                 </div>
 
@@ -1102,7 +1103,7 @@
                                                     <td style="padding: 15px; text-align: center;">
                                                         <div style="display: flex; gap: 8px; justify-content: center;">
                                                             <button type="button" class="btn btn-secondary"
-                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
                                                                 data-form-details="<c:out value="
                                                                 ${loan.formDetails}" />" style="padding: 6px 12px;
                                                             font-size: 0.75rem; border-color: var(--primary-500); color:
@@ -1235,7 +1236,7 @@
                                                                         class="bx bx-wallet-alt"></i> Repay</button>
                                                             </c:if>
                                                             <button type="button" class="btn btn-secondary"
-                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
                                                                 data-form-details="<c:out value="
                                                                 ${loan.formDetails}" />" style="padding: 6px 12px;
                                                             font-size: 0.75rem; border-color: var(--primary-500); color:
@@ -1333,7 +1334,7 @@
                                                     <td style="padding: 15px; text-align: center;">
                                                         <div style="display: flex; gap: 8px; justify-content: center;">
                                                             <button type="button" class="btn btn-secondary"
-                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}')"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
                                                                 data-form-details="<c:out value="
                                                                 ${loan.formDetails}" />" style="padding: 6px 12px;
                                                             font-size: 0.75rem; border-color: var(--primary-500); color:
@@ -2713,28 +2714,28 @@
                                     <table>
                                         <tr>
                                             <td style="width: 30%; font-weight: bold;">Full Name:</td>
-                                            <td style="width: 70%;"><input type="text" id="adminFormFullName" readonly
+                                            <td style="width: 70%;"><input type="text" id="adminViewFormFullName" readonly
                                                     style="font-weight: 600;"></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Father's / Husband's Name:</td>
-                                            <td><input type="text" id="adminFormRelationName" readonly></td>
+                                            <td><input type="text" id="adminViewFormRelationName" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Date of Birth:</td>
-                                            <td><input type="text" id="adminFormDob" readonly></td>
+                                            <td><input type="text" id="adminViewFormDob" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Gender:</td>
-                                            <td><input type="text" id="adminFormGender" readonly></td>
+                                            <td><input type="text" id="adminViewFormGender" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Mobile Number:</td>
-                                            <td><input type="text" id="adminFormMobile" readonly></td>
+                                            <td><input type="text" id="adminViewFormMobile" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Email Address:</td>
-                                            <td><input type="text" id="adminFormEmail" readonly></td>
+                                            <td><input type="text" id="adminViewFormEmail" readonly></td>
                                         </tr>
                                     </table>
 
@@ -2743,14 +2744,14 @@
                                     <h3
                                         style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 10px 0 5px 0;">
                                         Current Address</h3>
-                                    <div id="adminFormCurrentAddress"
+                                    <div id="adminViewFormCurrentAddress"
                                         style="border-bottom: 1px dotted #475569; padding: 5px 0; font-weight: 600;">
                                     </div>
 
                                     <h3
                                         style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 15px 0 5px 0;">
                                         Permanent Address</h3>
-                                    <div id="adminFormPermanentAddress"
+                                    <div id="adminViewFormPermanentAddress"
                                         style="border-bottom: 1px dotted #475569; padding: 5px 0; font-weight: 600; min-height: 25px;">
                                     </div>
 
@@ -2759,17 +2760,17 @@
                                     <table>
                                         <tr>
                                             <td style="width: 35%; font-weight: bold;">Aadhaar Number:</td>
-                                            <td style="width: 65%;"><input type="text" id="adminFormAadhaar" readonly>
+                                            <td style="width: 65%;"><input type="text" id="adminViewFormAadhaar" readonly>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">PAN Number:</td>
-                                            <td><input type="text" id="adminFormPan" readonly
+                                            <td><input type="text" id="adminViewFormPan" readonly
                                                     style="text-transform: uppercase;"></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Voter ID / Driving License No.:</td>
-                                            <td><input type="text" id="adminFormVoterDl" readonly></td>
+                                            <td><input type="text" id="adminViewFormVoterDl" readonly></td>
                                         </tr>
                                     </table>
 
@@ -2778,21 +2779,21 @@
                                     <table>
                                         <tr>
                                             <td style="width: 35%; font-weight: bold;">Occupation:</td>
-                                            <td style="width: 65%;"><input type="text" id="adminFormOccupation"
+                                            <td style="width: 65%;"><input type="text" id="adminViewFormOccupation"
                                                     readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Company / Business Name:</td>
-                                            <td><input type="text" id="adminFormCompanyName" readonly></td>
+                                            <td><input type="text" id="adminViewFormCompanyName" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Monthly Income:</td>
-                                            <td><input type="text" id="adminFormMonthlyIncome" readonly
+                                            <td><input type="text" id="adminViewFormMonthlyIncome" readonly
                                                     style="font-weight: 600;"></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Work Experience:</td>
-                                            <td><input type="text" id="adminFormExperience" readonly></td>
+                                            <td><input type="text" id="adminViewFormExperience" readonly></td>
                                         </tr>
                                     </table>
 
@@ -2801,20 +2802,20 @@
                                     <table>
                                         <tr>
                                             <td style="width: 35%; font-weight: bold;">Account Holder Name:</td>
-                                            <td style="width: 65%;"><input type="text" id="adminFormAccHolderName"
+                                            <td style="width: 65%;"><input type="text" id="adminViewFormAccHolderName"
                                                     readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Account Number:</td>
-                                            <td><input type="text" id="adminFormAccNo" readonly></td>
+                                            <td><input type="text" id="adminViewFormAccNo" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">IFSC Code:</td>
-                                            <td><input type="text" id="adminFormIfsc" readonly></td>
+                                            <td><input type="text" id="adminViewFormIfsc" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Branch:</td>
-                                            <td><input type="text" id="adminFormBranch" readonly></td>
+                                            <td><input type="text" id="adminViewFormBranch" readonly></td>
                                         </tr>
                                     </table>
 
@@ -2823,32 +2824,32 @@
                                     <table>
                                         <tr>
                                             <td style="width: 35%; font-weight: bold;">Loan Type:</td>
-                                            <td style="width: 65%;"><input type="text" id="adminFormLoanType" readonly
+                                            <td style="width: 65%;"><input type="text" id="adminViewFormLoanType" readonly
                                                     style="font-weight: bold; text-transform: uppercase;">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Requested Amount (₹):</td>
-                                            <td><input type="text" id="adminFormLoanAmount" readonly
+                                            <td><input type="text" id="adminViewFormLoanAmount" readonly
                                                     style="font-weight: bold;"></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Tenure Duration:</td>
-                                            <td><input type="text" id="adminFormLoanTenure" readonly></td>
+                                            <td><input type="text" id="adminViewFormLoanTenure" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Fixed Interest Rate:</td>
-                                            <td><input type="text" id="adminFormLoanRate" readonly
+                                            <td><input type="text" id="adminViewFormLoanRate" readonly
                                                     style="font-weight: 600; color: var(--primary-500);"></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Purpose of Loan:</td>
-                                            <td><input type="text" id="adminFormLoanPurpose" readonly></td>
+                                            <td><input type="text" id="adminViewFormLoanPurpose" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Estimated Monthly EMI:</td>
                                             <td style="font-weight: bold; font-size: 1.1rem; color: #0f172a;"
-                                                id="adminFormPaperEmiDisplay">₹ 0.00</td>
+                                                id="adminViewFormPaperEmiDisplay">₹ 0.00</td>
                                         </tr>
                                     </table>
 
@@ -2857,16 +2858,16 @@
                                     <table>
                                         <tr>
                                             <td style="width: 35%; font-weight: bold;">Nominee Name:</td>
-                                            <td style="width: 65%;"><input type="text" id="adminFormNomineeName"
+                                            <td style="width: 65%;"><input type="text" id="adminViewFormNomineeName"
                                                     readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Relationship with Applicant:</td>
-                                            <td><input type="text" id="adminFormNomineeRelationship" readonly></td>
+                                            <td><input type="text" id="adminViewFormNomineeRelationship" readonly></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Nominee Mobile Number:</td>
-                                            <td><input type="text" id="adminFormNomineeMobile" readonly></td>
+                                            <td><input type="text" id="adminViewFormNomineeMobile" readonly></td>
                                         </tr>
                                     </table>
 
@@ -2889,18 +2890,18 @@
                                                 <tr>
                                                     <td style="width: 30%; font-weight: bold;">Date:</td>
                                                     <td style="width: 70%;"><input type="text"
-                                                            id="adminFormDeclarationDate" readonly></td>
+                                                            id="adminViewFormDeclarationDate" readonly></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: bold;">Place:</td>
-                                                    <td><input type="text" id="adminFormDeclarationPlace" readonly>
+                                                    <td><input type="text" id="adminViewFormDeclarationPlace" readonly>
                                                     </td>
                                                 </tr>
                                             </table>
                                         </div>
                                         <div
                                             style="text-align: center; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
-                                            <input type="text" id="adminFormSignature" readonly
+                                            <input type="text" id="adminViewFormSignature" readonly
                                                 style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.5rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
                                             <span
                                                 style="font-size: 0.75rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px; display: block;">Applicant's
@@ -2965,17 +2966,17 @@
                     // Store all system accounts locally in JS for interactive client-side filtering
                     const allAccounts = JSON.parse(document.getElementById('accounts-data').textContent);
 
-                    function openViewModal(loanId, customerName, customerPhone, loanType, principal, interestRate, termMonths, formDetailsStr, loanStatus) {
+                    function openViewModal(loanId, customerName, customerPhone, loanType, principal, interestRate, termMonths, formDetailsStr, loanStatus, fallbackAadhaar, fallbackPan) {
                         document.getElementById('adminViewLoanId').textContent = "#LN-" + loanId;
 
                         // Re-populate basic/fallback details
-                        document.getElementById('adminFormFullName').value = customerName;
-                        document.getElementById('adminFormMobile').value = customerPhone;
-                        document.getElementById('adminFormLoanType').value = loanType;
-                        document.getElementById('adminFormLoanAmount').value = "₹ " + parseFloat(principal).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-                        document.getElementById('adminFormLoanRate').value = parseFloat(interestRate).toFixed(2) + "% Fixed P.A.";
-                        document.getElementById('adminFormLoanTenure').value = termMonths + " Months";
-                        document.getElementById('adminFormAccHolderName').value = customerName;
+                        document.getElementById('adminViewFormFullName').value = customerName;
+                        document.getElementById('adminViewFormMobile').value = customerPhone;
+                        document.getElementById('adminViewFormLoanType').value = loanType;
+                        document.getElementById('adminViewFormLoanAmount').value = "₹ " + parseFloat(principal).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                        document.getElementById('adminViewFormLoanRate').value = parseFloat(interestRate).toFixed(2) + "% Fixed P.A.";
+                        document.getElementById('adminViewFormLoanTenure').value = termMonths + " Months";
+                        document.getElementById('adminViewFormAccHolderName').value = customerName;
 
                         // Configure Modal Action Buttons dynamically
                         const approveBtn = document.getElementById('adminModalApproveBtn');
@@ -3010,75 +3011,75 @@
 
                         if (parsed) {
                             // Populate detailed form from JSON block
-                            document.getElementById('adminFormRelationName').value = parsed.relationName || '___________________________';
-                            document.getElementById('adminFormDob').value = parsed.dob || '___________________________';
-                            document.getElementById('adminFormGender').value = parsed.gender || '___________________________';
+                            document.getElementById('adminViewFormRelationName').value = parsed.relationName || '___________________________';
+                            document.getElementById('adminViewFormDob').value = parsed.dob || '___________________________';
+                            document.getElementById('adminViewFormGender').value = parsed.gender || '___________________________';
 
                             // Email prefill from basic or parsed
-                            document.getElementById('adminFormEmail').value = parsed.email || '';
+                            document.getElementById('adminViewFormEmail').value = parsed.email || '';
 
-                            document.getElementById('adminFormCurrentAddress').textContent = parsed.currentAddress || 'N/A';
-                            document.getElementById('adminFormPermanentAddress').textContent = parsed.permanentAddress || '______________________________________________________';
+                            document.getElementById('adminViewFormCurrentAddress').textContent = parsed.currentAddress || 'N/A';
+                            document.getElementById('adminViewFormPermanentAddress').textContent = parsed.permanentAddress || '______________________________________________________';
 
-                            document.getElementById('adminFormAadhaar').value = parsed.aadhaar || '';
-                            document.getElementById('adminFormPan').value = parsed.pan || '';
-                            document.getElementById('adminFormVoterDl').value = parsed.voterDlNo || '___________________________';
+                            document.getElementById('adminViewFormAadhaar').value = parsed.aadhaar || fallbackAadhaar || '';
+                            document.getElementById('adminViewFormPan').value = parsed.pan || fallbackPan || '';
+                            document.getElementById('adminViewFormVoterDl').value = parsed.voterDlNo || '___________________________';
 
-                            document.getElementById('adminFormOccupation').value = parsed.occupation || '___________________________';
-                            document.getElementById('adminFormCompanyName').value = parsed.companyName || '___________________________';
-                            document.getElementById('adminFormMonthlyIncome').value = parsed.monthlyIncome ? "₹ " + parseFloat(parsed.monthlyIncome).toLocaleString('en-IN') : '₹ ______________________';
-                            document.getElementById('adminFormExperience').value = parsed.workExperience || '_____________________';
+                            document.getElementById('adminViewFormOccupation').value = parsed.occupation || '___________________________';
+                            document.getElementById('adminViewFormCompanyName').value = parsed.companyName || '___________________________';
+                            document.getElementById('adminViewFormMonthlyIncome').value = parsed.monthlyIncome ? "₹ " + parseFloat(parsed.monthlyIncome).toLocaleString('en-IN') : '₹ ______________________';
+                            document.getElementById('adminViewFormExperience').value = parsed.workExperience || '_____________________';
 
-                            document.getElementById('adminFormAccNo').value = parsed.linkedAccountNo || '___________________________';
-                            document.getElementById('adminFormIfsc').value = parsed.linkedIfsc || '___________________________';
-                            document.getElementById('adminFormBranch').value = parsed.linkedBranch || 'VGB Main Branch';
+                            document.getElementById('adminViewFormAccNo').value = parsed.linkedAccountNo || '___________________________';
+                            document.getElementById('adminViewFormIfsc').value = parsed.linkedIfsc || '___________________________';
+                            document.getElementById('adminViewFormBranch').value = parsed.linkedBranch || 'VGB Main Branch';
 
-                            document.getElementById('adminFormLoanPurpose').value = parsed.loanPurpose || '___________________________';
+                            document.getElementById('adminViewFormLoanPurpose').value = parsed.loanPurpose || '___________________________';
 
-                            document.getElementById('adminFormNomineeName').value = parsed.nomineeName || '___________________________';
-                            document.getElementById('adminFormNomineeRelationship').value = parsed.nomineeRelationship || '___________________________';
-                            document.getElementById('adminFormNomineeMobile').value = parsed.nomineeMobile || '___________________________';
+                            document.getElementById('adminViewFormNomineeName').value = parsed.nomineeName || '___________________________';
+                            document.getElementById('adminViewFormNomineeRelationship').value = parsed.nomineeRelationship || '___________________________';
+                            document.getElementById('adminViewFormNomineeMobile').value = parsed.nomineeMobile || '___________________________';
 
-                            document.getElementById('adminFormDeclarationDate').value = parsed.declarationDate || '';
-                            document.getElementById('adminFormDeclarationPlace').value = parsed.declarationPlace || '___________________________';
-                            document.getElementById('adminFormSignature').value = parsed.signature || '';
+                            document.getElementById('adminViewFormDeclarationDate').value = parsed.declarationDate || '';
+                            document.getElementById('adminViewFormDeclarationPlace').value = parsed.declarationPlace || '___________________________';
+                            document.getElementById('adminViewFormSignature').value = parsed.signature || '';
 
                             // Calculate paper EMI
                             const monthlyRate = (parseFloat(interestRate) / 12) / 100;
                             const emi = (parseFloat(principal) * monthlyRate * Math.pow(1 + monthlyRate, parseInt(termMonths))) / (Math.pow(1 + monthlyRate, parseInt(termMonths)) - 1);
-                            document.getElementById('adminFormPaperEmiDisplay').textContent = "₹ " + emi.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            document.getElementById('adminViewFormPaperEmiDisplay').textContent = "₹ " + emi.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                         } else {
                             // Fall back cleanly to a neat default form compiled from basic database columns
-                            document.getElementById('adminFormRelationName').value = 'N/A (Legacy Record)';
-                            document.getElementById('adminFormDob').value = 'N/A';
-                            document.getElementById('adminFormGender').value = 'N/A';
-                            document.getElementById('adminFormEmail').value = '';
-                            document.getElementById('adminFormCurrentAddress').textContent = 'N/A (Legacy Record)';
-                            document.getElementById('adminFormPermanentAddress').textContent = 'N/A (Legacy Record)';
-                            document.getElementById('adminFormAadhaar').value = 'N/A';
-                            document.getElementById('adminFormPan').value = 'N/A';
-                            document.getElementById('adminFormVoterDl').value = 'N/A';
+                            document.getElementById('adminViewFormRelationName').value = 'N/A (Legacy Record)';
+                            document.getElementById('adminViewFormDob').value = 'N/A';
+                            document.getElementById('adminViewFormGender').value = 'N/A';
+                            document.getElementById('adminViewFormEmail').value = '';
+                            document.getElementById('adminViewFormCurrentAddress').textContent = 'N/A (Legacy Record)';
+                            document.getElementById('adminViewFormPermanentAddress').textContent = 'N/A (Legacy Record)';
+                            document.getElementById('adminViewFormAadhaar').value = fallbackAadhaar || 'N/A';
+                            document.getElementById('adminViewFormPan').value = fallbackPan || 'N/A';
+                            document.getElementById('adminViewFormVoterDl').value = 'N/A';
 
-                            document.getElementById('adminFormOccupation').value = 'N/A';
-                            document.getElementById('adminFormCompanyName').value = 'N/A';
-                            document.getElementById('adminFormMonthlyIncome').value = 'N/A';
-                            document.getElementById('adminFormExperience').value = 'N/A';
+                            document.getElementById('adminViewFormOccupation').value = 'N/A';
+                            document.getElementById('adminViewFormCompanyName').value = 'N/A';
+                            document.getElementById('adminViewFormMonthlyIncome').value = 'N/A';
+                            document.getElementById('adminViewFormExperience').value = 'N/A';
 
-                            document.getElementById('adminFormAccNo').value = 'N/A';
-                            document.getElementById('adminFormIfsc').value = 'N/A';
-                            document.getElementById('adminFormBranch').value = 'VGB Main Branch';
+                            document.getElementById('adminViewFormAccNo').value = 'N/A';
+                            document.getElementById('adminViewFormIfsc').value = 'N/A';
+                            document.getElementById('adminViewFormBranch').value = 'VGB Main Branch';
 
-                            document.getElementById('adminFormLoanPurpose').value = 'N/A (Legacy Record)';
+                            document.getElementById('adminViewFormLoanPurpose').value = 'N/A (Legacy Record)';
 
-                            document.getElementById('adminFormNomineeName').value = 'N/A';
-                            document.getElementById('adminFormNomineeRelationship').value = 'N/A';
-                            document.getElementById('adminFormNomineeMobile').value = 'N/A';
+                            document.getElementById('adminViewFormNomineeName').value = 'N/A';
+                            document.getElementById('adminViewFormNomineeRelationship').value = 'N/A';
+                            document.getElementById('adminViewFormNomineeMobile').value = 'N/A';
 
-                            document.getElementById('adminFormDeclarationDate').value = 'N/A';
-                            document.getElementById('adminFormDeclarationPlace').value = 'N/A';
-                            document.getElementById('adminFormSignature').value = 'N/A';
+                            document.getElementById('adminViewFormDeclarationDate').value = 'N/A';
+                            document.getElementById('adminViewFormDeclarationPlace').value = 'N/A';
+                            document.getElementById('adminViewFormSignature').value = 'N/A';
 
-                            document.getElementById('adminFormPaperEmiDisplay').textContent = 'N/A';
+                            document.getElementById('adminViewFormPaperEmiDisplay').textContent = 'N/A';
                         }
 
                         document.getElementById('adminViewModal').style.display = 'flex';
@@ -3920,6 +3921,8 @@
                             dob: document.getElementById('adminFormDob').value,
                             gender: document.querySelector('input[name="adminFormGender"]:checked')?.value || '',
                             permanentAddress: document.getElementById('adminFormPermanentAddress').value,
+                            aadhaar: document.getElementById('adminFormAadhaar').value,
+                            pan: document.getElementById('adminFormPan').value,
                             voterDlNo: document.getElementById('adminFormVoterDl').value,
                             occupation: document.getElementById('adminFormOccupation').value,
                             companyName: document.getElementById('adminFormCompanyName').value,

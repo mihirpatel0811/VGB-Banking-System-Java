@@ -1570,43 +1570,82 @@
             color: var(--accent-amber) !important;
         }
 
+        .print-only {
+            display: none !important;
+        }
+
         /* Print styling */
         @media print {
-            .sidebar,
-            .header,
-            .no-print,
-            .close-modal-btn,
-            .modal-footer,
-            #themeToggle {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            /* Hide everything that is NOT the statement modal */
+            body > *:not(#statementModal) {
                 display: none !important;
             }
-
-            .modal {
-                position: absolute !important;
+            #statementModal {
+                display: block !important;
+                position: relative !important;
                 background: white !important;
+                margin: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+            }
+            #statementModal .modal-content {
                 display: block !important;
                 box-shadow: none !important;
-                overflow: visible !important;
-            }
-
-            .modal-content {
-                box-shadow: none !important;
                 border: none !important;
+                width: 100% !important;
                 max-width: 100% !important;
-                max-height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
                 overflow: visible !important;
             }
-
-            .main-content {
-                margin-left: 0 !important;
+            #statementModal .modal-body {
                 padding: 0 !important;
             }
-
+            #statementModal .no-print {
+                display: none !important;
+            }
             .statement-meta-grid {
                 grid-template-columns: 1fr 1fr !important;
                 display: grid !important;
                 margin-bottom: 25px !important;
+            }
+            
+            /* Table formatting to fit portrait page */
+            #statementTxnTable {
+                table-layout: fixed !important;
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            #statementTxnTable th, #statementTxnTable td {
+                padding: 6px 4px !important;
+                font-size: 10px !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+            }
+            
+            /* Column widths for standard portrait layout */
+            #statementTxnTable th:nth-child(1), #statementTxnTable td:nth-child(1) { width: 5% !important; }
+            #statementTxnTable th:nth-child(2), #statementTxnTable td:nth-child(2) { width: 16% !important; }
+            #statementTxnTable th:nth-child(3), #statementTxnTable td:nth-child(3) { width: 8% !important; }
+            #statementTxnTable th:nth-child(4), #statementTxnTable td:nth-child(4) { width: 27% !important; }
+            #statementTxnTable th:nth-child(5), #statementTxnTable td:nth-child(5) { width: 8% !important; }
+            #statementTxnTable th:nth-child(6), #statementTxnTable td:nth-child(6) { width: 12% !important; }
+            #statementTxnTable th:nth-child(7), #statementTxnTable td:nth-child(7) { width: 12% !important; }
+            #statementTxnTable th:nth-child(8), #statementTxnTable td:nth-child(8) { width: 12% !important; }
+
+            .print-only {
+                display: flex !important;
+            }
+            .badge-id, .txn-deposit, .txn-withdrawal, span[style*="background"] {
+                background: transparent !important;
+                padding: 0 !important;
             }
         }
 
@@ -1629,7 +1668,8 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader-ring"></div>
-            <span>VGB</span>
+            <div class="loader-ring-outer"></div>
+            <span class="loader-watermark">VGB</span>
         </div>
     </div>
 
@@ -3061,7 +3101,7 @@
                     </div>
 
                     <!-- Footer Signatures -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; margin-bottom: 25px;" class="print-only">
                         <div style="text-align: center; width: 200px;">
                             <div style="border-bottom: 1.5px solid var(--gray-400); height: 40px; margin-bottom: 8px;"></div>
                             <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 600; text-transform: capitalize;">Authorized Signatory</span>

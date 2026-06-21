@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const App = {
     init: function () {
         this.initPreloader();
+        this.initGlobalFormLoaders();
         this.initThemeSystem();
         this.initNavigation();
         this.updateStatsCount();
@@ -110,6 +111,32 @@ const App = {
                 hidePreloader();
             }
         }, 3000);
+    },
+
+    initGlobalFormLoaders: function () {
+        document.addEventListener('submit', (e) => {
+            // Wait a tick to check if preventDefault was called by custom validation or AJAX handler
+            setTimeout(() => {
+                if (e.defaultPrevented) return;
+
+                const form = e.target;
+                const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+                submitButtons.forEach(btn => {
+                    btn.classList.add('btn-loading');
+                    if (btn.tagName === 'BUTTON') {
+                        btn.setAttribute('data-original-html', btn.innerHTML);
+                        btn.innerHTML = '<span>Processing...</span>';
+                    } else if (btn.tagName === 'INPUT') {
+                        btn.setAttribute('data-original-value', btn.value);
+                        btn.value = 'Processing...';
+                    }
+                    // Disable button shortly after to allow event propagation to finish
+                    setTimeout(() => {
+                        btn.disabled = true;
+                    }, 10);
+                });
+            }, 0);
+        });
     },
 
     revealHero: function () {
