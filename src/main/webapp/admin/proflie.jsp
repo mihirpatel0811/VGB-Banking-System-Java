@@ -313,12 +313,12 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
-                <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
+                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
                 <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
             </div>
             <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
@@ -358,6 +358,11 @@
                 <div class="toast-message" style="font-weight: 600; color: var(--gray-800);">Action executed successfully.</div>
             </div>
 
+            <!-- Hidden Upload Form for Admin -->
+            <form id="adminAvatarUploadForm" style="display: none;">
+                <input type="file" id="adminAvatarFileInput" name="adminAvatarFile" accept="image/*" onchange="uploadAdminAvatarDynamically();">
+            </form>
+
             <!-- Grid Layout -->
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;" class="mobile-grid-1">
                 <!-- Left Details Banner Block -->
@@ -367,8 +372,13 @@
                         <div class="profile-cover"></div>
                         <!-- Floating Avatar -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
-                            <div class="avatar-holder">
-                                <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Logo">
+                            <div style="position: relative; display: inline-block;">
+                                <div class="avatar-holder" id="adminAvatarContainer" style="cursor: pointer;" onclick="openAdminLightbox();">
+                                    <img id="adminAvatarImage" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin Profile Logo">
+                                </div>
+                                <div onclick="document.getElementById('adminAvatarFileInput').click();" style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid white; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20;" title="Click to Change Profile Picture">
+                                    <i class="bx bx-camera"></i>
+                                </div>
                             </div>
                             <div style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-size: 0.72rem; font-weight: 700; padding: 5px 12px; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">
                                 <i class="bx bxs-circle" style="font-size: 0.55rem; vertical-align: middle; margin-right: 4px;"></i> Active
@@ -769,6 +779,15 @@
 
         // Handle Theme Selector sync & Nav toggles on page load
         document.addEventListener("DOMContentLoaded", function () {
+            // Load saved admin avatar
+            const savedAvatar = localStorage.getItem('admin_avatar');
+            if (savedAvatar) {
+                const headerAvatar = document.getElementById('adminHeaderAvatar');
+                const adminAvatar = document.getElementById('adminAvatarImage');
+                if (headerAvatar) headerAvatar.src = savedAvatar;
+                if (adminAvatar) adminAvatar.src = savedAvatar;
+            }
+
             // Mobile Menu Toggle
             const mobileToggle = document.getElementById('mobileNavToggle');
             const sidebar = document.querySelector('.sidebar');
@@ -826,6 +845,96 @@
                 });
             }
         });
+
+        /* --- Admin Avatar Upload & Lightbox Methods --- */
+        function openAdminLightbox() {
+            const adminAvatar = document.getElementById('adminAvatarImage');
+            if (!adminAvatar || adminAvatar.src.includes('logo.png')) {
+                // If there's no custom avatar path, ignore preview request
+                return;
+            }
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const wrapper = document.getElementById('lightboxImageWrapper');
+            
+            lightboxImg.src = adminAvatar.src;
+            lightbox.style.display = 'flex';
+            
+            // Wait for display rendering then trigger entry animations
+            setTimeout(() => {
+                lightbox.style.opacity = '1';
+                wrapper.style.transform = 'scale(1)';
+            }, 15);
+        }
+
+        function closeAdminLightbox(e) {
+            if (e) {
+                e.stopPropagation();
+            }
+            const lightbox = document.getElementById('imageLightbox');
+            const wrapper = document.getElementById('lightboxImageWrapper');
+            
+            lightbox.style.opacity = '0';
+            wrapper.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+            }, 300);
+        }
+
+        function uploadAdminAvatarDynamically() {
+            const fileInput = document.getElementById('adminAvatarFileInput');
+            if (fileInput.files.length === 0) {
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            
+            // Front-end validation for type
+            if (!file.type.startsWith('image/')) {
+                showResponseToast('Only image files (JPEG, PNG, GIF) are allowed.', false);
+                fileInput.value = '';
+                return;
+            }
+            
+            // Show dynamic uploading feedback
+            showResponseToast('Updating profile picture...', true);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                try {
+                    localStorage.setItem('admin_avatar', base64String);
+                    
+                    // Update avatar elements dynamically
+                    const adminAvatar = document.getElementById('adminAvatarImage');
+                    const headerAvatar = document.getElementById('adminHeaderAvatar');
+                    if (adminAvatar) adminAvatar.src = base64String;
+                    if (headerAvatar) headerAvatar.src = base64String;
+                    
+                    fileInput.value = '';
+                    showResponseToast('Profile picture updated successfully!', true);
+                } catch (err) {
+                    showResponseToast('Failed to save profile picture: File might be too large.', false);
+                    fileInput.value = '';
+                }
+            };
+            reader.onerror = function() {
+                showResponseToast('Error reading image file.', false);
+                fileInput.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
     </script>
+
+    <!-- Full-screen image lightbox -->
+    <div id="imageLightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); z-index: 9999; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;" onclick="closeAdminLightbox()">
+        <div id="lightboxImageWrapper" style="position: relative; transform: scale(0.9); transition: transform 0.3s ease; max-width: 90%; max-height: 90%;">
+            <img id="lightboxImg" src="" alt="Enlarged Avatar" style="max-width: 450px; max-height: 450px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.25); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); object-fit: cover; display: block;">
+            <button style="position: absolute; top: -45px; right: -45px; background: none; border: none; color: white; font-size: 2.2rem; cursor: pointer; transition: transform 0.2s;" onclick="closeAdminLightbox(event)">
+                <i class="bx bx-x"></i>
+            </button>
+        </div>
+    </div>
 </body>
 </html>

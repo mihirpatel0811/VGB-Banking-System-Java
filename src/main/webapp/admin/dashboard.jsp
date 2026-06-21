@@ -486,7 +486,7 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions">

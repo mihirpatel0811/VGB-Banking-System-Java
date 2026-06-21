@@ -822,7 +822,7 @@
     <!-- Header -->
     <header class="header scrolled">
         <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-            <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
         </a>
         <div class="nav-actions">
             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>
@@ -895,23 +895,11 @@
                                             <!-- Gold V-Logo & Stacked Bank Name Header -->
                                             <div class="card-bank-header">
                                                 <div class="card-logo-v">
-                                                    <svg viewBox="0 0 100 100" style="width: 22px; height: 22px;">
-                                                        <defs>
-                                                            <linearGradient id="goldGradCard_${card.cardId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                                <stop offset="0%" stop-color="#bf953f" />
-                                                                <stop offset="25%" stop-color="#fcf6ba" />
-                                                                <stop offset="50%" stop-color="#b38728" />
-                                                                <stop offset="75%" stop-color="#fbf5b7" />
-                                                                <stop offset="100%" stop-color="#aa771c" />
-                                                            </linearGradient>
-                                                        </defs>
-                                                        <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradCard_${card.cardId})" />
-                                                        <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradCard_${card.cardId})" />
-                                                    </svg>
+                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" style="width: 22px; height: 22px; object-fit: contain;">
                                                 </div>
                                                 <div class="card-bank-name-stack">
                                                     <span class="bank-title">VERTEX</span>
-                                                    <span class="bank-subtitle">GELEXY BANK</span>
+                                                    <span class="bank-subtitle">GALAXY BANK</span>
                                                 </div>
                                             </div>
                                             
@@ -973,7 +961,7 @@
                                         <!-- Back Face -->
                                         <div class="card-face card-back">
                                             <div class="card-back-header">
-                                                <span class="back-helpline">For customer service, call 1800 123 4567 or visit www.vertexgelexybank.com</span>
+                                                <span class="back-helpline">For customer service, call 1800 123 4567 or visit www.vertexgalaxybank.com</span>
                                                 <span class="back-card-id">VGB${card.cardId}</span>
                                             </div>
                                             <div class="card-back-magnetic-strip"></div>
@@ -1002,28 +990,16 @@
                                                 </div>
                                                 <div class="back-right-logo">
                                                     <div class="back-logo-v">
-                                                        <svg viewBox="0 0 100 100" style="width: 15px; height: 15px;">
-                                                            <defs>
-                                                                <linearGradient id="goldGradBack_${card.cardId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                                    <stop offset="0%" stop-color="#bf953f" />
-                                                                    <stop offset="25%" stop-color="#fcf6ba" />
-                                                                    <stop offset="50%" stop-color="#b38728" />
-                                                                    <stop offset="75%" stop-color="#fbf5b7" />
-                                                                    <stop offset="100%" stop-color="#aa771c" />
-                                                                </linearGradient>
-                                                            </defs>
-                                                            <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradBack_${card.cardId})" />
-                                                            <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradBack_${card.cardId})" />
-                                                        </svg>
+                                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" style="width: 15px; height: 15px; object-fit: contain;">
                                                         <span class="logo-text-stacked">
                                                             <span class="text-top">VERTEX</span>
-                                                            <span class="text-bottom">GELEXY BANK</span>
+                                                            <span class="text-bottom">GALAXY BANK</span>
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="back-property-text">
-                                                This card is the property of Vertex Gelexy Bank. If found, please return to the nearest branch.
+                                                This card is the property of Vertex Galaxy Bank. If found, please return to the nearest branch.
                                             </div>
                                         </div>
                                     </div>

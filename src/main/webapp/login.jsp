@@ -558,7 +558,7 @@
             <header class="header scrolled">
                 <a href="${pageContext.request.contextPath}/index.jsp" class="logo" aria-label="Vertex Galaxy Bank home"
                     style="display: flex; align-items: center; text-decoration: none;">
-                    <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
                 </a>
                 <nav class="navbar" aria-label="Main navigation">
                     <a href="${pageContext.request.contextPath}/index.jsp#home"><i class="bx bx-home"></i> Home</a>
@@ -600,27 +600,7 @@
                                 <div class="card-glare"></div>
                                 <div class="bank-card-top">
                                     <div class="bank-card-logo-container">
-                                        <svg class="vg-orbit-logo" viewBox="0 0 100 100" width="32" height="32"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <ellipse cx="50" cy="50" rx="38" ry="12" fill="none"
-                                                stroke="url(#goldGradLogin)" stroke-width="3"
-                                                transform="rotate(-30 50 50)" />
-                                            <text x="28" y="58" font-family="'Cinzel', 'Georgia', serif" font-size="28"
-                                                font-weight="800" fill="#ffffff">V</text>
-                                            <text x="48" y="65" font-family="'Playfair Display', 'Georgia', serif"
-                                                font-style="italic" font-size="34" font-weight="bold"
-                                                fill="url(#goldGradLogin)">G</text>
-                                            <path
-                                                d="M 80 22 L 81.5 25 L 85 26.5 L 81.5 28 L 80 31 L 78.5 28 L 75 26.5 L 78.5 25 Z"
-                                                fill="#ffe875" />
-                                            <defs>
-                                                <linearGradient id="goldGradLogin" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stop-color="#ffe875" />
-                                                    <stop offset="50%" stop-color="#f7c844" />
-                                                    <stop offset="100%" stop-color="#b88f14" />
-                                                </linearGradient>
-                                            </defs>
-                                        </svg>
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
                                         <span class="bank-name-text">Vertex Galaxy Bank</span>
                                     </div>
                                     <svg class="bank-card-chip" viewBox="0 0 100 80" width="45" height="36"

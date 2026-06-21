@@ -163,7 +163,7 @@
     <!-- Header -->
     <header class="header scrolled">
         <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-            <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
         </a>
         <div class="nav-actions">
             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>
@@ -278,17 +278,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <!-- Stylish hexagon logo emblem -->
-                                <svg width="24" height="26" viewBox="0 0 24 26" fill="none" style="filter: drop-shadow(0 0 8px rgba(168,85,247,0.5));">
-                                    <path d="M12 1 L22 6.8 L22 18.2 L12 24 L2 18.2 L2 6.8 Z" fill="url(#logoBg)" stroke="#d8b4fe" stroke-width="1.5"/>
-                                    <defs>
-                                        <linearGradient id="logoBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="#8b5cf6"/>
-                                            <stop offset="100%" stop-color="#ec4899"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <path d="M12 7 L16 11 L16 15 L12 18 L8 15 L8 11 Z" fill="white" opacity="0.9"/>
-                                    <path d="M12 9 L14 11 L14 13 L12 15 L10 13 L10 11 Z" fill="#8b5cf6"/>
-                                </svg>
+                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 24px; height: 26px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(168,85,247,0.5));">
                                 <span style="font-weight: 700; letter-spacing: 0.5px; font-size: 0.95rem; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">Vertex Galaxy Bank</span>
                             </div>
                             

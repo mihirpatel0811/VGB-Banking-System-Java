@@ -1069,7 +1069,7 @@
     <!-- Header -->
     <header class="header scrolled">
         <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-            <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
         </a>
         <div class="nav-actions">
             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-user-circle"></i> Customer Space</span>
@@ -1172,20 +1172,20 @@
                                         </svg>
                                     </div>
                                     <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
-                                    <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GELEXY BANK</span>
+                                    <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
                                     <span style="font-size: 0.42rem; letter-spacing: 1px; color: rgba(255,255,255,0.5); font-weight: 500; font-family: 'Poppins', sans-serif; margin-top: 4px; text-transform: uppercase;">Connecting Today, Empowering Tomorrow</span>
                                 </div>
                                 
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
                                     <div style="font-family: 'Poppins', sans-serif; font-size: 0.45rem; line-height: 1.3; color: rgba(255,255,255,0.5);">
                                         <strong>Head Office:</strong><br>
-                                        Vertex Gelexy Bank,<br>
+                                        Vertex Galaxy Bank,<br>
                                         123, Business Avenue, Financial District,<br>
                                         City - 000001
                                     </div>
                                     <div style="display: flex; gap: 15px; font-family: 'Poppins', sans-serif; font-size: 0.48rem; color: rgba(255,255,255,0.6);">
                                         <span><i class="bx bx-phone" style="vertical-align: middle; color: #d4af37;"></i> 1800 123 4567</span>
-                                        <span><i class="bx bx-globe" style="vertical-align: middle; color: #d4af37;"></i> www.vertexgelexybank.com</span>
+                                        <span><i class="bx bx-globe" style="vertical-align: middle; color: #d4af37;"></i> www.vertexgalaxybank.com</span>
                                     </div>
                                 </div>
                             </div>
@@ -1207,7 +1207,7 @@
                                         <!-- Header -->
                                         <div class="cheque-header">
                                             <div class="cheque-bank-info">
-                                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GELEXY BANK</span>
+                                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
                                                 <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
                                             </div>
                                             <div class="cheque-date-box">
@@ -1245,7 +1245,7 @@
                                                 Brn: 0171 Pdt: 105<br>SB A/C
                                             </div>
                                             <div class="cheque-payable-text">
-                                                Payable at par through clearing/transfer at all branches of VERTEX GELEXY BANK LTD
+                                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
                                             </div>
                                             <div class="cheque-sign-area">
                                                 <span class="cheque-sign-name" id="chequeSignatureVal">${customer.firstName} ${customer.lastName}</span>
@@ -1340,11 +1340,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="label">Email</td>
-                                                        <td style="text-align: right;">support@vertexgelexybank.com</td>
+                                                        <td style="text-align: right;">support@vertexgalaxybank.com</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="label">Website</td>
-                                                        <td style="text-align: right;">www.vertexgelexybank.com</td>
+                                                        <td style="text-align: right;">www.vertexgalaxybank.com</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="label">Cheque Book No.</td>
@@ -1410,7 +1410,7 @@
                                     </div>
                                     <div class="chequebook-cover-title" style="text-align: center;">
                                         <h2>CHEQUE BOOK</h2>
-                                        <p style="margin: 4px 0 0; font-size: 0.75rem; letter-spacing: 2px; color: rgba(255, 255, 255, 0.7); font-weight: bold;">VERTEX GELEXY BANK</p>
+                                        <p style="margin: 4px 0 0; font-size: 0.75rem; letter-spacing: 2px; color: rgba(255, 255, 255, 0.7); font-weight: bold;">VERTEX GALAXY BANK</p>
                                     </div>
                                     <div class="cover-footer" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.58rem; color: rgba(255,255,255,0.5);">
                                         <span>SAFE. SECURE. TRUSTED.</span>
@@ -1429,7 +1429,7 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px double #cbd5e1; padding-bottom: 6px; position: relative; z-index: 2;">
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: 800; font-size: 0.8rem; color: #1e3a8a; text-transform: uppercase; letter-spacing: 1px;">VERTEX</span>
-                                            <span style="font-size: 0.5rem; color: #475569; font-weight: 600; text-transform: uppercase; margin-top: -2px;">GELEXY BANK</span>
+                                            <span style="font-size: 0.5rem; color: #475569; font-weight: 600; text-transform: uppercase; margin-top: -2px;">GALAXY BANK</span>
                                         </div>
                                         <span style="font-size: 0.8rem; color: #bf953f;"><i class="bx bx-shield-quarter"></i></span>
                                     </div>
@@ -1906,20 +1906,20 @@
                                         </svg>
                                     </div>
                                     <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
-                                    <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GELEXY BANK</span>
+                                    <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
                                     <span style="font-size: 0.42rem; letter-spacing: 1px; color: rgba(255,255,255,0.5); font-weight: 500; font-family: 'Poppins', sans-serif; margin-top: 4px; text-transform: uppercase;">Connecting Today, Empowering Tomorrow</span>
                                 </div>
                                 
                                 <div style="display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
                                     <div style="font-family: 'Poppins', sans-serif; font-size: 0.45rem; line-height: 1.3; color: rgba(255,255,255,0.5);">
                                         <strong>Head Office:</strong><br>
-                                        Vertex Gelexy Bank,<br>
+                                        Vertex Galaxy Bank,<br>
                                         123, Business Avenue, Financial District,<br>
                                         City - 000001
                                     </div>
                                     <div style="display: flex; gap: 15px; font-family: 'Poppins', sans-serif; font-size: 0.48rem; color: rgba(255,255,255,0.6);">
                                         <span><i class="bx bx-phone" style="vertical-align: middle; color: #d4af37;"></i> 1800 123 4567</span>
-                                        <span><i class="bx bx-globe" style="vertical-align: middle; color: #d4af37;"></i> www.vertexgelexybank.com</span>
+                                        <span><i class="bx bx-globe" style="vertical-align: middle; color: #d4af37;"></i> www.vertexgalaxybank.com</span>
                                     </div>
                                 </div>
                             </div>
@@ -1941,7 +1941,7 @@
                                         <!-- Header -->
                                         <div class="cheque-header">
                                             <div class="cheque-bank-info">
-                                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GELEXY BANK</span>
+                                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
                                                 <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
                                             </div>
                                             <div class="cheque-date-box">
@@ -1979,7 +1979,7 @@
                                                 Brn: 0171 Pdt: 105<br>SB A/C
                                             </div>
                                             <div class="cheque-payable-text">
-                                                Payable at par through clearing/transfer at all branches of VERTEX GELEXY BANK LTD
+                                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
                                             </div>
                                             <div class="cheque-sign-area">
                                                 <span class="cheque-sign-name" id="inspectChequeSignatureVal">--</span>
@@ -2073,11 +2073,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="label">Email</td>
-                                                        <td style="text-align: right;">support@vertexgelexybank.com</td>
+                                                        <td style="text-align: right;">support@vertexgalaxybank.com</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="label">Website</td>
-                                                        <td style="text-align: right;">www.vertexgelexybank.com</td>
+                                                        <td style="text-align: right;">www.vertexgalaxybank.com</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="label">Cheque Book No.</td>
@@ -2141,7 +2141,7 @@
                                     </div>
                                     <div class="chequebook-cover-title" style="text-align: center;">
                                         <h2>CHEQUE BOOK</h2>
-                                        <p style="margin: 4px 0 0; font-size: 0.75rem; letter-spacing: 2px; color: rgba(255, 255, 255, 0.7); font-weight: bold;">VERTEX GELEXY BANK</p>
+                                        <p style="margin: 4px 0 0; font-size: 0.75rem; letter-spacing: 2px; color: rgba(255, 255, 255, 0.7); font-weight: bold;">VERTEX GALAXY BANK</p>
                                     </div>
                                     <div class="cover-footer" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.58rem; color: rgba(255,255,255,0.5);">
                                         <span>SAFE. SECURE. TRUSTED.</span>
@@ -2159,7 +2159,7 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px double #cbd5e1; padding-bottom: 6px; position: relative; z-index: 2;">
                                         <div style="display: flex; flex-direction: column;">
                                             <span style="font-weight: 800; font-size: 0.8rem; color: #1e3a8a; text-transform: uppercase; letter-spacing: 1px;">VERTEX</span>
-                                            <span style="font-size: 0.5rem; color: #475569; font-weight: 600; text-transform: uppercase; margin-top: -2px;">GELEXY BANK</span>
+                                            <span style="font-size: 0.5rem; color: #475569; font-weight: 600; text-transform: uppercase; margin-top: -2px;">GALAXY BANK</span>
                                         </div>
                                         <span style="font-size: 0.8rem; color: #bf953f;"><i class="bx bx-shield-quarter"></i></span>
                                     </div>

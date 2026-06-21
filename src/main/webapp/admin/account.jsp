@@ -1642,7 +1642,7 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <span style="font-weight: 800; font-size: 1.25rem; background: linear-gradient(135deg, var(--primary-500) 0%, var(--secondary-500) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vertex Galaxy Bank</span>
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions">
@@ -2673,19 +2673,7 @@
                                         <!-- Gold V-Logo & Stacked Bank Name Header -->
                                         <div class="card-bank-header">
                                             <div class="card-logo-v">
-                                                <svg viewBox="0 0 100 100" style="width: 20px; height: 20px;">
-                                                    <defs>
-                                                        <linearGradient id="goldGradCard_wiz" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                            <stop offset="0%" stop-color="#bf953f" />
-                                                            <stop offset="25%" stop-color="#fcf6ba" />
-                                                            <stop offset="50%" stop-color="#b38728" />
-                                                            <stop offset="75%" stop-color="#fbf5b7" />
-                                                            <stop offset="100%" stop-color="#aa771c" />
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradCard_wiz)" />
-                                                    <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradCard_wiz)" />
-                                                </svg>
+                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));">
                                             </div>
                                             <div class="card-bank-name-stack">
                                                 <span class="bank-title">VERTEX</span>
@@ -2741,19 +2729,7 @@
                                             </div>
                                             <div class="back-right-logo">
                                                 <div class="back-logo-v">
-                                                    <svg viewBox="0 0 100 100" style="width: 15px; height: 15px;">
-                                                        <defs>
-                                                            <linearGradient id="goldGradBack_wiz" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                                <stop offset="0%" stop-color="#bf953f" />
-                                                                <stop offset="25%" stop-color="#fcf6ba" />
-                                                                <stop offset="50%" stop-color="#b38728" />
-                                                                <stop offset="75%" stop-color="#fbf5b7" />
-                                                                <stop offset="100%" stop-color="#aa771c" />
-                                                            </linearGradient>
-                                                        </defs>
-                                                        <path d="M15 15 L45 85 L55 85 L85 15 L70 15 L50 62 L30 15 Z" fill="url(#goldGradBack_wiz)" />
-                                                        <path d="M50 25 L53 32 L60 32 L55 36 L57 43 L50 39 L43 43 L45 36 L40 32 L47 32 Z" fill="url(#goldGradBack_wiz)" />
-                                                    </svg>
+                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 15px; height: 15px; object-fit: contain; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));">
                                                     <span class="logo-text-stacked">
                                                         <span class="text-top">VERTEX</span>
                                                         <span class="text-bottom">GALAXY BANK</span>
