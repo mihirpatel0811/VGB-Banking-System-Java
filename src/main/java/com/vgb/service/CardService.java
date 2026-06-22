@@ -364,6 +364,15 @@ public class CardService {
             throw new Exception("Failed to close card: " + e.getMessage());
         }
     }
+    public boolean updateLimits(long cardId, BigDecimal dailyLimit, BigDecimal atmLimit, BigDecimal onlineLimit, boolean internationalEnabled) throws Exception {
+        runExpiryCheck();
+        try {
+            return cardDAO.updateLimits(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled);
+        } catch (SQLException e) {
+            logger.error("Error updating card limits", e);
+            throw new Exception("Failed to update card limits: " + e.getMessage());
+        }
+    }
 
     private String generateUniqueCardNumber(String provider) throws SQLException {
         String prefix = "4"; // default Visa

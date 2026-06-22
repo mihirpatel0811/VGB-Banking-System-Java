@@ -147,8 +147,11 @@ public class DatabaseConfig {
                         "    card_holder_name VARCHAR(100) NOT NULL, " +
                         "    cvv CHAR(3) NOT NULL, " +
                         "    expiry_date DATE NOT NULL, " +
-                        "    status ENUM('pending', 'active', 'closed', 'expired') NOT NULL DEFAULT 'pending', " +
-                        "    daily_limit DECIMAL(15, 4) NOT NULL DEFAULT 50000.0000, " +
+    "    status ENUM('pending', 'active', 'closed', 'expired') NOT NULL DEFAULT 'pending', " +
+    "    daily_limit DECIMAL(15, 4) NOT NULL DEFAULT 50000.0000, " +
+                        "    atm_limit DECIMAL(15, 4) NOT NULL DEFAULT 25000.0000, " +
+                        "    online_limit DECIMAL(15, 4) NOT NULL DEFAULT 50000.0000, " +
+                        "    international_enabled TINYINT(1) NOT NULL DEFAULT 0, " +
                         "    card_fee DECIMAL(15, 4) NOT NULL DEFAULT 250.0000, " +
                         "    outstanding_balance DECIMAL(15, 4) NOT NULL DEFAULT 0.0000, " +
                         "    is_fee_paid TINYINT(1) NOT NULL DEFAULT 0, " +
@@ -160,6 +163,15 @@ public class DatabaseConfig {
                     logger.info("Card table created successfully!");
                 } else {
                     logger.debug("Schema verification: card table is present.");
+                    try (ResultSet cols = metaData.getColumns(null, null, "card", "atm_limit")) {
+                        if (!cols.next()) {
+                            logger.info("Migrating schema: adding limit columns to card table");
+                            stmt.execute("ALTER TABLE card ADD COLUMN atm_limit DECIMAL(15, 4) NOT NULL DEFAULT 25000.0000");
+                            stmt.execute("ALTER TABLE card ADD COLUMN online_limit DECIMAL(15, 4) NOT NULL DEFAULT 50000.0000");
+                            stmt.execute("ALTER TABLE card ADD COLUMN international_enabled TINYINT(1) NOT NULL DEFAULT 0");
+                            logger.info("Card table limits migration completed successfully.");
+                        }
+                    }
                 }
             } catch (SQLException ex) {
                 logger.warn("Card table creation error: {}", ex.getMessage());

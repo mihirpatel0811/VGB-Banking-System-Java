@@ -12,7 +12,7 @@ public class CardDAOImpl {
     private static final Logger logger = LoggerFactory.getLogger(CardDAOImpl.class);
 
     public boolean create(Card card) throws SQLException {
-        String sql = "INSERT INTO card (account_id, customer_id, card_number, card_type, card_provider, card_holder_name, cvv, expiry_date, status, daily_limit, card_fee, outstanding_balance, is_fee_paid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO card (account_id, customer_id, card_number, card_type, card_provider, card_holder_name, cvv, expiry_date, status, daily_limit, atm_limit, online_limit, international_enabled, card_fee, outstanding_balance, is_fee_paid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -28,9 +28,12 @@ public class CardDAOImpl {
             stmt.setDate(8, card.getExpiryDate());
             stmt.setString(9, card.getStatus());
             stmt.setBigDecimal(10, card.getDailyLimit());
-            stmt.setBigDecimal(11, card.getCardFee());
-            stmt.setBigDecimal(12, card.getOutstandingBalance());
-            stmt.setInt(13, card.isFeePaid() ? 1 : 0);
+            stmt.setBigDecimal(11, card.getAtmLimit());
+            stmt.setBigDecimal(12, card.getOnlineLimit());
+            stmt.setInt(13, card.isInternationalEnabled() ? 1 : 0);
+            stmt.setBigDecimal(14, card.getCardFee());
+            stmt.setBigDecimal(15, card.getOutstandingBalance());
+            stmt.setInt(16, card.isFeePaid() ? 1 : 0);
 
             int affected = stmt.executeUpdate();
             if (affected > 0) {
@@ -221,6 +224,24 @@ public class CardDAOImpl {
         }
     }
 
+    public boolean updateLimits(long cardId, java.math.BigDecimal dailyLimit, java.math.BigDecimal atmLimit, java.math.BigDecimal onlineLimit, boolean internationalEnabled) throws SQLException {
+        String sql = "UPDATE card SET daily_limit = ?, atm_limit = ?, online_limit = ?, international_enabled = ? WHERE card_id = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setBigDecimal(1, dailyLimit);
+            stmt.setBigDecimal(2, atmLimit);
+            stmt.setBigDecimal(3, onlineLimit);
+            stmt.setInt(4, internationalEnabled ? 1 : 0);
+            stmt.setLong(5, cardId);
+            return stmt.executeUpdate() > 0;
+        } finally {
+            DatabaseConfig.closeResources(null, stmt, conn);
+        }
+    }
+
     private Card mapResultSetToCard(ResultSet rs) throws SQLException {
         Card card = new Card();
         card.setCardId(rs.getLong("card_id"));
@@ -234,6 +255,9 @@ public class CardDAOImpl {
         card.setExpiryDate(rs.getDate("expiry_date"));
         card.setStatus(rs.getString("status"));
         card.setDailyLimit(rs.getBigDecimal("daily_limit"));
+        card.setAtmLimit(rs.getBigDecimal("atm_limit"));
+        card.setOnlineLimit(rs.getBigDecimal("online_limit"));
+        card.setInternationalEnabled(rs.getInt("international_enabled") == 1);
         card.setCardFee(rs.getBigDecimal("card_fee"));
         card.setOutstandingBalance(rs.getBigDecimal("outstanding_balance"));
         card.setFeePaid(rs.getInt("is_fee_paid") == 1);

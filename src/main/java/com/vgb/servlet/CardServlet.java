@@ -75,6 +75,9 @@ public class CardServlet extends BaseServlet {
                 case "payDues":
                     payDues(request, response);
                     break;
+                case "updateLimits":
+                    updateLimits(request, response);
+                    break;
                 default:
                     response.sendRedirect(request.getContextPath() + "/card");
             }
@@ -251,6 +254,57 @@ public class CardServlet extends BaseServlet {
                 request.getSession().setAttribute("success", "Credit card bill payment of ₹" + amount.setScale(2) + " processed successfully! Card outstanding dues reduced.");
             } else {
                 request.getSession().setAttribute("error", "Failed to clear dues.");
+            }
+        } catch (Exception e) {
+            request.getSession().setAttribute("error", e.getMessage());
+        }
+        response.sendRedirect(request.getContextPath() + "/card");
+    }
+
+    private void updateLimits(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Long customerId = getUserId(request);
+        if (customerId == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+
+        long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
+        BigDecimal dailyLimit = new BigDecimal(getParameter(request, "dailyLimit", "0"));
+        BigDecimal atmLimit = new BigDecimal(getParameter(request, "atmLimit", "0"));
+        BigDecimal onlineLimit = new BigDecimal(getParameter(request, "onlineLimit", "0"));
+        boolean internationalEnabled = "true".equals(getParameter(request, "internationalEnabled", "false"));
+
+        if (cardId == 0) {
+            request.getSession().setAttribute("error", "Invalid card ID.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+
+        // Verify ownership
+        Card card = cardService.getCardById(cardId);
+        if (card == null || card.getCustomerId() != customerId) {
+            request.getSession().setAttribute("error", "Unauthorized access.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+
+        if (dailyLimit.compareTo(BigDecimal.ZERO) < 0 || atmLimit.compareTo(BigDecimal.ZERO) < 0 || onlineLimit.compareTo(BigDecimal.ZERO) < 0) {
+            request.getSession().setAttribute("error", "Limits cannot be negative values.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+
+        try {
+            if (cardService.updateLimits(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled)) {
+                request.getSession().setAttribute("success", "Card limits updated successfully!");
+            } else {
+                request.getSession().setAttribute("error", "Failed to update card limits.");
             }
         } catch (Exception e) {
             request.getSession().setAttribute("error", e.getMessage());

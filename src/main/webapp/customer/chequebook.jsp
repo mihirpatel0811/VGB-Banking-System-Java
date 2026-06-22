@@ -1158,7 +1158,306 @@
             0%, 100% { opacity: 0.5; transform: translateX(0); }
             50% { opacity: 1; transform: translateX(3px); }
         }
-    </style>
+
+        /* Unified Class-Based styles for Cheque Book Visuals */
+        .cb-back-logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        .cb-back-logo-img-box {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cb-back-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .cb-back-bank-name {
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-top: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .cb-back-bank-sub {
+            font-size: 0.55rem;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.7);
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+        }
+        .cb-back-bank-motto {
+            font-size: 0.42rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+        .cb-back-footer-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 8px;
+        }
+        .cb-back-address {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.45rem;
+            line-height: 1.3;
+            color: rgba(255,255,255,0.5);
+        }
+        .cb-back-contact-info {
+            display: flex;
+            gap: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.48rem;
+            color: rgba(255,255,255,0.6);
+        }
+        .cb-back-contact-info span i {
+            vertical-align: middle;
+            color: #d4af37;
+            margin-right: 4px;
+        }
+        
+        .cb-inside-body {
+            flex: 1;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            position: relative;
+            z-index: 2;
+        }
+        .cb-inside-body-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #475569;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .cb-inside-table {
+            width: 100%;
+            border-collapse: collapse;
+            line-height: 1.4;
+        }
+        .cb-inside-row {
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        .cb-inside-label {
+            color: #64748b;
+            padding: 3px 0;
+            font-size: 0.65rem;
+        }
+        .cb-inside-value {
+            font-weight: 700;
+            color: #0f172a;
+            padding: 3px 0;
+            font-size: 0.68rem;
+        }
+        .cb-inside-value.caps {
+            text-transform: uppercase;
+        }
+        .cb-inside-value.mono {
+            font-family: monospace;
+        }
+
+        /* Modern Request Log Table UI */
+        .modern-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: left;
+        }
+        
+        .modern-table th {
+            padding: 16px 20px;
+            color: var(--gray-500);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--gray-100);
+            background: rgba(248, 250, 252, 0.5);
+        }
+        
+        .modern-table tbody tr {
+            transition: all var(--transition-normal);
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .modern-table tbody tr:hover {
+            background-color: rgba(99, 102, 241, 0.02);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.03);
+        }
+        
+        .modern-table td {
+            padding: 18px 20px;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            vertical-align: middle;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .status-badge.approved, .status-badge.delivered {
+            background: rgba(16, 185, 129, 0.1) !important;
+            color: var(--accent-emerald) !important;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1) !important;
+            color: #d97706 !important;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .status-badge.rejected {
+            background: rgba(239, 68, 68, 0.1) !important;
+            color: #dc2626 !important;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .status-badge i {
+            font-size: 0.5rem;
+        }
+
+        /* Charges Badge */
+        .charge-status-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            margin-left: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .charge-status-badge.paid {
+            background: rgba(16, 185, 129, 0.08);
+            color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        
+        .charge-status-badge.refunded {
+            background: rgba(239, 68, 68, 0.08);
+            color: #b91c1c;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+        
+        /* Action Button Refinements */
+        .btn-view-leaf {
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            border-radius: var(--radius-md);
+            background: rgba(99, 102, 241, 0.08) !important;
+            color: var(--primary-600) !important;
+            border: 1.5px solid rgba(99, 102, 241, 0.15) !important;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+        
+        .btn-view-leaf:hover {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .btn-renew-action {
+            background: rgba(16, 185, 129, 0.08) !important;
+            color: #047857 !important;
+            border: 1.5px solid rgba(16, 185, 129, 0.15) !important;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+        
+        .btn-renew-action:hover {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .info-tag-text {
+            font-size: 0.78rem;
+            color: var(--gray-400);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Custom Scrollbar for modern tables */
+        .table-responsive-wrapper {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(99, 102, 241, 0.35) rgba(241, 245, 249, 0.5);
+            padding-bottom: 8px; /* Extra padding to prevent clipping shadow */
+        }
+        
+        .table-responsive-wrapper::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        
+        .table-responsive-wrapper::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.4);
+            border-radius: var(--radius-full);
+        }
+        
+        .table-responsive-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.25);
+            border-radius: var(--radius-full);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+        
+        .table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.5);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+        }
     </style>
 </head>
 <body class="bank-home-page">
@@ -1305,25 +1604,25 @@
                         <div class="chequebook-book" id="3dChequebook">
                             <!-- 1. Back Cover -->
                             <div class="chequebook-back">
-                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 2;">
-                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
-                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                                <div class="cb-back-logo-section">
+                                    <div class="cb-back-logo-img-box">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" class="cb-back-logo-img">
                                     </div>
-                                    <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
-                                    <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
-                                    <span style="font-size: 0.42rem; letter-spacing: 1px; color: rgba(255,255,255,0.5); font-weight: 500; font-family: 'Poppins', sans-serif; margin-top: 4px; text-transform: uppercase;">Connecting Today, Empowering Tomorrow</span>
+                                    <span class="cb-back-bank-name">VERTEX</span>
+                                    <span class="cb-back-bank-sub">GALAXY BANK</span>
+                                    <span class="cb-back-bank-motto">Connecting Today, Empowering Tomorrow</span>
                                 </div>
                                 
-                                <div style="display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                                    <div style="font-family: 'Poppins', sans-serif; font-size: 0.45rem; line-height: 1.3; color: rgba(255,255,255,0.5);">
+                                <div class="cb-back-footer-section">
+                                    <div class="cb-back-address">
                                         <strong>Head Office:</strong><br>
                                         Vertex Galaxy Bank,<br>
                                         123, Business Avenue, Financial District,<br>
                                         City - 000001
                                     </div>
-                                    <div style="display: flex; gap: 15px; font-family: 'Poppins', sans-serif; font-size: 0.48rem; color: rgba(255,255,255,0.6);">
-                                        <span><i class="bx bx-phone" style="vertical-align: middle; color: #d4af37;"></i> 1800 123 4567</span>
-                                        <span><i class="bx bx-globe" style="vertical-align: middle; color: #d4af37;"></i> www.vertexgalaxybank.com</span>
+                                    <div class="cb-back-contact-info">
+                                        <span><i class="bx bx-phone"></i> 1800 123 4567</span>
+                                        <span><i class="bx bx-globe"></i> www.vertexgalaxybank.com</span>
                                     </div>
                                 </div>
                             </div>
@@ -1408,8 +1707,9 @@
                                         <div style="display: flex; gap: 20px; height: 100%; box-sizing: border-box; position: relative; z-index: 2;">
                                             <!-- Signature Box -->
                                             <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
-                                                <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; color: #64748b; font-weight: 600; text-transform: uppercase;">
-                                                    Please sign here / कृपया यहाँ हस्ताक्षर करें
+                                                <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; box-sizing: border-box;">
+                                                    <span class="cheque-sign-name" id="chequeSignatureBackVal" style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.2rem; font-style: italic; color: #2563eb; line-height: 1; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${customer.firstName} ${customer.lastName}</span>
+                                                    <span style="font-size: 0.42rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Please sign here</span>
                                                 </div>
                                                 <div style="height: 1.5px; border-bottom: 1px dashed #cbd5e1; width: 100%;"></div>
                                                 <div style="font-family: monospace; font-size: 0.72rem; letter-spacing: 2px; color: #334155; font-weight: bold; margin-top: 5px; text-align: center;">
@@ -1569,18 +1869,18 @@
                                         <span style="font-size: 0.8rem; color: #bf953f;"><i class="bx bx-shield-quarter"></i></span>
                                     </div>
                                     
-                                    <div class="cover-inside-body" style="flex: 1; padding: 10px 0; display: flex; flex-direction: column; justify-content: space-between; font-size: 0.75rem; position: relative; z-index: 2;">
-                                        <div style="text-align: center; font-weight: bold; margin-bottom: 8px; color: #475569; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">This Cheque Book Belongs To:</div>
-                                        <table style="width: 100%; border-collapse: collapse; line-height: 1.4;">
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">Name:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; text-transform: uppercase; font-size: 0.68rem;" id="pbCustName">
+                                    <div class="cb-inside-body">
+                                        <div class="cb-inside-body-title">This Cheque Book Belongs To:</div>
+                                        <table class="cb-inside-table">
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">Name:</td>
+                                                <td class="cb-inside-value caps" id="pbCustName">
                                                     ${customer.firstName} ${customer.lastName}
                                                 </td>
                                             </tr>
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">Account No:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; font-family: monospace;" id="pbAccNum">
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">Account No:</td>
+                                                <td class="cb-inside-value mono" id="pbAccNum">
                                                     <c:choose>
                                                         <c:when test="${not empty accounts}">
                                                             ${accounts[0].accountNumber}
@@ -1591,17 +1891,17 @@
                                                     </c:choose>
                                                 </td>
                                             </tr>
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">IFSC Code:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; font-family: monospace;">
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">IFSC Code:</td>
+                                                <td class="cb-inside-value mono">
                                                     <div class="digit-boxes">
                                                         <span>V</span><span>G</span><span>B</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>7</span><span>1</span>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">Branch:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; font-size: 0.68rem;">BHAKTINAGAR, RAJKOT</td>
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">Branch:</td>
+                                                <td class="cb-inside-value">BHAKTINAGAR, RAJKOT</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -1621,17 +1921,17 @@
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <i class="bx bx-list-ul" style="color: var(--primary-500);"></i> Request Status & Log Tracker
                 </h3>
-                <div style="overflow-x: auto;">
-                    <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                <div class="table-responsive-wrapper">
+                    <table class="modern-table">
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); padding-bottom: 10px; color: var(--gray-500); font-weight: 600; font-size: 0.85rem;">
-                                <th style="padding: 12px;">Request ID</th>
-                                <th style="padding: 12px;">Linked Account</th>
-                                <th style="padding: 12px;">Book Capacity</th>
-                                <th style="padding: 12px;">Charges Paid</th>
-                                <th style="padding: 12px;">Submission Date</th>
-                                <th style="padding: 12px;">Current Status</th>
-                                <th style="padding: 12px; text-align: right;">Action</th>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Linked Account</th>
+                                <th>Book Capacity</th>
+                                <th>Charges Paid</th>
+                                <th>Submission Date</th>
+                                <th>Current Status</th>
+                                <th style="text-align: right;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1639,40 +1939,40 @@
                                 <c:when test="${not empty requests}">
                                     <c:forEach var="req" items="${requests}">
                                         <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);">#${req.requestId}</td>
-                                            <td style="padding: 15px; font-family: monospace; font-weight: 600;">${req.accountNumber}</td>
-                                            <td style="padding: 15px;"><strong>${req.leavesCount} Leaves</strong></td>
-                                            <td style="padding: 15px;">
+                                        <tr>
+                                            <td style="font-weight: 700; color: var(--gray-800);">#${req.requestId}</td>
+                                            <td style="font-family: monospace; font-weight: 600;">${req.accountNumber}</td>
+                                            <td><strong>${req.leavesCount} Leaves</strong></td>
+                                            <td>
                                                 <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
                                                 <c:choose>
                                                     <c:when test="${req.chargesPaid}">
-                                                        <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;"><i class="bx bx-check"></i> Paid</span>
+                                                        <span class="charge-status-badge paid"><i class="bx bx-check"></i> Paid</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;"><i class="bx bx-x"></i> Refunded</span>
+                                                        <span class="charge-status-badge refunded"><i class="bx bx-x"></i> Refunded</span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; color: var(--gray-500);">
+                                            <td style="color: var(--gray-500);">
                                                 <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
                                             </td>
-                                            <td style="padding: 15px;">
+                                            <td>
                                                 <c:choose>
                                                     <c:when test="${req.status eq 'approved' or req.status eq 'delivered'}">
-                                                        <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;"><i class="bx bxs-circle" style="font-size: 0.5rem; vertical-align: middle;"></i> Approved</span>
+                                                        <span class="status-badge approved"><i class="bx bxs-circle"></i> Approved</span>
                                                     </c:when>
                                                     <c:when test="${req.status eq 'pending'}">
-                                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;"><i class="bx bxs-circle" style="font-size: 0.5rem; vertical-align: middle;"></i> Pending</span>
+                                                        <span class="status-badge pending"><i class="bx bxs-circle"></i> Pending</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;"><i class="bx bxs-circle" style="font-size: 0.5rem; vertical-align: middle;"></i> Rejected</span>
+                                                        <span class="status-badge rejected"><i class="bx bxs-circle"></i> Rejected</span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: right;">
+                                            <td style="text-align: right;">
                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                    <button type="button" class="btn" 
+                                                    <button type="button" class="btn-view-leaf" 
                                                             data-id="${req.requestId}" 
                                                             data-name="${req.customerName}" 
                                                             data-account="${req.accountNumber}" 
@@ -1680,19 +1980,18 @@
                                                             data-charges="${req.charges}" 
                                                             data-date="${formattedDate}" 
                                                             data-status="${req.status}"
-                                                            style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
                                                             onclick="inspectRequest(this)">
                                                         <i class="bx bx-show"></i> View Leaf
                                                     </button>
                                                     <c:choose>
                                                         <c:when test="${req.status eq 'approved'}">
-                                                            <button onclick="openRequestModal('renew')" class="btn" style="background: var(--gradient-primary); color: white; border: none; padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600;">Renew</button>
+                                                            <button onclick="openRequestModal('renew')" class="btn-renew-action">Renew</button>
                                                         </c:when>
                                                         <c:when test="${req.status eq 'rejected'}">
-                                                            <span style="font-size: 0.75rem; color: var(--gray-400); font-style: italic;">Refunded</span>
+                                                            <span class="info-tag-text">Refunded</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span style="font-size: 0.75rem; color: var(--gray-400); font-style: italic;">Pending</span>
+                                                            <span class="info-tag-text">Pending</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
@@ -1896,6 +2195,10 @@
             if (sig3D) {
                 sig3D.innerHTML = name ? name.toUpperCase() : '';
             }
+            const sigBack = document.getElementById('chequeSignatureBackVal');
+            if (sigBack) {
+                sigBack.innerHTML = name ? name.toUpperCase() : '';
+            }
         }
 
         function updateFeeDue() {
@@ -1940,8 +2243,11 @@
 
             const nameInput = document.getElementById('custNameInput');
             const sigDisplay = document.getElementById('chequeSignatureVal');
-            if (nameInput && sigDisplay) {
-                sigDisplay.innerHTML = nameInput.value ? nameInput.value.toUpperCase() : '';
+            const sigBack = document.getElementById('chequeSignatureBackVal');
+            if (nameInput) {
+                const upperName = nameInput.value ? nameInput.value.toUpperCase() : '';
+                if (sigDisplay) sigDisplay.innerHTML = upperName;
+                if (sigBack) sigBack.innerHTML = upperName;
             }
 
             const squares = document.getElementById('chequeDateSquares');
@@ -2033,25 +2339,25 @@
                         <div class="chequebook-book" id="inspect3dChequebook">
                             <!-- 1. Back Cover -->
                             <div class="chequebook-back">
-                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; position: relative; z-index: 2;">
-                                    <div style="width: 50px; height: 50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center;">
-                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                                <div class="cb-back-logo-section">
+                                    <div class="cb-back-logo-img-box">
+                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" class="cb-back-logo-img">
                                     </div>
-                                    <span style="font-weight: 800; font-size: 0.95rem; letter-spacing: 2px; color: #fff; margin-top: 5px; font-family: 'Poppins', sans-serif;">VERTEX</span>
-                                    <span style="font-size: 0.55rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold; font-family: 'Poppins', sans-serif;">GALAXY BANK</span>
-                                    <span style="font-size: 0.42rem; letter-spacing: 1px; color: rgba(255,255,255,0.5); font-weight: 500; font-family: 'Poppins', sans-serif; margin-top: 4px; text-transform: uppercase;">Connecting Today, Empowering Tomorrow</span>
+                                    <span class="cb-back-bank-name">VERTEX</span>
+                                    <span class="cb-back-bank-sub">GALAXY BANK</span>
+                                    <span class="cb-back-bank-motto">Connecting Today, Empowering Tomorrow</span>
                                 </div>
                                 
-                                <div style="display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                                    <div style="font-family: 'Poppins', sans-serif; font-size: 0.45rem; line-height: 1.3; color: rgba(255,255,255,0.5);">
+                                <div class="cb-back-footer-section">
+                                    <div class="cb-back-address">
                                         <strong>Head Office:</strong><br>
                                         Vertex Galaxy Bank,<br>
                                         123, Business Avenue, Financial District,<br>
                                         City - 000001
                                     </div>
-                                    <div style="display: flex; gap: 15px; font-family: 'Poppins', sans-serif; font-size: 0.48rem; color: rgba(255,255,255,0.6);">
-                                        <span><i class="bx bx-phone" style="vertical-align: middle; color: #d4af37;"></i> 1800 123 4567</span>
-                                        <span><i class="bx bx-globe" style="vertical-align: middle; color: #d4af37;"></i> www.vertexgalaxybank.com</span>
+                                    <div class="cb-back-contact-info">
+                                        <span><i class="bx bx-phone"></i> 1800 123 4567</span>
+                                        <span><i class="bx bx-globe"></i> www.vertexgalaxybank.com</span>
                                     </div>
                                 </div>
                             </div>
@@ -2136,8 +2442,9 @@
                                         <div style="display: flex; gap: 20px; height: 100%; box-sizing: border-box; position: relative; z-index: 2;">
                                             <!-- Signature Box -->
                                             <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
-                                                <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; color: #64748b; font-weight: 600; text-transform: uppercase;">
-                                                    Please sign here / कृपया यहाँ हस्ताक्षर करें
+                                                <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; box-sizing: border-box;">
+                                                    <span class="cheque-sign-name" id="inspectChequeSignatureBackVal" style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.2rem; font-style: italic; color: #2563eb; line-height: 1; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                                    <span style="font-size: 0.42rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Please sign here</span>
                                                 </div>
                                                 <div style="height: 1.5px; border-bottom: 1px dashed #cbd5e1; width: 100%;"></div>
                                                 <div style="font-family: monospace; font-size: 0.72rem; letter-spacing: 2px; color: #334155; font-weight: bold; margin-top: 5px; text-align: center;">
@@ -2293,32 +2600,32 @@
                                         <span style="font-size: 0.8rem; color: #bf953f;"><i class="bx bx-shield-quarter"></i></span>
                                     </div>
                                     
-                                    <div class="cover-inside-body" style="flex: 1; padding: 10px 0; display: flex; flex-direction: column; justify-content: space-between; font-size: 0.75rem; position: relative; z-index: 2;">
-                                        <div style="text-align: center; font-weight: bold; margin-bottom: 8px; color: #475569; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">This Cheque Book Belongs To:</div>
-                                        <table style="width: 100%; border-collapse: collapse; line-height: 1.4;">
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">Name:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; text-transform: uppercase; font-size: 0.68rem;" id="inspectpbCustName">
+                                    <div class="cb-inside-body">
+                                        <div class="cb-inside-body-title">This Cheque Book Belongs To:</div>
+                                        <table class="cb-inside-table">
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">Name:</td>
+                                                <td class="cb-inside-value caps" id="inspectpbCustName">
                                                     --
                                                 </td>
                                             </tr>
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">Account No:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; font-family: monospace;" id="inspectpbAccNum">
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">Account No:</td>
+                                                <td class="cb-inside-value mono" id="inspectpbAccNum">
                                                     --
                                                 </td>
                                             </tr>
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">IFSC Code:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; font-family: monospace;">
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">IFSC Code:</td>
+                                                <td class="cb-inside-value mono">
                                                     <div class="digit-boxes">
                                                         <span>V</span><span>G</span><span>B</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>7</span><span>1</span>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr style="border-bottom: 1px dashed #cbd5e1;">
-                                                <td style="color: #64748b; padding: 3px 0; font-size: 0.65rem;">Branch:</td>
-                                                <td style="font-weight: 700; color: #0f172a; padding: 3px 0; font-size: 0.68rem;">BHAKTINAGAR, RAJKOT</td>
+                                            <tr class="cb-inside-row">
+                                                <td class="cb-inside-label">Branch:</td>
+                                                <td class="cb-inside-value">BHAKTINAGAR, RAJKOT</td>
                                             </tr>
                                         </table>
                                     </div>

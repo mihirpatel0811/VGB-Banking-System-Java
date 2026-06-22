@@ -16,6 +16,9 @@ public class Card {
     private Date expiryDate;
     private String status; // 'pending', 'active', 'closed', 'expired'
     private BigDecimal dailyLimit;
+    private BigDecimal atmLimit;
+    private BigDecimal onlineLimit;
+    private boolean internationalEnabled;
     private BigDecimal cardFee;
     private BigDecimal outstandingBalance;
     private boolean isFeePaid;
@@ -27,6 +30,9 @@ public class Card {
 
     public Card() {
         this.dailyLimit = new BigDecimal("50000.0000");
+        this.atmLimit = new BigDecimal("25000.0000");
+        this.onlineLimit = new BigDecimal("50000.0000");
+        this.internationalEnabled = false;
         this.outstandingBalance = BigDecimal.ZERO;
         this.isFeePaid = false;
     }
@@ -165,6 +171,30 @@ public class Card {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+    }
+
+    public BigDecimal getAtmLimit() {
+        return atmLimit;
+    }
+
+    public void setAtmLimit(BigDecimal atmLimit) {
+        this.atmLimit = atmLimit;
+    }
+
+    public BigDecimal getOnlineLimit() {
+        return onlineLimit;
+    }
+
+    public void setOnlineLimit(BigDecimal onlineLimit) {
+        this.onlineLimit = onlineLimit;
+    }
+
+    public boolean isInternationalEnabled() {
+        return internationalEnabled;
+    }
+
+    public void setInternationalEnabled(boolean internationalEnabled) {
+        this.internationalEnabled = internationalEnabled;
     }
 
     // Helper mask method

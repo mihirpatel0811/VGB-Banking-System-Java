@@ -5377,3 +5377,40 @@ body.dark-mode div[style*="background: rgb(255, 255, 255)"] {
 #themeToggle {
     display: none !important;
 }
+
+/* Premium Logout Button */
+.btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid rgba(99, 102, 241, 0.2) !important;
+    background: transparent;
+    color: var(--gray-700) !important;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-logout:hover {
+    border-color: transparent !important;
+    background: var(--gradient-primary);
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+    transform: translateY(-1px);
+}
+.btn-logout i {
+    font-size: 1.05rem;
+    transition: transform var(--transition-fast);
+}
+.btn-logout:hover i {
+    transform: translateX(3px);
+}
+body.dark-mode .btn-logout {
+    color: var(--gray-300) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}

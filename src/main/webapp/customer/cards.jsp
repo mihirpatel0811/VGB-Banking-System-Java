@@ -1011,6 +1011,80 @@
                             background: white;
                             font-family: inherit;
                         }
+
+                        /* Switch Toggle Style */
+                        .switch-toggle {
+                            position: relative;
+                            display: inline-block;
+                            width: 50px;
+                            height: 26px;
+                        }
+
+                        .switch-toggle input {
+                            opacity: 0;
+                            width: 0;
+                            height: 0;
+                        }
+
+                        .slider-toggle-round {
+                            position: absolute;
+                            cursor: pointer;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background-color: #cbd5e1;
+                            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+                            border-radius: 34px;
+                        }
+
+                        .slider-toggle-round:before {
+                            position: absolute;
+                            content: "";
+                            height: 20px;
+                            width: 20px;
+                            left: 3px;
+                            bottom: 3px;
+                            background-color: white;
+                            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+                            border-radius: 50%;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+                        }
+
+                        .switch-toggle input:checked + .slider-toggle-round {
+                            background: var(--gradient-primary);
+                        }
+
+                        .switch-toggle input:checked + .slider-toggle-round:before {
+                            transform: translateX(24px);
+                        }
+
+                        /* Beautiful Slider Custom Styling */
+                        .limit-slider {
+                            -webkit-appearance: none;
+                            height: 6px;
+                            border-radius: 5px;
+                            background: var(--gray-200);
+                            outline: none;
+                            transition: background 0.2s;
+                        }
+
+                        .limit-slider::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 50%;
+                            background: var(--primary-500);
+                            cursor: pointer;
+                            border: 2px solid white;
+                            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+                            transition: transform 0.1s;
+                        }
+
+                        .limit-slider::-webkit-slider-thumb:hover {
+                            transform: scale(1.15);
+                        }
                     </style>
                 </head>
 
@@ -1307,65 +1381,90 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- External Control Bar under the 3D card wrapper -->
-                                                <div
-                                                    style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 340px; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.15); box-shadow: var(--shadow-sm);">
-                                                    <div>
-                                                        <c:choose>
-                                                            <c:when test="${card.status eq 'active'}">
-                                                                <span
-                                                                    style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                        class="bx bxs-circle"
-                                                                        style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                    Active</span>
-                                                            </c:when>
-                                                            <c:when test="${card.status eq 'pending'}">
-                                                                <span
-                                                                    style="background: rgba(245, 158, 11, 0.12); color: #b45309; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                        class="bx bxs-circle"
-                                                                        style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                    Pending</span>
-                                                            </c:when>
-                                                            <c:when test="${card.status eq 'expired'}">
-                                                                <span
-                                                                    style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                        class="bx bxs-circle"
-                                                                        style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                    Expired</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span
-                                                                    style="background: rgba(156, 163, 175, 0.12); color: #4b5563; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                        class="bx bxs-circle"
-                                                                        style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                    Closed</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </div>
-                                                    <div style="display: flex; gap: 8px;">
-                                                        <c:if
-                                                            test="${card.cardType eq 'credit' and card.status eq 'active' and card.outstandingBalance gt 0}">
-                                                            <button type="button"
-                                                                onclick="openPayDuesModal('${card.cardId}', '${card.outstandingBalance}')"
-                                                                class="btn"
-                                                                style="background: var(--gradient-primary); color: white; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: none; margin: 0; box-shadow: var(--shadow-sm);">Pay
-                                                                Dues</button>
-                                                        </c:if>
-                                                        <c:if
-                                                            test="${card.status eq 'expired' or card.status eq 'closed'}">
-                                                            <fmt:formatDate value="${card.expiryDate}" pattern="MM/yy"
-                                                                var="formattedExpiryDate" />
-                                                            <button type="button"
-                                                                onclick="openRenewModal('${card.cardId}', '${card.cardType}', '${card.cardFee}', '${card.cardNumber}', '${formattedExpiryDate}', '${card.cardProvider}')"
-                                                                class="btn"
-                                                                style="background: #10b981; color: white; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: none; margin: 0;">Renew</button>
-                                                        </c:if>
-                                                        <c:if test="${card.status eq 'active'}">
-                                                            <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
-                                                                class="btn"
-                                                                onclick="return confirm('Are you sure you want to permanently close this VGB card?');"
-                                                                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; border: 1px solid rgba(239, 68, 68, 0.2); margin: 0;">Close</a>
-                                                        </c:if>
+                                                <!-- External Control Bar & Limits summary under the 3D card wrapper -->
+                                                <div style="width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 8px;">
+                                                    <!-- Limits Badges Summary -->
+                                                    <c:if test="${card.status eq 'active'}">
+                                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
+                                                             <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 6px 10px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.12); display: flex; flex-direction: column; gap: 1px; box-shadow: var(--shadow-sm);">
+                                                                 <span style="font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 4px;"><i class="bx bx-atm" style="font-size: 0.8rem; color: var(--accent-emerald);"></i> ATM Limit</span>
+                                                                 <strong style="font-size: 0.8rem; color: var(--gray-700);">₹ <fmt:formatNumber value="${card.atmLimit}" minFractionDigits="2" maxFractionDigits="2"/></strong>
+                                                             </div>
+                                                             <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 6px 10px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.12); display: flex; flex-direction: column; gap: 1px; box-shadow: var(--shadow-sm);">
+                                                                 <span style="font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 4px;"><i class="bx bx-shopping-bag" style="font-size: 0.8rem; color: #d97706;"></i> Online Limit</span>
+                                                                 <strong style="font-size: 0.8rem; color: var(--gray-700);">₹ <fmt:formatNumber value="${card.onlineLimit}" minFractionDigits="2" maxFractionDigits="2"/></strong>
+                                                             </div>
+                                                        </div>
+                                                    </c:if>
+                                                    
+                                                    <div
+                                                        style="display: flex; justify-content: space-between; align-items: center; width: 100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.15); box-shadow: var(--shadow-sm);">
+                                                        <div>
+                                                            <c:choose>
+                                                                <c:when test="${card.status eq 'active'}">
+                                                                    <span
+                                                                        style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
+                                                                            class="bx bxs-circle"
+                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
+                                                                        Active</span>
+                                                                </c:when>
+                                                                <c:when test="${card.status eq 'pending'}">
+                                                                    <span
+                                                                        style="background: rgba(245, 158, 11, 0.12); color: #b45309; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
+                                                                            class="bx bxs-circle"
+                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
+                                                                        Pending</span>
+                                                                </c:when>
+                                                                <c:when test="${card.status eq 'expired'}">
+                                                                    <span
+                                                                        style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
+                                                                            class="bx bxs-circle"
+                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
+                                                                        Expired</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span
+                                                                        style="background: rgba(156, 163, 175, 0.12); color: #4b5563; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
+                                                                            class="bx bxs-circle"
+                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
+                                                                        Closed</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+                                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                                            <c:if test="${card.status eq 'active'}">
+                                                                <button type="button"
+                                                                    onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', ${card.internationalEnabled})"
+                                                                    class="btn"
+                                                                    style="background: rgba(99, 102, 241, 0.08); color: var(--primary-500); padding: 4px 8px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: 1px solid rgba(99, 102, 241, 0.15); margin: 0; display: inline-flex; align-items: center; gap: 3px;"
+                                                                    title="Manage Limits & Controls">
+                                                                    <i class="bx bx-slider-alt" style="font-size: 0.9rem;"></i> Limits
+                                                                </button>
+                                                            </c:if>
+                                                            <c:if
+                                                                test="${card.cardType eq 'credit' and card.status eq 'active' and card.outstandingBalance gt 0}">
+                                                                <button type="button"
+                                                                    onclick="openPayDuesModal('${card.cardId}', '${card.outstandingBalance}')"
+                                                                    class="btn"
+                                                                    style="background: var(--gradient-primary); color: white; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: none; margin: 0; box-shadow: var(--shadow-sm);">Pay
+                                                                    Dues</button>
+                                                            </c:if>
+                                                            <c:if
+                                                                test="${card.status eq 'expired' or card.status eq 'closed'}">
+                                                                <fmt:formatDate value="${card.expiryDate}" pattern="MM/yy"
+                                                                    var="formattedExpiryDate" />
+                                                                <button type="button"
+                                                                    onclick="openRenewModal('${card.cardId}', '${card.cardType}', '${card.cardFee}', '${card.cardNumber}', '${formattedExpiryDate}', '${card.cardProvider}')"
+                                                                    class="btn"
+                                                                    style="background: #10b981; color: white; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: none; margin: 0;">Renew</button>
+                                                            </c:if>
+                                                            <c:if test="${card.status eq 'active'}">
+                                                                <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
+                                                                    class="btn"
+                                                                    onclick="return confirm('Are you sure you want to permanently close this VGB card?');"
+                                                                    style="background: rgba(239, 68, 68, 0.08); color: #ef4444; padding: 4px 8px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; border: 1px solid rgba(239, 68, 68, 0.15); margin: 0;">Close</a>
+                                                            </c:if>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2028,6 +2127,72 @@
                         </div>
                     </div>
 
+                    <!-- 4. Modal: Manage Card Controls & Limits -->
+                    <div id="limitsModal" class="modal">
+                        <div class="modal-content" style="max-width: 500px; width: 100%;">
+                            <div class="modal-header">
+                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px;"><i
+                                        class="bx bx-slider-alt" style="color: var(--primary-500);"></i> Card Controls & Limits</h3>
+                                <button type="button" onclick="closeLimitsModal()" class="close-btn">&times;</button>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/card?action=updateLimits" method="post">
+                                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                                <input type="hidden" id="limitsCardId" name="cardId">
+                                <div class="modal-body" style="padding: 25px; display: flex; flex-direction: column; gap: 20px;">
+                                    <!-- Daily Limit Slider -->
+                                    <div class="form-group">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <label for="dailyLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Daily Transaction Limit</label>
+                                            <span id="dailyLimitVal" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                        </div>
+                                        <input type="range" id="dailyLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateLimitVal('dailyLimit', this.value)">
+                                        <input type="hidden" id="dailyLimitInput" name="dailyLimit">
+                                        <small style="color: var(--gray-400); font-size: 0.75rem;">Max daily spend capacity across all transactions</small>
+                                    </div>
+
+                                    <!-- ATM Limit Slider -->
+                                    <div class="form-group">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <label for="atmLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">ATM Cash Withdrawal Limit</label>
+                                            <span id="atmLimitVal" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 25,000</span>
+                                        </div>
+                                        <input type="range" id="atmLimitRange" min="1000" max="100000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateLimitVal('atmLimit', this.value)">
+                                        <input type="hidden" id="atmLimitInput" name="atmLimit">
+                                        <small style="color: var(--gray-400); font-size: 0.75rem;">Max daily withdrawal capacity at ATMs</small>
+                                    </div>
+
+                                    <!-- Online Limit Slider -->
+                                    <div class="form-group">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <label for="onlineLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Online & POS Shopping Limit</label>
+                                            <span id="onlineLimitVal" style="background: rgba(245, 158, 11, 0.1); color: #d97706; font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                        </div>
+                                        <input type="range" id="onlineLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateLimitVal('onlineLimit', this.value)">
+                                        <input type="hidden" id="onlineLimitInput" name="onlineLimit">
+                                        <small style="color: var(--gray-400); font-size: 0.75rem;">Max daily limit for E-Commerce, online, and POS store purchases</small>
+                                    </div>
+
+                                    <!-- International Toggle -->
+                                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 5px;">
+                                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                                            <strong style="font-size: 0.9rem; color: var(--gray-800);">International Usage</strong>
+                                            <small style="color: var(--gray-400); font-size: 0.75rem;">Allow transactions outside India</small>
+                                        </div>
+                                        <label class="switch-toggle">
+                                            <input type="checkbox" id="intlEnabledCheckbox" onchange="updateIntlInput(this.checked)">
+                                            <span class="slider-toggle-round"></span>
+                                        </label>
+                                        <input type="hidden" id="intlEnabledInput" name="internationalEnabled">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 5px; font-weight: 600;">
+                                        Save Control Preferences
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
                     <script>
                         function openApplyModal() {
@@ -2106,6 +2271,46 @@
                             document.getElementById('renewModal').style.display = 'none';
                         }
 
+                        function openLimitsModal(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled) {
+                            document.getElementById('limitsCardId').value = cardId;
+                            
+                            const dLim = parseInt(parseFloat(dailyLimit)) || 50000;
+                            const aLim = parseInt(parseFloat(atmLimit)) || 25000;
+                            const oLim = parseInt(parseFloat(onlineLimit)) || 50000;
+                            
+                            document.getElementById('dailyLimitRange').value = dLim;
+                            document.getElementById('dailyLimitInput').value = dLim;
+                            document.getElementById('dailyLimitVal').textContent = '₹ ' + dLim.toLocaleString('en-IN');
+                            
+                            document.getElementById('atmLimitRange').value = aLim;
+                            document.getElementById('atmLimitInput').value = aLim;
+                            document.getElementById('atmLimitVal').textContent = '₹ ' + aLim.toLocaleString('en-IN');
+                            
+                            document.getElementById('onlineLimitRange').value = oLim;
+                            document.getElementById('onlineLimitInput').value = oLim;
+                            document.getElementById('onlineLimitVal').textContent = '₹ ' + oLim.toLocaleString('en-IN');
+                            
+                            const isIntl = internationalEnabled === true || internationalEnabled === 'true' || internationalEnabled === 1;
+                            document.getElementById('intlEnabledCheckbox').checked = isIntl;
+                            document.getElementById('intlEnabledInput').value = isIntl ? 'true' : 'false';
+                            
+                            document.getElementById('limitsModal').style.display = 'flex';
+                        }
+
+                        function closeLimitsModal() {
+                            document.getElementById('limitsModal').style.display = 'none';
+                        }
+
+                        function updateLimitVal(type, val) {
+                            const parsedVal = parseInt(val) || 0;
+                            document.getElementById(type + 'Input').value = parsedVal;
+                            document.getElementById(type + 'Val').textContent = '₹ ' + parsedVal.toLocaleString('en-IN');
+                        }
+
+                        function updateIntlInput(checked) {
+                            document.getElementById('intlEnabledInput').value = checked ? 'true' : 'false';
+                        }
+
                         function updateApplyFeeAndNotice(cardType) {
                             const feeValue = cardType === 'credit' ? '500.00' : '250.00';
                             document.getElementById('applyFeeValue').textContent = '₹ ' + feeValue;
@@ -2141,6 +2346,7 @@
                             const applyModal = document.getElementById('applyModal');
                             const duesModal = document.getElementById('payDuesModal');
                             const renewModal = document.getElementById('renewModal');
+                            const limitsModal = document.getElementById('limitsModal');
                             if (event.target === applyModal) {
                                 closeApplyModal();
                             }
@@ -2149,6 +2355,9 @@
                             }
                             if (event.target === renewModal) {
                                 closeRenewModal();
+                            }
+                            if (event.target === limitsModal) {
+                                closeLimitsModal();
                             }
                         }
 
