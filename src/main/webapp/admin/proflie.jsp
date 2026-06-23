@@ -855,7 +855,7 @@
 
 
 
-            // Cursor glow glow position tracking
+            // Cursor glow position tracking
             const glow = document.querySelector('.cursor-glow');
             if (glow) {
                 window.addEventListener('mousemove', (e) => {
