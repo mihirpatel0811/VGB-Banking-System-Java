@@ -372,7 +372,7 @@
             position: relative;
             overflow: hidden;
             height: 100%;
-            min-height: 340px;
+            min-height: 350px;
         }
         body.dark-mode .passbook-visualizer-container {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(236, 72, 153, 0.02) 100%);
@@ -380,8 +380,8 @@
         }
 
         .passbook-wrapper {
-            width: 380px;
-            height: 250px;
+            width: 420px; /* Width of a single panel */
+            height: 180px; /* Height of a single panel */
             position: relative;
             transform-style: preserve-3d;
             cursor: pointer;
@@ -394,260 +394,498 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transform: rotateX(12deg) rotateY(-18deg);
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: rotateX(15deg) rotateY(-10deg);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Spine / spine shadow */
+        /* Spine binding edge decoration at top */
         .passbook-book::before {
             content: '';
             position: absolute;
             left: 0;
+            right: 0;
             top: 0;
-            bottom: 0;
-            width: 15px;
-            background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(255,255,255,0.15) 30%, rgba(0,0,0,0.2) 100%);
+            height: 10px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(255,255,255,0.15) 30%, rgba(0,0,0,0.2) 100%);
             z-index: 50;
-            border-radius: 12px 0 0 12px;
             pointer-events: none;
             opacity: 0.8;
         }
 
-        /* 3D cover swing wrapper - transitions opacity and visibility to hide left cover when open */
-        .passbook-cover-wrapper {
+        /* 3D panels */
+        .passbook-panel {
             position: absolute;
-            inset: 0;
-            transform-origin: left center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s ease;
-            z-index: 30;
-            opacity: 1;
-            visibility: visible;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .passbook-book.open .passbook-cover-wrapper {
-            transform: rotateY(-155deg);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        /* Base Page (stationary bottom ledger) */
+        .base-page {
+            z-index: 10;
         }
 
-        .passbook-book.open {
-            transform: rotateX(15deg) rotateY(10deg);
+        /* Cover Flap (flips upward from the top edge) */
+        .cover-flap {
+            transform-origin: center top;
+            transform: rotateX(0deg) translateZ(1px); /* Folds shut over base */
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
         }
 
-        .passbook-cover-front {
+        .passbook-book.open .cover-flap {
+            transform: rotateX(180deg) translateZ(0.5px); /* Unfolds upwards */
+        }
+
+        .passbook-book.flipped-back {
+            transform: rotateX(195deg) rotateY(10deg) !important;
+        }
+
+        .btn-flip-book {
+            position: absolute;
+            bottom: 12px;
+            left: 15px;
+            background: rgba(99, 102, 241, 0.08);
+            border: 1.5px solid rgba(99, 102, 241, 0.15);
+            color: var(--primary-600);
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all var(--transition-normal);
+            z-index: 100;
+        }
+        body.dark-mode .btn-flip-book {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .btn-flip-book:hover {
+            background: var(--gradient-primary);
+            color: white !important;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+        .btn-flip-book i {
+            font-size: 0.95rem;
+        }
+
+        /* Panel face styling */
+        .panel-face {
             position: absolute;
             inset: 0;
             backface-visibility: hidden;
-            background: radial-gradient(circle at 30% 30%, #1e1b4b 0%, #0c0a21 65%, #02000a 100%);
             border-radius: 12px;
-            box-shadow: 10px 15px 35px rgba(0, 0, 0, 0.4), inset -1px 0 2px rgba(255, 255, 255, 0.1);
-            padding: 24px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-front {
+            transform: rotateX(0deg);
             z-index: 2;
         }
 
-        .passbook-cover-front::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
-            pointer-events: none;
-        }
-
-        .passbook-cover-inside {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            transform: rotateY(180deg);
-            background: linear-gradient(135deg, #0f0b29 0%, #03010f 100%);
-            border-radius: 12px;
-            padding: 24px;
-            color: #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border-right: 1.5px solid rgba(255, 255, 255, 0.05);
+        .panel-back {
+            transform: rotateX(180deg);
             z-index: 1;
         }
 
-        .passbook-page {
-            position: absolute;
-            width: 98%;
-            height: 96%;
-            top: 2%;
-            left: 1%;
-            background: #faf8f5;
-            border-radius: 4px 10px 10px 4px;
-            box-shadow: inset 5px 0 15px rgba(0, 0, 0, 0.15), 5px 10px 20px rgba(0,0,0,0.15);
-            padding: 20px 24px;
-            color: #334155;
-            font-family: 'Poppins', sans-serif;
-            z-index: 20;
+        /* Cosmic styles */
+        .cosmic-cover {
+            background: radial-gradient(circle at 50% 50%, #0d0a2d 0%, #030211 80%, #000005 100%);
+            color: #ffffff;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            overflow: hidden;
+            height: 100%;
+            box-sizing: border-box;
+            position: relative;
         }
 
-        .passbook-back {
+        .cosmic-cover::before {
+            content: '';
             position: absolute;
             inset: 0;
-            background: #080517;
-            border-radius: 12px;
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.5);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.65rem;
-            border-left: 2px solid rgba(255,255,255,0.05);
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.25) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        /* Cover Details */
-        .bank-abbrev {
-            font-weight: 800;
-            font-size: 1.2rem;
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Orbits background for cover */
+        .cosmic-orbits {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.7;
         }
 
-        .chip-icon {
-            font-size: 1.6rem;
-            color: #d4af37;
-            opacity: 0.85;
-        }
-
-        .cover-logo {
-            align-self: center;
-            width: 70px;
-            height: 70px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-        }
-
-        .v-logo-svg {
+        .cosmic-orbits svg {
             width: 100%;
             height: 100%;
         }
 
-        .cover-title h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: 5px;
-            margin: 0;
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .cover-title p {
-            font-size: 0.6rem;
-            letter-spacing: 2.5px;
-            color: #d4af37;
-            text-transform: uppercase;
-            margin-top: 4px;
-            font-weight: 600;
-            opacity: 0.8;
-        }
-
-        .bank-tagline {
-            font-size: 0.55rem;
-            letter-spacing: 1px;
-            color: #a5b4fc;
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-
-        /* Inside Page */
-        .page-header {
-            border-bottom: 2px solid #cbd5e1;
-            padding-bottom: 6px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .page-header h4 {
-            font-size: 0.75rem;
+        /* Spine vertical text */
+        .spine-text {
+            position: absolute;
+            left: 2px;
+            top: 20px;
+            bottom: 20px;
+            width: 12px;
+            font-size: 0.38rem;
             font-weight: 800;
-            letter-spacing: 0.75px;
-            color: #1e293b;
-            margin: 0;
+            color: rgba(255, 255, 255, 0.3);
             text-transform: uppercase;
+            letter-spacing: 1px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
         }
 
-        .passbook-info-table {
+        /* Cover Title Frame */
+        .cover-title-frame {
+            border-top: 1.5px solid rgba(0, 240, 255, 0.3);
+            border-bottom: 1.5px solid rgba(0, 240, 255, 0.3);
+            padding: 4px 0;
+            margin: 5px 0;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+        }
+
+        .cover-title-frame h2 {
+            font-size: 1.25rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 4px !important;
+            margin: 0 !important;
+            background: linear-gradient(135deg, #00f0ff 0%, #d900ff 50%, #ffffff 100%);
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            text-shadow: 0 2px 10px rgba(0, 240, 255, 0.2);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Cover Info / Contact line */
+        .cover-contacts-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.42rem;
+            color: rgba(255, 255, 255, 0.5);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.08);
+            padding-top: 6px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .cover-contacts-row span {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Cover Icons row */
+        .cover-icons-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 8px 0;
+        }
+
+        .cover-icon-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 0.38rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        .cover-icon-box i {
+            font-size: 0.95rem;
+            color: #d900ff;
+            text-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+        }
+
+        /* Dark High-Tech background inside panels */
+        .inside-tech-panel {
+            background: radial-gradient(circle at 100% 100%, #0d0925 0%, #040212 90%);
+            color: #e2e8f0;
+            padding: 16px;
+            box-sizing: border-box;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .inside-tech-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* Page Headers */
+        .tech-page-header-pill {
+            background: linear-gradient(90deg, #d900ff 0%, #6366f1 100%);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+            margin-bottom: 8px;
+        }
+
+        .tech-page-header-pill h4 {
+            font-size: 0.65rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.75px !important;
+            color: #ffffff !important;
+            margin: 0 !important;
+            text-transform: uppercase !important;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Credentials info grid */
+        .tech-credentials-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.68rem;
+            font-size: 0.50rem;
             line-height: 1.4;
         }
 
-        .passbook-info-table td {
-            padding: 5px 0;
-            border-bottom: 1px dashed #e2e8f0;
+        .tech-credentials-table td {
+            padding: 4px 0;
+            border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
         }
 
-        .passbook-info-table td:first-child {
-            color: #64748b;
-            width: 35%;
+        .tech-credentials-table td:first-child {
+            color: #94a3b8;
+            width: 38%;
+            font-weight: 500;
         }
 
-        .info-bold {
+        .tech-credentials-table td:last-child {
+            color: #f8fafc;
             font-weight: 700;
         }
 
-        .text-ellipsis {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 180px;
-            display: inline-block;
-            vertical-align: bottom;
+        /* Circular Lock Shield */
+        .circular-lock-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 1.5px solid rgba(0, 240, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            flex-shrink: 0;
         }
 
+        .circular-lock-badge i {
+            font-size: 1.05rem;
+            color: #00f0ff;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
+
+        .tech-security-icons {
+            display: flex;
+            gap: 6px;
+            font-size: 0.38rem;
+            color: #94a3b8;
+            font-weight: 600;
+            align-items: center;
+        }
+
+        .tech-security-icon-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            opacity: 0.8;
+        }
+
+        .tech-security-icon-box i {
+            font-size: 0.72rem;
+            color: #00f0ff;
+        }
+
+        /* Important Instructions Panel inside */
+        .instructions-panel-inside {
+            background: radial-gradient(circle at 50% 50%, #0b071e 0%, #03010b 90%);
+            color: #e2e8f0;
+            padding: 16px;
+            box-sizing: border-box;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 12px;
+        }
+
+        .instructions-panel-inside h4 {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-align: center;
+            margin: 0 0 8px 0;
+            font-family: 'Poppins', sans-serif;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 4px;
+        }
+
+        .instructions-tech-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .instructions-tech-list li {
+            font-size: 0.48rem;
+            color: #cbd5e1;
+            line-height: 1.25;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .instructions-tech-list li i {
+            color: #d900ff;
+            font-size: 0.75rem;
+            text-shadow: 0 0 5px rgba(217, 0, 255, 0.4);
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        /* Transaction Record style */
+        .transaction-panel-inside {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 14px;
+            box-sizing: border-box;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+        }
+
+        /* Watermark V for transaction page */
+        .transaction-watermark-v {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px;
+            height: 110px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Transaction table grid */
+        .tech-ledger-grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.35rem;
+            z-index: 2;
+            position: relative;
+            table-layout: fixed;
+        }
+
+        .tech-ledger-grid th {
+            padding: 3px 2px !important;
+            background: #334155 !important;
+            color: #f8fafc !important;
+            font-weight: 700 !important;
+            font-size: 0.34rem !important;
+            text-transform: uppercase !important;
+            border: 1px solid #475569 !important;
+            letter-spacing: 0.1px !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tech-ledger-grid td {
+            padding: 3px 2px !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #475569 !important;
+            font-weight: 600 !important;
+            text-align: center !important;
+            font-family: monospace !important;
+            white-space: nowrap !important;
+            font-size: 0.34rem !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tech-ledger-grid td.particulars {
+            text-align: left !important;
+            font-family: inherit !important;
+        }
+
+        .tech-ledger-footer {
+            font-size: 0.38rem;
+            color: #64748b;
+            text-align: center;
+            font-weight: bold;
+            border-top: 1.5px solid #cbd5e1;
+            padding-top: 5px;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.2px;
+        }
+
+        /* Status watermark overlays */
         .passbook-status-watermark {
             position: absolute;
-            top: 55%;
+            top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(-20deg);
-            font-size: 2.2rem;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-size: 1.8rem;
             font-weight: 900;
-            color: rgba(245, 158, 11, 0.12); /* Default pending */
-            border: 4px solid currentColor;
-            padding: 4px 16px;
+            color: rgba(245, 158, 11, 0.15); /* default pending */
+            border: 3.5px solid currentColor;
+            padding: 4px 14px;
             border-radius: 6px;
             pointer-events: none;
             letter-spacing: 2px;
             text-transform: uppercase;
             user-select: none;
-            display: none;
-        }
-
-        .passbook-status-watermark.pending {
-            display: block;
-            color: rgba(245, 158, 11, 0.15);
+            z-index: 10;
         }
 
         .passbook-status-watermark.approved {
-            display: block;
-            color: rgba(16, 185, 129, 0.15);
+            color: rgba(16, 185, 129, 0.22) !important;
         }
 
         .passbook-status-watermark.rejected {
-            display: block;
-            color: rgba(239, 68, 68, 0.15);
+            color: rgba(239, 68, 68, 0.22) !important;
         }
 
         .click-hint {
@@ -987,94 +1225,275 @@
 
                 <!-- Right Column: Interactive 3D booklet visualizer -->
                 <div class="passbook-visualizer-container">
+                    <button type="button" class="btn-flip-book" onclick="toggleBookFlip(event)">
+                        <i class="bx bx-refresh"></i> Flip Booklet
+                    </button>
                     <button type="button" class="btn" style="position: absolute; top: 12px; right: 15px; background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: 1px solid rgba(99, 102, 241, 0.2); padding: 5px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; z-index: 100;" onclick="openFullPassbook3D(event)"><i class="bx bx-expand"></i> View Full 3D</button>
                     
                     <div class="passbook-wrapper" onclick="toggleBookOpen()">
                         <div class="passbook-book" id="3dPassbook">
-                            <!-- Back Cover -->
-                            <div class="passbook-back">
-                                <div class="back-cover-header">VERTEX GALAXY BANK</div>
-                                <div>
-                                    <p style="margin: 0; font-weight: bold; color: rgba(255,255,255,0.6);">General Information</p>
-                                    <p style="margin: 4px 0 0;">This passbook remains the property of Vertex Galaxy Bank. If found, please return to any branch office.</p>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                    <div>
-                                        <p style="margin: 0;">Support Hotline: 1800-VGB-BANK</p>
-                                        <p style="margin: 2px 0 0;">Web: www.vertexgalaxybank.com</p>
+                            <!-- SVG Gradients Definition -->
+                            <svg style="position: absolute; width: 0; height: 0;">
+                                <defs>
+                                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#00f0ff" />
+                                        <stop offset="50%" stop-color="#d900ff" />
+                                        <stop offset="100%" stop-color="#ffffff" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <!-- 1. Base Page (Stationary Bottom Panel: Transaction Ledger & Back Cover) -->
+                            <div class="passbook-panel base-page">
+                                <!-- Base Page Front: Transaction Ledger -->
+                                <div class="panel-face panel-front">
+                                    <div class="transaction-panel-inside">
+                                        <!-- Watermark V logo in background -->
+                                        <div class="transaction-watermark-v">
+                                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; fill: #334155;">
+                                                <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" />
+                                            </svg>
+                                        </div>
+                                        
+                                        <!-- Top layout -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                            <div class="tech-page-header-pill" style="background: linear-gradient(90deg, #6366f1 0%, #3b82f6 100%); margin-bottom: 0;">
+                                                <h4 style="font-size: 0.55rem !important;">Transaction Record</h4>
+                                            </div>
+                                            <div style="width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
+                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <!-- Ledger Table -->
+                                        <table class="tech-ledger-grid">
+                                            <colgroup>
+                                                <col style="width: 16%;">
+                                                <col style="width: 29%;">
+                                                <col style="width: 10%;">
+                                                <col style="width: 15%;">
+                                                <col style="width: 15%;">
+                                                <col style="width: 15%;">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Particulars</th>
+                                                    <th>Chq No.</th>
+                                                    <th>Withdrawal</th>
+                                                    <th>Deposit</th>
+                                                    <th>Balance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>07-Jun-26</td>
+                                                    <td class="particulars">Opening Bal</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>10,000.00</td>
+                                                    <td>10,000.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>12-Jun-26</td>
+                                                    <td class="particulars">Interest Paid</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>150.00</td>
+                                                    <td>10,150.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>18-Jun-26</td>
+                                                    <td class="particulars">ATM Wdl</td>
+                                                    <td>-</td>
+                                                    <td>2,000.00</td>
+                                                    <td>-</td>
+                                                    <td>8,150.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>22-Jun-26</td>
+                                                    <td class="particulars">Passbook Fee</td>
+                                                    <td>-</td>
+                                                    <td>100.00</td>
+                                                    <td>-</td>
+                                                    <td>8,050.00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="tech-ledger-footer" style="font-size: 0.35rem; margin-top: 2px; border-top: 1px solid #cbd5e1; padding-top: 3px;">
+                                            BANKING BEYOND BOUNDARIES. BUILDING YOUR GALAXY OF WEALTH.
+                                        </div>
                                     </div>
-                                    <div style="font-family: monospace; font-size: 0.9rem; letter-spacing: 1.5px; opacity: 0.7;">*VGB-PB*</div>
+                                </div>
+                                <!-- Base Page Back: Back Cover -->
+                                <div class="panel-face panel-back">
+                                    <div class="cosmic-cover">
+                                        <!-- Cosmic Orbits background -->
+                                        <div class="cosmic-orbits">
+                                            <svg viewBox="0 0 100 100">
+                                                <ellipse cx="50" cy="40" rx="35" ry="8" fill="none" stroke="rgba(0, 240, 255, 0.25)" stroke-width="0.8" transform="rotate(-25 50 40)" />
+                                                <ellipse cx="50" cy="40" rx="42" ry="12" fill="none" stroke="rgba(217, 0, 255, 0.2)" stroke-width="0.6" transform="rotate(-25 50 40)" />
+                                            </svg>
+                                        </div>
+                                        
+                                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 5px;">
+                                            <div style="width: 26px; height: 26px; margin-bottom: 2px;">
+                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
+                                                </svg>
+                                            </div>
+                                            <span style="font-weight: 800; font-size: 0.52rem; letter-spacing: 1.5px; color: #fff; font-family: 'Poppins', sans-serif;">VERTEX GALAXY BANK</span>
+                                            <span style="font-size: 0.38rem; letter-spacing: 0.5px; color: rgba(255,255,255,0.6); margin-top: 2px; font-family: 'Poppins', sans-serif; text-align: center;">Your Universe. Your Future. Our Commitment.</span>
+                                        </div>
+
+                                        <div class="cover-icons-row" style="margin: 4px 0;">
+                                            <div class="cover-icon-box">
+                                                <i class="bx bx-lock-alt"></i>
+                                                <span>SECURE</span>
+                                            </div>
+                                            <div class="cover-icon-box">
+                                                <i class="bx bx-atom"></i>
+                                                <span>INNOVATIVE</span>
+                                            </div>
+                                            <div class="cover-icon-box">
+                                                <i class="bx bx-shield-quarter"></i>
+                                                <span>RELIABLE</span>
+                                            </div>
+                                            <div class="cover-icon-box">
+                                                <i class="bx bx-rocket"></i>
+                                                <span>FUTURISTIC</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="cover-contacts-row" style="padding-top: 4px;">
+                                            <span><i class="bx bx-phone" style="color: #00f0ff;"></i> 1800 123 4567</span>
+                                            <span><i class="bx bx-globe" style="color: #00f0ff;"></i> www.vertexgalaxybank.com</span>
+                                            <span><i class="bx bx-envelope" style="color: #00f0ff;"></i> support@vertexgalaxybank.com</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <!-- Inside Ledger Info Page -->
-                            <div class="passbook-page">
-                                <div class="page-header">
-                                    <h4>ACCOUNT CREDENTIALS CARD</h4>
+
+                            <!-- 2. Cover Flap (Top Panel: Front Cover & Split Info/Instructions) -->
+                            <div class="passbook-panel cover-flap">
+                                <!-- Cover Flap Front: Front Cover (visible when closed) -->
+                                <div class="panel-face panel-front">
+                                    <div class="cosmic-cover">
+                                        <!-- Spine label text (only visible when book is closed and rotated) -->
+                                        <div class="spine-text">
+                                            <span>VERTEX GALAXY BANK</span>
+                                            <span>PASSBOOK</span>
+                                        </div>
+                                        
+                                        <!-- Cosmic Orbits background -->
+                                        <div class="cosmic-orbits">
+                                            <svg viewBox="0 0 100 100">
+                                                <ellipse cx="50" cy="50" rx="36" ry="9" fill="none" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1" transform="rotate(-25 50 50)" />
+                                                <ellipse cx="50" cy="50" rx="44" ry="14" fill="none" stroke="rgba(217, 0, 255, 0.35)" stroke-width="0.8" transform="rotate(-25 50 50)" />
+                                                <circle cx="20" cy="30" r="0.6" fill="#fff" opacity="0.8" />
+                                                <circle cx="85" cy="25" r="0.8" fill="#fff" opacity="0.9" />
+                                                <circle cx="75" cy="75" r="0.5" fill="#fff" opacity="0.6" />
+                                                <circle cx="15" cy="80" r="0.7" fill="#fff" opacity="0.7" />
+                                            </svg>
+                                        </div>
+                                        
+                                        <!-- Top row -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 12px;">
+                                            <span style="font-weight: 800; font-size: 0.72rem; letter-spacing: 1px; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); font-family: 'Poppins', sans-serif;">VERTEX</span>
+                                            <span style="font-size: 0.95rem; color: #00f0ff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);"><i class="bx bx-chip"></i></span>
+                                        </div>
+                                        
+                                        <!-- Large Glowing V Logo in middle -->
+                                        <div style="align-self: center; width: 62px; height: 62px; filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.45)); margin: 2px 0; display: flex; align-items: center; justify-content: center; position: relative;">
+                                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                                <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
+                                            </svg>
+                                        </div>
+
+                                        <!-- Title section -->
+                                        <div style="text-align: center; padding-left: 12px;">
+                                            <div style="font-size: 0.46rem; letter-spacing: 2px; color: rgba(255,255,255,0.7); font-weight: 700; text-transform: uppercase; font-family: 'Poppins', sans-serif;">VERTEX GALAXY BANK</div>
+                                            <div class="cover-title-frame">
+                                                <h2>PASSBOOK</h2>
+                                            </div>
+                                        </div>
+
+                                        <div style="font-size: 0.38rem; color: rgba(255,255,255,0.4); text-align: center; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Poppins', sans-serif; padding-left: 12px;">
+                                            Always Beyond Boundaries
+                                        </div>
+                                    </div>
                                 </div>
-                                <table class="passbook-info-table">
-                                    <tr>
-                                        <td>Holder Name:</td>
-                                        <td class="info-bold uppercase text-ellipsis" id="pbCustName">
-                                            SELECT REQUEST
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Account No:</td>
-                                        <td class="info-bold monospace" id="pbAccNum">
-                                            - - - - - - - - - - - - -
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Account Type:</td>
-                                        <td class="info-bold uppercase" id="pbAccType">
-                                            - - - - -
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>IFS Code:</td>
-                                        <td class="info-bold monospace">VGB0000171</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Branch:</td>
-                                        <td class="info-bold">BHAKTINAGAR, RAJKOT</td>
-                                    </tr>
-                                </table>
-                                <div class="passbook-status-watermark" id="pbWatermark">PREVIEW</div>
+                                <!-- Cover Flap Back: Split Account Info & Instructions (visible when open) -->
+                                <div class="panel-face panel-back">
+                                    <div class="inside-tech-panel" style="padding: 10px 14px; flex-direction: row; gap: 12px; align-items: stretch; justify-content: space-between;">
+                                        <!-- Left Column: Account Information -->
+                                        <div style="flex: 1.3; display: flex; flex-direction: column; justify-content: space-between;">
+                                            <div>
+                                                <div class="tech-page-header-pill" style="margin-bottom: 4px;">
+                                                    <h4>Account Info</h4>
+                                                </div>
+                                                <table class="tech-credentials-table">
+                                                    <tr>
+                                                        <td>Name</td>
+                                                        <td>: <span class="uppercase text-ellipsis" id="pbCustName">SELECT REQUEST</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>A/C No.</td>
+                                                        <td>: <span class="monospace" id="pbAccNum">- - - - - - - - - - - - -</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>IFSC Code</td>
+                                                        <td>: <span class="monospace">VGB0000171</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>A/C Type</td>
+                                                        <td>: <span class="uppercase" id="pbAccType">- - - - -</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Branch</td>
+                                                        <td>: <span>BHAKTINAGAR, RAJKOT</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Date</td>
+                                                        <td>: <span>08-AUG-2022</span></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div style="font-size: 0.33rem; color: rgba(255,255,255,0.4); text-align: left; font-weight: 500; font-family: 'Poppins', sans-serif;">
+                                                Thank you for banking with VERTEX GALAXY BANK
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Right Column: Important Instructions -->
+                                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed rgba(255,255,255,0.15); padding-left: 12px;">
+                                            <div>
+                                                <h4 style="font-size: 0.52rem; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; margin: 0 0 6px 0; font-family: 'Poppins', sans-serif; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 3px; text-align: center;">Instructions</h4>
+                                                <ul class="instructions-tech-list" style="gap: 4px;">
+                                                    <li><i class="bx bx-check-shield" style="font-size: 0.6rem;"></i> Bring passbook for all counter transactions.</li>
+                                                    <li><i class="bx bx-shield-quarter" style="font-size: 0.6rem;"></i> Report any discrepancy immediately.</li>
+                                                    <li><i class="bx bx-credit-card-front" style="font-size: 0.6rem;"></i> Property of Vertex Galaxy Bank.</li>
+                                                    <li><i class="bx bx-error-alt" style="font-size: 0.6rem;"></i> Keep secure. Do not fold/tear.</li>
+                                                </ul>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="circular-lock-badge" style="width: 22px; height: 22px; border-width: 1px;">
+                                                    <i class="bx bx-shield-quarter" style="font-size: 0.75rem;"></i>
+                                                </div>
+                                                <div style="width: 22px; height: 11px; opacity: 0.8;">
+                                                    <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                                        <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <!-- Folding Front Cover -->
-                            <div class="passbook-cover-wrapper">
-                                <!-- Front Cover Outer -->
-                                <div class="passbook-cover-front">
-                                    <div class="cover-header">
-                                        <span class="bank-abbrev">VGB</span>
-                                        <span class="chip-icon"><i class="bx bx-chip"></i></span>
-                                    </div>
-                                    <div class="cover-logo" style="display: flex; align-items: center; justify-content: center;">
-                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 100%; height: 100%; object-fit: contain;">
-                                    </div>
-                                    <div class="cover-title">
-                                        <h2>PASSBOOK</h2>
-                                        <p>VERTEX GALAXY BANK</p>
-                                    </div>
-                                    <div class="cover-footer">
-                                        <span class="bank-tagline">Always Beyond Boundaries</span>
-                                    </div>
-                                </div>
-                                <!-- Front Cover Inner -->
-                                <div class="passbook-cover-inside">
-                                    <div class="cover-inside-header">VERTEX GALAXY PASSBOOK</div>
-                                    <div class="cover-inside-body">
-                                        <p style="margin: 0; font-weight: bold; color: white;">Notice to Customer:</p>
-                                        <p style="margin: 6px 0 0;">Please keep this passbook in a safe place. Please update your passbook at any VGB kiosk terminal regularly to log transaction ledgers offline.</p>
-                                        <p style="margin: 8px 0 0;">Report any discrepancy to the branch manager immediately.</p>
-                                    </div>
-                                    <div class="cover-inside-footer">
-                                        VGB Secure Booklet | Version 3D
-                                    </div>
-                                </div>
-                            </div>
+
+                            <div class="passbook-status-watermark" id="pbWatermark">PREVIEW</div>
                         </div>
                     </div>
                     <div class="click-hint" id="pbHint"><i class="bx bx-pointer"></i> Click to Open</div>
@@ -1257,40 +1676,84 @@
         const wrapper = document.querySelector('.passbook-wrapper');
         const hint = document.getElementById('pbHint');
 
-        if (wrapper && book) {
-            wrapper.addEventListener('mousemove', (e) => {
-                if (book.classList.contains('open')) return;
+        // Dynamically scale book to fit container width without clipping
+        function updateBookTransform(rotX = 0, rotY = 0) {
+            if (!book || !container) return;
+            const currentContainer = book.closest('#modalPassbookScene') || container;
+            const containerWidth = currentContainer.clientWidth;
+            if (book.classList.contains('open')) {
+                // Open vertical book height is 360px, width is 420px
+                const openScale = Math.min((containerWidth - 30) / 420, 0.75);
+                book.style.transform = `rotateX(${25 + rotX}deg) rotateY(${-5 + rotY}deg) scale(${openScale})`;
+            } else if (book.classList.contains('flipped-back')) {
+                // Flipped closed book
+                const closedScale = Math.min((containerWidth - 20) / 420, 0.85);
+                book.style.transform = `rotateX(${195 + rotX}deg) rotateY(${10 + rotY}deg) scale(${closedScale})`;
+            } else {
+                // Closed book width is 420px, height is 180px
+                const closedScale = Math.min((containerWidth - 20) / 420, 0.85);
+                book.style.transform = `rotateX(${15 + rotX}deg) rotateY(${-10 + rotY}deg) scale(${closedScale})`;
+            }
+        }
 
-                const rect = wrapper.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
+        if (container && book) {
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-                const rX = -(y / rect.height) * 15;
-                const rY = (x / rect.width) * 22;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const maxRotX = book.classList.contains('open') ? 10 : 15;
+                const maxRotY = book.classList.contains('open') ? 8 : 15;
+
+                const rotX = -((y - centerY) / centerY) * maxRotX;
+                const rotY = ((x - centerX) / centerX) * maxRotY;
 
                 requestAnimationFrame(() => {
-                    book.style.transform = `rotateX(${12 + rX}deg) rotateY(${-18 + rY}deg) scale(1.025)`;
+                    updateBookTransform(rotX, rotY);
                 });
             });
 
-            wrapper.addEventListener('mouseleave', () => {
-                if (book.classList.contains('open')) return;
+            container.addEventListener('mouseleave', () => {
                 requestAnimationFrame(() => {
-                    book.style.transform = `rotateX(12deg) rotateY(-18deg) scale(1)`;
+                    updateBookTransform(0, 0);
                 });
+            });
+
+            // Initial scale update
+            updateBookTransform(0, 0);
+            
+            // Re-scale on window resize
+            window.addEventListener('resize', () => {
+                updateBookTransform(0, 0);
             });
         }
 
         function toggleBookOpen() {
             if (!book) return;
+            book.classList.remove('flipped-back');
             book.classList.toggle('open');
             if (book.classList.contains('open')) {
                 if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Close';
-                book.style.transform = 'rotateX(15deg) rotateY(10deg)';
             } else {
                 if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Open';
-                book.style.transform = 'rotateX(12deg) rotateY(-18deg)';
             }
+            updateBookTransform(0, 0);
+        }
+
+        function toggleBookFlip(event) {
+            if (event) event.stopPropagation();
+            if (!book) return;
+            book.classList.remove('open');
+            book.classList.toggle('flipped-back');
+            if (book.classList.contains('flipped-back')) {
+                if (hint) hint.innerHTML = '<i class="bx bx-refresh"></i> Back Cover View';
+            } else {
+                if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Open';
+            }
+            updateBookTransform(0, 0);
         }
 
         // Modal open/close functions
@@ -1302,6 +1765,10 @@
             if (modal && modalScene && wrapper) {
                 modalScene.appendChild(wrapper);
                 modal.style.display = 'flex';
+                // Trigger re-scale inside the modal
+                setTimeout(() => {
+                    updateBookTransform(0, 0);
+                }, 50);
             }
         }
 
@@ -1313,6 +1780,10 @@
             if (modal && inlineScene && wrapper) {
                 inlineScene.insertBefore(wrapper, hintEl || null);
                 modal.style.display = 'none';
+                // Trigger re-scale inside the inline container
+                setTimeout(() => {
+                    updateBookTransform(0, 0);
+                }, 50);
             }
         }
 
@@ -1348,8 +1819,11 @@
             }
 
             // Open book cover automatically to show info
-            if (book && !book.classList.contains('open')) {
-                toggleBookOpen();
+            if (book) {
+                book.classList.remove('flipped-back');
+                if (!book.classList.contains('open')) {
+                    toggleBookOpen();
+                }
             }
 
             // Scroll visualizer into view on mobile
