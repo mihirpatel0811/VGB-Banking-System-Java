@@ -425,6 +425,17 @@
             transform: rotateX(195deg) rotateY(10deg) !important;
         }
 
+        .chequebook-book.flipped-back .chequebook-page,
+        .chequebook-book.flipped-back .chequebook-cover-wrapper {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .chequebook-book.flipped-back .chequebook-back {
+            z-index: 40;
+        }
+
         .panel-face {
             position: absolute;
             inset: 0;
@@ -805,23 +816,192 @@
             box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
         }
 
-        /* Back Cover */
+        /* Back Cover Styles updated for premium visuals */
         .chequebook-back {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 50% 50%, #151145 0%, #06041a 60%, #010008 100%);
+            background: radial-gradient(circle at 50% 35%, #110e3d 0%, #06041c 70%, #01000b 100%) !important;
             border-radius: 12px;
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 12px 18px 45px rgba(0, 0, 0, 0.45);
             z-index: 10;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 16px 20px;
-            color: rgba(255, 255, 255, 0.4);
-            border-top: 2px solid rgba(255,255,255,0.05);
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 25px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
             transform: rotateX(180deg);
             backface-visibility: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Decorative glowing nebulas and lines */
+        .chequebook-back .cb-back-nebula-bg {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.22) 0%, transparent 60%),
+                radial-gradient(circle at 10% 10%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cb-back-neon-curves {
+            position: absolute;
+            bottom: -50px;
+            right: -30px;
+            width: 280px;
+            height: 160px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            border-top: 2.5px solid rgba(139, 92, 246, 0.45);
+            border-right: 3.5px solid rgba(139, 92, 246, 0.65);
+            filter: blur(2px);
+            transform: rotate(-25deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cb-back-neon-curves-2 {
+            position: absolute;
+            bottom: -65px;
+            right: -45px;
+            width: 310px;
+            height: 175px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            border-top: 2px solid rgba(0, 210, 255, 0.4);
+            border-right: 3px solid rgba(0, 210, 255, 0.6);
+            filter: blur(1px);
+            transform: rotate(-25deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cb-back-logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .cb-back-bank-name {
+            font-weight: 800;
+            font-size: 1.1rem !important;
+            letter-spacing: 4px !important;
+            color: #ffffff !important;
+            margin-top: 6px;
+            line-height: 1.1;
+        }
+
+        .cb-back-bank-sub {
+            font-size: 0.58rem !important;
+            letter-spacing: 2.5px !important;
+            color: #00d2ff !important;
+            font-weight: 700 !important;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        .cb-back-slogan {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(167, 139, 250, 0.15);
+        }
+
+        .cb-back-info-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 5px;
+            z-index: 2;
+            position: relative;
+            width: 100%;
+        }
+
+        .cb-back-info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.62rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .cb-back-info-item.address {
+            align-items: flex-start;
+        }
+
+        .cb-back-info-item i {
+            color: #38bdf8;
+            font-size: 0.85rem;
+            margin-top: 1px;
+        }
+
+        .cb-back-info-item.address i {
+            margin-top: 3px;
+        }
+
+        .cb-back-info-item span {
+            line-height: 1.4;
+            font-family: 'Poppins', sans-serif;
+            text-align: left;
+        }
+
+        @media (max-width: 576px) {
+            .chequebook-back {
+                padding: 12px 15px !important;
+                gap: 8px !important;
+            }
+            .chequebook-back svg {
+                width: 32px !important;
+                height: 32px !important;
+            }
+            .cb-back-bank-name {
+                font-size: 0.85rem !important;
+                letter-spacing: 2.5px !important;
+            }
+            .cb-back-bank-sub {
+                font-size: 0.48rem !important;
+                letter-spacing: 1.5px !important;
+            }
+            .cb-back-slogan {
+                font-size: 0.58rem !important;
+                margin-top: 4px !important;
+                letter-spacing: 1px !important;
+            }
+            .cb-back-info-block {
+                gap: 6px !important;
+                margin-top: 2px !important;
+            }
+            .cb-back-info-item {
+                font-size: 0.48rem !important;
+                gap: 6px !important;
+            }
+            .cb-back-info-item i {
+                font-size: 0.65rem !important;
+            }
+            .cb-back-neon-curves {
+                width: 180px !important;
+                height: 100px !important;
+            }
+            .cb-back-neon-curves-2 {
+                width: 200px !important;
+                height: 110px !important;
+            }
         }
 
         /* Technical Dotted pattern for back cover */
@@ -1673,8 +1853,14 @@
                             <div class="chequebook-book" id="demo3dChequebook">
                                 <!-- 1. Back Cover -->
                                 <div class="chequebook-back">
+                                    <div class="cb-back-nebula-bg"></div>
+                                    <div class="cb-back-neon-curves"></div>
+                                    <div class="cb-back-neon-curves-2"></div>
+                                    
                                     <div class="cb-back-logo-section">
-                                        <svg viewBox="0 0 100 100" style="width: 45px; height: 45px; filter: drop-shadow(0 0 8px rgba(121, 40, 202, 0.45));">
+                                        <svg viewBox="0 0 100 100" style="width: 40px; height: 40px;">
+                                            <ellipse cx="50" cy="58" rx="42" ry="11" fill="none" stroke="#00f0ff" stroke-width="1.8" transform="rotate(-18 50 58)" opacity="0.85" />
+                                            <ellipse cx="50" cy="58" rx="46" ry="6" fill="none" stroke="#d946ef" stroke-width="1.2" transform="rotate(18 50 58)" opacity="0.75" />
                                             <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" />
                                         </svg>
                                         <span class="cb-back-bank-name">VERTEX</span>
@@ -1683,9 +1869,9 @@
                                     </div>
                                     
                                     <div class="cb-back-info-block">
-                                        <div class="cb-back-info-item">
+                                        <div class="cb-back-info-item address">
                                             <i class="bx bx-map"></i>
-                                            <span>123 Galaxy Avenue, Nebula City, Cosmos State 12345</span>
+                                            <span>123 Galaxy Avenue, Nebula City<br>Cosmos State 12345</span>
                                         </div>
                                         <div class="cb-back-info-item">
                                             <i class="bx bx-phone"></i>
@@ -1829,8 +2015,8 @@
                                                         <th style="width: 12%;">DATE</th>
                                                         <th style="width: 32%;">DESCRIPTION</th>
                                                         <th style="width: 12%;">CHECK NO.</th>
-                                                        <th style="width: 16%;">PAYMENT / DEBIT (-)</th>
-                                                        <th style="width: 16%;">DEPOSIT / CREDIT (+)</th>
+                                                        <th style="width: 16%;">PAYMENT \ DEBIT (-)</th>
+                                                        <th style="width: 16%;">DEPOSIT \ CREDIT (+)</th>
                                                         <th style="width: 4%;">✔</th>
                                                         <th style="width: 12%;">BALANCE</th>
                                                     </tr>
@@ -2143,8 +2329,14 @@
                         <div class="chequebook-book" id="inspect3dChequebook">
                             <!-- 1. Back Cover -->
                             <div class="chequebook-back">
+                                <div class="cb-back-nebula-bg"></div>
+                                <div class="cb-back-neon-curves"></div>
+                                <div class="cb-back-neon-curves-2"></div>
+                                
                                 <div class="cb-back-logo-section">
-                                    <svg viewBox="0 0 100 100" style="width: 45px; height: 45px; filter: drop-shadow(0 0 8px rgba(121, 40, 202, 0.45));">
+                                    <svg viewBox="0 0 100 100" style="width: 40px; height: 40px;">
+                                        <ellipse cx="50" cy="58" rx="42" ry="11" fill="none" stroke="#00f0ff" stroke-width="1.8" transform="rotate(-18 50 58)" opacity="0.85" />
+                                        <ellipse cx="50" cy="58" rx="46" ry="6" fill="none" stroke="#d946ef" stroke-width="1.2" transform="rotate(18 50 58)" opacity="0.75" />
                                         <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" />
                                     </svg>
                                     <span class="cb-back-bank-name">VERTEX</span>
@@ -2153,9 +2345,9 @@
                                 </div>
                                 
                                 <div class="cb-back-info-block">
-                                    <div class="cb-back-info-item">
+                                    <div class="cb-back-info-item address">
                                         <i class="bx bx-map"></i>
-                                        <span>123 Galaxy Avenue, Nebula City, Cosmos State 12345</span>
+                                        <span>123 Galaxy Avenue, Nebula City<br>Cosmos State 12345</span>
                                     </div>
                                     <div class="cb-back-info-item">
                                         <i class="bx bx-phone"></i>
@@ -2299,8 +2491,8 @@
                                                     <th style="width: 12%;">DATE</th>
                                                     <th style="width: 32%;">DESCRIPTION</th>
                                                     <th style="width: 12%;">CHECK NO.</th>
-                                                    <th style="width: 16%;">PAYMENT / DEBIT (-)</th>
-                                                    <th style="width: 16%;">DEPOSIT / CREDIT (+)</th>
+                                                    <th style="width: 16%;">PAYMENT \ DEBIT (-)</th>
+                                                    <th style="width: 16%;">DEPOSIT \ CREDIT (+)</th>
                                                     <th style="width: 4%;">✔</th>
                                                     <th style="width: 12%;">BALANCE</th>
                                                 </tr>

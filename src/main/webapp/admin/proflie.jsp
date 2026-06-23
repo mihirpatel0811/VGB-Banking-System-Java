@@ -382,7 +382,7 @@
                         <!-- Floating Avatar -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
                             <div style="position: relative; display: inline-block;">
-                                <div class="avatar-holder" id="adminAvatarContainer" style="cursor: pointer;" onclick="openAdminLightbox();">
+                                <div class="avatar-holder" id="adminAvatarContainer" style="cursor:  pointer;" onclick="openAdminLightbox();">
                                     <img id="adminAvatarImage" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin Profile Logo">
                                 </div>
                                 <div onclick="document.getElementById('adminAvatarFileInput').click();" style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid white; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20;" title="Click to Change Profile Picture">

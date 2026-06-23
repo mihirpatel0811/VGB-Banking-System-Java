@@ -15,7 +15,7 @@
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>VGB | My Cards</title>
                     <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
-                    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+                    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap"
                         rel="stylesheet">
                     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
                     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
@@ -236,75 +236,384 @@
                             background: #080b11;
                         }
 
-                        /* 8 DYNAMIC PREMIUM BACKGROUNDS & ACCENTS */
-                        /* 1. Visa Debit */
-                        .vgb-atm-card.debit.visa {
-                            background: linear-gradient(135deg, #091326 0%, #030611 100%);
-                            box-shadow: 0 12px 25px rgba(29, 78, 216, 0.25);
+                        /* --- DEBIT CARD REDESIGN (COSMIC ORBIT PRESETS) --- */
+                        /* --- DEBIT & CREDIT CARD REDESIGN (COSMIC ORBIT PRESETS) --- */
+                        .vgb-atm-card.debit,
+                        .vgb-atm-card.credit {
+                            background: radial-gradient(circle at 50% 50%, #060b24 0%, #02040c 100%) !important;
+                            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
                         }
-
-                        .vgb-atm-card.debit.visa .card-front::after {
+                        
+                        /* Cosmic Orbiting rings (orbits) */
+                        .vgb-atm-card.debit .card-front::before,
+                        .vgb-atm-card.debit .card-back::before,
+                        .vgb-atm-card.credit .card-front::before,
+                        .vgb-atm-card.credit .card-back::before {
                             content: '';
                             position: absolute;
-                            inset: 0;
-                            background:
-                                radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.35) 0%, transparent 60%),
-                                linear-gradient(125deg, transparent 40%, rgba(255, 255, 255, 0.18) 47%, rgba(255, 255, 255, 0.32) 50%, rgba(255, 255, 255, 0.18) 53%, transparent 60%);
+                            top: 5%;
+                            left: 30%;
+                            width: 80%;
+                            height: 80%;
+                            border-radius: 50%;
+                            border: 1.5px solid rgba(0, 210, 255, 0.35);
+                            box-shadow: 0 0 10px rgba(0, 210, 255, 0.25), inset 0 0 10px rgba(0, 210, 255, 0.15);
+                            transform: rotate(-25deg) scaleY(0.4);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+                        .vgb-atm-card.debit .card-front::after,
+                        .vgb-atm-card.debit .card-back::after,
+                        .vgb-atm-card.credit .card-front::after,
+                        .vgb-atm-card.credit .card-back::after {
+                            content: '';
+                            position: absolute;
+                            top: -5%;
+                            left: 25%;
+                            width: 90%;
+                            height: 90%;
+                            border-radius: 50%;
+                            border: 2px solid rgba(139, 92, 246, 0.25);
+                            box-shadow: 0 0 12px rgba(139, 92, 246, 0.2), inset 0 0 12px rgba(139, 92, 246, 0.1);
+                            transform: rotate(-30deg) scaleY(0.35);
                             pointer-events: none;
                             z-index: 1;
                         }
 
-                        /* 2. Premium Visa Debit (Visa Platinum) */
-                        .vgb-atm-card.debit.visa.premium-tier {
-                            background: linear-gradient(135deg, #18181b 0%, #09090b 100%) !important;
-                            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+                        /* Clear the original backgrounds/pseudo-elements for Visa/MC/RuPay credit & debit */
+                        .vgb-atm-card.debit.visa, 
+                        .vgb-atm-card.debit.visa.premium-tier, 
+                        .vgb-atm-card.debit.mastercard, 
+                        .vgb-atm-card.debit.rupay,
+                        .vgb-atm-card.credit.visa, 
+                        .vgb-atm-card.credit.visa.premium-tier, 
+                        .vgb-atm-card.credit.mastercard, 
+                        .vgb-atm-card.credit.rupay {
+                            background: radial-gradient(circle at 50% 50%, #060b24 0%, #02040c 100%) !important;
+                            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+                        }
+                        .vgb-atm-card.debit.visa .card-front::after,
+                        .vgb-atm-card.debit.visa.premium-tier .card-front::after,
+                        .vgb-atm-card.debit.mastercard .card-front::after,
+                        .vgb-atm-card.debit.rupay .card-front::after,
+                        .vgb-atm-card.credit.visa .card-front::after,
+                        .vgb-atm-card.credit.visa.premium-tier .card-front::after,
+                        .vgb-atm-card.credit.mastercard .card-front::after,
+                        .vgb-atm-card.credit.rupay .card-front::after {
+                            display: none !important; /* disable credit style backgrounds */
                         }
 
-                        .vgb-atm-card.debit.visa.premium-tier .card-front::after {
-                            content: '';
+                        /* Toggle visual displays */
+                        .vgb-atm-card.credit .debit-front-layout,
+                        .vgb-atm-card.credit .debit-back-layout {
+                            display: none !important;
+                        }
+                        .vgb-atm-card.debit .credit-front-layout,
+                        .vgb-atm-card.debit .credit-back-layout {
+                            display: none !important;
+                        }
+
+                        /* Debit & Credit Front Layout */
+                        .debit-front-layout,
+                        .credit-front-layout {
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                            box-sizing: border-box;
+                            z-index: 5;
+                            position: relative;
+                        }
+                        .debit-header-right {
                             position: absolute;
-                            inset: 0;
-                            background:
-                                linear-gradient(120deg, transparent 35%, rgba(191, 149, 63, 0.2) 45%, rgba(252, 211, 77, 0.35) 50%, rgba(191, 149, 63, 0.2) 55%, transparent 65%),
-                                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.01) 0px, rgba(255, 255, 255, 0.01) 2px, transparent 2px, transparent 10px);
-                            pointer-events: none;
-                            z-index: 1;
+                            top: 0px;
+                            right: 0px;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-end;
+                            line-height: 1.1;
+                        }
+                        .debit-label-txt {
+                            font-size: 0.65rem;
+                            font-weight: 700;
+                            color: rgba(255, 255, 255, 0.9);
+                            letter-spacing: 1px;
+                            text-transform: uppercase;
+                        }
+                        .contactless-icon-debit {
+                            font-size: 1.25rem;
+                            transform: rotate(90deg);
+                            opacity: 0.8;
+                            color: #ffffff;
+                            margin-top: 4px;
+                        }
+                        .debit-chip-row {
+                            margin-top: 15px;
+                            display: flex;
+                        }
+                        .vgb-atm-card.debit .card-number-display.debit-number {
+                            margin: 15px 0 5px;
+                            text-align: left;
+                            font-size: 1.2rem;
+                            letter-spacing: 2.5px;
+                            font-weight: 600;
+                            color: #ffffff;
+                            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+                            font-family: 'Share Tech Mono', monospace;
+                        }
+                        .debit-expiry-row {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 6px;
+                            margin-top: -5px;
+                        }
+                        .debit-expiry-row .expiry-label {
+                            font-size: 0.35rem;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            opacity: 0.75;
+                            color: #ffffff;
+                            line-height: 1.1;
+                            text-align: right;
+                        }
+                        .debit-expiry-row .expiry-value {
+                            font-size: 0.8rem;
+                            font-weight: 600;
+                            color: #ffffff;
+                            font-family: 'Share Tech Mono', monospace;
+                        }
+                        .debit-bottom-row {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-end;
+                            margin-top: 5px;
+                        }
+                        .debit-bottom-row .holder-name.debit-holder {
+                            font-size: 0.8rem;
+                            font-weight: 500;
+                            letter-spacing: 1px;
+                            text-transform: uppercase;
+                            color: #ffffff;
+                            font-family: 'Poppins', sans-serif;
+                        }
+                        .debit-brand-logo-container {
+                            display: flex;
+                            align-items: flex-end;
+                            height: 30px;
                         }
 
-                        /* 3. Mastercard Debit */
-                        .vgb-atm-card.debit.mastercard {
-                            background: radial-gradient(circle at 75% 35%, #181105 0%, #000000 75%);
-                            box-shadow: 0 12px 25px rgba(191, 149, 63, 0.15);
+                        /* Visa Secure */
+                        .brand-visa-secure {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-end;
+                            line-height: 0.95;
+                        }
+                        .brand-visa-secure .visa-secure-text {
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 1.25rem;
+                            font-weight: 800;
+                            font-style: italic;
+                            color: #ffffff;
+                            letter-spacing: 0.5px;
+                        }
+                        .brand-visa-secure .visa-secure-sub {
+                            font-size: 0.4rem;
+                            font-weight: 700;
+                            color: rgba(255, 255, 255, 0.8);
+                            letter-spacing: 1.2px;
+                            margin-top: -1px;
                         }
 
-                        .vgb-atm-card.debit.mastercard .card-front::after {
-                            content: '';
+                        /* Mastercard ID */
+                        .brand-mastercard-id {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            line-height: 1;
+                            gap: 3px;
+                        }
+                        .mc-circles-id {
+                            display: flex;
+                            align-items: center;
+                            width: 28px;
+                            height: 18px;
+                            position: relative;
+                        }
+                        .mc-circles-id .circle-id {
+                            width: 16px;
+                            height: 16px;
+                            border-radius: 50%;
                             position: absolute;
-                            inset: 0;
-                            background:
-                                radial-gradient(circle at 75% 35%, rgba(254, 240, 138, 0.35) 0%, rgba(202, 138, 4, 0.2) 20%, rgba(113, 63, 18, 0.05) 40%, transparent 65%),
-                                repeating-radial-gradient(ellipse 220px 110px at 75% 35%, transparent 0px, transparent 12px, rgba(217, 119, 6, 0.03) 15px, transparent 18px);
-                            pointer-events: none;
-                            transform: rotate(-15deg);
-                            z-index: 1;
+                        }
+                        .mc-circles-id .circle-id.red-id {
+                            background: #eb001b;
+                            left: 0;
+                        }
+                        .mc-circles-id .circle-id.orange-id {
+                            background: #ff5f00;
+                            right: 0;
+                            opacity: 0.9;
+                        }
+                        .mc-id-text {
+                            font-size: 0.42rem;
+                            font-weight: 700;
+                            color: #ffffff;
+                            text-align: center;
+                            letter-spacing: 0.5px;
+                            line-height: 1.1;
+                        }
+                        .mc-id-text .id-text {
+                            font-size: 0.45rem;
+                            text-transform: uppercase;
+                            font-weight: 800;
                         }
 
-                        /* 4. Rupay Debit */
-                        .vgb-atm-card.debit.rupay {
-                            background: linear-gradient(135deg, #050d24 0%, #0c0822 50%, #030209 100%);
-                            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.2);
+                        /* RuPay Global */
+                        .brand-rupay-global {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-end;
+                            line-height: 0.95;
+                        }
+                        .brand-rupay-global .rupay-global-text {
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 1.1rem;
+                            font-weight: 800;
+                            font-style: italic;
+                            color: #ffffff;
+                            letter-spacing: 0.5px;
+                        }
+                        .brand-rupay-global .rupay-global-text .arrow-accent {
+                            color: #ca8a04;
+                            font-size: 0.8rem;
+                            margin-left: 2px;
+                        }
+                        .brand-rupay-global .rupay-global-sub {
+                            font-size: 0.4rem;
+                            font-weight: 700;
+                            color: rgba(255, 255, 255, 0.8);
+                            letter-spacing: 1px;
+                            margin-top: -1px;
                         }
 
-                        .vgb-atm-card.debit.rupay .card-front::after {
-                            content: '';
-                            position: absolute;
-                            inset: 0;
-                            background:
-                                radial-gradient(circle at 10% 85%, rgba(59, 130, 246, 0.22) 0%, transparent 55%),
-                                radial-gradient(circle at 80% 15%, rgba(139, 92, 246, 0.18) 0%, transparent 55%),
-                                linear-gradient(55deg, transparent 30%, rgba(99, 102, 241, 0.12) 45%, rgba(236, 72, 153, 0.15) 55%, transparent 70%);
-                            pointer-events: none;
-                            z-index: 1;
+                        /* Debit & Credit Back Layout */
+                        .debit-back-layout,
+                        .credit-back-layout {
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                            box-sizing: border-box;
+                            padding: 0px 0;
+                        }
+                        .debit-back-info-bar {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-size: 0.42rem;
+                            color: rgba(255, 255, 255, 0.7);
+                            margin-top: 6px;
+                            z-index: 5;
+                            padding: 0 5px;
+                        }
+                        .debit-back-grid {
+                            display: grid;
+                            grid-template-columns: 1.2fr 1fr;
+                            gap: 15px;
+                            align-items: flex-start;
+                            margin-top: 10px;
+                            flex-grow: 1;
+                            z-index: 5;
+                        }
+                        .debit-grid-left {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+                        .debit-signature-area {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2px;
+                        }
+                        .debit-sig-label {
+                            font-size: 0.38rem;
+                            font-weight: 600;
+                            color: rgba(255, 255, 255, 0.6);
+                            letter-spacing: 0.5px;
+                        }
+                        .debit-sig-strip-wrapper {
+                            display: flex;
+                            align-items: center;
+                            background: repeating-linear-gradient(45deg, #e2e8f0, #e2e8f0 4px, #cbd5e1 4px, #cbd5e1 8px);
+                            height: 28px;
+                            border-radius: 4px;
+                            padding-right: 2px;
+                            box-sizing: border-box;
+                            position: relative;
+                            overflow: hidden;
+                        }
+                        .debit-signature-pattern {
+                            flex-grow: 1;
+                            height: 100%;
+                        }
+                        .debit-sig-cvv-box {
+                            background: #ffffff;
+                            height: 24px;
+                            width: 38px;
+                            border-radius: 3px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: 1px solid #cbd5e1;
+                        }
+                        .debit-sig-cvv-box .cvv-val {
+                            font-family: 'Share Tech Mono', monospace;
+                            font-size: 0.75rem;
+                            font-weight: 700;
+                            color: #334155;
+                            letter-spacing: 0.5px;
+                        }
+                        .debit-back-network-logo {
+                            display: flex;
+                            align-items: center;
+                            height: 28px;
+                            margin-top: 2px;
+                        }
+                        .debit-grid-right {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                            padding-left: 5px;
+                        }
+                        .debit-back-vgb-header {
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                        }
+                        .debit-back-vgb-header .logo-text-stacked .text-top {
+                            font-size: 0.48rem;
+                            font-weight: 800;
+                            letter-spacing: 1px;
+                            color: #ffffff;
+                        }
+                        .debit-back-vgb-header .logo-text-stacked .text-bottom {
+                            font-size: 0.32rem;
+                            font-weight: 600;
+                            letter-spacing: 0.5px;
+                            color: rgba(255, 255, 255, 0.7);
+                        }
+                        .debit-property-disclaimer {
+                            font-size: 0.4rem;
+                            line-height: 1.3;
+                            color: rgba(255, 255, 255, 0.7);
+                            margin: 0;
+                            border-top: 1px solid rgba(255, 255, 255, 0.1);
+                            padding-top: 5px;
                         }
 
                         /* 5. Classic Credit (Visa Signature) */
@@ -459,7 +768,7 @@
                         }
 
                         .signature-strip-cvv .cvv-val {
-                            font-family: monospace;
+                            font-family: 'Share Tech Mono', monospace;
                             font-size: 0.85rem;
                             font-weight: 700;
                             color: #334155;
@@ -570,36 +879,7 @@
                             z-index: 5;
                         }
 
-                        /* Gold Card Back customization */
-                        .vgb-atm-card.credit.mastercard .card-back {
-                            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%) !important;
-                            color: #0f172a !important;
-                        }
-
-                        .vgb-atm-card.credit.mastercard .card-back .card-back-header {
-                            color: rgba(15, 23, 42, 0.7) !important;
-                        }
-
-                        .vgb-atm-card.credit.mastercard .card-back .signature-strip-text span:first-child {
-                            color: #0f172a !important;
-                        }
-
-                        .vgb-atm-card.credit.mastercard .card-back .signature-strip-text span:last-child {
-                            color: #1e293b !important;
-                        }
-
-                        .vgb-atm-card.credit.mastercard .card-back .logo-text-stacked .text-top {
-                            color: #0f172a !important;
-                        }
-
-                        .vgb-atm-card.credit.mastercard .card-back .logo-text-stacked .text-bottom {
-                            color: rgba(15, 23, 42, 0.7) !important;
-                        }
-
-                        .vgb-atm-card.credit.mastercard .card-back .back-property-text {
-                            color: #0f172a !important;
-                            border-top: 1px solid rgba(15, 23, 42, 0.15) !important;
-                        }
+                        /* Gold Card Back customization deactivated - unified cosmic theme now active */
 
                         /* Card Bank Header */
                         .card-bank-header {
@@ -672,7 +952,7 @@
 
                         /* Card Number */
                         .card-number-display {
-                            font-family: monospace;
+                            font-family: 'Share Tech Mono', monospace;
                             font-size: 1.2rem;
                             letter-spacing: 2px;
                             font-weight: 600;
@@ -712,6 +992,7 @@
                         }
 
                         .expiry-value {
+                            font-family: 'Share Tech Mono', monospace;
                             font-size: 0.72rem;
                             font-weight: 700;
                             color: #ffffff;
@@ -723,7 +1004,7 @@
                             letter-spacing: 0.5px;
                             text-transform: uppercase;
                             color: #ffffff;
-                            font-family: monospace;
+                            font-family: 'Share Tech Mono', monospace;
                         }
 
                         /* Brand logos */
@@ -863,7 +1144,7 @@
                         }
 
                         .card-number {
-                            font-family: monospace;
+                            font-family: 'Share Tech Mono', monospace;
                             font-size: 1.25rem;
                             letter-spacing: 2px;
                             font-weight: 600;
@@ -1240,7 +1521,7 @@
                                                         class="vgb-atm-card ${card.cardType} ${card.cardProvider} ${card.dailyLimit gt 50000 ? 'premium-tier' : ''} ${card.status ne 'active' ? 'inactive-card' : ''}">
                                                         <!-- Front Face -->
                                                         <div class="card-face card-front">
-                                                            <!-- Gold V-Logo & Stacked Bank Name Header -->
+                                                            <!-- Shared/Common: Bank Name Header -->
                                                             <div class="card-bank-header">
                                                                 <div class="card-logo-v">
                                                                     <img src="${pageContext.request.contextPath}/assest/images/logo.png"
@@ -1253,129 +1534,239 @@
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Platinum Tier Indicator Text -->
-                                                            <div class="card-tier-indicator">
-                                                                <c:if
-                                                                    test="${card.dailyLimit gt 50000 or (card.cardType eq 'credit' and card.cardProvider eq 'rupay') or (card.cardType eq 'credit' and card.cardProvider eq 'visa' and card.dailyLimit gt 50000)}">
-                                                                    <span class="platinum-text">${card.cardType eq
-                                                                        'credit' and card.cardProvider eq 'visa' ?
-                                                                        'INFINITE' : 'PLATINUM'}</span>
-                                                                </c:if>
-                                                            </div>
+                                                            <!-- DEBIT FRONT LAYOUT -->
+                                                            <div class="debit-front-layout">
+                                                                <div class="debit-header-right">
+                                                                    <span class="debit-label-txt">DEBIT</span>
+                                                                    <i class="bx bx-wifi contactless-icon-debit"></i>
+                                                                </div>
 
-                                                            <!-- Metallic Chip & Wireless Waves Row -->
-                                                            <div class="card-middle-row">
-                                                                <div class="metallic-chip"></div>
-                                                                <i class="bx bx-wifi contactless-icon"></i>
-                                                            </div>
+                                                                <div class="debit-chip-row">
+                                                                    <div class="metallic-chip"></div>
+                                                                </div>
 
-                                                            <!-- Centered Card Number -->
-                                                            <div class="card-number-display">
-                                                                ${card.cardNumber}
-                                                            </div>
+                                                                <div class="card-number-display debit-number">
+                                                                    ${card.cardNumber}
+                                                                </div>
 
-                                                            <!-- Details & Network Provider Footer Row -->
-                                                            <div class="card-bottom-row">
-                                                                <div class="card-holder-info">
-                                                                    <div class="expiry-info">
-                                                                        <span class="expiry-label">VALID THRU</span>
-                                                                        <span class="expiry-value">
-                                                                            <fmt:formatDate value="${card.expiryDate}"
-                                                                                pattern="MM/yy" />
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="holder-name">${card.cardHolderName}
+                                                                <div class="debit-expiry-row">
+                                                                    <span class="expiry-label">VALID<br>THRU</span>
+                                                                    <span class="expiry-value">
+                                                                        <fmt:formatDate value="${card.expiryDate}" pattern="MM/yy" />
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="debit-bottom-row">
+                                                                    <div class="holder-name debit-holder">${card.cardHolderName}</div>
+                                                                    <div class="debit-brand-logo-container">
+                                                                        <c:choose>
+                                                                            <c:when test="${card.cardProvider eq 'visa'}">
+                                                                                <div class="brand-visa-secure">
+                                                                                    <span class="visa-secure-text">VISA</span>
+                                                                                    <span class="visa-secure-sub">SECURE</span>
+                                                                                </div>
+                                                                            </c:when>
+                                                                            <c:when test="${card.cardProvider eq 'mastercard'}">
+                                                                                <div class="brand-mastercard-id">
+                                                                                    <div class="mc-circles-id">
+                                                                                        <span class="circle-id red-id"></span>
+                                                                                        <span class="circle-id orange-id"></span>
+                                                                                    </div>
+                                                                                    <span class="mc-id-text">mastercard<br><span class="id-text">ID</span></span>
+                                                                                </div>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <div class="brand-rupay-global">
+                                                                                    <span class="rupay-global-text">RuPay<span class="arrow-accent">▶</span></span>
+                                                                                    <span class="rupay-global-sub">GLOBAL</span>
+                                                                                </div>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
                                                                     </div>
                                                                 </div>
-                                                                <div class="card-brand-logo">
-                                                                    <c:choose>
-                                                                        <c:when test="${card.cardProvider eq 'visa'}">
-                                                                            <div class="brand-visa">
-                                                                                <span class="visa-text">VISA</span>
-                                                                                <span class="visa-sub">${card.cardType
-                                                                                    eq 'debit' ? (card.dailyLimit gt
-                                                                                    50000 ? 'Platinum' : 'Debit') :
-                                                                                    (card.dailyLimit gt 50000 ?
-                                                                                    'Infinite' : 'Signature')}</span>
-                                                                            </div>
-                                                                        </c:when>
-                                                                        <c:when
-                                                                            test="${card.cardProvider eq 'mastercard'}">
-                                                                            <div class="brand-mastercard">
-                                                                                <div class="mc-circles">
-                                                                                    <span class="circle red"></span>
-                                                                                    <span class="circle orange"></span>
+                                                            </div>
+
+                                                            <!-- CREDIT FRONT LAYOUT -->
+                                                            <div class="credit-front-layout">
+                                                                <div class="debit-header-right">
+                                                                    <span class="debit-label-txt">CREDIT</span>
+                                                                    <i class="bx bx-wifi contactless-icon-debit"></i>
+                                                                </div>
+
+                                                                <div class="debit-chip-row">
+                                                                    <div class="metallic-chip"></div>
+                                                                </div>
+
+                                                                <div class="card-number-display debit-number">
+                                                                    ${card.cardNumber}
+                                                                </div>
+
+                                                                <div class="debit-expiry-row">
+                                                                    <span class="expiry-label">VALID<br>THRU</span>
+                                                                    <span class="expiry-value">
+                                                                        <fmt:formatDate value="${card.expiryDate}" pattern="MM/yy" />
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="debit-bottom-row">
+                                                                    <div class="holder-name debit-holder">${card.cardHolderName}</div>
+                                                                    <div class="debit-brand-logo-container">
+                                                                        <c:choose>
+                                                                            <c:when test="${card.cardProvider eq 'visa'}">
+                                                                                <div class="brand-visa-secure">
+                                                                                    <span class="visa-secure-text">VISA</span>
+                                                                                    <span class="visa-secure-sub">SECURE</span>
                                                                                 </div>
-                                                                                <span class="mc-text">${card.cardType eq
-                                                                                    'debit' ? 'debit' :
-                                                                                    'mastercard'}</span>
-                                                                            </div>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <div class="brand-rupay">
-                                                                                <span class="rupay-text">RuPay<span
-                                                                                        class="arrow-accent">▶</span></span>
-                                                                                <span class="rupay-sub">${card.cardType
-                                                                                    eq 'debit' ? 'DEBIT' :
-                                                                                    'CREDIT'}</span>
-                                                                            </div>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
+                                                                            </c:when>
+                                                                            <c:when test="${card.cardProvider eq 'mastercard'}">
+                                                                                <div class="brand-mastercard-id">
+                                                                                    <div class="mc-circles-id">
+                                                                                        <span class="circle-id red-id"></span>
+                                                                                        <span class="circle-id orange-id"></span>
+                                                                                    </div>
+                                                                                    <span class="mc-id-text">mastercard<br><span class="id-text">ID</span></span>
+                                                                                </div>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <div class="brand-rupay-global">
+                                                                                    <span class="rupay-global-text">RuPay<span class="arrow-accent">▶</span></span>
+                                                                                    <span class="rupay-global-sub">GLOBAL</span>
+                                                                                </div>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <!-- Back Face -->
                                                         <div class="card-face card-back">
-                                                            <div class="card-back-header">
-                                                                <span class="back-helpline">For customer service, call
-                                                                    1800 123 4567 or visit
-                                                                    www.vertexgalaxybank.com</span>
-                                                                <span class="back-card-id">VGB${card.cardId}</span>
-                                                            </div>
-                                                            <div class="card-back-magnetic-strip"></div>
-                                                            <div class="card-back-signature-container">
-                                                                <div class="signature-strip-text">
-                                                                    <span>AUTHORISED SIGNATURE</span>
-                                                                    <span>NOT VALID UNLESS SIGNED</span>
+                                                            <!-- DEBIT BACK LAYOUT -->
+                                                            <div class="debit-back-layout">
+                                                                <div class="card-back-magnetic-strip" style="margin: 0 -25px;"></div>
+                                                                
+                                                                <div class="debit-back-info-bar">
+                                                                    <span class="debit-info-web">www.vertexgalaxybank.com</span>
+                                                                    <span class="debit-info-phone">For customer service, call +1 234 567 8900</span>
                                                                 </div>
-                                                                <div class="signature-strip-cvv"
-                                                                    onclick="toggleCvv(this, '${card.cvv}')"
-                                                                    title="Click to show CVV" style="cursor: pointer;">
-                                                                    <span class="cvv-val cvv-text">•••</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-back-bottom">
-                                                                <div class="back-left-emblem">
-                                                                    <c:choose>
-                                                                        <c:when test="${card.cardProvider eq 'visa'}">
-                                                                            <div class="dove-hologram"></div>
-                                                                        </c:when>
-                                                                        <c:when
-                                                                            test="${card.cardProvider eq 'mastercard'}">
-                                                                            <div class="mc-hologram"></div>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <span class="rupay-back-emblem">RuPay<span
-                                                                                    class="arrow-accent">▶</span></span>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-                                                                </div>
-                                                                <div class="back-right-logo">
-                                                                    <div class="back-logo-v">
-                                                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png"
-                                                                            alt="VGB"
-                                                                            style="width: 15px; height: 15px; object-fit: contain;">
-                                                                        <span class="logo-text-stacked">
-                                                                            <span class="text-top">VERTEX</span>
-                                                                            <span class="text-bottom">GALAXY BANK</span>
-                                                                        </span>
+                                                                
+                                                                <div class="debit-back-grid">
+                                                                    <div class="debit-grid-left">
+                                                                        <div class="debit-signature-area">
+                                                                            <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
+                                                                            <div class="debit-sig-strip-wrapper">
+                                                                                <div class="debit-signature-pattern"></div>
+                                                                                <div class="debit-sig-cvv-box" onclick="toggleCvv(this, '${card.cvv}')" title="Click to show CVV" style="cursor: pointer;">
+                                                                                    <span class="cvv-val cvv-text">•••</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
+                                                                        </div>
+                                                                        
+                                                                        <div class="debit-back-network-logo">
+                                                                            <c:choose>
+                                                                                <c:when test="${card.cardProvider eq 'visa'}">
+                                                                                    <div class="brand-visa-secure">
+                                                                                        <span class="visa-secure-text" style="font-size: 1rem;">VISA</span>
+                                                                                        <span class="visa-secure-sub" style="font-size: 0.35rem; letter-spacing: 0.8px;">SECURE</span>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:when test="${card.cardProvider eq 'mastercard'}">
+                                                                                    <div class="brand-mastercard-id" style="flex-direction: row; gap: 6px; align-items: center;">
+                                                                                        <div class="mc-circles-id">
+                                                                                            <span class="circle-id red-id"></span>
+                                                                                            <span class="circle-id orange-id"></span>
+                                                                                        </div>
+                                                                                        <span class="mc-id-text" style="text-align: left;">mastercard<br><span class="id-text">ID</span></span>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <div class="brand-rupay-global">
+                                                                                        <span class="rupay-global-text" style="font-size: 0.95rem;">RuPay<span class="arrow-accent">▶</span></span>
+                                                                                        <span class="rupay-global-sub" style="font-size: 0.35rem;">GLOBAL</span>
+                                                                                    </div>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="debit-grid-right">
+                                                                        <div class="debit-back-vgb-header">
+                                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
+                                                                            <div class="logo-text-stacked">
+                                                                                <span class="text-top">VERTEX</span>
+                                                                                <span class="text-bottom">GALAXY BANK</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <p class="debit-property-disclaimer">
+                                                                            This card is the property of Vertex Galaxy Bank and must be returned upon request.
+                                                                        </p>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="back-property-text">
-                                                                This card is the property of Vertex Galaxy Bank. If
-                                                                found, please return to the nearest branch.
+
+                                                            <!-- CREDIT BACK LAYOUT -->
+                                                            <div class="credit-back-layout">
+                                                                <div class="card-back-magnetic-strip" style="margin: 0 -25px;"></div>
+                                                                
+                                                                <div class="debit-back-info-bar">
+                                                                    <span class="debit-info-web">www.vertexgalaxybank.com</span>
+                                                                    <span class="debit-info-phone">For customer service, call +1 234 567 8900</span>
+                                                                </div>
+                                                                
+                                                                <div class="debit-back-grid">
+                                                                    <div class="debit-grid-left">
+                                                                        <div class="debit-signature-area">
+                                                                            <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
+                                                                            <div class="debit-sig-strip-wrapper">
+                                                                                <div class="debit-signature-pattern"></div>
+                                                                                <div class="debit-sig-cvv-box" onclick="toggleCvv(this, '${card.cvv}')" title="Click to show CVV" style="cursor: pointer;">
+                                                                                    <span class="cvv-val cvv-text">•••</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
+                                                                        </div>
+                                                                        
+                                                                        <div class="debit-back-network-logo">
+                                                                            <c:choose>
+                                                                                <c:when test="${card.cardProvider eq 'visa'}">
+                                                                                    <div class="brand-visa-secure">
+                                                                                        <span class="visa-secure-text" style="font-size: 1rem;">VISA</span>
+                                                                                        <span class="visa-secure-sub" style="font-size: 0.35rem; letter-spacing: 0.8px;">SECURE</span>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:when test="${card.cardProvider eq 'mastercard'}">
+                                                                                    <div class="brand-mastercard-id" style="flex-direction: row; gap: 6px; align-items: center;">
+                                                                                        <div class="mc-circles-id">
+                                                                                            <span class="circle-id red-id"></span>
+                                                                                            <span class="circle-id orange-id"></span>
+                                                                                        </div>
+                                                                                        <span class="mc-id-text" style="text-align: left;">mastercard<br><span class="id-text">ID</span></span>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <div class="brand-rupay-global">
+                                                                                        <span class="rupay-global-text" style="font-size: 0.95rem;">RuPay<span class="arrow-accent">▶</span></span>
+                                                                                        <span class="rupay-global-sub" style="font-size: 0.35rem;">GLOBAL</span>
+                                                                                    </div>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="debit-grid-right">
+                                                                        <div class="debit-back-vgb-header">
+                                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
+                                                                            <div class="logo-text-stacked">
+                                                                                <span class="text-top">VERTEX</span>
+                                                                                <span class="text-bottom">GALAXY BANK</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <p class="debit-property-disclaimer">
+                                                                            This card is the property of Vertex Galaxy Bank and must be returned upon request.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1434,7 +1825,7 @@
                                                         <div style="display: flex; gap: 8px; align-items: center;">
                                                             <c:if test="${card.status eq 'active'}">
                                                                 <button type="button"
-                                                                    onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', ${card.internationalEnabled})"
+                                                                    onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', '${card.internationalEnabled}')"
                                                                     class="btn"
                                                                     style="background: rgba(99, 102, 241, 0.08); color: var(--primary-500); padding: 4px 8px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: 1px solid rgba(99, 102, 241, 0.15); margin: 0; display: inline-flex; align-items: center; gap: 3px;"
                                                                     title="Manage Limits & Controls">

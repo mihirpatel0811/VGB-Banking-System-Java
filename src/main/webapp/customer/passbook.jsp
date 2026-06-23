@@ -29,24 +29,102 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(99, 102, 241, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.04);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        body {
+            background-color: #f6f8fc !important;
+            color: var(--gray-700) !important;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            --glass-bg: rgba(30, 41, 59, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background-color: #0f172a !important;
+        }
+
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+        body.dark-mode .cursor-glow {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        /* Preloader override */
+        .preloader {
+            background: #f6f8fc;
+            z-index: 9999;
+        }
+        body.dark-mode .preloader {
+            background: #0f172a;
+        }
+
+        /* --- STICKY GLASSMORPHIC HEADER --- */
+        .header {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            padding: 20px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        body.dark-mode .header {
+            background: rgba(15, 23, 42, 0.6) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 14px 40px;
+            border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        body.dark-mode .header.scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- STYLISH SIDEBAR --- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.45) !important;
             backdrop-filter: blur(25px) saturate(180%) !important;
             -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
-            border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
+            border-right: 1px solid var(--glass-border) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+            box-shadow: var(--panel-shadow);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+
         .sidebar-menu a {
             display: flex;
             align-items: center;
@@ -61,6 +139,9 @@
             overflow: hidden;
             border: 1px solid transparent;
         }
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
+        }
         .sidebar-menu a i {
             font-size: 1.25rem;
             transition: transform var(--transition-fast);
@@ -71,6 +152,10 @@
             border-color: rgba(99, 102, 241, 0.1);
             transform: translateX(4px);
         }
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
         .sidebar-menu a:hover i {
             transform: scale(1.1);
         }
@@ -80,57 +165,55 @@
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
             border-color: transparent;
         }
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
-            background: var(--gray-50);
-            transition: all 0.3s ease;
+            background: transparent;
+            z-index: 10;
+            position: relative;
         }
+
+        /* --- FOOTER PANEL --- */
         .footer {
             margin-left: 280px;
-            background: white;
-            border-top: 1px solid rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border-top: 1px solid var(--glass-border) !important;
             padding: 20px 0;
             transition: all 0.3s ease;
         }
-        .mobile-nav-toggle {
-            display: none !important;
+        body.dark-mode .footer {
+            background: rgba(15, 23, 42, 0.45) !important;
         }
-        @media (max-width: 991px) {
-            .mobile-nav-toggle {
-                display: flex !important;
-            }
-            .sidebar {
-                left: -280px !important;
-                top: 80px;
-                height: calc(100vh - 80px);
-                z-index: 1000;
-            }
-            .sidebar.active {
-                left: 0 !important;
-            }
-            .main-content {
-                margin-left: 0 !important;
-                padding: 120px 20px 40px !important;
-            }
-            .footer {
-                margin-left: 0 !important;
-            }
-        }
+
+        /* --- PREMIUM GLASS CARDS --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
             padding: 28px;
-            box-shadow: var(--shadow-md), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        body.dark-mode .glass-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
         }
         .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.2) !important;
         }
+
+        /* --- LOGOUT BUTTON --- */
         .btn-logout {
             display: inline-flex;
             align-items: center;
@@ -148,6 +231,10 @@
             cursor: pointer;
             text-decoration: none;
         }
+        body.dark-mode .btn-logout {
+            color: var(--gray-300) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
         .btn-logout:hover {
             border-color: transparent !important;
             background: var(--gradient-primary);
@@ -162,47 +249,30 @@
         .btn-logout:hover i {
             transform: translateX(3px);
         }
+
+        /* --- MOBILE LAYOUTS --- */
+        @media (max-width: 991px) {
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
+            }
+        }
         @media (max-width: 480px) {
             .mobile-hide {
                 display: none !important;
             }
-        }
-
-        .services-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        .service-feature-card {
-            border-radius: 16px;
-            padding: 24px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 160px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .service-feature-card.primary {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        }
-        .service-feature-card.secondary {
-            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
-        }
-
-        .service-feature-card .icon-bg {
-            position: absolute;
-            right: -20px;
-            bottom: -20px;
-            font-size: 8rem;
-            color: rgba(255, 255, 255, 0.08);
-            pointer-events: none;
         }
 
         /* Modal styling */
@@ -229,15 +299,25 @@
             max-width: 600px;
             border-radius: var(--radius-lg);
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: modalScaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
+        body.dark-mode .modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
 
         @keyframes modalScaleUp {
-            from { transform: scale(0.9) translateY(10px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
+            from {
+                transform: perspective(1000px) rotateX(15deg) scale(0.9) translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: perspective(1000px) rotateX(0deg) scale(1) translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-header {
@@ -260,29 +340,33 @@
             cursor: pointer;
             transition: color 0.2s;
         }
-        
         .close-btn:hover {
             color: #ef4444;
         }
 
         /* Paper style request form */
         .paper-form {
-            background: #fff;
-            border: 1.5px solid var(--gray-200);
+            background: #fdfbf7;
+            border: 1px solid rgba(191, 149, 63, 0.3);
             padding: 30px;
-            border-radius: var(--radius-sm);
-            color: #1e293b;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 1rem;
+            border-radius: var(--radius-md);
+            color: #334155;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
             line-height: 1.6;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.01), var(--shadow-sm);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.02), 0 10px 30px rgba(0,0,0,0.05);
             position: relative;
             overflow: hidden;
+        }
+        body.dark-mode .paper-form {
+            background: #1e293b;
+            color: #f1f5f9;
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .paper-header {
             text-align: center;
-            border-bottom: 2px double #475569;
+            border-bottom: 2px double rgba(191, 149, 63, 0.4);
             padding-bottom: 12px;
             margin-bottom: 20px;
         }
@@ -296,6 +380,9 @@
             margin: 0;
             font-family: 'Poppins', sans-serif;
         }
+        body.dark-mode .paper-header h2 {
+            color: #ffffff;
+        }
 
         .paper-header h3 {
             font-size: 0.95rem;
@@ -305,6 +392,9 @@
             text-transform: uppercase;
             font-family: 'Poppins', sans-serif;
             letter-spacing: 0.5px;
+        }
+        body.dark-mode .paper-header h3 {
+            color: var(--gray-400);
         }
 
         .fee-badge {
@@ -322,7 +412,7 @@
 
         .paper-select, .paper-input {
             border: none;
-            border-bottom: 1px dotted #475569;
+            border-bottom: 1.5px dotted #475569;
             padding: 2px 5px;
             background: transparent;
             font-weight: 600;
@@ -331,6 +421,10 @@
             outline: none;
             color: #0f172a;
             cursor: pointer;
+        }
+        body.dark-mode .paper-select, body.dark-mode .paper-input {
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
         }
 
         .signature-font {
@@ -361,21 +455,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(30, 27, 75, 0.02) 0%, rgba(99, 102, 241, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, rgba(6, 182, 212, 0.04) 100%);
             border: 1px solid rgba(99, 102, 241, 0.12);
             border-radius: var(--radius-lg);
             padding: 40px 20px;
-            box-shadow: inset 0 2px 8px rgba(99, 102, 241, 0.02);
+            box-shadow: inset 0 2px 8px rgba(99, 102, 241, 0.05);
             height: 100%;
             perspective: 1200px;
             position: relative;
             overflow: hidden;
             min-height: 350px;
         }
+        body.dark-mode .passbook-visualizer-container {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
 
         .passbook-wrapper {
-            width: 420px; /* Width of a single panel */
-            height: 180px; /* Height of a single panel */
+            width: 420px;
+            height: 180px;
             position: relative;
             transform-style: preserve-3d;
             cursor: pointer;
@@ -413,7 +510,8 @@
             height: 100%;
             transform-style: preserve-3d;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Base Page (stationary bottom ledger) */
@@ -455,6 +553,11 @@
             transition: all var(--transition-normal);
             z-index: 100;
         }
+        body.dark-mode .btn-flip-book {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--primary-400);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
         .btn-flip-book:hover {
             background: var(--gradient-primary);
             color: white !important;
@@ -488,7 +591,7 @@
 
         /* Cosmic styles */
         .cosmic-cover {
-            background: radial-gradient(circle at 50% 50%, #0d0a2d 0%, #030211 80%, #000005 100%);
+            background: radial-gradient(circle at 50% 50%, #0d0a2d 0%, #030211 80%, #000005 100%) !important;
             color: #ffffff;
             padding: 16px;
             display: flex;
@@ -497,6 +600,8 @@
             height: 100%;
             box-sizing: border-box;
             position: relative;
+            border: 1.5px solid rgba(191, 149, 63, 0.35) !important;
+            box-shadow: inset 0 0 15px rgba(191, 149, 63, 0.15);
         }
 
         .cosmic-cover::before {
@@ -519,6 +624,15 @@
         .cosmic-orbits svg {
             width: 100%;
             height: 100%;
+        }
+
+        .cosmic-orbits ellipse {
+            stroke-dasharray: 200;
+            animation: dashOrbit 15s linear infinite;
+        }
+        @keyframes dashOrbit {
+            from { stroke-dashoffset: 200; }
+            to { stroke-dashoffset: 0; }
         }
 
         /* Spine vertical text */
@@ -768,7 +882,7 @@
 
         /* Transaction Record style */
         .transaction-panel-inside {
-            background: #f1f5f9;
+            background: #fdfbf7;
             color: #334155;
             padding: 14px;
             box-sizing: border-box;
@@ -778,7 +892,12 @@
             justify-content: space-between;
             position: relative;
             border-radius: 12px;
-            border: 1.5px solid #cbd5e1;
+            border: 1.5px solid rgba(191, 149, 63, 0.25);
+        }
+        body.dark-mode .transaction-panel-inside {
+            background: #1e293b;
+            color: #cbd5e1;
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         /* Watermark V for transaction page */
@@ -818,6 +937,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        body.dark-mode .tech-ledger-grid th {
+            background: #0f172a !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
 
         .tech-ledger-grid td {
             padding: 3px 2px !important;
@@ -830,6 +953,10 @@
             font-size: 0.34rem !important;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+        body.dark-mode .tech-ledger-grid td {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #cbd5e1 !important;
         }
 
         .tech-ledger-grid td.particulars {
@@ -846,6 +973,10 @@
             padding-top: 5px;
             font-family: 'Poppins', sans-serif;
             letter-spacing: 0.2px;
+        }
+        body.dark-mode .tech-ledger-footer {
+            color: var(--gray-400);
+            border-top-color: rgba(255, 255, 255, 0.1);
         }
 
         /* Status watermark overlays */
@@ -914,6 +1045,127 @@
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
+        }
+
+        /* --- REDESIGNED LIST TABLE & STATUS GLOWS --- */
+        .passbook-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .passbook-history-table th {
+            padding: 14px 18px;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            white-space: nowrap;
+        }
+        body.dark-mode .passbook-history-table th {
+            color: var(--gray-400);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        .passbook-history-table td {
+            padding: 16px 18px;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+            vertical-align: middle;
+            white-space: nowrap;
+            transition: all var(--transition-fast);
+        }
+        body.dark-mode .passbook-history-table td {
+            color: var(--gray-300);
+            border-bottom-color: rgba(255, 255, 255, 0.04);
+        }
+        .passbook-history-table tr {
+            transition: background 0.2s ease;
+        }
+        .passbook-history-table tr:hover td {
+            background: rgba(99, 102, 241, 0.02);
+        }
+        body.dark-mode .passbook-history-table tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        /* Glowing status badges */
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .status-badge i {
+            font-size: 0.45rem;
+        }
+        .status-badge.approved {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .status-badge.rejected {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-inspect {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: var(--radius-sm);
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            border: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .btn-inspect:hover {
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-renew-action {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            border: 1.5px solid rgba(99, 102, 241, 0.2) !important;
+            background: transparent !important;
+            color: var(--gray-700) !important;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+        body.dark-mode .btn-renew-action {
+            color: var(--gray-300) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        .btn-renew-action:hover {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
     </style>
 </head>
@@ -1333,13 +1585,13 @@
                             <li>Galaxy navy-blue textured covers with dual metallic gold foil accents</li>
                             <li>Inline smart EMV-style chip simulator representing next-gen security</li>
                             <li>Quick-scan machine-readable ledger columns</li>
-                            <li>Flat processing fee of <strong>₹100.00</strong> (fully refunded if request is rejected by Admin)</li>
+                            <li>Flat processing fee of <strong>â‚¹100.00</strong> (fully refunded if request is rejected by Admin)</li>
                         </ul>
                     </div>
                     <div style="background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-md); padding: 18px; margin-top: 15px;">
                         <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Important Policy</span>
                         <p style="font-size: 0.8rem; color: var(--gray-500); margin: 0; line-height: 1.5;">
-                            Applying for a Passbook will automatically deduct ₹100.00 from your account balance. Upon approval, your account parameters will be updated to enable passbook transactions.
+                            Applying for a Passbook will automatically deduct â‚¹100.00 from your account balance. Upon approval, your account parameters will be updated to enable passbook transactions.
                         </p>
                     </div>
                 </div>
@@ -1349,16 +1601,16 @@
             <div class="glass-card">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-list-ol"></i> Application History</h3>
                 <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <table class="passbook-history-table">
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px;">Request ID</th>
-                                <th style="padding: 12px 15px;">Account Number</th>
-                                <th style="padding: 12px 15px;">Type</th>
-                                <th style="padding: 12px 15px;">Fee Status</th>
-                                <th style="padding: 12px 15px;">Requested Date</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: right;">Action</th>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Account Number</th>
+                                <th>Type</th>
+                                <th>Fee Status</th>
+                                <th>Requested Date</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1366,10 +1618,10 @@
                                 <c:when test="${not empty requests}">
                                     <c:forEach var="req" items="${requests}">
                                         <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);">#${req.requestId}</td>
-                                            <td style="padding: 15px; font-family: monospace; font-weight: 600;">${req.accountNumber}</td>
-                                            <td style="padding: 15px;">
+                                        <tr>
+                                            <td style="font-weight: 700;">#${req.requestId}</td>
+                                            <td style="font-family: monospace; font-weight: 600;">${req.accountNumber}</td>
+                                            <td>
                                                 <c:choose>
                                                     <c:when test="${req.requestType eq 'new'}">
                                                         <span class="badge-new">New Cover</span>
@@ -1379,48 +1631,47 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px;">
-                                                <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
+                                            <td>
+                                                <span style="font-weight: 600;">â‚¹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
                                                 <c:choose>
                                                     <c:when test="${req.chargesPaid}">
-                                                        <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;"><i class="bx bx-check"></i> Paid</span>
+                                                        <span class="status-badge approved" style="font-size: 0.7rem; padding: 2px 6px; margin-left: 5px;"><i class="bx bx-check"></i> Paid</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;"><i class="bx bx-x"></i> Refunded</span>
+                                                        <span class="status-badge rejected" style="font-size: 0.7rem; padding: 2px 6px; margin-left: 5px;"><i class="bx bx-x"></i> Refunded</span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; color: var(--gray-500);">
+                                            <td>
                                                 <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
                                             </td>
-                                            <td style="padding: 15px;">
+                                            <td>
                                                 <c:choose>
                                                     <c:when test="${req.status eq 'approved' or req.status eq 'delivered'}">
-                                                        <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;"><i class="bx bxs-circle" style="font-size: 0.5rem; vertical-align: middle;"></i> Approved</span>
+                                                        <span class="status-badge approved"><i class="bx bxs-circle"></i> Approved</span>
                                                     </c:when>
                                                     <c:when test="${req.status eq 'pending'}">
-                                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;"><i class="bx bxs-circle" style="font-size: 0.5rem; vertical-align: middle;"></i> Pending</span>
+                                                        <span class="status-badge pending"><i class="bx bxs-circle"></i> Pending</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;"><i class="bx bxs-circle" style="font-size: 0.5rem; vertical-align: middle;"></i> Rejected</span>
+                                                        <span class="status-badge rejected"><i class="bx bxs-circle"></i> Rejected</span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: right;">
+                                            <td style="text-align: right;">
                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                    <button type="button" class="btn" 
+                                                    <button type="button" class="btn-inspect" 
                                                             data-id="${req.requestId}" 
                                                             data-name="${req.customerName}" 
                                                             data-account="${req.accountNumber}" 
                                                             data-type="${req.requestType}" 
                                                             data-acctype="${req.accountType}"
                                                             data-status="${req.status}"
-                                                            style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
                                                             onclick="inspectRequest(this)">
                                                         <i class="bx bx-show"></i> Inspect
                                                     </button>
                                                     <c:if test="${req.status eq 'approved'}">
-                                                        <button onclick="openRequestModal('renew', '${req.accountId}')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600;">Renew</button>
+                                                        <button onclick="openRequestModal('renew', '${req.accountId}')" class="btn-renew-action">Renew</button>
                                                     </c:if>
                                                 </div>
                                             </td>
@@ -1455,7 +1706,7 @@
                     <input type="hidden" name="action" id="formAction" value="apply">
                     
                     <div class="paper-form">
-                        <div class="fee-badge">Fee: ₹100.00</div>
+                        <div class="fee-badge">Fee: â‚¹100.00</div>
                         <div class="paper-header">
                             <h2>VERTEX GALAXY BANK</h2>
                             <h3>PASSBOOK APPLICATION FORM</h3>
@@ -1466,7 +1717,7 @@
                             <select name="accountId" id="modalAccountId" class="paper-select" style="width: 100%; padding: 6px 0;" onchange="updateModalPreview()" required>
                                 <c:forEach var="acc" items="${accounts}">
                                     <option value="${acc.accountId}" data-accnum="${acc.accountNumber}" data-acctype="${acc.accountType}">
-                                        ${acc.accountNumber} (${acc.accountType}) - Bal: ₹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2"/>
+                                        ${acc.accountNumber} (${acc.accountType}) - Bal: â‚¹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2"/>
                                     </option>
                                 </c:forEach>
                             </select>
@@ -1496,7 +1747,7 @@
                     
                     <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 15px;">
                         <button type="button" class="btn btn-secondary" style="padding: 10px 20px;" onclick="closeRequestModal()">Cancel</button>
-                        <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600;">Confirm & Debit ₹100.00</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600;">Confirm & Debit â‚¹100.00</button>
                     </div>
                 </form>
             </div>
@@ -1702,3 +1953,4 @@
     </script>
 </body>
 </html>
+
