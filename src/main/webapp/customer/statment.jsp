@@ -25,10 +25,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Financial Statements</title>
     <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-bg-hover: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
+            --glass-glow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+        }
+
         .sidebar {
             width: 280px;
             background: rgba(255, 255, 255, 0.9) !important;
@@ -118,18 +129,21 @@
                 margin-left: 0 !important;
             }
         }
+
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
             padding: 28px;
-            box-shadow: var(--shadow-md), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--glass-shadow), var(--glass-glow);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            margin-bottom: 30px;
         }
         .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.2);
+            background: var(--glass-bg-hover);
+            border-color: rgba(99, 102, 241, 0.25);
         }
         .btn-logout {
             display: inline-flex;
@@ -168,20 +182,127 @@
             }
         }
         .statement-type-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 12px 25px;
             font-weight: 600;
             border-radius: var(--radius-md);
             cursor: pointer;
             border: 1px solid var(--gray-200);
             background: white;
-            color: var(--gray-500);
+            color: var(--gray-600);
             transition: all var(--transition-normal);
+            box-shadow: var(--shadow-sm);
+        }
+        .statement-type-btn i {
+            font-size: 1.2rem;
         }
         .statement-type-btn.active {
             background: var(--gradient-primary);
             color: white;
             border-color: transparent;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: white;
+            outline: none;
+            font-weight: 500;
+            color: var(--gray-700);
+            transition: border-color 0.2s;
+        }
+        .filter-select:focus, .filter-input:focus {
+            border-color: var(--primary-400);
+        }
+
+        /* Ledger Table Styles */
+        .ledger-table-container {
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+        .ledger-table th {
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--gray-800);
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+        }
+        .ledger-table td {
+            padding: 15px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+        }
+        .ledger-table tbody tr {
+            transition: background-color 0.2s;
+        }
+        .ledger-table tbody tr:hover {
+            background-color: rgba(99, 102, 241, 0.02);
+        }
+        
+        .txn-deposit-val {
+            color: var(--accent-green) !important;
+            font-weight: 700;
+        }
+        .txn-withdrawal-val {
+            color: var(--accent-red) !important;
+            font-weight: 700;
+        }
+        .txn-balance-val {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .badge-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+        }
+        .badge-status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+        .badge-status-failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+        .badge-type {
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .badge-type.deposit {
+            color: var(--accent-green);
+        }
+        .badge-type.withdrawal {
+            color: var(--accent-red);
+        }
+        .badge-type.transfer {
+            color: var(--accent-blue);
         }
 
         .print-only {
@@ -215,7 +336,6 @@
                 display: flex !important;
             }
             
-            /* Table formatting to fit portrait page */
             #txnTable, #regularStatement table, #loanStatement table {
                 table-layout: fixed !important;
                 width: 100% !important;
@@ -231,7 +351,6 @@
                 word-break: break-word !important;
             }
             
-            /* Column widths for standard portrait layout */
             #txnTable th:nth-child(1), #txnTable td:nth-child(1),
             #loanStatement table th:nth-child(1), #loanStatement table td:nth-child(1) { width: 5% !important; }
             #txnTable th:nth-child(2), #txnTable td:nth-child(2),
@@ -249,16 +368,10 @@
             #txnTable th:nth-child(8), #txnTable td:nth-child(8),
             #loanStatement table th:nth-child(8), #loanStatement table td:nth-child(8) { width: 12% !important; }
 
-            .badge-id, .txn-deposit, .txn-withdrawal, span[style*="background"] {
+            .badge-status, .txn-deposit-val, .txn-withdrawal-val, span[style*="background"] {
                 background: transparent !important;
                 padding: 0 !important;
             }
-        }
-        .txn-deposit {
-            color: var(--accent-emerald) !important;
-        }
-        .txn-withdrawal {
-            color: var(--secondary-500) !important;
         }
     </style>
 </head>
@@ -300,7 +413,7 @@
                         <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                             <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">${customer.fullName}</span>
                             <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
-                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); display: inline-block;"></span>
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); display: inline-block;"></span>
                                 Customer Space
                             </span>
                         </div>
@@ -348,7 +461,7 @@
                     <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">Transaction Ledger Statements</h2>
                     <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Filter by date, category type, or print official bank transcripts.</p>
                 </div>
-                <button type="button" onclick="window.print()" class="btn btn-primary">
+                <button type="button" onclick="window.print()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
                     <span>Export Statement</span>
                     <i class="bx bx-printer"></i>
                 </button>
@@ -366,7 +479,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;" class="mobile-grid-1">
                     <div class="form-group">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 8px;">Date Range</label>
-                        <select id="dateFilter" onchange="runFilter()" style="width: 100%; padding: 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                        <select id="dateFilter" onchange="runFilter()" class="filter-select">
                             <option value="all">Full Statement</option>
                             <option value="today">Today Only</option>
                             <option value="month">Current Month</option>
@@ -376,7 +489,7 @@
                     </div>
                     <div class="form-group">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 8px;">Transaction Type</label>
-                        <select id="typeFilter" onchange="runFilter()" style="width: 100%; padding: 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                        <select id="typeFilter" onchange="runFilter()" class="filter-select">
                             <option value="all">All Types</option>
                             <option value="deposit">Deposits</option>
                             <option value="withdrawal">Withdrawals</option>
@@ -385,7 +498,7 @@
                     </div>
                     <div class="form-group">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 8px;">Select Account</label>
-                        <select id="accountFilter" onchange="switchAccount(this.value)" style="width: 100%; padding: 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none; font-weight: 600; cursor: pointer;">
+                        <select id="accountFilter" onchange="switchAccount(this.value)" class="filter-select" style="font-weight: 600; cursor: pointer;">
                             <c:forEach items="${accounts}" var="acc">
                                 <option value="${acc.accountId}" ${acc.accountId == selectedAccountId ? 'selected' : ''}>
                                     ${acc.accountNumber} - ${acc.accountType} (₹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2" maxFractionDigits="2"/>)
@@ -397,11 +510,11 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div>
                                 <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 8px;">Start Date</label>
-                                <input type="date" id="startDate" onchange="runFilter()" style="width: 100%; padding: 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                                <input type="date" id="startDate" onchange="runFilter()" class="filter-input">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 8px;">End Date</label>
-                                <input type="date" id="endDate" onchange="runFilter()" style="width: 100%; padding: 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                                <input type="date" id="endDate" onchange="runFilter()" class="filter-input">
                             </div>
                         </div>
                     </div>
@@ -414,7 +527,7 @@
                 <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
                     <div class="form-group">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 8px;">Select Active Loan</label>
-                        <select id="loanSelectFilter" onchange="switchLoan(this.value)" style="width: 100%; padding: 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none; font-weight: 600; cursor: pointer;">
+                        <select id="loanSelectFilter" onchange="switchLoan(this.value)" class="filter-select" style="font-weight: 600; cursor: pointer;">
                             <c:choose>
                                 <c:when test="${not empty customerLoans}">
                                     <c:forEach items="${customerLoans}" var="ln">
@@ -430,7 +543,9 @@
                         </select>
                     </div>
                 </div>
-            </di            <!-- Regular Transactions Ledger Table -->
+            </div>
+
+            <!-- Regular Transactions Ledger Table -->
             <div class="glass-card" id="regularStatement">
                 <!-- Official Bank Logo & Name -->
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
@@ -482,18 +597,18 @@
                     </button>
                 </div>
                 
-                <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;" id="txnTable">
+                <div class="ledger-table-container">
+                    <table class="ledger-table" id="txnTable">
                         <thead>
-                            <tr style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Transaction Date</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
+                            <tr>
+                                <th style="width: 80px;">Sr. No.</th>
+                                <th>Transaction Date</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Credit Amount</th>
+                                <th style="text-align: right;">Debit Amount</th>
+                                <th style="text-align: right;">Running Balance</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -502,33 +617,33 @@
                                     <c:set var="txnSr" value="0" />
                                     <c:forEach var="txn" items="${transactions}">
                                         <c:set var="txnSr" value="${txnSr + 1}" />
-                                        <tr class="txn-row" data-type="${txn.transactionType}" style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);">${txnSr}</td>
-                                            <td style="padding: 15px;">${txn.transactionDate}</td>
-                                            <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                <span class="${(txn.transactionType == 'deposit' || txn.transactionType == 'interest' || (txn.transactionType == 'transfer' && txn.toAccountId == selectedAccountId)) ? 'txn-deposit' : 'txn-withdrawal'}">${txn.transactionType}</span>
+                                        <tr class="txn-row" data-type="${txn.transactionType}">
+                                            <td style="font-weight: 600; color: var(--gray-500);">${txnSr}</td>
+                                            <td class="txn-date">${txn.transactionDate}</td>
+                                            <td>
+                                                <span class="badge-type ${txn.transactionType}">${txn.transactionType}</span>
                                             </td>
-                                            <td style="padding: 15px;">${txn.description}</td>
-                                            <td style="padding: 15px;">
-                                                <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${txn.status}</span>
+                                            <td>${txn.description}</td>
+                                            <td>
+                                                <span class="badge-status badge-status-${txn.status.toLowerCase()}">${txn.status}</span>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #10b981;">
+                                            <td style="text-align: right;">
                                                 <c:choose>
                                                     <c:when test="${txn.transactionType == 'deposit' || txn.transactionType == 'interest' || (txn.transactionType == 'transfer' && txn.toAccountId == selectedAccountId)}">
-                                                        + ₹<fmt:formatNumber value="${txn.amount}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                        <span class="txn-deposit-val">+ ₹<fmt:formatNumber value="${txn.amount}" minFractionDigits="2" maxFractionDigits="2"/></span>
                                                     </c:when>
                                                     <c:otherwise>-</c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #ef4444;">
+                                            <td style="text-align: right;">
                                                 <c:choose>
                                                     <c:when test="${txn.transactionType == 'withdrawal' || txn.transactionType == 'fee' || (txn.transactionType == 'transfer' && txn.fromAccountId == selectedAccountId)}">
-                                                        - ₹<fmt:formatNumber value="${txn.amount}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                        <span class="txn-withdrawal-val">- ₹<fmt:formatNumber value="${txn.amount}" minFractionDigits="2" maxFractionDigits="2"/></span>
                                                     </c:when>
                                                     <c:otherwise>-</c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                            <td style="text-align: right;" class="txn-balance-val">
                                                 ₹<fmt:formatNumber value="${txn.runningBalance}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                         </tr>
@@ -536,7 +651,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <tr class="txn-row">
-                                        <td colspan="8" style="text-align: center; padding: 30px; color: var(--gray-400);">No transactions retrieved for this account.</td>
+                                        <td colspan="8" style="text-align: center; padding: 35px; color: var(--gray-400);">No transactions retrieved for this account.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>
@@ -604,8 +719,8 @@
                         <p style="margin: 4px 0 0; color: var(--gray-600);">Loan Reference: <strong style="font-family: monospace;">#LN-${selectedLoan.loanId}</strong> (${selectedLoan.loanType} Loan)</p>
                         <p style="margin: 4px 0 0; color: var(--gray-600);">Principal Amount: <strong>₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
                         <p style="margin: 4px 0 0; color: var(--gray-600);">Interest Rate / Term: <strong>${selectedLoan.interestRate}% P.A. / ${selectedLoan.termMonths} Mos</strong></p>
-                        <p style="margin: 4px 0 0; color: var(--gray-600);">Accumulated Repaid: <strong style="color: var(--accent-emerald);">₹<fmt:formatNumber value="${totalRepaid}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
-                        <p style="margin: 4px 0 0; color: var(--gray-600);">Outstanding Balance: <strong style="color: var(--secondary-500);">₹<fmt:formatNumber value="${selectedLoan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Accumulated Repaid: <strong style="color: var(--accent-green);">₹<fmt:formatNumber value="${totalRepaid}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
+                        <p style="margin: 4px 0 0; color: var(--gray-600);">Outstanding Balance: <strong style="color: var(--accent-red);">₹<fmt:formatNumber value="${selectedLoan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></strong></p>
                     </div>
                 </div>
 
@@ -619,18 +734,18 @@
                     </button>
                 </div>
                 
-                <div style="overflow-x: auto; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 25px;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-bottom: 0;">
+                <div class="ledger-table-container">
+                    <table class="ledger-table">
                         <thead>
-                            <tr style="background: rgba(99, 102, 241, 0.04); color: var(--gray-700); border-bottom: 2px solid var(--gray-200);">
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; width: 80px;">Sr. No.</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Payment Date</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Type</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Credit Amount</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Debit Amount</th>
-                                <th style="padding: 14px 16px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: right;">Total Amount</th>
+                            <tr>
+                                <th style="width: 80px;">Sr. No.</th>
+                                <th>Payment Date</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Credit Amount</th>
+                                <th style="text-align: right;">Debit Amount</th>
+                                <th style="text-align: right;">Outstanding Principal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -642,21 +757,21 @@
                                     <!-- Repayment rows -->
                                     <c:forEach var="repay" items="${repayments}">
                                         <c:set var="repaySr" value="${repaySr + 1}" />
-                                        <tr style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
-                                            <td style="padding: 15px;">${repay.repaymentDate}</td>
-                                            <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                <span class="txn-deposit" style="color: var(--accent-emerald) !important;">Repayment</span>
+                                        <tr>
+                                            <td style="font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
+                                            <td class="txn-date">${repay.repaymentDate}</td>
+                                            <td>
+                                                <span class="badge-type deposit">Repayment</span>
                                             </td>
-                                            <td style="padding: 15px;">EMI Repayment (Principal: ₹<fmt:formatNumber value="${repay.principalComponent}" minFractionDigits="2" maxFractionDigits="2"/>, Interest: ₹<fmt:formatNumber value="${repay.interestComponent}" minFractionDigits="2" maxFractionDigits="2"/>)</td>
-                                            <td style="padding: 15px;">
-                                                <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
+                                            <td>EMI Repayment (Principal: ₹<fmt:formatNumber value="${repay.principalComponent}" minFractionDigits="2" maxFractionDigits="2"/>, Interest: ₹<fmt:formatNumber value="${repay.interestComponent}" minFractionDigits="2" maxFractionDigits="2"/>)</td>
+                                            <td>
+                                                <span class="badge-status badge-status-completed">COMPLETED</span>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #10b981;">
+                                            <td style="text-align: right;" class="txn-deposit-val">
                                                 + ₹<fmt:formatNumber value="${repay.amountPaid}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #ef4444;">-</td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                            <td style="text-align: right;">-</td>
+                                            <td style="text-align: right;" class="txn-balance-val">
                                                 ₹<fmt:formatNumber value="${runningLoanBal}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                         </tr>
@@ -666,29 +781,29 @@
                                     <!-- Initial Disbursal row -->
                                     <c:if test="${not empty selectedLoan}">
                                         <c:set var="repaySr" value="${repaySr + 1}" />
-                                        <tr style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
-                                            <td style="padding: 15px;">${selectedLoan.startDate}</td>
-                                            <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                <span class="txn-withdrawal" style="color: var(--secondary-500) !important;">Disbursal</span>
+                                        <tr>
+                                            <td style="font-weight: 600; color: var(--gray-500);"><span class="badge-id">#${repaySr}</span></td>
+                                            <td class="txn-date">${selectedLoan.startDate}</td>
+                                            <td>
+                                                <span class="badge-type withdrawal">Disbursal</span>
                                             </td>
-                                            <td style="padding: 15px;">Initial ${selectedLoan.loanType} Loan Disbursal</td>
-                                            <td style="padding: 15px;">
-                                                <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">COMPLETED</span>
+                                            <td>Initial ${selectedLoan.loanType} Loan Disbursal</td>
+                                            <td>
+                                                <span class="badge-status badge-status-completed">COMPLETED</span>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #10b981;">-</td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #ef4444;">
+                                            <td style="text-align: right;">-</td>
+                                            <td style="text-align: right;" class="txn-withdrawal-val">
                                                 - ₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e3a8a; font-family: monospace;">
+                                            <td style="text-align: right;" class="txn-balance-val">
                                                 ₹<fmt:formatNumber value="${selectedLoan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/>
                                             </td>
                                         </tr>
                                     </c:if>
                                 </c:when>
                                 <c:otherwise>
-                                    <tr style="border-bottom: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-400); text-align: center;">
-                                        <td colspan="8" style="padding: 30px;">No loan statement entries found.</td>
+                                    <tr style="text-align: center;">
+                                        <td colspan="8" style="padding: 35px; color: var(--gray-400);">No loan statement entries found.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>
@@ -708,7 +823,6 @@
                     </div>
                 </div>
             </div>
-            </div>
         </div>
     </main>
 
@@ -721,6 +835,40 @@
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
         window.onload = function() {
+            // Populate generated dates dynamically
+            const currentDateStr = new Date().toLocaleDateString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            const rDateSpan = document.getElementById('currentDateRegular');
+            if (rDateSpan) rDateSpan.innerText = currentDateStr;
+            const lDateSpan = document.getElementById('currentDateLoan');
+            if (lDateSpan) lDateSpan.innerText = currentDateStr;
+
+            // Format dates inside lists beautifully
+            document.querySelectorAll('.txn-date').forEach(el => {
+                const rawVal = el.innerText.trim();
+                if (rawVal) {
+                    const normalizedStr = rawVal.replace('T', ' ');
+                    const dateObj = new Date(normalizedStr);
+                    if (!isNaN(dateObj.getTime())) {
+                        el.innerText = dateObj.toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true
+                        });
+                    }
+                }
+            });
+
+            // Initialize active tab from query params
             const urlParams = new URLSearchParams(window.location.search);
             const tab = urlParams.get('tab');
             if (tab === 'loan') {
@@ -793,11 +941,12 @@
             }
             
             rows.forEach(row => {
+                // Skips empty state row
                 if (row.cells.length < 8) return;
                 const rowType = row.getAttribute('data-type') || '';
                 
                 // Type check
-                let typeMatch = (type === 'all' || rowType === type);
+                const typeMatch = (type === 'all' || rowType === type);
                 
                 // Date check
                 let dateMatch = true;

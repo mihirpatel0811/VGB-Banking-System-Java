@@ -25,28 +25,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Apply and Manage Loans</title>
     <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(99, 102, 241, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.04);
+            --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            --secondary-gradient: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        body {
+            background-color: #f6f8fc !important;
+            color: var(--gray-700) !important;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body.dark-mode {
+            --glass-bg: rgba(30, 41, 59, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-glow: rgba(99, 102, 241, 0.1);
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background-color: #0f172a !important;
+        }
+
+        /* Preloader */
+        .preloader {
+            background: #f6f8fc;
+            z-index: 9999;
+        }
+        body.dark-mode .preloader {
+            background: #0f172a;
+        }
+
+        /* Cursor follower */
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+        body.dark-mode .cursor-glow {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+        }
+
+        /* --- STICKY GLASSMORPHIC HEADER --- */
+        .header {
+            background: rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            padding: 20px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        
+        body.dark-mode .header {
+            background: rgba(15, 23, 42, 0.6) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 14px 40px;
+            border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-mode .header.scrolled {
+            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-nav-toggle {
+            display: none !important;
+        }
+        body.dark-mode .mobile-nav-toggle {
+            color: var(--gray-300) !important;
+        }
+
+        /* --- STYLISH SIDEBAR --- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.45) !important;
             backdrop-filter: blur(25px) saturate(180%) !important;
             -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
-            border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
+            border-right: 1px solid var(--glass-border) !important;
             padding: 30px 20px;
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+            box-shadow: var(--panel-shadow);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+
         .sidebar-menu a {
             display: flex;
             align-items: center;
@@ -61,76 +154,75 @@
             overflow: hidden;
             border: 1px solid transparent;
         }
+
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
+        }
+
         .sidebar-menu a i {
             font-size: 1.25rem;
             transition: transform var(--transition-fast);
         }
+
         .sidebar-menu a:hover {
             background: rgba(99, 102, 241, 0.06);
             color: var(--primary-500) !important;
             border-color: rgba(99, 102, 241, 0.1);
             transform: translateX(4px);
         }
+        
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
+
         .sidebar-menu a:hover i {
             transform: scale(1.1);
         }
+
         .sidebar-menu a.active {
             background: var(--gradient-primary) !important;
             color: white !important;
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
             border-color: transparent;
         }
+
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             margin-left: 280px;
             padding: 120px 40px 40px;
             min-height: 100vh;
-            background: var(--gray-50);
-            transition: all 0.3s ease;
+            background: transparent;
+            z-index: 10;
+            position: relative;
         }
-        .footer {
-            margin-left: 280px;
-            background: white;
-            border-top: 1px solid rgba(99, 102, 241, 0.15);
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        .mobile-nav-toggle {
-            display: none !important;
-        }
-        @media (max-width: 991px) {
-            .mobile-nav-toggle {
-                display: flex !important;
-            }
-            .sidebar {
-                left: -280px !important;
-                top: 80px;
-                height: calc(100vh - 80px);
-                z-index: 1000;
-            }
-            .sidebar.active {
-                left: 0 !important;
-            }
-            .main-content {
-                margin-left: 0 !important;
-                padding: 120px 20px 40px !important;
-            }
-            .footer {
-                margin-left: 0 !important;
-            }
-        }
+
+        /* --- PREMIUM GLASS CARDS --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
             border-radius: var(--radius-lg);
             padding: 28px;
-            box-shadow: var(--shadow-md), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
+        
+        body.dark-mode .glass-card {
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: var(--panel-shadow);
+        }
+
         .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.2) !important;
         }
+
         .btn-logout {
             display: inline-flex;
             align-items: center;
@@ -162,67 +254,200 @@
         .btn-logout:hover i {
             transform: translateX(3px);
         }
-        @media (max-width: 480px) {
-            .mobile-hide {
-                display: none !important;
-            }
+
+        /* --- EMI CALCULATOR LAYOUT --- */
+        .calculator-result-box {
+            background: var(--secondary-gradient);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            color: white;
+            text-align: center;
+            margin-top: 25px;
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.25);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Loan Card Grid Styling */
+        .calculator-result-box::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 75%);
+            border-radius: 50%;
+            top: -60px;
+            right: -60px;
+            pointer-events: none;
+        }
+
+        .calculator-input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            outline: none;
+            font-size: 0.9rem;
+            color: var(--gray-800);
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        body.dark-mode .calculator-input-field {
+            background: rgba(15, 23, 42, 0.45);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+        .calculator-input-field:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        /* --- LOAN PRODUCT CARDS GRID --- */
         .loans-category-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
+
         .loan-product-card {
             background: white;
-            border: 1px solid var(--gray-200);
+            border: 1.5px solid var(--gray-200);
             border-radius: var(--radius-lg);
-            padding: 22px 20px;
+            padding: 24px 20px;
             text-align: center;
             cursor: pointer;
-            transition: all var(--transition-normal);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            overflow: hidden;
         }
+        body.dark-mode .loan-product-card {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
         .loan-product-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary-500);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15);
         }
+
         .loan-product-card h4 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: var(--gray-800);
             margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif;
         }
+        body.dark-mode .loan-product-card h4 {
+            color: var(--white);
+        }
+
         .loan-product-card p {
-            font-size: 0.75rem;
+            font-size: 0.76rem;
             color: var(--gray-400);
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 15px;
             flex-grow: 1;
         }
+
         .loan-product-card .rate-badge {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: var(--primary-500);
-            margin-bottom: 12px;
-        }
-        .loan-product-card .btn {
-            margin-top: auto;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Printable paper layout */
+        /* --- ACTIVE LOANS TABLE SYSTEM --- */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 16px 20px;
+            color: var(--gray-500);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            white-space: nowrap;
+            background: rgba(99, 102, 241, 0.02);
+        }
+        body.dark-mode th {
+            color: var(--gray-400);
+            background: rgba(15, 23, 42, 0.15);
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        body.dark-mode td {
+            color: var(--gray-300);
+            border-bottom-color: rgba(255, 255, 255, 0.04);
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.02);
+        }
+        body.dark-mode tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .badge-id {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: rgba(99, 102, 241, 0.06);
+            color: var(--primary-500);
+            padding: 5px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(99, 102, 241, 0.08);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        body.dark-mode .badge-id {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary-300);
+        }
+
+        .badge-status {
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* --- PRINTABLE PAPER Application FORM --- */
         .loan-paper-form {
             background: #fff;
-            border: 1.5px solid var(--gray-200);
-            padding: 40px;
-            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--gray-300);
+            padding: 45px;
+            border-radius: 4px;
             color: #1e293b;
             font-family: 'Times New Roman', Times, serif;
             font-size: 0.95rem;
@@ -232,7 +457,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        .loan-paper-form h1, .loan-paper-form h2, .loan-paper-form h3, .loan-paper-form h4 {
+        .loan-paper-form h1, .loan-paper-form h2, .loan-paper-form h3 {
             font-family: 'Poppins', sans-serif;
             color: #0f172a;
         }
@@ -241,10 +466,10 @@
             font-weight: 800;
             text-align: center;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             border-bottom: 2px double #475569;
             padding-bottom: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
         .loan-paper-form h2 {
             font-size: 1.05rem;
@@ -257,42 +482,76 @@
             color: #475569;
             letter-spacing: 0.5px;
         }
+        .loan-paper-form h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #475569;
+            margin: 15px 0 5px 0;
+            text-transform: capitalize;
+        }
         .loan-paper-form table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
         }
         .loan-paper-form td {
-            padding: 6px 0;
+            padding: 8px 0;
             vertical-align: middle;
         }
         .loan-paper-form input[type="text"], .loan-paper-form input[type="date"], .loan-paper-form input[type="number"], .loan-paper-form select {
-            border: none;
-            border-bottom: 1px dotted #475569 !important;
-            background: transparent;
-            font-weight: 600;
-            font-family: inherit;
-            font-size: inherit;
-            outline: none;
-            color: #0f172a;
-            width: 100%;
-            padding: 2px 5px;
+            border: none !important;
+            border-bottom: 1.5px dotted #475569 !important;
+            background: transparent !important;
+            font-weight: 600 !important;
+            font-family: inherit !important;
+            font-size: inherit !important;
+            outline: none !important;
+            color: #0f172a !important;
+            width: 100% !important;
+            padding: 3px 5px !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
         }
+
         .loan-paper-form input[type="radio"], .loan-paper-form input[type="checkbox"] {
             cursor: pointer;
             margin-right: 5px;
         }
-        
-        /* Centered modal customizer */
-        .modal-body::-webkit-scrollbar {
-            width: 6px;
-        }
-        .modal-body::-webkit-scrollbar-thumb {
-            background-color: var(--gray-300);
-            border-radius: var(--radius-full);
+
+        /* --- GLASSMORPHIC OVERLAY MODAL --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
         }
 
-        /* Print layout centering using absolute target */
+        .modal-dialog-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: var(--shadow-2xl);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        body.dark-mode .modal-dialog-content {
+            background: #1e293b;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Print formatting */
         @media print {
             body * {
                 visibility: hidden !important;
@@ -311,7 +570,7 @@
                 padding: 0 !important;
                 display: flex !important;
             }
-            .modal-content {
+            .modal-dialog-content {
                 box-shadow: none !important;
                 border: none !important;
                 width: 100% !important;
@@ -319,11 +578,6 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 background: white !important;
-            }
-            .modal-body {
-                overflow: visible !important;
-                max-height: none !important;
-                padding: 0 !important;
             }
             .loan-paper-form {
                 border: none !important;
@@ -334,6 +588,28 @@
             }
             .no-print {
                 display: none !important;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .mobile-nav-toggle {
+                display: flex !important;
+            }
+            .sidebar {
+                left: -280px !important;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0 !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 120px 20px 40px !important;
+            }
+            .footer {
+                margin-left: 0 !important;
             }
         }
     </style>
@@ -437,20 +713,20 @@
                 </div>
             </c:if>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;" class="mobile-grid-1">
-                <!-- EMI Simulator -->
+            <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 30px; margin-bottom: 40px;" class="mobile-grid-1">
+                <!-- EMI Calculator -->
                 <div class="glass-card">
-                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;"><i class="bx bx-calculator"></i> VGB Premium EMI Calculator</h3>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 12px;"><i class="bx bx-calculator" style="color: var(--primary-500);"></i> VGB Premium EMI Calculator</h3>
                     
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="calcAmount" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Principal Amount (₹)</label>
-                        <input type="number" id="calcAmount" value="500000" min="50000" max="50000000" oninput="calculateEMI()" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="calcAmount" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; text-transform: uppercase;">Principal Amount (₹)</label>
+                        <input type="number" id="calcAmount" class="calculator-input-field" value="500000" min="50000" max="50000000" oninput="calculateEMI()">
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="mobile-grid-1">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;" class="mobile-grid-1">
                         <div class="form-group">
-                            <label for="calcRate" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Annual Interest Rate (%)</label>
-                            <select id="calcRate" onchange="calculateEMI()" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                            <label for="calcRate" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; text-transform: uppercase;">Annual Interest Rate (%)</label>
+                            <select id="calcRate" onchange="calculateEMI()" class="calculator-input-field" style="cursor: pointer;">
                                 <option value="7.50" selected>Home Secure Loan (7.50%)</option>
                                 <option value="8.50">Vehicle Purchase Loan (8.50%)</option>
                                 <option value="6.50">Higher Education Loan (6.50%)</option>
@@ -459,47 +735,49 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="displayCalcTermVal" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Tenure Duration</label>
+                            <label for="displayCalcTermVal" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; text-transform: uppercase;">Tenure Duration</label>
                             <div style="display: flex; gap: 10px;">
-                                <input type="number" id="displayCalcTermVal" value="10" min="1" max="30" required style="flex-grow: 1; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;" oninput="syncCalcTerm()">
-                                <select id="calcTermUnit" style="width: 110px; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;" onchange="syncCalcTerm()">
+                                <input type="number" id="displayCalcTermVal" class="calculator-input-field" value="10" min="1" max="30" required oninput="syncCalcTerm()">
+                                <select id="calcTermUnit" class="calculator-input-field" style="width: 120px; cursor: pointer;" onchange="syncCalcTerm()">
                                     <option value="years" selected>Years</option>
                                     <option value="months">Months</option>
                                 </select>
                             </div>
                             <input type="hidden" id="calcTerm" value="120">
                         </div>
-                    </div>                    <div style="background: var(--gradient-secondary); padding: 20px; border-radius: var(--radius-md); color: white; text-align: center; margin-top: 25px; box-shadow: var(--shadow-sm);">
-                        <span style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Estimated Monthly Payment</span>
-                        <strong style="font-size: 2.2rem; font-weight: 800; display: block; margin-top: 5px;" id="emiResult">₹ 0.00</strong>
-                        <span style="font-size: 0.75rem; opacity: 0.85; display: block; margin-top: 3px;">Subject to terms &amp; final physical document verification.</span>
+                    </div>
+                    
+                    <div class="calculator-result-box">
+                        <span style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.95; font-weight: 600;">Estimated Monthly Payment</span>
+                        <strong style="font-size: 2.3rem; font-weight: 800; display: block; margin-top: 5px; font-family: 'Share Tech Mono', monospace;" id="emiResult">₹ 0.00</strong>
+                        <span style="font-size: 0.75rem; opacity: 0.85; display: block; margin-top: 5px;">Subject to terms &amp; final paper document verification.</span>
                     </div>
                 </div>
 
                 <!-- Promotional Info Column -->
-                <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);">
+                <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%) !important; border-color: rgba(99, 102, 241, 0.2);">
                     <div>
-                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;"><i class="bx bx-star" style="color: #eab308;"></i> Why VGB Premium Lending?</h3>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 12px;"><i class="bx bx-shield-quarter" style="color: var(--primary-500);"></i> Why VGB Premium Lending?</h3>
                         <p style="font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 20px;">
                             Vertex Galaxy Bank offers custom-tailored credit solutions featuring highly competitive fixed interest rates, flexible tenure options up to 30 years, and instant digital credit assessment. 
                         </p>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
                             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                <i class="bx bx-check-double" style="color: var(--primary-500); font-size: 1.2rem;"></i>
-                                <span>Zero hidden charges &amp; fully transparent terms</span>
+                                <i class="bx bx-check-shield" style="color: var(--accent-emerald); font-size: 1.25rem;"></i>
+                                <span style="font-weight: 500;">Zero hidden charges &amp; fully transparent terms</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                <i class="bx bx-check-double" style="color: var(--primary-500); font-size: 1.2rem;"></i>
-                                <span>Flexible EMI repayments auto-debited securely</span>
+                                <i class="bx bx-credit-card-front" style="color: var(--accent-emerald); font-size: 1.25rem;"></i>
+                                <span style="font-weight: 500;">Flexible EMI repayments auto-debited securely</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                <i class="bx bx-check-double" style="color: var(--primary-500); font-size: 1.2rem;"></i>
-                                <span>Direct administrative verification with instant updates</span>
+                                <i class="bx bx-badge-check" style="color: var(--accent-emerald); font-size: 1.25rem;"></i>
+                                <span style="font-weight: 500;">Direct administrative verification with instant updates</span>
                             </div>
                         </div>
                     </div>
-                    <div style="border-top: 1px solid rgba(99, 102, 241, 0.1); padding-top: 15px; margin-top: 20px; font-size: 0.85rem; color: var(--gray-50); font-style: italic;">
-                        Please select one of the loan products below to fill in your printable formal application form.
+                    <div style="border-top: 1px solid rgba(99, 102, 241, 0.1); padding-top: 15px; margin-top: 20px; font-size: 0.8rem; color: var(--gray-500); font-style: italic; font-weight: 500;">
+                        Select one of the loan products below to inspect details or open the formal application.
                     </div>
                 </div>
             </div>
@@ -521,8 +799,8 @@
                         </div>
                         <div>
                             <div class="rate-badge">12.00% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 15,00,000</div>
-                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem;">Apply Now</button>
+                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 15px; font-weight: 600;">Max: ₹ 15,00,000</div>
+                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.78rem;">Apply Now</button>
                         </div>
                     </div>
 
@@ -534,8 +812,8 @@
                         </div>
                         <div>
                             <div class="rate-badge">7.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 5,00,00,000</div>
-                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem;">Apply Now</button>
+                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 15px; font-weight: 600;">Max: ₹ 5,00,00,000</div>
+                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.78rem;">Apply Now</button>
                         </div>
                     </div>
 
@@ -547,8 +825,8 @@
                         </div>
                         <div>
                             <div class="rate-badge">8.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 50,00,000</div>
-                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem;">Apply Now</button>
+                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 15px; font-weight: 600;">Max: ₹ 50,00,000</div>
+                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.78rem;">Apply Now</button>
                         </div>
                     </div>
 
@@ -560,8 +838,8 @@
                         </div>
                         <div>
                             <div class="rate-badge">6.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 40,00,000</div>
-                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem;">Apply Now</button>
+                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 15px; font-weight: 600;">Max: ₹ 40,00,000</div>
+                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.78rem;">Apply Now</button>
                         </div>
                     </div>
 
@@ -569,12 +847,12 @@
                     <div class="loan-product-card" onclick="showLoanDetails('business', 10.50, 10000000)">
                         <div>
                             <h4>Business Capital Loan</h4>
-                            <p>Power your business venture, purchase heavy equipment, expand infrastructure, or boost cashflow.</p>
+                            <p>Power your business venture, purchase heavy machinery, expand infrastructure, or boost working capital.</p>
                         </div>
                         <div>
                             <div class="rate-badge">10.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
-                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 1,00,00,000</div>
-                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 0.75rem;">Apply Now</button>
+                            <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 15px; font-weight: 600;">Max: ₹ 1,00,00,000</div>
+                            <button type="button" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 0.78rem;">Apply Now</button>
                         </div>
                     </div>
                 </div>
@@ -582,49 +860,61 @@
 
             <!-- Existing Loans Ledger -->
             <div class="glass-card">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-receipt"></i> Active Loan Portfolio Ledger</h3>
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-receipt" style="color: var(--primary-500);"></i> Active Loan Portfolio Ledger</h3>
+                <div class="table-responsive">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px;">Loan ID</th>
-                                <th style="padding: 12px 15px;">Loan Type</th>
-                                <th style="padding: 12px 15px;">Interest Rate</th>
-                                <th style="padding: 12px 15px;">Principal</th>
-                                <th style="padding: 12px 15px;">Remaining Balance</th>
-                                <th style="padding: 12px 15px; text-align: right;">Monthly EMI</th>
-                                <th style="padding: 12px 15px;">Maturity Date</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: center;">Repay EMI</th>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Loan Type</th>
+                                <th>Interest Rate</th>
+                                <th>Principal</th>
+                                <th>Remaining Balance</th>
+                                <th style="text-align: right;">Monthly EMI</th>
+                                <th>Maturity Date</th>
+                                <th>Status</th>
+                                <th style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:choose>
                                 <c:when test="${not empty loans}">
                                     <c:forEach var="loan" items="${loans}">
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                            <td style="padding: 15px; font-family: monospace;">#LN-${loan.loanId}</td>
-                                            <td style="padding: 15px; text-transform: capitalize; font-weight: 500;">${loan.loanType}</td>
-                                            <td style="padding: 15px;">${loan.interestRate}% P.A.</td>
-                                            <td style="padding: 15px; font-weight: 600;">₹ <fmt:formatNumber value="${loan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></td>
-                                            <td style="padding: 15px; font-weight: 600; color: #ef4444;">₹ <fmt:formatNumber value="${loan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></td>
-                                            <td style="padding: 15px; text-align: right; font-weight: 600; color: var(--gray-800);">₹ <fmt:formatNumber value="${loan.monthlyEMI}" minFractionDigits="2" maxFractionDigits="2"/></td>
-                                            <td style="padding: 15px;">
+                                        <tr>
+                                            <td><span class="badge-id">#LN-${loan.loanId}</span></td>
+                                            <td style="text-transform: capitalize; font-weight: 600;">${loan.loanType}</td>
+                                            <td style="font-weight: 500;">${loan.interestRate}% P.A.</td>
+                                            <td style="font-weight: 700; color: var(--gray-800);">₹ <fmt:formatNumber value="${loan.principalAmount}" minFractionDigits="2" maxFractionDigits="2"/></td>
+                                            <td style="font-weight: 700; color: #ef4444;">₹ <fmt:formatNumber value="${loan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2"/></td>
+                                            <td style="text-align: right; font-weight: 700; color: var(--primary-500); font-family: 'Share Tech Mono', monospace;">₹ <fmt:formatNumber value="${loan.monthlyEMI}" minFractionDigits="2" maxFractionDigits="2"/></td>
+                                            <td>
                                                 <c:choose>
                                                     <c:when test="${not empty loan.endDate}">
                                                         ${loan.endDate}
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span style="color: var(--gray-400); font-style: italic;">Pending Approval</span>
+                                                        <span style="color: var(--gray-400); font-style: italic; font-weight: 500;">Awaiting Approval</span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td style="padding: 15px;">
-                                                <span style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${loan.status}</span>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${loan.status == 'active' or loan.status == 'approved' or loan.status == 'disbursed'}">
+                                                        <span class="badge-status" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald);">Active</span>
+                                                    </c:when>
+                                                    <c:when test="${loan.status == 'pending_approval' or loan.status == 'pending'}">
+                                                        <span class="badge-status" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">Pending</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge-status" style="background: rgba(156, 163, 175, 0.1); color: var(--gray-500);">${loan.status}</span>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
-                                            <td style="padding: 15px; text-align: center;">
+                                            <td style="text-align: center;">
                                                 <c:if test="${loan.status == 'active' or loan.status == 'approved' or loan.status == 'disbursed'}">
-                                                    <button type="button" class="btn btn-secondary" onclick="openRepayModal('${loan.loanId}', '${loan.remainingBalance}')" style="padding: 6px 12px; font-size: 0.75rem;"><i class="bx bx-wallet-alt"></i> Repay EMI</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="openRepayModal('${loan.loanId}', '${loan.remainingBalance}')" style="padding: 6px 14px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); background: transparent; display: inline-flex; align-items: center; gap: 4px;">
+                                                        <i class="bx bx-wallet-alt"></i> Repay EMI
+                                                    </button>
                                                 </c:if>
                                             </td>
                                         </tr>
@@ -632,7 +922,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <tr>
-                                        <td colspan="9" style="text-align: center; padding: 30px; color: var(--gray-400);">No active or pending loans found for this profile.</td>
+                                        <td colspan="9" style="text-align: center; padding: 40px; color: var(--gray-400); font-weight: 500;">No active or pending loans found for this profile.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>
@@ -642,24 +932,24 @@
             </div>
         </div>
 
-        <!-- Repay EMI Modal Overlay (Simple Glassmorphic Alert Box) -->
-        <div id="repayModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
-            <div class="glass-card" style="width: 100%; max-width: 500px; background: white; border: 1px solid rgba(99, 102, 241, 0.2); box-shadow: var(--shadow-2xl); position: relative;">
-                <button type="button" onclick="closeRepayModal()" style="position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; border: none; background: transparent;"><i class="bx bx-x"></i></button>
+        <!-- Repay EMI Modal Overlay -->
+        <div id="repayModal" class="modal-overlay">
+            <div class="modal-dialog-content" style="max-width: 500px; padding: 30px; position: relative;">
+                <button type="button" onclick="closeRepayModal()" style="position: absolute; top: 20px; right: 20px; font-size: 1.6rem; color: var(--gray-400); cursor: pointer; border: none; background: transparent;"><i class="bx bx-x"></i></button>
                 
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;"><i class="bx bx-wallet-alt"></i> Process Loan EMI Auto-Debit</h3>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 12px;"><i class="bx bx-wallet-alt" style="color: var(--primary-500);"></i> Process Loan EMI Auto-Debit</h3>
                 <form action="${pageContext.request.contextPath}/loan?action=repayment" method="post">
                     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                     <input type="hidden" name="loanId" id="modalLoanId">
 
                     <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="modalRemaining" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Remaining Balance (₹)</label>
-                        <input type="text" id="modalRemaining" readonly style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: var(--gray-100); outline: none;">
+                        <label for="modalRemaining" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; text-transform: uppercase;">Remaining Balance (₹)</label>
+                        <input type="text" id="modalRemaining" readonly class="calculator-input-field" style="background: var(--gray-100);">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="modalAccount" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Select Checking/Savings Account to Debit</label>
-                        <select id="modalAccount" name="accountId" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
+                        <label for="modalAccount" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; text-transform: uppercase;">Select Account to Debit</label>
+                        <select id="modalAccount" name="accountId" required class="calculator-input-field" style="cursor: pointer;">
                             <c:forEach var="acc" items="${accounts}">
                                 <option value="${acc.accountId}">Account #${acc.accountId} (${acc.accountType}) - Bal: ₹ ${acc.balance}</option>
                             </c:forEach>
@@ -667,8 +957,8 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 25px;">
-                        <label for="modalAmount" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Payment Amount (₹)</label>
-                        <input type="number" step="0.01" min="100" id="modalAmount" name="amount" required placeholder="E.g., 5000" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                        <label for="modalAmount" style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; text-transform: uppercase;">Payment Amount (₹)</label>
+                        <input type="number" step="0.01" min="100" id="modalAmount" name="amount" required placeholder="E.g., 5000" class="calculator-input-field">
                     </div>
 
                     <div style="display: flex; gap: 15px; justify-content: flex-end;">
@@ -682,38 +972,35 @@
             </div>
         </div>
 
-        <!-- High-Fidelity Premium Loan Details Modal -->
-        <div id="loanDetailsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1050; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-            <div class="modal-content" style="width: 100%; max-width: 650px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; overflow: hidden;">
+        <!-- Loan Specification Details Modal -->
+        <div id="loanDetailsModal" class="modal-overlay" style="z-index: 1050;">
+            <div class="modal-dialog-content" style="max-width: 650px;">
                 <!-- Header with premium gradient background -->
-                <div style="padding: 25px 30px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); display: flex; justify-content: space-between; align-items: center; color: white;">
-                    <h3 id="detailsModalTitle" style="font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 10px; margin: 0; letter-spacing: 0.5px;">
+                <div style="padding: 25px 30px; background: var(--primary-gradient); display: flex; justify-content: space-between; align-items: center; color: white;">
+                    <h3 id="detailsModalTitle" style="font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 10px; margin: 0; letter-spacing: 0.5px; color: white;">
                         <i class="bx bx-info-circle" style="font-size: 1.6rem;"></i>
                         <span>Loan Product Specification</span>
                     </h3>
                     <button type="button" onclick="closeDetailsModal()" style="font-size: 1.6rem; color: rgba(255, 255, 255, 0.8); cursor: pointer; background: transparent; border: none; outline: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255, 255, 255, 0.8)'"><i class="bx bx-x"></i></button>
                 </div>
                 
-                <!-- Body with loan type specifications -->
-                <div style="padding: 30px; background: var(--gray-50); flex-grow: 1; max-height: 70vh; overflow-y: auto;">
-                    <!-- Overview Section -->
+                <!-- Body with specifications -->
+                <div style="padding: 30px; background: var(--gray-50); max-height: 70vh; overflow-y: auto;">
                     <div style="background: white; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--gray-200); margin-bottom: 20px;">
-                        <p id="detailsDescription" style="font-size: 0.95rem; color: var(--gray-700); line-height: 1.6; margin: 0;"></p>
+                        <p id="detailsDescription" style="font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; margin: 0;"></p>
                     </div>
                     
-                    <!-- Rate & Limit badges -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-                        <div style="background: rgba(99, 102, 241, 0.05); border: 1.5px solid rgba(99, 102, 241, 0.15); padding: 15px; border-radius: var(--radius-md); text-align: center;">
+                        <div style="background: rgba(99, 102, 241, 0.04); border: 1.5px solid rgba(99, 102, 241, 0.12); padding: 15px; border-radius: var(--radius-md); text-align: center;">
                             <span style="font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Fixed Interest Rate</span>
                             <strong id="detailsInterestRate" style="font-size: 1.6rem; color: var(--primary-600); font-weight: 800; display: block; margin-top: 5px;"></strong>
                         </div>
-                        <div style="background: rgba(16, 185, 129, 0.05); border: 1.5px solid rgba(16, 185, 129, 0.15); padding: 15px; border-radius: var(--radius-md); text-align: center;">
+                        <div style="background: rgba(16, 185, 129, 0.04); border: 1.5px solid rgba(16, 185, 129, 0.12); padding: 15px; border-radius: var(--radius-md); text-align: center;">
                             <span style="font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: block;">Maximum Credit Limit</span>
                             <strong id="detailsMaxLimit" style="font-size: 1.6rem; color: var(--accent-emerald); font-weight: 800; display: block; margin-top: 5px;"></strong>
                         </div>
                     </div>
                     
-                    <!-- Benefits grid -->
                     <div style="margin-bottom: 25px;">
                         <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <i class="bx bx-check-shield" style="color: var(--primary-500); font-size: 1.25rem;"></i>
@@ -723,7 +1010,6 @@
                         </ul>
                     </div>
 
-                    <!-- Eligibility & Docs columns -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="mobile-grid-1">
                         <div>
                             <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -736,7 +1022,7 @@
                         <div>
                             <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                                 <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.25rem;"></i>
-                                <span>Required Documentation</span>
+                                <span>Required Documents</span>
                             </h4>
                             <ul id="detailsDocuments" style="padding-left: 20px; margin: 0; font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
                             </ul>
@@ -747,7 +1033,7 @@
                 <!-- Footer buttons -->
                 <div style="padding: 20px 30px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 15px; background: white;">
                     <button type="button" class="btn btn-secondary" onclick="closeDetailsModal()" style="padding: 10px 22px;">Close</button>
-                    <button type="button" id="detailsApplyBtn" class="btn btn-primary" style="padding: 10px 25px; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
+                    <button type="button" id="detailsApplyBtn" class="btn btn-primary" style="padding: 10px 25px; display: flex; align-items: center; gap: 8px; border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
                         <span>Apply Now</span>
                         <i class="bx bx-chevron-right"></i>
                     </button>
@@ -756,8 +1042,8 @@
         </div>
 
         <!-- Printable formal Loan Application Form Modal -->
-        <div id="loanApplicationModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;">
-            <div class="modal-content" style="width: 100%; max-width: 850px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-2xl); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; flex-direction: column; max-height: 90vh;">
+        <div id="loanApplicationModal" class="modal-overlay">
+            <div class="modal-dialog-content" style="max-width: 850px; max-height: 90vh;">
                 <div class="modal-header no-print" style="padding: 20px 30px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);">
                     <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 10px;">
                         <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.5rem;"></i>
@@ -770,7 +1056,7 @@
                     <form id="actualLoanForm" action="${pageContext.request.contextPath}/loan?action=apply" method="post" onsubmit="serializeLoanForm(event)">
                         <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                         
-                        <!-- Main hidden inputs submitted to server -->
+                        <!-- Hidden parameters submitted to servlet -->
                         <input type="hidden" id="submitLoanType" name="loanType">
                         <input type="hidden" id="submitAmount" name="amount">
                         <input type="hidden" id="submitTermMonths" name="termMonths">
@@ -789,7 +1075,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">Father's / Husband's Name:</td>
-                                    <td><input type="text" id="formRelationName" placeholder="___________________________" required></td>
+                                    <td><input type="text" id="formRelationName" placeholder="Type relation full name" required></td>
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">Date of Birth:</td>
@@ -817,19 +1103,19 @@
 
                             <!-- 2. Address Details -->
                             <h2>2. Address Details</h2>
-                            <h3 style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 10px 0 5px 0;">Current Address</h3>
-                            <div style="border-bottom: 1px dotted #475569; padding: 5px 0 10px 0; margin-bottom: 10px; font-weight: 600;">
+                            <h3 style="margin: 10px 0 5px 0;">Current Address</h3>
+                            <div style="border-bottom: 1.5px dotted #475569; padding: 5px 0 10px 0; margin-bottom: 10px; font-weight: 600;">
                                 ${customer.address}, ${customer.city}, ${customer.state} - ${customer.zipCode}
                                 <input type="hidden" id="formCurrentAddress" value="${customer.address}, ${customer.city}, ${customer.state} - ${customer.zipCode}">
                             </div>
 
-                            <h3 style="font-size: 0.95rem; font-weight: 700; color: #475569; margin: 15px 0 5px 0;">Permanent Address</h3>
+                            <h3 style="margin: 15px 0 5px 0;">Permanent Address</h3>
                             <div style="margin-bottom: 10px;" class="no-print">
                                 <label style="font-size: 0.85rem; font-weight: 600; cursor: pointer;">
                                     <input type="checkbox" id="sameAsCurrent" onchange="copyCurrentAddress(this)"> Same as Current Address
                                 </label>
                             </div>
-                            <textarea id="formPermanentAddress" placeholder="______________________________________________________" required style="width: 100%; border: none; border-bottom: 1px dotted #475569; font-family: inherit; font-size: inherit; font-weight: 600; outline: none; background: transparent; resize: none; height: 50px;"></textarea>
+                            <textarea id="formPermanentAddress" placeholder="Enter permanent address details..." required style="width: 100%; border: none; border-bottom: 1.5px dotted #475569; font-family: inherit; font-size: inherit; font-weight: 600; outline: none; background: transparent; resize: none; height: 50px;"></textarea>
 
                             <!-- 3. Identity Details -->
                             <h2>3. Identity Details</h2>
@@ -843,8 +1129,8 @@
                                     <td><input type="text" id="formPan" value="${customer.panCard}" readonly style="text-transform: uppercase;"></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Voter ID / Driving License No.:</td>
-                                    <td><input type="text" id="formVoterDl" placeholder="___________________________" required></td>
+                                    <td style="font-weight: bold;">Voter ID / DL Number:</td>
+                                    <td><input type="text" id="formVoterDl" placeholder="Enter identification document number" required></td>
                                 </tr>
                             </table>
 
@@ -853,25 +1139,25 @@
                             <table>
                                 <tr>
                                     <td style="width: 35%; font-weight: bold;">Occupation:</td>
-                                    <td style="width: 65%;"><input type="text" id="formOccupation" placeholder="___________________________" required></td>
+                                    <td style="width: 65%;"><input type="text" id="formOccupation" placeholder="E.g., Software Engineer, Merchant" required></td>
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">Company / Business Name:</td>
-                                    <td><input type="text" id="formCompanyName" placeholder="___________________________" required></td>
+                                    <td><input type="text" id="formCompanyName" placeholder="Company or Organization Name" required></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Monthly Income:</td>
-                                    <td><input type="number" id="formMonthlyIncome" placeholder="₹ ______________________" required min="1000"></td>
+                                    <td style="font-weight: bold;">Monthly Net Income:</td>
+                                    <td><input type="number" id="formMonthlyIncome" placeholder="₹ Value" required min="1000"></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Work Experience:</td>
-                                    <td><input type="text" id="formExperience" placeholder="_____________________" required></td>
+                                    <td style="font-weight: bold;">Total Work Experience:</td>
+                                    <td><input type="text" id="formExperience" placeholder="E.g., 5 Years" required></td>
                                 </tr>
                             </table>
 
                             <!-- 5. Bank Account Details -->
                             <h2>5. Bank Account Details</h2>
-                            <p style="font-size: 0.85rem; font-style: italic; color: #64748b; margin-bottom: 10px;" class="no-print">Choose one of your active VGB savings or checking accounts to link with this loan for disbursal and EMI payments.</p>
+                            <p style="font-size: 0.85rem; font-style: italic; color: #64748b; margin-bottom: 10px;" class="no-print">Link one of your active accounts for disbursement and auto-recovery.</p>
                             <table>
                                 <tr class="no-print">
                                     <td style="width: 35%; font-weight: bold;">Select Account to Link:</td>
@@ -892,14 +1178,14 @@
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">Account Number:</td>
-                                    <td><input type="text" id="formAccNo" readonly placeholder="___________________________" required></td>
+                                    <td><input type="text" id="formAccNo" readonly placeholder="Select account above to populate" required></td>
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">IFSC Code:</td>
-                                    <td><input type="text" id="formIfsc" readonly placeholder="___________________________" required></td>
+                                    <td><input type="text" id="formIfsc" readonly placeholder="Select account above to populate" required></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Branch:</td>
+                                    <td style="font-weight: bold;">IFSC Branch:</td>
                                     <td><input type="text" id="formBranch" readonly value="VGB Main Branch" style="font-weight: 600;"></td>
                                 </tr>
                             </table>
@@ -908,15 +1194,15 @@
                             <h2>6. Loan Details</h2>
                             <table>
                                 <tr>
-                                    <td style="width: 35%; font-weight: bold;">Loan Type:</td>
+                                    <td style="width: 35%; font-weight: bold;">Loan Product:</td>
                                     <td style="width: 65%;"><input type="text" id="formLoanTypeDisplay" readonly style="font-weight: bold; text-transform: uppercase;"></td>
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">Requested Amount (₹):</td>
-                                    <td><input type="number" id="formLoanAmount" placeholder="______________________" required oninput="calculatePaperEMI()"></td>
+                                    <td><input type="number" id="formLoanAmount" placeholder="Enter amount" required oninput="calculatePaperEMI()"></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Tenure Duration:</td>
+                                    <td style="font-weight: bold;">Repayment Tenure:</td>
                                     <td>
                                         <div style="display: flex; gap: 10px;">
                                             <input type="number" id="formLoanTermVal" placeholder="Tenure" required style="width: 60%;" oninput="syncPaperTermMonths()">
@@ -929,16 +1215,16 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Fixed Interest Rate:</td>
+                                    <td style="font-weight: bold;">Interest rate profile:</td>
                                     <td><input type="text" id="formLoanRate" readonly style="font-weight: 600; color: var(--primary-500);"></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Purpose of Loan:</td>
-                                    <td><input type="text" id="formLoanPurpose" placeholder="___________________________" required></td>
+                                    <td style="font-weight: bold;">Detailed Purpose:</td>
+                                    <td><input type="text" id="formLoanPurpose" placeholder="E.g., Medical expenses, vehicle purchase" required></td>
                                 </tr>
                                 <tr>
                                     <td style="font-weight: bold;">Estimated Monthly EMI:</td>
-                                    <td style="font-weight: bold; font-size: 1.1rem; color: #0f172a;" id="formPaperEmiDisplay">₹ 0.00</td>
+                                    <td style="font-weight: bold; font-size: 1.15rem; color: #0f172a; font-family: 'Share Tech Mono', monospace;" id="formPaperEmiDisplay">₹ 0.00</td>
                                 </tr>
                             </table>
 
@@ -947,28 +1233,28 @@
                             <table>
                                 <tr>
                                     <td style="width: 35%; font-weight: bold;">Nominee Name:</td>
-                                    <td style="width: 65%;"><input type="text" id="formNomineeName" placeholder="___________________________" required></td>
+                                    <td style="width: 65%;"><input type="text" id="formNomineeName" placeholder="Full name of nominee" required></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Relationship with Applicant:</td>
-                                    <td><input type="text" id="formNomineeRelationship" placeholder="___________________________" required></td>
+                                    <td style="font-weight: bold;">Relationship:</td>
+                                    <td><input type="text" id="formNomineeRelationship" placeholder="E.g., Spouse, Child, Parent" required></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight: bold;">Nominee Mobile Number:</td>
-                                    <td><input type="text" id="formNomineeMobile" placeholder="___________________________" required pattern="[0-9]{10}"></td>
+                                    <td style="font-weight: bold;">Mobile Number:</td>
+                                    <td><input type="text" id="formNomineeMobile" placeholder="10-Digit Mobile No." required pattern="[0-9]{10}"></td>
                                 </tr>
                             </table>
 
                             <!-- 8. Declaration -->
                             <h2>8. Declaration</h2>
-                            <div style="margin-bottom: 20px; font-size: 0.9rem; text-align: justify; line-height: 1.5; color: #334155;">
+                            <div style="margin-bottom: 20px; font-size: 0.88rem; text-align: justify; line-height: 1.6; color: #334155;">
                                 <label style="cursor: pointer; display: flex; gap: 10px; align-items: flex-start;">
                                     <input type="checkbox" id="formDeclarationCheckbox" required style="margin-top: 4px;">
-                                    <span>I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief and I undertake to inform Vertex Galaxy Bank of any changes therein, immediately. In case any of the above information is found to be false or untrue or misleading, I am aware that I may be held liable for it. I authorize the Bank to debit my linked account for recovery of EMI.</span>
+                                    <span>I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief. I authorize Vertex Galaxy Bank to execute monthly auto-debits on my linked account to clear EMI repayments.</span>
                                 </label>
                             </div>
 
-                            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px;">
+                            <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; margin-top: 30px;">
                                 <div>
                                     <table style="margin-bottom: 0;">
                                         <tr>
@@ -977,18 +1263,18 @@
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">Place:</td>
-                                            <td><input type="text" id="formDeclarationPlace" placeholder="___________________________" required></td>
+                                            <td><input type="text" id="formDeclarationPlace" placeholder="E.g., Mumbai, Delhi" required></td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div style="text-align: center; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
-                                    <input type="text" id="formSignature" placeholder="Type to sign" required style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.5rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
+                                    <input type="text" id="formSignature" placeholder="Type name to sign" required style="text-align: center; font-family: 'Brush Script MT', cursive, Georgia, serif; font-size: 1.65rem; border-bottom: 1.5px solid #000 !important; width: 85%;">
                                     <span style="font-size: 0.75rem; font-weight: bold; color: #475569; text-transform: uppercase; margin-top: 5px; display: block;">Applicant's Signature</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Action Buttons (inside form, shown only on screen) -->
+                        <!-- Action Buttons -->
                         <div class="no-print" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
                             <button type="button" class="btn btn-secondary" onclick="closeLoanModal()" style="padding: 10px 22px;">Close</button>
                             <button type="button" class="btn btn-secondary" onclick="printApplicationForm()" style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
@@ -1008,7 +1294,7 @@
 
     <footer class="footer" style="padding: 20px 0; margin-left: 280px; background: white; border-top: 1px solid rgba(99, 102, 241, 0.15);">
         <div class="container" style="text-align: center; max-width: 1200px; padding: 0;">
-            <p style="font-size: 0.85rem; color: var(--gray-500);">&copy; <span data-current-year>2026</span> Vertex Galaxy Bank. All rights reserved.</p>
+            <p style="font-size: 0.85rem; color: var(--gray-500); font-weight: 500;">&copy; <span data-current-year>2026</span> Vertex Galaxy Bank. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1133,7 +1419,6 @@
             document.getElementById('detailsInterestRate').textContent = rate.toFixed(2) + "% Fixed P.A.";
             document.getElementById('detailsMaxLimit').textContent = "₹ " + maxLimit.toLocaleString('en-IN');
             
-            // Benefits list
             const benefitsList = document.getElementById('detailsBenefits');
             benefitsList.innerHTML = '';
             spec.benefits.forEach(benefit => {
@@ -1148,7 +1433,6 @@
                 benefitsList.appendChild(li);
             });
             
-            // Eligibility list
             const eligibilityList = document.getElementById('detailsEligibility');
             eligibilityList.innerHTML = '';
             spec.eligibility.forEach(el => {
@@ -1157,7 +1441,6 @@
                 eligibilityList.appendChild(li);
             });
             
-            // Documents list
             const documentsList = document.getElementById('detailsDocuments');
             documentsList.innerHTML = '';
             spec.documents.forEach(doc => {
@@ -1166,7 +1449,6 @@
                 documentsList.appendChild(li);
             });
             
-            // Bind the Apply Button action
             const applyBtn = document.getElementById('detailsApplyBtn');
             applyBtn.onclick = function() {
                 closeDetailsModal();
@@ -1190,10 +1472,9 @@
 
             const amountInput = document.getElementById('formLoanAmount');
             amountInput.max = maxLimit;
-            amountInput.placeholder = "Max limit: ₹ " + maxLimit.toLocaleString('en-IN');
+            amountInput.placeholder = "Max: ₹ " + maxLimit.toLocaleString('en-IN');
             amountInput.value = "";
 
-            // Pre-fill today's date
             const today = new Date();
             const yyyy = today.getFullYear();
             let mm = today.getMonth() + 1;
@@ -1202,10 +1483,9 @@
             if (mm < 10) mm = '0' + mm;
             document.getElementById('formDeclarationDate').value = dd + '/' + mm + '/' + yyyy;
 
-            // Reset other form fields
             document.getElementById('actualLoanForm').reset();
             
-            // Re-populate readonly fields that standard reset might clear
+            // Re-populate readonly fields
             document.getElementById('formFullName').value = "${customer.fullName}";
             document.getElementById('formMobile').value = "${customer.phoneNo}";
             document.getElementById('formEmail').value = "${customer.email}";
@@ -1217,7 +1497,6 @@
             document.getElementById('formBranch').value = "VGB Main Branch";
             document.getElementById('formAccHolderName').value = "${customer.fullName}";
 
-            // Trigger term syncing to initial value
             document.getElementById('formLoanTermVal').value = 10;
             document.getElementById('formLoanTermUnit').value = "years";
             syncPaperTermMonths();
@@ -1310,7 +1589,6 @@
                 return false;
             }
 
-            // Gather all details for JSON serialization
             const details = {
                 relationName: document.getElementById('formRelationName').value,
                 dob: document.getElementById('formDob').value,
@@ -1336,10 +1614,7 @@
                 signature: document.getElementById('formSignature').value
             };
 
-            // Bind serialized string to hidden parameter
             document.getElementById('submitFormDetails').value = JSON.stringify(details);
-
-            // Bind values to high level fields for back compatibility
             document.getElementById('submitAmount').value = amount;
             document.getElementById('submitTermMonths').value = document.getElementById('formLoanTermMonths').value;
             
@@ -1369,7 +1644,6 @@
             });
         }
 
-        // Initialize Calculator
         function syncCalcTerm() {
             const valInput = document.getElementById('displayCalcTermVal');
             const unit = document.getElementById('calcTermUnit').value;
@@ -1401,7 +1675,7 @@
             syncCalcTerm();
             calculateEMI();
 
-            // Mobile sidebar toggle handler
+            // Mobile sidebar toggle
             const mobileToggle = document.getElementById('mobileNavToggle');
             const sidebar = document.querySelector('.sidebar');
             if (mobileToggle && sidebar) {
@@ -1416,12 +1690,23 @@
                     }
                 });
                 
-                // Close sidebar if clicking outside
                 document.addEventListener('click', (e) => {
                     if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
                         sidebar.classList.remove('active');
                         mobileToggle.querySelector('i').className = 'bx bx-menu';
                     }
+                });
+            }
+
+            // Glow follower
+            const glow = document.querySelector('.cursor-glow');
+            if (glow) {
+                window.addEventListener('mousemove', (e) => {
+                    const { clientX, clientY } = e;
+                    requestAnimationFrame(() => {
+                        glow.style.left = clientX + 'px';
+                        glow.style.top = clientY + 'px';
+                    });
                 });
             }
         });

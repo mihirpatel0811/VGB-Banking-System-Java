@@ -17,6 +17,9 @@ public class PassbookRequest {
     private String accountNumber;
     private String accountType;
     private String customerName;
+    private String ifscCode;
+    private String phoneNo;
+    private String nomineeName;
 
     public PassbookRequest() {
         this.requestType = "new";
@@ -111,5 +114,29 @@ public class PassbookRequest {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getIfscCode() {
+        return ifscCode;
+    }
+
+    public void setIfscCode(String ifscCode) {
+        this.ifscCode = ifscCode;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public String getNomineeName() {
+        return nomineeName;
+    }
+
+    public void setNomineeName(String nomineeName) {
+        this.nomineeName = nomineeName;
     }
 }

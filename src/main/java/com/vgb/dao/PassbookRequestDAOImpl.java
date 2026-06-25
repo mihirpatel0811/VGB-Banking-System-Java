@@ -38,10 +38,12 @@ public class PassbookRequestDAOImpl {
     }
 
     public PassbookRequest getById(long requestId) throws SQLException {
-        String sql = "SELECT pr.*, a.account_number, a.account_type, CONCAT(cust.first_name, ' ', cust.last_name) AS customer_name " +
+        String sql = "SELECT pr.*, a.account_number, a.account_type, a.ifsc_code, CONCAT(cust.first_name, ' ', cust.last_name) AS customer_name, cust.phone_no, COALESCE(sav.nominee_name, curr.business_name, 'None') AS nominee_name " +
                      "FROM passbook_request pr " +
                      "JOIN account a ON pr.account_id = a.account_id " +
                      "JOIN customer cust ON pr.customer_id = cust.customer_id " +
+                     "LEFT JOIN account_savings sav ON a.account_id = sav.account_id " +
+                     "LEFT JOIN account_current curr ON a.account_id = curr.account_id " +
                      "WHERE pr.request_id = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -61,10 +63,12 @@ public class PassbookRequestDAOImpl {
     }
 
     public List<PassbookRequest> getByCustomerId(long customerId) throws SQLException {
-        String sql = "SELECT pr.*, a.account_number, a.account_type, CONCAT(cust.first_name, ' ', cust.last_name) AS customer_name " +
+        String sql = "SELECT pr.*, a.account_number, a.account_type, a.ifsc_code, CONCAT(cust.first_name, ' ', cust.last_name) AS customer_name, cust.phone_no, COALESCE(sav.nominee_name, curr.business_name, 'None') AS nominee_name " +
                      "FROM passbook_request pr " +
                      "JOIN account a ON pr.account_id = a.account_id " +
                      "JOIN customer cust ON pr.customer_id = cust.customer_id " +
+                     "LEFT JOIN account_savings sav ON a.account_id = sav.account_id " +
+                     "LEFT JOIN account_current curr ON a.account_id = curr.account_id " +
                      "WHERE pr.customer_id = ? " +
                      "ORDER BY pr.requested_at DESC";
         Connection conn = null;
@@ -86,10 +90,12 @@ public class PassbookRequestDAOImpl {
     }
 
     public List<PassbookRequest> getAll() throws SQLException {
-        String sql = "SELECT pr.*, a.account_number, a.account_type, CONCAT(cust.first_name, ' ', cust.last_name) AS customer_name " +
+        String sql = "SELECT pr.*, a.account_number, a.account_type, a.ifsc_code, CONCAT(cust.first_name, ' ', cust.last_name) AS customer_name, cust.phone_no, COALESCE(sav.nominee_name, curr.business_name, 'None') AS nominee_name " +
                      "FROM passbook_request pr " +
                      "JOIN account a ON pr.account_id = a.account_id " +
                      "JOIN customer cust ON pr.customer_id = cust.customer_id " +
+                     "LEFT JOIN account_savings sav ON a.account_id = sav.account_id " +
+                     "LEFT JOIN account_current curr ON a.account_id = curr.account_id " +
                      "ORDER BY pr.requested_at DESC";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -153,6 +159,9 @@ public class PassbookRequestDAOImpl {
             request.setAccountNumber(rs.getString("account_number"));
             request.setAccountType(rs.getString("account_type"));
             request.setCustomerName(rs.getString("customer_name"));
+            request.setIfscCode(rs.getString("ifsc_code"));
+            request.setPhoneNo(rs.getString("phone_no"));
+            request.setNomineeName(rs.getString("nominee_name"));
         } catch (SQLException e) {
             // Optional columns, skip if not mapped in SELECT
         }

@@ -512,6 +512,24 @@
             position: relative;
         }
 
+        .passbook-front-cover {
+            background-image: url('${pageContext.request.contextPath}/assest/images/passbook.png') !important;
+            background-size: 200% 200% !important;
+            background-position: 0% 0% !important;
+            background-repeat: no-repeat !important;
+            border: none !important;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .passbook-back-cover {
+            background-image: url('${pageContext.request.contextPath}/assest/images/passbook.png') !important;
+            background-size: 200% 200% !important;
+            background-position: 100% 0% !important;
+            background-repeat: no-repeat !important;
+            border: none !important;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+        }
+
         .cosmic-cover::before {
             content: '';
             position: absolute;
@@ -519,6 +537,11 @@
             background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.25) 0%, transparent 60%),
                         radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%);
             pointer-events: none;
+        }
+
+        .passbook-front-cover::before,
+        .passbook-back-cover::before {
+            display: none !important;
         }
 
         /* Orbits background for cover */
@@ -617,173 +640,170 @@
             text-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
         }
 
-        /* Dark High-Tech background inside panels */
+        /* Soft lavender premium theme inside panels */
         .inside-tech-panel {
-            background: radial-gradient(circle at 100% 100%, #0d0925 0%, #040212 90%);
-            color: #e2e8f0;
-            padding: 16px;
+            background: linear-gradient(135deg, #f3f5fa 0%, #e6eaf3 100%) !important;
+            color: #0f172a !important;
+            padding: 10px 12px !important;
             box-sizing: border-box;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
+            border: 1px solid rgba(99, 102, 241, 0.1) !important;
         }
 
         .inside-tech-panel::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%);
-            pointer-events: none;
+            display: none !important;
         }
 
-        /* Page Headers */
-        .tech-page-header-pill {
-            background: linear-gradient(90deg, #d900ff 0%, #6366f1 100%);
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-            margin-bottom: 8px;
+        /* Top header bar for Account Info Page */
+        .inside-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
         }
 
-        .tech-page-header-pill h4 {
-            font-size: 0.65rem !important;
+        .inside-page-header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .inside-page-header .header-left img {
+            width: 14px;
+            height: 14px;
+            object-fit: contain;
+        }
+
+        .inside-page-header .header-center {
+            font-size: 0.52rem !important;
             font-weight: 800 !important;
             letter-spacing: 0.75px !important;
-            color: #ffffff !important;
-            margin: 0 !important;
+            color: #1e1b4b !important;
             text-transform: uppercase !important;
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Credentials info grid */
+        .inside-page-header .header-right {
+            font-size: 0.50rem !important;
+            font-weight: 700 !important;
+            color: #312e81 !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Credentials info grid updated */
         .tech-credentials-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.50rem;
-            line-height: 1.4;
+            font-size: 0.42rem !important;
+            line-height: 1.3;
         }
 
         .tech-credentials-table td {
-            padding: 4px 0;
-            border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+            padding: 2.5px 0 !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.08) !important;
+            color: #1e293b !important;
         }
 
         .tech-credentials-table td:first-child {
-            color: #94a3b8;
-            width: 38%;
-            font-weight: 500;
+            color: #475569 !important;
+            width: 42%;
+            font-weight: 600 !important;
         }
 
         .tech-credentials-table td:last-child {
-            color: #f8fafc;
-            font-weight: 700;
+            color: #0f172a !important;
+            font-weight: 700 !important;
         }
 
-        /* Circular Lock Shield */
-        .circular-lock-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
-            border: 1.5px solid rgba(0, 240, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-            flex-shrink: 0;
-        }
-
-        .circular-lock-badge i {
-            font-size: 1.05rem;
-            color: #00f0ff;
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
-        }
-
-        .tech-security-icons {
-            display: flex;
-            gap: 6px;
-            font-size: 0.38rem;
-            color: #94a3b8;
-            font-weight: 600;
-            align-items: center;
-        }
-
-        .tech-security-icon-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            opacity: 0.8;
-        }
-
-        .tech-security-icon-box i {
-            font-size: 0.72rem;
-            color: #00f0ff;
-        }
-
-        /* Important Instructions Panel inside */
-        .instructions-panel-inside {
-            background: radial-gradient(circle at 50% 50%, #0b071e 0%, #03010b 90%);
-            color: #e2e8f0;
-            padding: 16px;
-            box-sizing: border-box;
+        /* Important Instructions Box */
+        .instructions-box-premium {
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 8px;
+            padding: 8px 10px;
             height: 100%;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid rgba(99, 102, 241, 0.15);
-            border-radius: 12px;
+            justify-content: flex-start;
         }
 
-        .instructions-panel-inside h4 {
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #ffffff;
-            text-transform: uppercase;
+        .instructions-box-premium h5 {
+            font-size: 0.46rem !important;
+            font-weight: 700 !important;
+            color: #1e1b4b !important;
+            margin: 0 0 5px 0 !important;
+            text-transform: uppercase !important;
             text-align: center;
-            margin: 0 0 8px 0;
-            font-family: 'Poppins', sans-serif;
-            border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+            padding-bottom: 3px;
         }
 
-        .instructions-tech-list {
+        .instructions-list-premium {
             list-style: none;
             padding: 0;
             margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
-        .instructions-tech-list li {
-            font-size: 0.48rem;
-            color: #cbd5e1;
+        .instructions-list-premium li {
+            font-size: 0.36rem !important;
+            color: #475569 !important;
             line-height: 1.25;
             display: flex;
             align-items: flex-start;
-            gap: 6px;
+            gap: 4px;
         }
 
-        .instructions-tech-list li i {
-            color: #d900ff;
-            font-size: 0.75rem;
-            text-shadow: 0 0 5px rgba(217, 0, 255, 0.4);
-            margin-top: 1px;
-            flex-shrink: 0;
+        .instructions-list-premium li::before {
+            content: "•";
+            color: #4f46e5;
+            font-weight: bold;
+            margin-right: 2px;
+        }
+
+        /* Footer badges */
+        .premium-footer-badges {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1.5px solid rgba(99, 102, 241, 0.15);
+            padding-top: 4px;
+            margin-top: 2px;
+        }
+
+        .badge-item-premium {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.32rem !important;
+            color: #1e1b4b !important;
+            font-weight: 600 !important;
+        }
+
+        .badge-item-premium i {
+            font-size: 0.50rem !important;
+            color: #4f46e5 !important;
         }
 
         /* Transaction Record style */
         .transaction-panel-inside {
-            background: #f1f5f9;
-            color: #334155;
-            padding: 14px;
+            background: linear-gradient(135deg, #f3f5fa 0%, #e6eaf3 100%) !important;
+            color: #0f172a !important;
+            padding: 10px 12px !important;
             box-sizing: border-box;
             height: 100%;
             display: flex;
@@ -791,7 +811,13 @@
             justify-content: space-between;
             position: relative;
             border-radius: 12px;
-            border: 1.5px solid #cbd5e1;
+            border: 1px solid rgba(99, 102, 241, 0.15) !important;
+        }
+
+        body.dark-mode .transaction-panel-inside {
+            background: linear-gradient(135deg, #f3f5fa 0%, #e6eaf3 100%) !important;
+            color: #0f172a !important;
+            border-color: rgba(99, 102, 241, 0.15) !important;
         }
 
         /* Watermark V for transaction page */
@@ -800,9 +826,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 110px;
-            height: 110px;
-            opacity: 0.05;
+            width: 100px;
+            height: 100px;
+            opacity: 0.035 !important;
             pointer-events: none;
             z-index: 1;
         }
@@ -811,7 +837,7 @@
         .tech-ledger-grid {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.35rem;
+            font-size: 0.34rem !important;
             z-index: 2;
             position: relative;
             table-layout: fixed;
@@ -819,12 +845,12 @@
 
         .tech-ledger-grid th {
             padding: 3px 2px !important;
-            background: #334155 !important;
-            color: #f8fafc !important;
+            background: #1e1b4b !important; /* Deep navy/purple */
+            color: #ffffff !important;
             font-weight: 700 !important;
-            font-size: 0.34rem !important;
+            font-size: 0.32rem !important;
             text-transform: uppercase !important;
-            border: 1px solid #475569 !important;
+            border: 1px solid rgba(99, 102, 241, 0.25) !important;
             letter-spacing: 0.1px !important;
             text-align: center !important;
             white-space: nowrap !important;
@@ -832,10 +858,15 @@
             text-overflow: ellipsis;
         }
 
+        body.dark-mode .tech-ledger-grid th {
+            background: #1e1b4b !important;
+            border-color: rgba(99, 102, 241, 0.25) !important;
+        }
+
         .tech-ledger-grid td {
             padding: 3px 2px !important;
-            border: 1px solid #cbd5e1 !important;
-            color: #475569 !important;
+            border: 1px solid rgba(99, 102, 241, 0.12) !important;
+            color: #334155 !important;
             font-weight: 600 !important;
             text-align: center !important;
             font-family: monospace !important;
@@ -845,20 +876,30 @@
             text-overflow: ellipsis;
         }
 
+        body.dark-mode .tech-ledger-grid td {
+            border-color: rgba(99, 102, 241, 0.12) !important;
+            color: #334155 !important;
+        }
+
         .tech-ledger-grid td.particulars {
             text-align: left !important;
             font-family: inherit !important;
         }
 
         .tech-ledger-footer {
-            font-size: 0.38rem;
-            color: #64748b;
-            text-align: center;
-            font-weight: bold;
-            border-top: 1.5px solid #cbd5e1;
-            padding-top: 5px;
+            font-size: 0.34rem !important;
+            color: #475569 !important;
+            text-align: left !important;
+            font-weight: 500 !important;
+            border-top: none !important;
+            padding-top: 3px !important;
             font-family: 'Poppins', sans-serif;
             letter-spacing: 0.2px;
+            font-style: italic;
+        }
+
+        body.dark-mode .tech-ledger-footer {
+            color: #475569 !important;
         }
 
         /* Status watermark overlays */
@@ -869,7 +910,7 @@
             transform: translate(-50%, -50%) rotate(-25deg);
             font-size: 1.8rem;
             font-weight: 900;
-            color: rgba(245, 158, 11, 0.15); /* default pending */
+            color: rgba(99, 102, 241, 0.18); /* default preview */
             border: 3.5px solid currentColor;
             padding: 4px 14px;
             border-radius: 6px;
@@ -878,14 +919,20 @@
             text-transform: uppercase;
             user-select: none;
             z-index: 10;
+            transition: all 0.3s ease;
         }
 
-        .passbook-status-watermark.approved {
-            color: rgba(16, 185, 129, 0.22) !important;
+        .passbook-status-watermark.approved,
+        .passbook-status-watermark.delivered {
+            color: rgba(16, 185, 129, 0.25) !important;
+        }
+
+        .passbook-status-watermark.pending {
+            color: rgba(245, 158, 11, 0.25) !important;
         }
 
         .passbook-status-watermark.rejected {
-            color: rgba(239, 68, 68, 0.22) !important;
+            color: rgba(239, 68, 68, 0.25) !important;
         }
 
         .click-hint {
@@ -1330,49 +1377,8 @@
                                 </div>
                                 <!-- Base Page Back: Back Cover -->
                                 <div class="panel-face panel-back">
-                                    <div class="cosmic-cover">
-                                        <!-- Cosmic Orbits background -->
-                                        <div class="cosmic-orbits">
-                                            <svg viewBox="0 0 100 100">
-                                                <ellipse cx="50" cy="40" rx="35" ry="8" fill="none" stroke="rgba(0, 240, 255, 0.25)" stroke-width="0.8" transform="rotate(-25 50 40)" />
-                                                <ellipse cx="50" cy="40" rx="42" ry="12" fill="none" stroke="rgba(217, 0, 255, 0.2)" stroke-width="0.6" transform="rotate(-25 50 40)" />
-                                            </svg>
-                                        </div>
-                                        
-                                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 5px;">
-                                            <div style="width: 26px; height: 26px; margin-bottom: 2px;">
-                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                </svg>
-                                            </div>
-                                            <span style="font-weight: 800; font-size: 0.52rem; letter-spacing: 1.5px; color: #fff; font-family: 'Poppins', sans-serif;">VERTEX GALAXY BANK</span>
-                                            <span style="font-size: 0.38rem; letter-spacing: 0.5px; color: rgba(255,255,255,0.6); margin-top: 2px; font-family: 'Poppins', sans-serif; text-align: center;">Your Universe. Your Future. Our Commitment.</span>
-                                        </div>
-
-                                        <div class="cover-icons-row" style="margin: 4px 0;">
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-lock-alt"></i>
-                                                <span>SECURE</span>
-                                            </div>
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-atom"></i>
-                                                <span>INNOVATIVE</span>
-                                            </div>
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-shield-quarter"></i>
-                                                <span>RELIABLE</span>
-                                            </div>
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-rocket"></i>
-                                                <span>FUTURISTIC</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="cover-contacts-row" style="padding-top: 4px;">
-                                            <span><i class="bx bx-phone" style="color: #00f0ff;"></i> 1800 123 4567</span>
-                                            <span><i class="bx bx-globe" style="color: #00f0ff;"></i> www.vertexgalaxybank.com</span>
-                                            <span><i class="bx bx-envelope" style="color: #00f0ff;"></i> support@vertexgalaxybank.com</span>
-                                        </div>
+                                    <div class="cosmic-cover passbook-back-cover">
+                                        <!-- Keep empty to show background image cover -->
                                     </div>
                                 </div>
                             </div>
@@ -1381,112 +1387,88 @@
                             <div class="passbook-panel cover-flap">
                                 <!-- Cover Flap Front: Front Cover (visible when closed) -->
                                 <div class="panel-face panel-front">
-                                    <div class="cosmic-cover">
-                                        <!-- Spine label text (only visible when book is closed and rotated) -->
-                                        <div class="spine-text">
-                                            <span>VERTEX GALAXY BANK</span>
-                                            <span>PASSBOOK</span>
-                                        </div>
-                                        
-                                        <!-- Cosmic Orbits background -->
-                                        <div class="cosmic-orbits">
-                                            <svg viewBox="0 0 100 100">
-                                                <ellipse cx="50" cy="50" rx="36" ry="9" fill="none" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1" transform="rotate(-25 50 50)" />
-                                                <ellipse cx="50" cy="50" rx="44" ry="14" fill="none" stroke="rgba(217, 0, 255, 0.35)" stroke-width="0.8" transform="rotate(-25 50 50)" />
-                                                <circle cx="20" cy="30" r="0.6" fill="#fff" opacity="0.8" />
-                                                <circle cx="85" cy="25" r="0.8" fill="#fff" opacity="0.9" />
-                                                <circle cx="75" cy="75" r="0.5" fill="#fff" opacity="0.6" />
-                                                <circle cx="15" cy="80" r="0.7" fill="#fff" opacity="0.7" />
-                                            </svg>
-                                        </div>
-                                        
-                                        <!-- Top row -->
-                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 12px;">
-                                            <span style="font-weight: 800; font-size: 0.72rem; letter-spacing: 1px; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); font-family: 'Poppins', sans-serif;">VERTEX</span>
-                                            <span style="font-size: 0.95rem; color: #00f0ff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);"><i class="bx bx-chip"></i></span>
-                                        </div>
-                                        
-                                        <!-- Large Glowing V Logo in middle -->
-                                        <div style="align-self: center; width: 62px; height: 62px; filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.45)); margin: 2px 0; display: flex; align-items: center; justify-content: center; position: relative;">
-                                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                            </svg>
-                                        </div>
-
-                                        <!-- Title section -->
-                                        <div style="text-align: center; padding-left: 12px;">
-                                            <div style="font-size: 0.46rem; letter-spacing: 2px; color: rgba(255,255,255,0.7); font-weight: 700; text-transform: uppercase; font-family: 'Poppins', sans-serif;">VERTEX GALAXY BANK</div>
-                                            <div class="cover-title-frame">
-                                                <h2>PASSBOOK</h2>
-                                            </div>
-                                        </div>
-
-                                        <div style="font-size: 0.38rem; color: rgba(255,255,255,0.4); text-align: center; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Poppins', sans-serif; padding-left: 12px;">
-                                            Always Beyond Boundaries
-                                        </div>
+                                    <div class="cosmic-cover passbook-front-cover">
+                                        <!-- Keep empty to show background image cover -->
                                     </div>
                                 </div>
                                 <!-- Cover Flap Back: Split Account Info & Instructions (visible when open) -->
                                 <div class="panel-face panel-back">
-                                    <div class="inside-tech-panel" style="padding: 10px 14px; flex-direction: row; gap: 12px; align-items: stretch; justify-content: space-between;">
-                                        <!-- Left Column: Account Information -->
-                                        <div style="flex: 1.3; display: flex; flex-direction: column; justify-content: space-between;">
-                                            <div>
-                                                <div class="tech-page-header-pill" style="margin-bottom: 4px;">
-                                                    <h4>Account Info</h4>
+                                    <div class="inside-tech-panel">
+                                        <div style="display: flex; gap: 12px; align-items: stretch; justify-content: space-between; flex: 1;">
+                                            <!-- Left Column: Account Information -->
+                                            <div style="flex: 1.35; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div class="inside-page-header">
+                                                        <div class="header-left">
+                                                            <div style="width: 14px; height: 14px; display: inline-block;">
+                                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <span class="header-center">Account Information</span>
+                                                        <span class="header-right">Vertex Galaxy Bank</span>
+                                                    </div>
+                                                    <table class="tech-credentials-table">
+                                                        <tr>
+                                                            <td>Account Holder Name</td>
+                                                            <td>: <span class="uppercase text-ellipsis" id="pbCustName">SELECT REQUEST</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Account Number</td>
+                                                            <td>: <span class="monospace" id="pbAccNum">- - - - - - - - - - - - -</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Account Type</td>
+                                                            <td>: <span class="uppercase" id="pbAccType">- - - - -</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>IFSC Code</td>
+                                                            <td>: <span class="monospace" id="pbIfsc">VGB0000171</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>MICR Code</td>
+                                                            <td>: <span class="monospace" id="pbMicr">110202001</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Branch</td>
+                                                            <td>: <span id="pbBranch">BHAKTINAGAR, RAJKOT</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Phone Number</td>
+                                                            <td>: <span id="pbPhone">-</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Nominee Name</td>
+                                                            <td>: <span class="uppercase text-ellipsis" id="pbNominee">NEHA MALHOTRA</span></td>
+                                                        </tr>
+                                                    </table>
                                                 </div>
-                                                <table class="tech-credentials-table">
-                                                    <tr>
-                                                        <td>Name</td>
-                                                        <td>: <span class="uppercase text-ellipsis" id="pbCustName">SELECT REQUEST</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A/C No.</td>
-                                                        <td>: <span class="monospace" id="pbAccNum">- - - - - - - - - - - - -</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>IFSC Code</td>
-                                                        <td>: <span class="monospace">VGB0000171</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A/C Type</td>
-                                                        <td>: <span class="uppercase" id="pbAccType">- - - - -</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Branch</td>
-                                                        <td>: <span>BHAKTINAGAR, RAJKOT</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Date</td>
-                                                        <td>: <span>08-AUG-2022</span></td>
-                                                    </tr>
-                                                </table>
                                             </div>
-                                            <div style="font-size: 0.33rem; color: rgba(255,255,255,0.4); text-align: left; font-weight: 500; font-family: 'Poppins', sans-serif;">
-                                                Thank you for banking with VERTEX GALAXY BANK
+                                            
+                                            <!-- Right Column: Important Instructions -->
+                                            <div style="flex: 0.95; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed rgba(99, 102, 241, 0.2); padding-left: 10px;">
+                                                <div class="instructions-box-premium">
+                                                    <h5>Important Instructions</h5>
+                                                    <ul class="instructions-list-premium">
+                                                        <li>Please update your KYC details periodically.</li>
+                                                        <li>Report any discrepancy in your passbook immediately.</li>
+                                                        <li>This passbook is non-transferable.</li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                        
-                                        <!-- Right Column: Important Instructions -->
-                                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed rgba(255,255,255,0.15); padding-left: 12px;">
-                                            <div>
-                                                <h4 style="font-size: 0.52rem; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; margin: 0 0 6px 0; font-family: 'Poppins', sans-serif; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 3px; text-align: center;">Instructions</h4>
-                                                <ul class="instructions-tech-list" style="gap: 4px;">
-                                                    <li><i class="bx bx-check-shield" style="font-size: 0.6rem;"></i> Bring passbook for all counter transactions.</li>
-                                                    <li><i class="bx bx-shield-quarter" style="font-size: 0.6rem;"></i> Report any discrepancy immediately.</li>
-                                                    <li><i class="bx bx-credit-card-front" style="font-size: 0.6rem;"></i> Property of Vertex Galaxy Bank.</li>
-                                                    <li><i class="bx bx-error-alt" style="font-size: 0.6rem;"></i> Keep secure. Do not fold/tear.</li>
-                                                </ul>
+
+                                        <!-- Footer Row Badges -->
+                                        <div class="premium-footer-badges">
+                                            <div class="badge-item-premium">
+                                                <i class="bx bx-shield-quarter"></i> Secure Banking Always
                                             </div>
-                                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div class="circular-lock-badge" style="width: 22px; height: 22px; border-width: 1px;">
-                                                    <i class="bx bx-shield-quarter" style="font-size: 0.75rem;"></i>
-                                                </div>
-                                                <div style="width: 22px; height: 11px; opacity: 0.8;">
-                                                    <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                        <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                    </svg>
-                                                </div>
+                                            <div class="badge-item-premium">
+                                                <i class="bx bx-globe"></i> Accepted Across India & Internationally
+                                            </div>
+                                            <div class="badge-item-premium">
+                                                <i class="bx bx-support"></i> 24/7 Support
                                             </div>
                                         </div>
                                     </div>
@@ -1570,7 +1552,10 @@
                                                             data-name="${req.customerName}" 
                                                             data-account="${req.accountNumber}" 
                                                             data-type="${req.requestType}" 
-                                                            data-acctype="${req.accountType}"
+                                                            data-acctype="${req.accountType} Account"
+                                                            data-ifsc="${req['ifscCode']}"
+                                                            data-phone="${req['phoneNo']}"
+                                                            data-nominee="${req['nomineeName']}"
                                                             data-status="${req.status}"
                                                             style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
                                                             onclick="inspectRequest(this)">
@@ -1802,16 +1787,25 @@
             const acc = btn.getAttribute('data-account');
             const type = btn.getAttribute('data-type');
             const acctype = btn.getAttribute('data-acctype');
+            const ifsc = btn.getAttribute('data-ifsc');
+            const phone = btn.getAttribute('data-phone');
+            const nominee = btn.getAttribute('data-nominee');
             const status = btn.getAttribute('data-status');
 
             const nameEl = document.getElementById('pbCustName');
             const accEl = document.getElementById('pbAccNum');
             const accTypeEl = document.getElementById('pbAccType');
+            const ifscEl = document.getElementById('pbIfsc');
+            const phoneEl = document.getElementById('pbPhone');
+            const nomineeEl = document.getElementById('pbNominee');
             const wm = document.getElementById('pbWatermark');
 
             if (nameEl) nameEl.innerText = name || '';
             if (accEl) accEl.innerText = acc || '';
             if (accTypeEl) accTypeEl.innerText = acctype || '';
+            if (ifscEl) ifscEl.innerText = ifsc || '-';
+            if (phoneEl) phoneEl.innerText = phone || '-';
+            if (nomineeEl) nomineeEl.innerText = nominee || 'NONE';
 
             if (wm && status) {
                 wm.innerText = status;

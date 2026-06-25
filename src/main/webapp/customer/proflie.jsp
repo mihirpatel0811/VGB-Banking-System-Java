@@ -75,10 +75,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Profile Settings</title>
     <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-bg-hover: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
+            --glass-glow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+        }
+
         .sidebar {
             width: 280px;
             background: rgba(255, 255, 255, 0.9) !important;
@@ -90,7 +101,7 @@
             top: 80px;
             bottom: 0;
             left: 0;
-            z-index: 100;
+            z-index: 99;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -168,15 +179,19 @@
                 margin-left: 0 !important;
             }
         }
+
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
-            padding: 28px;
-            box-shadow: var(--shadow-md), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            padding: 30px;
+            box-shadow: var(--glass-shadow), var(--glass-glow);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
         }
         .glass-card:hover {
             border-color: rgba(99, 102, 241, 0.2);
@@ -217,33 +232,280 @@
                 display: none !important;
             }
         }
-        .profile-tab {
-            padding: 12px 25px;
-            font-weight: 600;
-            color: var(--gray-500);
+
+        /* Profile banner/cover matching admin style */
+        .profile-cover {
+            background-image: url('../assest/images/cover-image.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 120px;
+            border-radius: var(--radius-md);
+            position: relative;
+        }
+        .profile-cover::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+        }
+        .avatar-holder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            background: white;
+            margin-top: -50px;
+            margin-left: 20px;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+        .avatar-holder:hover {
+            transform: scale(1.05);
+        }
+        .avatar-holder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Tab buttons layout matching admin style */
+        .tab-nav-btn {
             background: transparent;
             border: none;
-            border-left: 3px solid transparent;
+            outline: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            padding: 10px 18px;
             cursor: pointer;
-            text-align: left;
-            transition: all var(--transition-normal);
+            position: relative;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-nav-btn.active {
+            color: var(--primary-600);
+        }
+        .tab-nav-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            transition: all 0.25s ease;
+        }
+        .tab-nav-btn.active::after {
+            background: linear-gradient(90deg, var(--primary-500), var(--secondary-500));
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: white;
+            outline: none;
+            font-size: 0.95rem;
+            color: var(--gray-800);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .control-input:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+        .control-input[readonly] {
+            background: rgba(99, 102, 241, 0.03);
+            color: var(--gray-500);
+            cursor: not-allowed;
+            border-color: var(--gray-200);
+        }
+
+        .sub-card {
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+            transition: all 0.3s ease;
+        }
+        .sub-card:hover {
+            border-color: rgba(99, 102, 241, 0.18);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
+            transform: translateY(-2px);
+        }
+
+        .password-strength-bar {
+            height: 6px;
+            border-radius: var(--radius-full);
+            background: var(--gray-200);
+            margin-top: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .strength-indicator {
+            height: 100%;
+            width: 0;
+            transition: all 0.4s ease;
+        }
+
+        /* Banking detail cards */
+        .banking-detail-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .banking-detail-card:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-ambient-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 6px 15px;
+            border-bottom-left-radius: var(--radius-md);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Password input visual tweaks */
+        .password-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
             width: 100%;
         }
-        .profile-tab.active {
+        .password-eye-icon {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            color: var(--gray-400);
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+        .password-eye-icon:hover {
             color: var(--primary-500);
-            border-left-color: var(--primary-500);
-            background: rgba(99, 102, 241, 0.05);
         }
-        .profile-section {
-            display: none;
+
+        .btn-submit-loading {
+            position: relative;
+            color: transparent !important;
+            pointer-events: none;
         }
-        .profile-section.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
+        .btn-submit-loading::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            top: 50%;
+            left: 50%;
+            margin-top: -9px;
+            margin-left: -9px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spinLoading 0.6s linear infinite;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes spinLoading {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Dark Mode Color Overrides */
+        body.dark-mode .sidebar {
+            background: rgba(15, 23, 42, 0.45) !important;
+        }
+        body.dark-mode .sidebar-menu a {
+            color: var(--gray-400) !important;
+        }
+        body.dark-mode .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white) !important;
+        }
+        body.dark-mode .sidebar-menu a.active {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+        body.dark-mode .glass-card {
+            background: rgba(30, 41, 59, 0.7) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode .avatar-holder {
+            border-color: var(--gray-800) !important;
+            background: var(--gray-800) !important;
+        }
+        body.dark-mode .info-tile {
+            background: rgba(15, 23, 42, 0.4) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+        }
+        body.dark-mode .info-tile span {
+            color: var(--gray-400) !important;
+        }
+        body.dark-mode .info-tile strong {
+            color: white !important;
+        }
+        body.dark-mode .tab-nav-btn {
+            color: var(--gray-400) !important;
+        }
+        body.dark-mode .tab-nav-btn.active {
+            color: var(--primary-400) !important;
+        }
+        body.dark-mode .form-group input {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+        body.dark-mode .sub-card {
+            background: rgba(15, 23, 42, 0.3) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+            box-shadow: none !important;
+        }
+        body.dark-mode .sub-card:hover {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.dark-mode .form-group label {
+            color: var(--gray-300) !important;
+        }
+        body.dark-mode .toast-message {
+            color: white !important;
+        }
+        /* Customer Profile Page Specifics */
+        body.dark-mode .banking-detail-card {
+            background: rgba(15, 23, 42, 0.4) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+        }
+        body.dark-mode .banking-detail-card:hover {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        body.dark-mode .control-input {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+        body.dark-mode .control-input[readonly] {
+            background: rgba(255, 255, 255, 0.02) !important;
+            color: var(--gray-500) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
         }
     </style>
 </head>
@@ -285,7 +547,7 @@
                         <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                             <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">${customer.fullName}</span>
                             <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
-                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); display: inline-block;"></span>
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); display: inline-block;"></span>
                                 Customer Space
                             </span>
                         </div>
@@ -328,29 +590,13 @@
     <main class="main-content">
         <div class="container" style="max-width: 1200px; padding: 0;">
             <div style="margin-bottom: 40px;">
-                <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">My Profile &amp; Settings</h2>
+                <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--gray-900);">My Profile &amp; Settings</h2>
                 <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Review contact files, verify KYC, or update security credentials.</p>
             </div>
 
-            <!-- Dynamic alerts -->
-            <c:if test="${not empty sessionScope.success}">
-                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 15px 20px; color: var(--accent-emerald); font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;" class="no-print">
-                    <i class="bx bx-check-circle" style="font-size: 1.3rem;"></i>
-                    <span>${sessionScope.success}</span>
-                </div>
-                <c:remove var="success" scope="session" />
-            </c:if>
-            <c:if test="${not empty sessionScope.error}">
-                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 15px 20px; color: #ef4444; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;" class="no-print">
-                    <i class="bx bx-error-circle" style="font-size: 1.3rem;"></i>
-                    <span>${sessionScope.error}</span>
-                </div>
-                <c:remove var="error" scope="session" />
-            </c:if>
-
             <!-- Toast alert -->
-            <div id="toast" style="position: fixed; top: 100px; right: 40px; z-index: 1000; background: white; padding: 15px 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-xl); border: 1px solid var(--gray-200); display: flex; align-items: center; gap: 10px; transform: translateY(-50px); opacity: 0; transition: all 0.4s ease;">
-                <div class="toast-icon"><i class="bx bx-check-circle" style="color: #10b981; font-size: 1.5rem;"></i></div>
+            <div id="toast" style="position: fixed; top: 100px; right: 40px; z-index: 1000; background: white; padding: 15px 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-xl); border: 1px solid var(--gray-200); display: flex; align-items: center; gap: 10px; transform: translateY(-50px); opacity: 0; transition: all 0.4s ease; border-left: 4px solid var(--primary-500);">
+                <div class="toast-icon"></div>
                 <div class="toast-message" style="font-weight: 600; color: var(--gray-800);">Action executed successfully.</div>
             </div>
 
@@ -359,202 +605,252 @@
                 <input type="file" id="avatarFileInput" name="avatarFile" accept="image/*" onchange="uploadAvatarDynamically();">
             </form>
 
-            <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 30px;" class="mobile-grid-1">
-                <!-- Left Tabs Menu -->
-                <div class="glass-card" style="padding: 15px 0; align-self: start;">
-                    <button class="profile-tab active" id="tabPers" onclick="showProfileSec('personal')"><i class="bx bx-user-pin"></i> Personal Details</button>
-                    <button class="profile-tab" id="tabBank" onclick="showProfileSec('banking')"><i class="bx bx-wallet"></i> Banking Details</button>
-                    <button class="profile-tab" id="tabCred" onclick="showProfileSec('credentials')"><i class="bx bx-shield-quarter"></i> Login &amp; Security</button>
-                </div>
-
-                <!-- Right Details Sections -->
-                <div style="display: flex; flex-direction: column;">
-                    <!-- 1. Personal Details -->
-                    <div class="glass-card profile-section active" id="secPersonal">
-                        <!-- Customer Avatar / Profile Banner -->
-                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; background: var(--gradient-primary); padding: 25px; border-radius: var(--radius-md); color: white;" class="profile-banner">
+            <!-- Split Grid Layout matching admin profile structure -->
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;" class="mobile-grid-1">
+                
+                <!-- Left Details Banner Block -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <div class="glass-card" style="padding: 0;">
+                        <!-- Cover Banner -->
+                        <div class="profile-cover"></div>
+                        
+                        <!-- Floating Avatar -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
                             <div style="position: relative; display: inline-block;">
                                 <c:set var="avatarUrl" value="" />
                                 <c:if test="${not empty customer.avatarPath}">
                                     <c:set var="avatarUrl" value="${pageContext.request.contextPath}${customer.avatarPath}" />
                                 </c:if>
-                                <div id="avatarClickContainer" onclick="openLightbox('${avatarUrl}')" style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; background: rgba(255, 255, 255, 0.2); border: 3px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); cursor: pointer;" title="Click to View Profile Picture">
+                                <div class="avatar-holder" id="avatarClickContainer" style="cursor: pointer;" onclick="openLightbox('${avatarUrl}')" title="Click to View Profile Picture">
                                     <c:choose>
                                         <c:when test="${not empty customer.avatarPath}">
-                                            <img id="avatarImageRef" src="${avatarUrl}" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                                            <img id="avatarImageRef" src="${avatarUrl}" alt="Profile Avatar">
                                         </c:when>
                                         <c:otherwise>
-                                            <i class="bx bxs-user-circle" style="font-size: 5rem; color: white;"></i>
+                                            <i class="bx bxs-user-circle" style="font-size: 5.5rem; color: var(--gray-300);"></i>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                <div onclick="document.getElementById('avatarFileInput').click();" style="position: absolute; bottom: -2px; right: -2px; background: var(--primary-500); color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; border: 2px solid white; box-shadow: var(--shadow-sm); cursor: pointer;" title="Click to Change Profile Picture">
+                                <div onclick="document.getElementById('avatarFileInput').click();" style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid white; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20;" title="Click to Change Profile Picture">
                                     <i class="bx bx-camera"></i>
                                 </div>
                             </div>
-                            <div>
-                                <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: white;">${customer.fullName}</h3>
-                                <p style="font-size: 0.85rem; margin: 5px 0 0; opacity: 0.85;">Username: <strong style="font-weight: 600;">${customer.username}</strong></p>
-                                <div style="display: flex; gap: 10px; margin-top: 10px; align-items: center;" class="mobile-flex-wrap">
-                                    <span style="background: rgba(255, 255, 255, 0.25); color: white; padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
-                                        ID: #VGB-CUST-${customer.customerId}
-                                    </span>
-                                    <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
-                                        <i class="bx bx-check-shield"></i> ${customer.status}
-                                    </span>
-                                </div>
+                            <div style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); font-size: 0.72rem; font-weight: 700; padding: 5px 12px; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                                <i class="bx bxs-circle" style="font-size: 0.55rem; vertical-align: middle; margin-right: 4px;"></i> ${customer.status}
                             </div>
                         </div>
 
-                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;"><i class="bx bx-user-pin"></i> Profile Contact Card</h3>
+                        <!-- User Profile Overview -->
+                        <div style="padding: 0 25px 30px;">
+                            <h3 id="bannerFullName" style="font-size: 1.35rem; font-weight: 800; color: var(--gray-900);">${customer.fullName}</h3>
+                            <p style="font-size: 0.85rem; color: var(--gray-400); margin-top: 2px;">Customer Account</p>
+                            
+                            <hr style="border: none; border-top: 1px solid var(--gray-100); margin: 20px 0;">
+
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                                    <span style="color: var(--gray-400);">Customer ID:</span>
+                                    <strong style="color: var(--gray-700); font-family: monospace;">#VGB-CUST-${customer.customerId}</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                                    <span style="color: var(--gray-400);">Username:</span>
+                                    <strong style="color: var(--gray-700); font-family: monospace;">${customer.username}</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                                    <span style="color: var(--gray-400);">Nationality Status:</span>
+                                    <strong style="color: var(--primary-500); text-transform: uppercase;"><i class="bx bx-check-shield"></i> Indian</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Net Worth Card matching admin System health layout -->
+                    <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Combined Net Worth
+                        </h4>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: var(--gray-900); margin-bottom: 8px;">
+                            ₹<fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/>
+                        </div>
+                        <div style="font-size: 0.82rem; color: var(--gray-500); line-height: 1.5; margin-bottom: 15px;">
+                            Combined balance across all savings, checking, and current accounts linked to your customer ID.
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">
+                            <span>Audit Security Status</span>
+                            <span style="color: var(--accent-green);">Secure Access</span>
+                        </div>
+                        <div class="password-strength-bar" style="margin-top: 0;">
+                            <div class="strength-indicator" style="width: 100%; background: var(--accent-green);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Settings Card -->
+                <div class="glass-card">
+                    <!-- Tabs Navigation Bar matching admin style -->
+                    <div style="display: flex; gap: 15px; border-bottom: 2px solid var(--gray-200); margin-bottom: 30px; flex-wrap: wrap;">
+                        <button type="button" class="tab-nav-btn active" id="btn-tab-info" onclick="switchProfileTab('info')">
+                            <i class="bx bx-info-circle" style="font-size: 1.15rem;"></i> Profile Specs
+                        </button>
+                        <button type="button" class="tab-nav-btn" id="btn-tab-credentials" onclick="switchProfileTab('credentials')">
+                            <i class="bx bx-shield-quarter" style="font-size: 1.15rem;"></i> Update Credentials
+                        </button>
+                        <button type="button" class="tab-nav-btn" id="btn-tab-banking" onclick="switchProfileTab('banking')">
+                            <i class="bx bx-wallet" style="font-size: 1.15rem;"></i> Banking Ledger
+                        </button>
+                    </div>
+
+                    <!-- Tab 1: Profile Specifications & Updates -->
+                    <div id="tab-content-info">
+                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            <i class="bx bx-card" style="color: var(--primary-500);"></i> Profile Contact Information
+                        </h4>
+                        
                         <form id="personalUpdateForm" onsubmit="submitContactUpdate(event)">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;" class="mobile-grid-1">
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">First Name</label>
-                                    <input type="text" id="firstName" value="${customer.firstName}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">First Name</label>
+                                    <input type="text" id="firstName" value="${customer.firstName}" required class="control-input">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Last Name</label>
-                                    <input type="text" id="lastName" value="${customer.lastName}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Last Name</label>
+                                    <input type="text" id="lastName" value="${customer.lastName}" required class="control-input">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Email Address</label>
-                                    <input type="email" id="email" value="${customer.email}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Email Address</label>
+                                    <input type="email" id="email" value="${customer.email}" required class="control-input">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Mobile Number</label>
-                                    <input type="text" id="phoneNo" value="${customer.phoneNo}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Mobile Number</label>
+                                    <input type="text" id="phoneNo" value="${customer.phoneNo}" required class="control-input">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 20px;">
-                                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Home Street Address</label>
-                                <input type="text" id="address" value="${customer.address}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Home Street Address</label>
+                                <input type="text" id="address" value="${customer.address}" required class="control-input">
                             </div>
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;" class="mobile-grid-1">
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">City</label>
-                                    <input type="text" id="city" value="${customer.city}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">City</label>
+                                    <input type="text" id="city" value="${customer.city}" required class="control-input">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">State</label>
-                                    <input type="text" id="state" value="${customer.state}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">State</label>
+                                    <input type="text" id="state" value="${customer.state}" required class="control-input">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Zip Code</label>
-                                    <input type="text" id="zipCode" value="${customer.zipCode}" required style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Zip Code</label>
+                                    <input type="text" id="zipCode" value="${customer.zipCode}" required class="control-input">
                                 </div>
                             </div>
                             
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="mobile-grid-1">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;" class="mobile-grid-1">
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Aadhaar Card Number</label>
-                                    <input type="text" value="${customer.aadhaarCard}" readonly style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: rgba(99, 102, 241, 0.05); color: var(--gray-600); cursor: not-allowed; font-weight: 500;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Aadhaar Card Number</label>
+                                    <input type="text" value="${customer.aadhaarCard}" readonly class="control-input">
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">PAN Card Number</label>
-                                    <input type="text" value="${customer.panCard}" readonly style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: rgba(99, 102, 241, 0.05); color: var(--gray-600); cursor: not-allowed; font-weight: 500;">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">PAN Card Number</label>
+                                    <input type="text" value="${customer.panCard}" readonly class="control-input">
                                 </div>
                             </div>
  
-                            <button type="submit" class="btn btn-primary" style="margin-top: 30px;">
+                            <button type="submit" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
                                 <span>Save Changes</span>
                                 <i class="bx bx-check"></i>
                             </button>
                         </form>
                     </div>
 
-                    <!-- 2. Banking Details -->
-                    <div class="glass-card profile-section" id="secBanking">
-                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;"><i class="bx bx-wallet"></i> Core Account Ledger Information</h3>
+                    <!-- Tab 2: Security & Credentials Forms -->
+                    <div id="tab-content-credentials" style="display: none;">
+                        <!-- Update Password Card -->
+                        <div class="sub-card">
+                            <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                                <i class="bx bx-key" style="color: var(--primary-500); font-size: 1.4rem; background: rgba(99, 102, 241, 0.1); padding: 8px; border-radius: 50%;"></i> Change Account Login Password
+                            </h4>
+                            <form id="passwordUpdateForm" onsubmit="submitPasswordUpdate(event)" style="display: flex; flex-direction: column; gap: 20px; max-width: 550px;">
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">Old Password</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="oldPasswordInput" required class="control-input">
+                                        <i class="bx bx-hide password-eye-icon" onclick="togglePasswordVisibility('oldPasswordInput', this)"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">New Password</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="newPasswordInput" required class="control-input" oninput="updatePasswordStrengthMeter(this.value)">
+                                        <i class="bx bx-hide password-eye-icon" onclick="togglePasswordVisibility('newPasswordInput', this)"></i>
+                                    </div>
+                                    
+                                    <!-- Dynamic Strength Indicator -->
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.75rem; font-weight: 600;">
+                                        <span style="color: var(--gray-400);">Password Strength:</span>
+                                        <span id="strengthText" style="color: #ef4444; font-weight: 700;">Too Short</span>
+                                    </div>
+                                    <div class="password-strength-bar">
+                                        <div class="strength-indicator" id="strengthBar" style="background: #ef4444; width: 0%;"></div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="align-self: start; padding: 12px 28px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 8px;">
+                                    <i class="bx bx-lock-alt" style="font-size: 1.1rem;"></i> Update Password
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Update PIN Card -->
+                        <div class="sub-card">
+                            <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                                <i class="bx bx-lock-open" style="color: var(--secondary-500); font-size: 1.4rem; background: rgba(168, 85, 247, 0.1); padding: 8px; border-radius: 50%;"></i> Change Transaction PIN
+                            </h4>
+                            <form id="pinUpdateForm" onsubmit="submitPinUpdate(event)" style="display: flex; flex-direction: column; gap: 20px; max-width: 550px;">
+                                <div class="form-group">
+                                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">New 4-Digit Secure PIN</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="newPinInput" maxlength="4" pattern="^[0-9]{4}$" required placeholder="E.g. 0000" class="control-input" style="font-family: monospace; letter-spacing: 4px; font-weight: 700;">
+                                        <i class="bx bx-hide password-eye-icon" onclick="togglePasswordVisibility('newPinInput', this)"></i>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="align-self: start; padding: 12px 28px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 8px;">
+                                    <i class="bx bx-shield" style="font-size: 1.1rem;"></i> Update PIN
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Banking Signatory & Account details -->
+                    <div id="tab-content-banking" style="display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Mapped Accounts &amp; Signatory Authorities
+                        </h4>
+                        <p style="color: var(--gray-400); font-size: 0.82rem; margin-bottom: 25px;">Review ledger records, nominees, and joint holdings of your bank profiles.</p>
                         
-                        <!-- Financial net worth banner -->
-                        <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; padding: 25px; border-radius: var(--radius-md); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;" class="mobile-grid-1">
-                            <div>
-                                <span style="font-size: 0.8rem; font-weight: 600; color: #a5b4fc; text-transform: uppercase; letter-spacing: 0.5px;">Combined Net Worth</span>
-                                <h2 style="font-size: 2.2rem; font-weight: 800; color: white; margin-top: 5px;">₹<fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/></h2>
-                                <p style="font-size: 0.8rem; color: #c7d2fe; margin-top: 5px; opacity: 0.9;">Consolidated balance across all savings, checking, and current accounts.</p>
-                            </div>
-                            <div style="text-align: right;" class="mobile-text-left">
-                                <span style="background: rgba(255, 255, 255, 0.1); padding: 6px 12px; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 600; color: white; display: inline-block;">
-                                    <i class="bx bx-check-shield"></i> Profile Secure
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Core ledger parameters -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 35px;" class="mobile-grid-1">
-                            <div>
-                                <span style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase;">Linked Customer ID</span>
-                                <strong style="font-size: 1.1rem; color: var(--gray-800); display: block; margin-top: 5px;">#VGB-CUST-${customer.customerId}</strong>
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase;">KYC Verification Status</span>
-                                <strong style="font-size: 1.1rem; color: var(--accent-emerald); display: block; margin-top: 5px; text-transform: uppercase;"><i class="bx bx-check-shield"></i> ${customer.status}</strong>
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase;">Primary IFSC Branch Code</span>
-                                <strong style="font-size: 1.1rem; color: var(--gray-800); display: block; margin-top: 5px; font-family: monospace;">VGBK0000001</strong>
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase;">Routing System Type</span>
-                                <strong style="font-size: 1.1rem; color: var(--gray-800); display: block; margin-top: 5px;">Immediate Payment Service (IMPS)</strong>
-                            </div>
-                        </div>
-
-
-                        <!-- Detailed Account Signature & Banking Records -->
-                        <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-top: 35px; margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.05); padding-bottom: 10px;"><i class="bx bx-file"></i> Detailed Banking &amp; Signatory Records</h4>
-                        <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 35px;">
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
                             <c:choose>
                                 <c:when test="${not empty accounts}">
                                     <c:forEach var="acc" items="${accounts}">
-                                        <div style="background: rgba(255, 255, 255, 0.5); border: 1.5px solid rgba(99, 102, 241, 0.12); border-radius: var(--radius-md); padding: 25px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; transition: all var(--transition-normal);" class="banking-detail-card">
-                                            <!-- Ambient light badge inside card -->
-                                            <div style="position: absolute; top: 0; right: 0; background: var(--gradient-primary); color: white; padding: 6px 15px; border-bottom-left-radius: var(--radius-md); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-                                                Active ${acc.accountType} Account
+                                        <div class="banking-detail-card">
+                                            <div class="card-ambient-badge">
+                                                Active ${acc.accountType}
                                             </div>
                                             
-                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; margin-top: 15px;" class="mobile-grid-1">
-                                                <!-- Left Columns -->
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; margin-top: 15px;" class="mobile-grid-1">
                                                 <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Customer ID</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 3px;">#VGB-CUST-${acc.customerId > 0 ? acc.customerId : customer.customerId}</strong>
+                                                    <span style="display: block; font-size: 0.72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Customer ID</span>
+                                                    <strong style="font-size: 0.9rem; color: var(--gray-700); display: block; margin-top: 3px;">#VGB-CUST-${acc.customerId > 0 ? acc.customerId : customer.customerId}</strong>
                                                 </div>
-                                                
-                                                <!-- Right Columns -->
                                                 <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Bank Name</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 3px;">Vertex Galaxy Bank (VGB)</strong>
+                                                    <span style="display: block; font-size: 0.72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">IFSC Code</span>
+                                                    <strong style="font-size: 0.9rem; color: var(--gray-700); display: block; margin-top: 3px; font-family: monospace;">${acc.ifscCode}</strong>
                                                 </div>
-                                                
                                                 <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Customer Name</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 3px;">${customer.fullName}</strong>
+                                                    <span style="display: block; font-size: 0.72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Account Number</span>
+                                                    <strong style="font-size: 1rem; color: var(--primary-500); display: block; margin-top: 3px; font-family: 'Share Tech Mono', monospace; letter-spacing: 0.5px;">${acc.accountNumber}</strong>
                                                 </div>
-                                                
                                                 <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Bank Branch Address</span>
-                                                    <strong style="font-size: 0.9rem; color: var(--gray-700); display: block; margin-top: 3px; line-height: 1.4;">VGB Corporate Towers, Bandra Kurla Complex, Mumbai, MH - 400051</strong>
-                                                </div>
-                                                
-                                                <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Account Type</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 3px; text-transform: capitalize;">${acc.accountType} Ledger</strong>
-                                                </div>
-                                                
-                                                <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">IFSC Routing Code</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 3px; font-family: monospace;">${acc.ifscCode}</strong>
-                                                </div>
-                                                
-                                                <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Account Number</span>
-                                                    <strong style="font-size: 1.1rem; color: var(--primary-500); display: block; margin-top: 3px; font-family: monospace; letter-spacing: 0.5px;">${acc.accountNumber}</strong>
-                                                </div>
-                                                
-                                                <div>
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Nominee Person Details</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 3px;">
+                                                    <span style="display: block; font-size: 0.72rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Nominee Name</span>
+                                                    <strong style="font-size: 0.9rem; color: var(--gray-700); display: block; margin-top: 3px;">
                                                         <c:choose>
                                                             <c:when test="${acc.accountType == 'savings' && not empty acc.nomineeName}">
                                                                 ${acc.nomineeName}
@@ -563,17 +859,16 @@
                                                                 No Nominee Assigned
                                                             </c:when>
                                                             <c:otherwise>
-                                                                Not Applicable (Current Business Account)
+                                                                Not Applicable
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </strong>
                                                 </div>
-                                                
-                                                <div style="grid-column: span 2;">
-                                                    <span style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px;">Account Signatories &amp; Authority</span>
-                                                    <strong style="font-size: 1rem; color: var(--gray-800); display: block; margin-top: 5px; display: flex; align-items: center; gap: 8px;">
-                                                        <i class="bx bx-check-double" style="color: var(--accent-emerald); font-size: 1.2rem;"></i>
-                                                        <span>${acc.customerName} <span style="font-weight: 500; font-size: 0.8rem; color: var(--gray-500);">(${acc.holdingType != null ? acc.holdingType : 'primary'} authority)</span></span>
+                                                <div style="grid-column: span 2; background: rgba(99, 102, 241, 0.02); padding: 10px; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.05);">
+                                                    <span style="display: block; font-size: 0.7rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Signatories</span>
+                                                    <strong style="font-size: 0.9rem; color: var(--gray-800); display: flex; align-items: center; gap: 6px;">
+                                                        <i class="bx bx-check-double" style="color: var(--accent-green);"></i>
+                                                        <span>${acc.customerName} <span style="font-weight: 500; font-size: 0.78rem; color: var(--gray-500);">(${acc.holdingType != null ? acc.holdingType : 'primary'} holding)</span></span>
                                                     </strong>
                                                 </div>
                                             </div>
@@ -582,52 +877,10 @@
                                 </c:when>
                                 <c:otherwise>
                                     <div style="text-align: center; padding: 30px; background: rgba(99, 102, 241, 0.03); border: 1px dashed var(--gray-200); border-radius: var(--radius-md); color: var(--gray-400);">
-                                        <i class="bx bx-wallet" style="font-size: 2.5rem; color: var(--gray-300);"></i>
-                                        <p style="margin-top: 10px; font-weight: 500;">No active account signatories found on this profile.</p>
+                                        <p style="font-weight: 500;">No active account signatories found on this profile.</p>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
-                        </div>
-
-
-                    </div>
-
-                    <!-- 3. Security Credentials -->
-                    <div class="glass-card profile-section" id="secCredentials">
-                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;"><i class="bx bx-shield-quarter"></i> Update Security Credentials</h3>
-                                               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;" class="mobile-grid-1">
-                            <!-- Change Password -->
-                            <form id="passwordUpdateForm" onsubmit="submitPasswordUpdate(event)" style="display: flex; flex-direction: column; gap: 15px;">
-                                <h4 style="font-weight: 700; color: var(--gray-700); margin-bottom: 5px;"><i class="bx bx-key"></i> Change Login Password</h4>
-                                <div class="form-group">
-                                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Old Password</label>
-                                    <div style="position: relative; display: flex; align-items: center;">
-                                        <input type="password" id="oldPasswordInput" required style="width: 100%; padding: 10px 40px 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
-                                        <i class="bx bx-hide" onclick="togglePasswordVisibility('oldPasswordInput', this)" style="position: absolute; right: 15px; cursor: pointer; color: var(--gray-400); font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-500)'" onmouseout="this.style.color='var(--gray-400)'"></i>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">New Password</label>
-                                    <div style="position: relative; display: flex; align-items: center;">
-                                        <input type="password" id="newPasswordInput" required style="width: 100%; padding: 10px 40px 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
-                                        <i class="bx bx-hide" onclick="togglePasswordVisibility('newPasswordInput', this)" style="position: absolute; right: 15px; cursor: pointer; color: var(--gray-400); font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-500)'" onmouseout="this.style.color='var(--gray-400)'"></i>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary" style="align-self: start; padding: 10px 20px;">Change Password</button>
-                            </form>
- 
-                            <!-- Change PIN -->
-                            <form id="pinUpdateForm" onsubmit="submitPinUpdate(event)" style="display: flex; flex-direction: column; gap: 15px;">
-                                <h4 style="font-weight: 700; color: var(--gray-700); margin-bottom: 5px;"><i class="bx bx-lock-open"></i> Change Transaction PIN</h4>
-                                <div class="form-group">
-                                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">New 4-Digit PIN</label>
-                                    <div style="position: relative; display: flex; align-items: center;">
-                                        <input type="password" id="newPinInput" maxlength="4" pattern="^[0-9]{4}$" required placeholder="E.g. 0000" style="width: 100%; padding: 10px 40px 10px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-family: monospace;">
-                                        <i class="bx bx-hide" onclick="togglePasswordVisibility('newPinInput', this)" style="position: absolute; right: 15px; cursor: pointer; color: var(--gray-400); font-size: 1.2rem; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-500)'" onmouseout="this.style.color='var(--gray-400)'"></i>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary" style="align-self: start; padding: 10px 20px;">Update PIN</button>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -636,14 +889,14 @@
     </main>
 
     <!-- Premium Image Lightbox Modal -->
-    <div id="imageLightbox" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(15px); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;">
+    <div id="imageLightbox" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(15px); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;" onclick="closeLightbox()">
         <!-- Close button -->
-        <button onclick="closeLightbox()" style="position: absolute; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.1); border: none; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: all 0.3s; outline: none;" onmouseover="this.style.background='rgba(255, 255, 255, 0.25)'; this.style.transform='scale(1.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='scale(1)'">
+        <button onclick="closeLightbox(event)" style="position: absolute; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.1); border: none; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: all 0.3s; outline: none;" onmouseover="this.style.background='rgba(255, 255, 255, 0.25)'; this.style.transform='scale(1.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='scale(1)'">
             <i class="bx bx-x"></i>
         </button>
         <!-- Image wrapper -->
-        <div style="max-width: 80%; max-height: 80%; border-radius: var(--radius-lg); overflow: hidden; border: 4px solid rgba(255, 255, 255, 0.2); box-shadow: var(--shadow-2xl); transform: scale(0.9); transition: transform 0.3s ease;" id="lightboxImageWrapper">
-            <img id="lightboxImg" src="" alt="Profile Lightbox" style="width: 100%; height: auto; max-height: 80vh; display: block; object-fit: contain;">
+        <div style="max-width: 90%; max-height: 90%; border-radius: var(--radius-lg); overflow: hidden; border: 4px solid rgba(255, 255, 255, 0.2); box-shadow: var(--shadow-2xl); transform: scale(0.9); transition: transform 0.3s ease;" id="lightboxImageWrapper">
+            <img id="lightboxImg" src="" alt="Profile Lightbox" style="max-width: 450px; max-height: 450px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.25); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); object-fit: cover; display: block;">
         </div>
     </div>
 
@@ -655,27 +908,67 @@
 
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
-        function showProfileSec(sec) {
-            document.getElementById('tabPers').classList.remove('active');
-            document.getElementById('tabBank').classList.remove('active');
-            document.getElementById('tabCred').classList.remove('active');
+        // Tab switching controller matching admin style
+        function switchProfileTab(tabId) {
+            document.querySelectorAll('.tab-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('tab-content-info').style.display = 'none';
+            document.getElementById('tab-content-credentials').style.display = 'none';
+            document.getElementById('tab-content-banking').style.display = 'none';
 
-            document.getElementById('secPersonal').classList.remove('active');
-            document.getElementById('secBanking').classList.remove('active');
-            document.getElementById('secCredentials').classList.remove('active');
+            document.getElementById('btn-tab-' + tabId).classList.add('active');
+            document.getElementById('tab-content-' + tabId).style.display = 'block';
+        }
 
-            if (sec === 'personal') {
-                document.getElementById('tabPers').classList.add('active');
-                document.getElementById('secPersonal').classList.add('active');
-            } else if (sec === 'banking') {
-                document.getElementById('tabBank').classList.add('active');
-                document.getElementById('secBanking').classList.add('active');
-            } else {
-                document.getElementById('tabCred').classList.add('active');
-                document.getElementById('secCredentials').classList.add('active');
+        // Live Password Strength Meter Logic
+        function updatePasswordStrengthMeter(password) {
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            
+            if (password.length === 0) {
+                bar.style.width = '0%';
+                text.innerText = 'Too Short';
+                text.style.color = '#ef4444';
+                return;
+            }
+
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+
+            switch (score) {
+                case 0:
+                case 1:
+                    bar.style.width = '25%';
+                    bar.style.background = '#ef4444';
+                    text.innerText = 'Weak Password';
+                    text.style.color = '#ef4444';
+                    break;
+                case 2:
+                    bar.style.width = '50%';
+                    bar.style.background = '#f59e0b';
+                    text.innerText = 'Medium Password';
+                    text.style.color = '#f59e0b';
+                    break;
+                case 3:
+                    bar.style.width = '75%';
+                    bar.style.background = '#3b82f6';
+                    text.innerText = 'Good Password';
+                    text.style.color = '#3b82f6';
+                    break;
+                case 4:
+                    bar.style.width = '100%';
+                    bar.style.background = '#10b981';
+                    text.innerText = 'Strong Secure Password';
+                    text.style.color = '#10b981';
+                    break;
             }
         }
 
+        // Response Toast Alerts Display
         function showResponseToast(message, isSuccess = true) {
             const toast = document.getElementById('toast');
             const toastIcon = toast.querySelector('.toast-icon');
@@ -684,10 +977,12 @@
             if (isSuccess) {
                 toastIcon.innerHTML = '<i class="bx bx-check-circle" style="color: #10b981; font-size: 1.5rem;"></i>';
                 toast.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                toast.style.borderLeftColor = '#10b981';
                 toast.style.background = 'rgba(255, 255, 255, 0.95)';
             } else {
                 toastIcon.innerHTML = '<i class="bx bx-error-circle" style="color: #ef4444; font-size: 1.5rem;"></i>';
                 toast.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                toast.style.borderLeftColor = '#ef4444';
                 toast.style.background = 'rgba(255, 255, 255, 0.95)';
             }
             
@@ -701,14 +996,14 @@
             }, 4000);
         }
 
+        // Submitting Contact Updates
         function submitContactUpdate(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             if (btn) {
-                btn.classList.add('btn-loading');
+                btn.classList.add('btn-submit-loading');
                 btn.disabled = true;
                 btn.setAttribute('data-orig-html', btn.innerHTML);
-                btn.innerHTML = '<span>Saving...</span>';
             }
             
             const params = new URLSearchParams();
@@ -737,20 +1032,20 @@
             })
             .then(data => {
                 if (btn) {
-                    btn.classList.remove('btn-loading');
+                    btn.classList.remove('btn-submit-loading');
                     btn.disabled = false;
                     btn.innerHTML = btn.getAttribute('data-orig-html');
                 }
                 showResponseToast(data.message || 'Contact details updated successfully!', true);
                 const fullName = document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value;
-                const bannerName = document.querySelector('.profile-banner h3');
+                const bannerName = document.getElementById('bannerFullName');
                 if (bannerName) {
                     bannerName.innerText = fullName;
                 }
             })
             .catch(error => {
                 if (btn) {
-                    btn.classList.remove('btn-loading');
+                    btn.classList.remove('btn-submit-loading');
                     btn.disabled = false;
                     btn.innerHTML = btn.getAttribute('data-orig-html');
                 }
@@ -758,14 +1053,14 @@
             });
         }
 
+        // Submitting Password Update Request (Preserved Backend Integration)
         function submitPasswordUpdate(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             if (btn) {
-                btn.classList.add('btn-loading');
+                btn.classList.add('btn-submit-loading');
                 btn.disabled = true;
                 btn.setAttribute('data-orig-html', btn.innerHTML);
-                btn.innerHTML = '<span>Updating...</span>';
             }
             
             const oldPassword = document.getElementById('oldPasswordInput').value;
@@ -791,16 +1086,17 @@
             })
             .then(data => {
                 if (btn) {
-                    btn.classList.remove('btn-loading');
+                    btn.classList.remove('btn-submit-loading');
                     btn.disabled = false;
                     btn.innerHTML = btn.getAttribute('data-orig-html');
                 }
                 showResponseToast(data.message || 'Password changed successfully!', true);
                 document.getElementById('passwordUpdateForm').reset();
+                updatePasswordStrengthMeter('');
             })
             .catch(error => {
                 if (btn) {
-                    btn.classList.remove('btn-loading');
+                    btn.classList.remove('btn-submit-loading');
                     btn.disabled = false;
                     btn.innerHTML = btn.getAttribute('data-orig-html');
                 }
@@ -808,14 +1104,14 @@
             });
         }
 
+        // Submitting PIN Update Request (Preserved Backend Integration)
         function submitPinUpdate(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             if (btn) {
-                btn.classList.add('btn-loading');
+                btn.classList.add('btn-submit-loading');
                 btn.disabled = true;
                 btn.setAttribute('data-orig-html', btn.innerHTML);
-                btn.innerHTML = '<span>Updating...</span>';
             }
             
             const newPin = document.getElementById('newPinInput').value;
@@ -839,7 +1135,7 @@
             })
             .then(data => {
                 if (btn) {
-                    btn.classList.remove('btn-loading');
+                    btn.classList.remove('btn-submit-loading');
                     btn.disabled = false;
                     btn.innerHTML = btn.getAttribute('data-orig-html');
                 }
@@ -848,7 +1144,7 @@
             })
             .catch(error => {
                 if (btn) {
-                    btn.classList.remove('btn-loading');
+                    btn.classList.remove('btn-submit-loading');
                     btn.disabled = false;
                     btn.innerHTML = btn.getAttribute('data-orig-html');
                 }
@@ -856,6 +1152,7 @@
             });
         }
 
+        // Input Password Toggle Visibility Handler
         function togglePasswordVisibility(inputId, icon) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
@@ -872,7 +1169,6 @@
         /* --- Full Screen Avatar Lightbox Methods --- */
         function openLightbox(imgSrc) {
             if (!imgSrc) {
-                // If there's no custom avatar path, ignore preview request
                 return;
             }
             const lightbox = document.getElementById('imageLightbox');
@@ -882,14 +1178,16 @@
             lightboxImg.src = imgSrc;
             lightbox.style.display = 'flex';
             
-            // Wait for display rendering then trigger entry animations
             setTimeout(() => {
                 lightbox.style.opacity = '1';
                 wrapper.style.transform = 'scale(1)';
             }, 15);
         }
 
-        function closeLightbox() {
+        function closeLightbox(e) {
+            if (e) {
+                e.stopPropagation();
+            }
             const lightbox = document.getElementById('imageLightbox');
             const wrapper = document.getElementById('lightboxImageWrapper');
             
@@ -909,14 +1207,12 @@
             
             const file = fileInput.files[0];
             
-            // Front-end validation for type
             if (!file.type.startsWith('image/')) {
                 showResponseToast('Only image files (JPEG, PNG, GIF) are allowed.', false);
                 fileInput.value = '';
                 return;
             }
             
-            // Show dynamic uploading feedback
             showResponseToast('Uploading profile picture...', true);
             
             const formData = new FormData();
@@ -942,10 +1238,9 @@
                     const relativePath = data.avatarPath;
                     const absolutePath = '${pageContext.request.contextPath}' + relativePath;
                     
-                    // Update avatar elements dynamically
                     const clickContainer = document.getElementById('avatarClickContainer');
                     if (clickContainer) {
-                        clickContainer.innerHTML = `<img id="avatarImageRef" src="${absolutePath}" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        clickContainer.innerHTML = `<img id="avatarImageRef" src="${absolutePath}" alt="Profile Avatar">`;
                         clickContainer.onclick = function() {
                             openLightbox(absolutePath);
                         };

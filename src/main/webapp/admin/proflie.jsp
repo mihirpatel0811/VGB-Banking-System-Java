@@ -91,8 +91,11 @@
             transition: all 0.3s ease;
         }
         .profile-cover {
-            background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%);
-            height: 140px;
+            background-image: url('../assest/images/cover-image.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 120px;
             border-radius: var(--radius-md);
             position: relative;
         }
