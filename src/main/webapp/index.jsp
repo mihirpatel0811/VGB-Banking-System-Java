@@ -63,7 +63,7 @@
             }
 
             .logo img {
-                height: 38px;
+                height: 40px;
                 width: auto;
                 transition: transform var(--transition-normal);
             }
