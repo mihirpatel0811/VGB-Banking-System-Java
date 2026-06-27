@@ -187,11 +187,10 @@
                             margin-bottom: 40px;
                         }
 
-                        /* 3D ATM CARD SCENE STYLING */
+                        /* ATM CARD SCENE STYLING */
                         .card-3d-wrapper {
                             width: 340px;
                             height: 220px;
-                            perspective: 1200px;
                             cursor: pointer;
                             margin-bottom: 20px;
                         }
@@ -200,7 +199,6 @@
                             width: 100%;
                             height: 100%;
                             position: relative;
-                            transform-style: preserve-3d;
                             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
                             border-radius: 20px;
                         }

@@ -511,12 +511,11 @@
             transform: translateY(-1px);
         }
 
-        /* --- PREMIUM 3D ATM CARDS --- */
+        /* --- PREMIUM ATM CARDS --- */
         .vgb-atm-card {
             width: 100%;
             height: 100%;
             position: relative;
-            transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
             border-radius: 20px;
             cursor: pointer;
@@ -975,16 +974,11 @@
         .sandbox-card-wrapper {
             position: relative;
             transition: transform 0.1s ease;
-            transform-style: preserve-3d;
             margin: 0 auto;
             width: 340px;
             height: 220px;
         }
 
-        .card-3d-scene {
-            perspective: 1200px;
-            transform-style: preserve-3d;
-        }
 
         /* Interactive card details scaling for dynamic responsiveness */
         @media (min-width: 1200px) {
@@ -1797,8 +1791,8 @@
                 <i class="bx bx-credit-card-front" style="color: var(--primary-500); font-size: 1.5rem;"></i> VGB Premium Card Visualizer
             </h3>
 
-            <!-- 3D Flippable Card -->
-            <div class="card-3d-scene" id="visualizerCardTiltWrapper" style="perspective: 1000px; width: 100%; display: flex; justify-content: center; margin-bottom: 30px; transform-style: preserve-3d;">
+            <!-- Flippable Card -->
+            <div class="card-3d-scene" id="visualizerCardTiltWrapper" style="width: 100%; display: flex; justify-content: center; margin-bottom: 30px;">
                 <div id="visualizerCard" class="vgb-atm-card interactive" style="width: 340px; height: 220px;" onclick="this.classList.toggle('flipped')">
                     <!-- Front Face -->
                     <div class="card-face card-front">
@@ -2138,7 +2132,7 @@
             
             const wrapper = document.getElementById('visualizerCardTiltWrapper');
             if (wrapper) {
-                wrapper.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+                wrapper.style.transform = "scale(1)";
             }
             
             modal.style.display = 'flex';
@@ -2245,38 +2239,19 @@
             document.getElementById('demo3DCard').classList.toggle('flipped');
         }
 
-        // Live 3D Tilt Effect calculations
+        // Flat Hover scale effect (2D only)
         function apply3DTilt(wrapperId, innerCardId) {
             const wrapper = document.getElementById(wrapperId);
             const card = document.getElementById(innerCardId);
             if (!wrapper || !card) return;
             
-            wrapper.addEventListener('mousemove', function(e) {
-                const rect = wrapper.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const width = rect.width;
-                const height = rect.height;
-                
-                const percentX = (x / width) - 0.5;
-                const percentY = (y / height) - 0.5;
-                
-                const maxRotation = 14; 
-                
-                const rotateX = -(percentY * maxRotation).toFixed(2);
-                const rotateY = (percentX * maxRotation).toFixed(2);
-                
-                wrapper.style.transform = `perspective(1000px) rotateX(\${rotateX}deg) rotateY(\${rotateY}deg) scale3d(1.04, 1.04, 1.04)`;
-            });
-            
-            wrapper.addEventListener('mouseleave', function() {
-                wrapper.style.transition = "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)";
-                wrapper.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-            });
-
             wrapper.addEventListener('mouseenter', function() {
-                wrapper.style.transition = "none";
+                wrapper.style.transition = "transform 0.3s ease";
+                wrapper.style.transform = "scale(1.03)";
+            });
+            wrapper.addEventListener('mouseleave', function() {
+                wrapper.style.transition = "transform 0.3s ease";
+                wrapper.style.transform = "scale(1)";
             });
         }
 

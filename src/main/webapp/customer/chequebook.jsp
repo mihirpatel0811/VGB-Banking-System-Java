@@ -447,131 +447,22 @@
             padding: 45px 20px;
             box-shadow: inset 0 2px 8px rgba(99, 102, 241, 0.02);
             height: 100%;
-            perspective: 1200px;
+            perspective: 1000px;
             position: relative;
             overflow: hidden;
             min-height: 340px;
         }
 
-        .chequebook-wrapper {
+        .cheque-leaf-container-wrapper {
             width: 480px;
             height: 210px;
             position: relative;
-            transform-style: preserve-3d;
-            cursor: pointer;
         }
         @media (max-width: 576px) {
-            .chequebook-wrapper {
+            .cheque-leaf-container-wrapper {
                 width: 340px;
                 height: 150px;
             }
-        }
-
-        .chequebook-book {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transform: rotateX(15deg) rotateY(-10deg);
-            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        /* 3D panels */
-        .chequebook-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .base-page {
-            z-index: 10;
-        }
-
-        .chequebook-cover-wrapper {
-            position: absolute;
-            inset: 0;
-            transform-origin: center top;
-            transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 30;
-        }
-
-        .cover-flap {
-            transform-origin: center top;
-            transform: rotateX(0deg) translateZ(1px); /* Folds shut over base */
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 30;
-        }
-
-        .chequebook-book.open .cover-flap {
-            transform: rotateX(180deg) translateZ(0.5px); /* Opens upwards */
-        }
-
-        .chequebook-book.flipped-back {
-            transform: rotateX(195deg) rotateY(10deg) !important;
-        }
-
-        .chequebook-book.flipped-back .chequebook-page,
-        .chequebook-book.flipped-back .chequebook-cover-wrapper {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .chequebook-book.flipped-back .chequebook-back {
-            z-index: 40;
-        }
-
-        .panel-face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .panel-front {
-            transform: rotateX(0deg);
-            z-index: 2;
-        }
-
-        .panel-back {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        .btn-flip-book {
-            position: absolute;
-            bottom: 12px;
-            left: 15px;
-            background: rgba(99, 102, 241, 0.08);
-            border: 1.5px solid rgba(99, 102, 241, 0.15);
-            color: var(--primary-600);
-            padding: 6px 12px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all var(--transition-normal);
-            z-index: 100;
-        }
-        .btn-flip-book:hover {
-            background: var(--gradient-primary);
-            color: white !important;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-            transform: translateY(-1px);
-        }
-        .btn-flip-book i {
-            font-size: 0.95rem;
         }
 
         /* Front side of the cover with leather spine */
@@ -1932,277 +1823,29 @@
                         <i class="bx bx-shield-quarter icon-bg" style="font-size: 6rem;"></i>
                     </div>
                 </div>
-
-                <!-- Right: Interactive 3D Cheque Visualizer Booklet -->
+                <!-- Right: Interactive Cheque Visualizer (Flat Card) -->
                 <div class="cheque-visualizer-container">
-                    <button type="button" class="btn-flip-book" onclick="toggleBookFlip(event)">
-                        <i class="bx bx-refresh"></i> Flip Booklet
-                    </button>
-                    <div class="chequebook-wrapper" id="chequebookWrapper" onclick="toggleBookOpen()">
-                        <div class="chequebook-book" id="3dChequebook">
-                            <!-- 1. Back Cover -->
-                            <div class="chequebook-back">
-                                <div class="cb-back-nebula-bg"></div>
-                                <div class="cb-back-neon-curves"></div>
-                                <div class="cb-back-neon-curves-2"></div>
+                    <div class="cheque-leaf-container-wrapper">
+                        <div class="cheque-leaf-wrapper" id="chequeLeafFlipWrapper" onclick="toggleChequeLeafFlip(event)">
+                            <!-- Cheque Leaf Front -->
+                            <div class="cheque-leaf-front">
+                                <!-- Watermark background SVG -->
+                                <svg viewBox="0 0 100 100" class="watermark-bg-svg">
+                                    <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#7928ca" stroke-width="1.2" transform="rotate(-15 80 80)" />
+                                    <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#7928ca" stroke-width="1.8" transform="rotate(-15 80 80)" />
+                                    <ellipse cx="80" cy="80" rx="80" ry="35" fill="none" stroke="#00d2ff" stroke-width="0.9" transform="rotate(-15 80 80)" />
+                                </svg>
                                 
-                                <div class="cb-back-logo-section">
-                                    <svg viewBox="0 0 100 100" style="width: 40px; height: 40px;">
-                                        <ellipse cx="50" cy="58" rx="42" ry="11" fill="none" stroke="#00f0ff" stroke-width="1.8" transform="rotate(-18 50 58)" opacity="0.85" />
-                                        <ellipse cx="50" cy="58" rx="46" ry="6" fill="none" stroke="#d946ef" stroke-width="1.2" transform="rotate(18 50 58)" opacity="0.75" />
-                                        <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" />
-                                    </svg>
-                                    <span class="cb-back-bank-name">VERTEX</span>
-                                    <span class="cb-back-bank-sub">GALAXY BANK</span>
-                                    <span class="cb-back-slogan">Your Universe. Your Bank.</span>
-                                </div>
+                                <!-- Hologram ribbon -->
+                                <div class="cheque-hologram"></div>
                                 
-                                <div class="cb-back-info-block">
-                                    <div class="cb-back-info-item address">
-                                        <i class="bx bx-map"></i>
-                                        <span>123 Galaxy Avenue, Nebula City<br>Cosmos State 12345</span>
-                                    </div>
-                                    <div class="cb-back-info-item">
-                                        <i class="bx bx-phone"></i>
-                                        <span>+1 234 567 8900</span>
-                                    </div>
-                                    <div class="cb-back-info-item">
-                                        <i class="bx bx-globe"></i>
-                                        <span>www.vertexgalaxybank.com</span>
-                                    </div>
-                                    <div class="cb-back-info-item">
-                                        <i class="bx bx-envelope"></i>
-                                        <span>support@vertexgalaxybank.com</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 2. Page 2: Cheque Leaf (Front/Back) -->
-                            <div class="chequebook-page page-cheque" style="z-index: 20;">
-                                <div class="cheque-leaf-wrapper" id="chequeLeafFlipWrapper">
-                                    <!-- Cheque Leaf Front -->
-                                    <div class="cheque-leaf-front" onclick="toggleChequeLeafFlip(event)">
-                                        <!-- Watermark background SVG -->
-                                        <svg viewBox="0 0 100 100" class="watermark-bg-svg">
-                                            <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#7928ca" stroke-width="1.2" transform="rotate(-15 80 80)" />
-                                            <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#7928ca" stroke-width="1.8" transform="rotate(-15 80 80)" />
-                                            <ellipse cx="80" cy="80" rx="80" ry="35" fill="none" stroke="#00d2ff" stroke-width="0.9" transform="rotate(-15 80 80)" />
-                                        </svg>
-                                        
-                                        <!-- Hologram ribbon -->
-                                        <div class="cheque-hologram"></div>
-                                        
-                                        <!-- Header -->
-                                        <div class="cheque-header">
-                                            <div class="cheque-bank-info">
-                                                <span class="cheque-bank-name">
-                                                    <svg viewBox="0 0 100 100" style="width: 14px; height: 14px;">
-                                                        <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="#0b0922" />
-                                                    </svg>
-                                                    VERTEX GALAXY BANK
-                                                </span>
-                                                <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
-                                            </div>
-                                            <div class="cheque-date-box">
-                                                <div class="date-squares" id="chequeDateSquares">
-                                                    <span>3</span><span>1</span><span>0</span><span>5</span><span>2</span><span>0</span><span>2</span><span>6</span>
-                                                </div>
-                                                <div style="font-size: 0.45rem; color: #64748b; font-weight: bold; margin-top: 1px; text-transform: uppercase;">Valid for 3 months</div>
-                                            </div>
-                                        </div>
-  
-                                        <!-- Pay row -->
-                                        <div class="cheque-row" style="margin-top: 5px;">
-                                            <span class="cheque-label">PAY TO THE ORDER OF <span class="hindi-text">अदा करें</span></span>
-                                            <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.82rem;" id="chequePayeeDisplay">Self or Bearer</span>
-                                            <span class="cheque-label bearer-text">OR BEARER <span class="hindi-text">या धारक को</span></span>
-                                        </div>
-  
-                                        <!-- Rupees row -->
-                                        <div class="cheque-row">
-                                            <span class="cheque-label">RUPEES / DOLLARS <span class="hindi-text">रुपये</span></span>
-                                            <span class="cheque-line-fill" id="chequeRupeesTextDisplay">One Hundred and Fifty Rupees Only</span>
-                                            <div class="cheque-amount-box">
-                                                <span class="rupee-symbol">₹</span>
-                                                <span class="amount-val" id="chequeAmountDisplay">150.00</span>
-                                            </div>
-                                        </div>
-  
-                                        <!-- Account details row -->
-                                        <div class="cheque-details-row">
-                                            <div class="cheque-acc-box">
-                                                <span class="acc-label">A/C No.<br><span class="hindi-text">खाता क्र.</span></span>
-                                                <span class="acc-val" id="chequeAccountDisplayVal">50100170255263</span>
-                                            </div>
-                                            <div class="cheque-branch-codes">
-                                                Brn: 0171 Pdt: 105<br>SB A/C
-                                            </div>
-                                            <div class="cheque-payable-text">
-                                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
-                                            </div>
-                                            <div class="cheque-sign-area">
-                                                <span class="cheque-sign-name" id="chequeSignatureVal">${customer.firstName} ${customer.lastName}</span>
-                                                <span class="cheque-sign-label">Please sign above / Authorized Signatory</span>
-                                            </div>
-                                        </div>
-  
-                                        <!-- Bottom MICR band -->
-                                        <div class="cheque-micr-band" id="chequeMicrVal" style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-                                            <span>⑈000076⑈</span> <span>360240005⑆</span> <span>018696⑈</span> <span>31</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Cheque Leaf Back -->
-                                    <div class="cheque-leaf-back-side" onclick="toggleChequeLeafFlip(event)">
-                                        <!-- Watermark background SVG -->
-                                        <svg viewBox="0 0 100 100" class="watermark-bg-svg">
-                                            <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#94a3b8" stroke-width="1.2" transform="rotate(-15 80 80)" />
-                                            <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#94a3b8" stroke-width="1.8" transform="rotate(-15 80 80)" />
-                                        </svg>
-                                        
-                                        <div style="display: flex; gap: 20px; height: 100%; box-sizing: border-box; position: relative; z-index: 2;">
-                                            <!-- Signature Box -->
-                                            <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
-                                                <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; box-sizing: border-box;">
-                                                    <span class="cheque-sign-name" id="chequeSignatureBackVal" style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.2rem; font-style: italic; color: #2563eb; line-height: 1; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${customer.firstName} ${customer.lastName}</span>
-                                                    <span style="font-size: 0.42rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Please sign here</span>
-                                                </div>
-                                                <div style="height: 1.5px; border-bottom: 1px dashed #cbd5e1; width: 100%;"></div>
-                                                <div style="font-family: monospace; font-size: 0.72rem; letter-spacing: 2px; color: #334155; font-weight: bold; margin-top: 5px; text-align: center;">
-                                                    ⑈123456⑈ 000123456789⑆ 123456⑈ 29
-                                                </div>
-                                            </div>
-                                            <!-- Notes -->
-                                            <div style="flex: 0.9; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed #cbd5e1; padding-left: 15px; font-family: 'Poppins', sans-serif;">
-                                                <div>
-                                                    <h4 style="margin: 0; font-size: 0.58rem; font-weight: bold; color: #0b0922; text-transform: uppercase; letter-spacing: 0.5px;">Notes / टिप्पणियां</h4>
-                                                    <ul style="margin: 5px 0 0 10px; padding: 0; font-size: 0.45rem; color: #475569; display: flex; flex-direction: column; gap: 3px; list-style-type: disc;">
-                                                        <li>This cheque is valid for three months from the date of issue.</li>
-                                                        <li>Please ensure sufficient balance in your account.</li>
-                                                        <li>Please cross the cheque if not used.</li>
-                                                        <li style="font-weight: bold; color: #ef4444;">Do not write below this line.</li>
-                                                    </ul>
-                                                </div>
-                                                <div style="font-size: 0.42rem; color: #94a3b8; font-weight: 500; text-transform: uppercase; text-align: right;">
-                                                    * DO NOT WRITE BELOW THIS LINE
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 3. Page 1: Inside Middle Page (Check Register) -->
-                            <div class="chequebook-page page-instructions" id="chequeInstructionsPage" onclick="toggleInstructionsPage(event)" style="z-index: 25;">
-                                <!-- Front Face: Check Register Grid -->
-                                <div class="instructions-front">
-                                    <div class="check-register-title-bar">CHECK REGISTER</div>
-                                    <div class="check-register-content">
-                                        <table class="check-register-table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 12%;">DATE</th>
-                                                    <th style="width: 32%;">DESCRIPTION</th>
-                                                    <th style="width: 12%;">CHECK NO.</th>
-                                                    <th style="width: 16%;">PAYMENT \ DEBIT (-)</th>
-                                                    <th style="width: 16%;">DEPOSIT \ CREDIT (+)</th>
-                                                    <th style="width: 4%;">✔</th>
-                                                    <th style="width: 12%;">BALANCE</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <!-- Back Face: Watermark Blank Page -->
-                                <div class="instructions-back">
-                                    <svg viewBox="0 0 100 100" class="watermark-bg-svg">
-                                        <ellipse cx="50" cy="50" rx="30" ry="12" fill="none" stroke="#94a3b8" stroke-width="1.2" transform="rotate(-15 50 50)" />
-                                        <ellipse cx="50" cy="50" rx="50" ry="20" fill="none" stroke="#94a3b8" stroke-width="1.8" transform="rotate(-15 50 50)" />
-                                    </svg>
-                                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 0.52rem; color: #94a3b8; font-weight: 500; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 1px;">
-                                        SAFE. SECURE. TRUSTED.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 4. Folding Front Cover Wrapper -->
-                            <div class="chequebook-cover-wrapper cover-flap">
-                                <!-- Front Cover Outer -->
-                                <div class="chequebook-cover-front">
-                                    <div class="cover-nebula-bg"></div>
-                                    <div class="cover-cosmic-logo">
-                                        <svg viewBox="0 0 100 100" class="cb-cosmic-v-svg">
-                                            <defs>
-                                                <linearGradient id="vCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stop-color="#00d2ff" />
-                                                    <stop offset="50%" stop-color="#7928ca" />
-                                                    <stop offset="100%" stop-color="#ff007a" />
-                                                </linearGradient>
-                                                <filter id="coverGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                                    <feGaussianBlur stdDeviation="3.5" result="blur" />
-                                                    <feMerge>
-                                                        <feMergeNode in="blur" />
-                                                        <feMergeNode in="SourceGraphic" />
-                                                    </feMerge>
-                                                </filter>
-                                            </defs>
-                                            <ellipse cx="50" cy="58" rx="42" ry="11" fill="none" stroke="#00f0ff" stroke-width="1.8" transform="rotate(-18 50 58)" opacity="0.85" filter="url(#coverGlow)" />
-                                            <ellipse cx="50" cy="58" rx="46" ry="6" fill="none" stroke="#d946ef" stroke-width="1.2" transform="rotate(18 50 58)" opacity="0.75" filter="url(#coverGlow)" />
-                                            <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" filter="url(#coverGlow)" />
-                                        </svg>
-                                    </div>
-                                    <div class="cover-text-group">
-                                        <div class="cover-bank-name">VERTEX</div>
-                                        <div class="cover-bank-sub">GALAXY BANK</div>
-                                        <div class="cover-checkbook-title">CHECKBOOK</div>
-                                    </div>
-                                    <div class="cover-footer" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.58rem; color: rgba(255,255,255,0.5); z-index: 5; margin-left: -20px;">
-                                        <span>SAFE. SECURE. TRUSTED.</span>
-                                        <span>SECURED BOOKLET</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- Front Cover Inner - Safety Protection Page -->
-                                <div class="chequebook-cover-inside">
-                                    <div class="inside-rings-watermark"></div>
-                                    
-                                    <div class="protection-container">
-                                        <div class="protection-left">
-                                            <svg viewBox="0 0 100 100">
-                                                <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" />
+                                <!-- Header -->
+                                <div class="cheque-header">
+                                    <div class="cheque-bank-info">
+                                        <span class="cheque-bank-name">
+                                            <svg viewBox="0 0 100 100" style="width: 14px; height: 14px;">
+                                                <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="#0b0922" />
                                             </svg>
-                                            <span class="protection-bank-name">VERTEX</span>
-                                            <span class="protection-bank-sub">GALAXY BANK</span>
-                                        </div>
-                                        
-                                        <div class="protection-divider"></div>
-                                        
-                                        <div class="protection-right">
-                                            <div class="protection-item">
-                                                <i class="bx bx-shield-alt-2"></i>
-                                                <div class="protection-text">
-                                                    <strong>FOR YOUR PROTECTION</strong>
-                                                    <span>Heat sensitive ink fades with heat.</span>
-                                                </div>
-                                            </div>
-                                            <div class="protection-item">
-                                                <i class="bx bx-file"></i>
-                                                <div class="protection-text">
-                                                    <strong>SECURE PAPER</strong>
-                                                    <span>Contains security fibers and watermark.</span>
-                                                </div>
-                                            </div>
-                                            <div class="protection-item">
-                                                <i class="bx bx-lock-alt"></i>
-                                                <div class="protection-text">
-                                                    <strong>AUTHORIZED USE ONLY</strong>
                                                     <span>All checks are protected by strict security features.</span>
                                                 </div>
                                             </div>
@@ -2660,276 +2303,122 @@
                     <div><strong>Charges:</strong> <span id="inspectCharges" style="font-weight: 700; color: var(--gray-900);">--</span></div>
                 </div>
                 
-                <!-- 3D Cheque Visualizer -->
+                <!-- Flat Cheque Visualizer inside Inspector -->
                 <div class="cheque-visualizer-container" style="margin-bottom: 20px;">
-                    <button type="button" class="btn-flip-book" onclick="toggleInspectBookFlip(event)">
-                        <i class="bx bx-refresh"></i> Flip Booklet
-                    </button>
-                    <div class="chequebook-wrapper" id="inspectChequebookWrapper" onclick="toggleInspectBookOpen()">
-                        <div class="chequebook-book" id="inspect3dChequebook">
-                            <!-- 1. Back Cover -->
-                            <div class="chequebook-back">
-                                <div class="cb-back-nebula-bg"></div>
-                                <div class="cb-back-neon-curves"></div>
-                                <div class="cb-back-neon-curves-2"></div>
+                    <div class="cheque-leaf-container-wrapper">
+                        <div class="cheque-leaf-wrapper" id="inspectChequeLeafFlipWrapper" onclick="toggleInspectChequeLeafFlip(event)">
+                            <!-- Cheque Leaf Front -->
+                            <div class="cheque-leaf-front">
+                                <!-- Watermark background SVG -->
+                                <svg viewBox="0 0 100 100" class="watermark-bg-svg">
+                                    <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#7928ca" stroke-width="1.2" transform="rotate(-15 80 80)" />
+                                    <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#7928ca" stroke-width="1.8" transform="rotate(-15 80 80)" />
+                                    <ellipse cx="80" cy="80" rx="80" ry="35" fill="none" stroke="#00d2ff" stroke-width="0.9" transform="rotate(-15 80 80)" />
+                                </svg>
                                 
-                                <div class="cb-back-logo-section">
-                                    <svg viewBox="0 0 100 100" style="width: 40px; height: 40px;">
-                                        <ellipse cx="50" cy="58" rx="42" ry="11" fill="none" stroke="#00f0ff" stroke-width="1.8" transform="rotate(-18 50 58)" opacity="0.85" />
-                                        <ellipse cx="50" cy="58" rx="46" ry="6" fill="none" stroke="#d946ef" stroke-width="1.2" transform="rotate(18 50 58)" opacity="0.75" />
-                                        <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" />
-                                    </svg>
-                                    <span class="cb-back-bank-name">VERTEX</span>
-                                    <span class="cb-back-bank-sub">GALAXY BANK</span>
-                                    <span class="cb-back-slogan">Your Universe. Your Bank.</span>
-                                </div>
+                                <!-- Hologram ribbon -->
+                                <div class="cheque-hologram"></div>
                                 
-                                <div class="cb-back-info-block">
-                                    <div class="cb-back-info-item address">
-                                        <i class="bx bx-map"></i>
-                                        <span>123 Galaxy Avenue, Nebula City<br>Cosmos State 12345</span>
+                                <!-- Header -->
+                                <div class="cheque-header">
+                                    <div class="cheque-bank-info">
+                                        <span class="cheque-bank-name">
+                                            <svg viewBox="0 0 100 100" style="width: 14px; height: 14px;">
+                                                <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="#0b0922" />
+                                            </svg>
+                                            VERTEX GALAXY BANK
+                                        </span>
+                                        <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
                                     </div>
-                                    <div class="cb-back-info-item">
-                                        <i class="bx bx-phone"></i>
-                                        <span>+1 234 567 8900</span>
-                                    </div>
-                                    <div class="cb-back-info-item">
-                                        <i class="bx bx-globe"></i>
-                                        <span>www.vertexgalaxybank.com</span>
-                                    </div>
-                                    <div class="cb-back-info-item">
-                                        <i class="bx bx-envelope"></i>
-                                        <span>support@vertexgalaxybank.com</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 2. Page 2: Cheque Leaf (Front/Back) -->
-                            <div class="chequebook-page page-cheque" style="z-index: 20;">
-                                <div class="cheque-leaf-wrapper" id="inspectChequeLeafFlipWrapper">
-                                    <!-- Cheque Leaf Front -->
-                                    <div class="cheque-leaf-front" onclick="toggleInspectChequeLeafFlip(event)">
-                                        <!-- Watermark background SVG -->
-                                        <svg viewBox="0 0 100 100" class="watermark-bg-svg">
-                                            <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#7928ca" stroke-width="1.2" transform="rotate(-15 80 80)" />
-                                            <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#7928ca" stroke-width="1.8" transform="rotate(-15 80 80)" />
-                                            <ellipse cx="80" cy="80" rx="80" ry="35" fill="none" stroke="#00d2ff" stroke-width="0.9" transform="rotate(-15 80 80)" />
-                                        </svg>
-                                        
-                                        <!-- Hologram ribbon -->
-                                        <div class="cheque-hologram"></div>
-                                        
-                                        <!-- Header -->
-                                        <div class="cheque-header">
-                                            <div class="cheque-bank-info">
-                                                <span class="cheque-bank-name">
-                                                    <svg viewBox="0 0 100 100" style="width: 14px; height: 14px;">
-                                                        <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="#0b0922" />
-                                                    </svg>
-                                                    VERTEX GALAXY BANK
-                                                </span>
-                                                <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
-                                            </div>
-                                            <div class="cheque-date-box">
-                                                <div class="date-squares" id="inspectChequeDateSquares">
-                                                    <!-- Populated by JS -->
-                                                </div>
-                                                <div style="font-size: 0.45rem; color: #64748b; font-weight: bold; margin-top: 1px; text-transform: uppercase;">Valid for 3 months</div>
-                                            </div>
-                                        </div>
-  
-                                        <!-- Pay row -->
-                                        <div class="cheque-row" style="margin-top: 5px;">
-                                            <span class="cheque-label">PAY TO THE ORDER OF <span class="hindi-text">अदा करें</span></span>
-                                            <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.82rem;" id="inspectChequePayeeDisplay">Self or Bearer</span>
-                                            <span class="cheque-label bearer-text">OR BEARER <span class="hindi-text">या धारक को</span></span>
-                                        </div>
-  
-                                        <!-- Rupees row -->
-                                        <div class="cheque-row">
-                                            <span class="cheque-label">RUPEES / DOLLARS <span class="hindi-text">रुपये</span></span>
-                                            <span class="cheque-line-fill" id="inspectChequeRupeesTextDisplay">--</span>
-                                            <div class="cheque-amount-box">
-                                                <span class="rupee-symbol">₹</span>
-                                                <span class="amount-val" id="inspectChequeAmountDisplay">--</span>
-                                            </div>
-                                        </div>
-  
-                                        <!-- Account details row -->
-                                        <div class="cheque-details-row">
-                                            <div class="cheque-acc-box">
-                                                <span class="acc-label">A/C No.<br><span class="hindi-text">खाता क्र.</span></span>
-                                                <span class="acc-val" id="inspectChequeAccountDisplayVal">--</span>
-                                            </div>
-                                            <div class="cheque-branch-codes">
-                                                Brn: 0171 Pdt: 105<br>SB A/C
-                                            </div>
-                                            <div class="cheque-payable-text">
-                                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
-                                            </div>
-                                            <div class="cheque-sign-area">
-                                                <span class="cheque-sign-name" id="inspectChequeSignatureVal">--</span>
-                                                <span class="cheque-sign-label">Please sign above / Authorized Signatory</span>
-                                            </div>
-                                        </div>
-  
-                                        <!-- Bottom MICR band -->
-                                        <div class="cheque-micr-band" id="inspectChequeMicrVal">
+                                    <div class="cheque-date-box">
+                                        <div class="date-squares" id="inspectChequeDateSquares">
                                             <!-- Populated by JS -->
                                         </div>
+                                        <div style="font-size: 0.45rem; color: #64748b; font-weight: bold; margin-top: 1px; text-transform: uppercase;">Valid for 3 months</div>
                                     </div>
-                                    
-                                    <!-- Cheque Leaf Back -->
-                                    <div class="cheque-leaf-back-side" onclick="toggleInspectChequeLeafFlip(event)">
-                                        <!-- Watermark background SVG -->
-                                        <svg viewBox="0 0 100 100" class="watermark-bg-svg">
-                                            <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#94a3b8" stroke-width="1.2" transform="rotate(-15 80 80)" />
-                                            <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#94a3b8" stroke-width="1.8" transform="rotate(-15 80 80)" />
-                                        </svg>
-                                        
-                                        <div style="display: flex; gap: 20px; height: 100%; box-sizing: border-box; position: relative; z-index: 2;">
-                                            <!-- Signature Box -->
-                                            <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
-                                                <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; box-sizing: border-box;">
-                                                    <span class="cheque-sign-name" id="inspectChequeSignatureBackVal" style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.2rem; font-style: italic; color: #2563eb; line-height: 1; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-                                                    <span style="font-size: 0.42rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Please sign here</span>
-                                                </div>
-                                                <div style="height: 1.5px; border-bottom: 1px dashed #cbd5e1; width: 100%;"></div>
-                                                <div style="font-family: monospace; font-size: 0.72rem; letter-spacing: 2px; color: #334155; font-weight: bold; margin-top: 5px; text-align: center;">
-                                                    ⑈123456⑈ 000123456789⑆ 123456⑈ 29
-                                                </div>
-                                            </div>
-                                            <!-- Notes -->
-                                            <div style="flex: 0.9; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed #cbd5e1; padding-left: 15px; font-family: 'Poppins', sans-serif;">
-                                                <div>
-                                                    <h4 style="margin: 0; font-size: 0.58rem; font-weight: bold; color: #0b0922; text-transform: uppercase; letter-spacing: 0.5px;">Notes / टिप्पणियां</h4>
-                                                    <ul style="margin: 5px 0 0 10px; padding: 0; font-size: 0.45rem; color: #475569; display: flex; flex-direction: column; gap: 3px; list-style-type: disc;">
-                                                        <li>This cheque is valid for three months from the date of issue.</li>
-                                                        <li>Please ensure sufficient balance in your account.</li>
-                                                        <li>Please cross the cheque if not used.</li>
-                                                        <li style="font-weight: bold; color: #ef4444;">Do not write below this line.</li>
-                                                    </ul>
-                                                </div>
-                                                <div style="font-size: 0.42rem; color: #94a3b8; font-weight: 500; text-transform: uppercase; text-align: right;">
-                                                    * DO NOT WRITE BELOW THIS LINE
-                                                </div>
-                                            </div>
-                                        </div>
+                                </div>
+          
+                                <!-- Pay row -->
+                                <div class="cheque-row" style="margin-top: 5px;">
+                                    <span class="cheque-label">PAY TO THE ORDER OF <span class="hindi-text">अदा करें</span></span>
+                                    <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.82rem;" id="inspectChequePayeeDisplay">Self or Bearer</span>
+                                    <span class="cheque-label bearer-text">OR BEARER <span class="hindi-text">या धारक को</span></span>
+                                </div>
+          
+                                <!-- Rupees row -->
+                                <div class="cheque-row">
+                                    <span class="cheque-label">RUPEES / DOLLARS <span class="hindi-text">रुपये</span></span>
+                                    <span class="cheque-line-fill" id="inspectChequeRupeesTextDisplay">--</span>
+                                    <div class="cheque-amount-box">
+                                        <span class="rupee-symbol">₹</span>
+                                        <span class="amount-val" id="inspectChequeAmountDisplay">--</span>
                                     </div>
+                                </div>
+          
+                                <!-- Account details row -->
+                                <div class="cheque-details-row">
+                                    <div class="cheque-acc-box">
+                                        <span class="acc-label">A/C No.<br><span class="hindi-text">खाता क्र.</span></span>
+                                        <span class="acc-val" id="inspectChequeAccountDisplayVal">--</span>
+                                    </div>
+                                    <div class="cheque-branch-codes">
+                                        Brn: 0171 Pdt: 105<br>SB A/C
+                                    </div>
+                                    <div class="cheque-payable-text">
+                                        Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
+                                    </div>
+                                    <div class="cheque-sign-area">
+                                        <span class="cheque-sign-name" id="inspectChequeSignatureVal">--</span>
+                                        <span class="cheque-sign-label">Please sign above / Authorized Signatory</span>
+                                    </div>
+                                </div>
+          
+                                <!-- Bottom MICR band -->
+                                <div class="cheque-micr-band" id="inspectChequeMicrVal">
+                                    <!-- Populated by JS -->
                                 </div>
                             </div>
                             
-                            <!-- 3. Page 1: Inside Middle Page (Check Register) -->
-                            <div class="chequebook-page page-instructions" id="inspectChequeInstructionsPage" onclick="toggleInspectInstructionsPage(event)" style="z-index: 25;">
-                                <!-- Front Face: Check Register Grid -->
-                                <div class="instructions-front">
-                                    <div class="check-register-title-bar">CHECK REGISTER</div>
-                                    <div class="check-register-content">
-                                        <table class="check-register-table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 12%;">DATE</th>
-                                                    <th style="width: 32%;">DESCRIPTION</th>
-                                                    <th style="width: 12%;">CHECK NO.</th>
-                                                    <th style="width: 16%;">PAYMENT \ DEBIT (-)</th>
-                                                    <th style="width: 16%;">DEPOSIT \ CREDIT (+)</th>
-                                                    <th style="width: 4%;">✔</th>
-                                                    <th style="width: 12%;">BALANCE</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <!-- Back Face: Watermark Blank Page -->
-                                <div class="instructions-back">
-                                    <svg viewBox="0 0 100 100" class="watermark-bg-svg">
-                                        <ellipse cx="50" cy="50" rx="30" ry="12" fill="none" stroke="#94a3b8" stroke-width="1.2" transform="rotate(-15 50 50)" />
-                                        <ellipse cx="50" cy="50" rx="50" ry="20" fill="none" stroke="#94a3b8" stroke-width="1.8" transform="rotate(-15 50 50)" />
-                                    </svg>
-                                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 0.52rem; color: #94a3b8; font-weight: 500; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 1px;">
-                                        SAFE. SECURE. TRUSTED.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 4. Folding Front Cover Wrapper -->
-                            <div class="chequebook-cover-wrapper cover-flap">
-                                <!-- Front Cover Outer -->
-                                <div class="chequebook-cover-front">
-                                    <div class="cover-nebula-bg"></div>
-                                    <div class="cover-cosmic-logo">
-                                        <svg viewBox="0 0 100 100" class="cb-cosmic-v-svg">
-                                            <ellipse cx="50" cy="58" rx="42" ry="11" fill="none" stroke="#00f0ff" stroke-width="1.8" transform="rotate(-18 50 58)" opacity="0.85" filter="url(#coverGlow)" />
-                                            <ellipse cx="50" cy="58" rx="46" ry="6" fill="none" stroke="#d946ef" stroke-width="1.2" transform="rotate(18 50 58)" opacity="0.75" filter="url(#coverGlow)" />
-                                            <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" filter="url(#coverGlow)" />
-                                        </svg>
-                                    </div>
-                                    <div class="cover-text-group">
-                                        <div class="cover-bank-name">VERTEX</div>
-                                        <div class="cover-bank-sub">GALAXY BANK</div>
-                                        <div class="cover-checkbook-title">CHECKBOOK</div>
-                                    </div>
-                                    <div class="cover-footer" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.58rem; color: rgba(255,255,255,0.5); z-index: 5; margin-left: -20px;">
-                                        <span>SAFE. SECURE. TRUSTED.</span>
-                                        <span>SECURED BOOKLET</span>
-                                    </div>
-                                </div>
+                            <!-- Cheque Leaf Back -->
+                            <div class="cheque-leaf-back-side">
+                                <!-- Watermark background SVG -->
+                                <svg viewBox="0 0 100 100" class="watermark-bg-svg">
+                                    <ellipse cx="80" cy="80" rx="40" ry="15" fill="none" stroke="#94a3b8" stroke-width="1.2" transform="rotate(-15 80 80)" />
+                                    <ellipse cx="80" cy="80" rx="60" ry="25" fill="none" stroke="#94a3b8" stroke-width="1.8" transform="rotate(-15 80 80)" />
+                                </svg>
                                 
-                                <!-- Front Cover Inner - Safety Protection Page -->
-                                <div class="chequebook-cover-inside">
-                                    <div class="inside-rings-watermark"></div>
-                                    
-                                    <div class="protection-container">
-                                        <div class="protection-left">
-                                            <svg viewBox="0 0 100 100">
-                                                <path d="M22 18 L46 82 L54 82 L78 18 L65 18 L50 58 L35 18 Z" fill="url(#vCoverGrad)" />
-                                            </svg>
-                                            <span class="protection-bank-name">VERTEX</span>
-                                            <span class="protection-bank-sub">GALAXY BANK</span>
+                                <div style="display: flex; gap: 20px; height: 100%; box-sizing: border-box; position: relative; z-index: 2;">
+                                    <!-- Signature Box -->
+                                    <div style="flex: 1.1; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <div style="border: 1px dashed #94a3b8; border-radius: 4px; background: rgba(255,255,255,0.7); height: 75px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; box-sizing: border-box;">
+                                            <span class="cheque-sign-name" id="inspectChequeSignatureBackVal" style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.2rem; font-style: italic; color: #2563eb; line-height: 1; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                                            <span style="font-size: 0.42rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-top: 4px;">Please sign here</span>
                                         </div>
-                                        
-                                        <div class="protection-divider"></div>
-                                        
-                                        <div class="protection-right">
-                                            <div class="protection-item">
-                                                <i class="bx bx-shield-alt-2"></i>
-                                                <div class="protection-text">
-                                                    <strong>FOR YOUR PROTECTION</strong>
-                                                    <span>Heat sensitive ink fades with heat.</span>
-                                                </div>
-                                            </div>
-                                            <div class="protection-item">
-                                                <i class="bx bx-file"></i>
-                                                <div class="protection-text">
-                                                    <strong>SECURE PAPER</strong>
-                                                    <span>Contains security fibers and watermark.</span>
-                                                </div>
-                                            </div>
-                                            <div class="protection-item">
-                                                <i class="bx bx-lock-alt"></i>
-                                                <div class="protection-text">
-                                                    <strong>AUTHORIZED USE ONLY</strong>
-                                                    <span>All checks are protected by strict security features.</span>
-                                                </div>
-                                            </div>
+                                        <div style="height: 1.5px; border-bottom: 1px dashed #cbd5e1; width: 100%;"></div>
+                                        <div style="font-family: monospace; font-size: 0.72rem; letter-spacing: 2px; color: #334155; font-weight: bold; margin-top: 5px; text-align: center;">
+                                            ⑈123456⑈ 000123456789⑆ 123456⑈ 29
                                         </div>
                                     </div>
-                                    
-                                    <div class="protection-footer">
-                                        Your Universe. Your Bank.
+                                    <!-- Notes -->
+                                    <div style="flex: 0.9; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed #cbd5e1; padding-left: 15px; font-family: 'Poppins', sans-serif;">
+                                        <div>
+                                            <h4 style="margin: 0; font-size: 0.58rem; font-weight: bold; color: #0b0922; text-transform: uppercase; letter-spacing: 0.5px;">Notes / टिप्पणियां</h4>
+                                            <ul style="margin: 5px 0 0 10px; padding: 0; font-size: 0.45rem; color: #475569; display: flex; flex-direction: column; gap: 3px; list-style-type: disc;">
+                                                <li>This cheque is valid for three months from the date of issue.</li>
+                                                <li>Please ensure sufficient balance in your account.</li>
+                                                <li>Please cross the cheque if not used.</li>
+                                                <li style="font-weight: bold; color: #ef4444;">Do not write below this line.</li>
+                                            </ul>
+                                        </div>
+                                        <div style="font-size: 0.42rem; color: #94a3b8; font-weight: 500; text-transform: uppercase; text-align: right;">
+                                            * DO NOT WRITE BELOW THIS LINE
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="click-hint" id="inspectChequeHint" style="position: absolute; bottom: 12px; right: 15px; font-size: 0.65rem; color: var(--primary-500); display: flex; align-items: center; gap: 4px; font-weight: 500; animation: pulseHint 2s infinite; pointer-events: none;"><i class="bx bx-pointer"></i> Click to Open</div>
+                    <div class="click-hint" id="inspectChequeHint" style="position: absolute; bottom: 12px; right: 15px; font-size: 0.65rem; color: var(--primary-500); display: flex; align-items: center; gap: 4px; font-weight: 500; animation: pulseHint 2s infinite; pointer-events: none;"><i class="bx bx-pointer"></i> Click Cheque to Flip</div>
                     <!-- Diagonal Stamp overlay -->
                     <div class="cheque-processed-stamp" id="stampOverlay">APPROVED</div>
                 </div>
@@ -2968,8 +2457,6 @@
             document.getElementById('inspectChequeAccountDisplayVal').innerHTML = accountNumber;
             document.getElementById('inspectChequeSignatureVal').innerHTML = customerName ? customerName.toUpperCase() : '';
             document.getElementById('inspectChequeSignatureBackVal').innerHTML = customerName ? customerName.toUpperCase() : '';
-            document.getElementById('inspectpbCustName').innerHTML = customerName ? customerName.toUpperCase() : '';
-            document.getElementById('inspectpbAccNum').innerHTML = accountNumber;
             
             // MICR Band parsing
             const last6 = accountNumber.length >= 6 ? accountNumber.substring(accountNumber.length - 6) : "018696";
@@ -3010,18 +2497,13 @@
                 stampOverlay.style.display = 'block';
             }
             
-            // Reset inspector book to closed and unflipped when opening modal
-            const inspectBook = document.getElementById('inspect3dChequebook');
-            if (inspectBook) {
-                inspectBook.classList.remove('open');
-            }
             const inspectLeaf = document.getElementById('inspectChequeLeafFlipWrapper');
             if (inspectLeaf) {
                 inspectLeaf.classList.remove('flipped');
             }
             const inspectHint = document.getElementById('inspectChequeHint');
             if (inspectHint) {
-                inspectHint.innerHTML = `<i class="bx bx-pointer"></i> Click to Open`;
+                inspectHint.innerHTML = `<i class="bx bx-pointer"></i> Click Cheque to Flip`;
             }
             
             modal.style.display = 'flex';
@@ -3042,99 +2524,11 @@
             openInspectModal(id, name, account, leaves, charges, date, status);
         }
 
-        function toggleBookOpen() {
-            if (!book) return;
-            book.classList.remove('flipped-back');
-            book.classList.toggle('open');
-            if (book.classList.contains('open')) {
-                if (hint) hint.innerHTML = `<i class="bx bx-rotate-right"></i> Click Page to Turn`;
-            } else {
-                if (hint) hint.innerHTML = `<i class="bx bx-pointer"></i> Click to Open`;
-                const leaf = document.getElementById('chequeLeafFlipWrapper');
-                if (leaf) leaf.classList.remove('flipped');
-                const page = document.getElementById('chequeInstructionsPage');
-                if (page) page.classList.remove('turned');
-            }
-            updateBookTransform(0, 0);
-        }
-
-        function toggleBookFlip(event) {
-            if (event) event.stopPropagation();
-            if (!book) return;
-            book.classList.remove('open');
-            book.classList.toggle('flipped-back');
-            if (book.classList.contains('flipped-back')) {
-                if (hint) hint.innerHTML = `<i class="bx bx-refresh"></i> Back Cover View`;
-            } else {
-                if (hint) hint.innerHTML = `<i class="bx bx-pointer"></i> Click to Open`;
-            }
-            updateBookTransform(0, 0);
-        }
-        
-        function toggleInstructionsPage(event) {
-            if (event) event.stopPropagation();
-            const page = document.getElementById('chequeInstructionsPage');
-            if (page) {
-                page.classList.toggle('turned');
-                if (hint) {
-                    if (page.classList.contains('turned')) {
-                        hint.innerHTML = `<i class="bx bx-rotate-right"></i> Click Leaf to Flip`;
-                    } else {
-                        hint.innerHTML = `<i class="bx bx-rotate-right"></i> Click Page to Turn`;
-                    }
-                }
-            }
-        }
-        
         function toggleChequeLeafFlip(event) {
             if (event) event.stopPropagation();
             const leaf = document.getElementById('chequeLeafFlipWrapper');
             if (leaf) {
                 leaf.classList.toggle('flipped');
-            }
-        }
-        
-        function toggleInspectBookOpen() {
-            if (!inspectBook) return;
-            inspectBook.classList.remove('flipped-back');
-            inspectBook.classList.toggle('open');
-            if (inspectBook.classList.contains('open')) {
-                if (inspectHint) inspectHint.innerHTML = `<i class="bx bx-rotate-right"></i> Click Page to Turn`;
-            } else {
-                if (inspectHint) inspectHint.innerHTML = `<i class="bx bx-pointer"></i> Click to Open`;
-                const leaf = document.getElementById('inspectChequeLeafFlipWrapper');
-                if (leaf) leaf.classList.remove('flipped');
-                const page = document.getElementById('inspectChequeInstructionsPage');
-                if (page) page.classList.remove('turned');
-            }
-            updateInspectBookTransform(0, 0);
-        }
-
-        function toggleInspectBookFlip(event) {
-            if (event) event.stopPropagation();
-            if (!inspectBook) return;
-            inspectBook.classList.remove('open');
-            inspectBook.classList.toggle('flipped-back');
-            if (inspectBook.classList.contains('flipped-back')) {
-                if (inspectHint) inspectHint.innerHTML = `<i class="bx bx-refresh"></i> Back Cover View`;
-            } else {
-                if (inspectHint) inspectHint.innerHTML = `<i class="bx bx-pointer"></i> Click to Open`;
-            }
-            updateInspectBookTransform(0, 0);
-        }
-        
-        function toggleInspectInstructionsPage(event) {
-            if (event) event.stopPropagation();
-            const page = document.getElementById('inspectChequeInstructionsPage');
-            if (page) {
-                page.classList.toggle('turned');
-                if (inspectHint) {
-                    if (page.classList.contains('turned')) {
-                        inspectHint.innerHTML = `<i class="bx bx-rotate-right"></i> Click Leaf to Flip`;
-                    } else {
-                        inspectHint.innerHTML = `<i class="bx bx-rotate-right"></i> Click Page to Turn`;
-                    }
-                }
             }
         }
         
@@ -3145,59 +2539,8 @@
                 leaf.classList.toggle('flipped');
             }
         }
-        
-        // Add 3D tilt interaction for inspector modal cheque
+
         document.addEventListener('DOMContentLoaded', () => {
-            const inspectWrapper = document.getElementById('inspectChequebookWrapper');
-            const inspectBook = document.getElementById('inspect3dChequebook');
-            const inspectContainer = document.querySelector('#inspectModal .cheque-visualizer-container');
-            const inspectHint = document.getElementById('inspectChequeHint');
-
-            function updateInspectBookTransform(rotX = 0, rotY = 0) {
-                if (!inspectBook || !inspectContainer) return;
-                const containerWidth = inspectContainer.clientWidth;
-                if (inspectBook.classList.contains('open')) {
-                    const openScale = Math.min((containerWidth - 30) / 480, 0.8);
-                    inspectBook.style.transform = `rotateX(${25 + rotX}deg) rotateY(${-5 + rotY}deg) scale(${openScale})`;
-                } else if (inspectBook.classList.contains('flipped-back')) {
-                    const closedScale = Math.min((containerWidth - 20) / 480, 0.9);
-                    inspectBook.style.transform = `rotateX(${195 + rotX}deg) rotateY(${10 + rotY}deg) scale(${closedScale})`;
-                } else {
-                    const closedScale = Math.min((containerWidth - 20) / 480, 0.9);
-                    inspectBook.style.transform = `rotateX(${15 + rotX}deg) rotateY(${-10 + rotY}deg) scale(${closedScale})`;
-                }
-            }
-
-            window.updateInspectBookTransform = updateInspectBookTransform;
-
-            if (inspectContainer && inspectBook) {
-                inspectContainer.addEventListener('mousemove', (e) => {
-                    const rect = inspectContainer.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const maxRotX = inspectBook.classList.contains('open') ? 10 : 15;
-                    const maxRotY = inspectBook.classList.contains('open') ? 8 : 15;
-                    const rotX = -((y - centerY) / centerY) * maxRotX;
-                    const rotY = ((x - centerX) / centerX) * maxRotY;
-                    requestAnimationFrame(() => {
-                        updateInspectBookTransform(rotX, rotY);
-                    });
-                });
-
-                inspectContainer.addEventListener('mouseleave', () => {
-                    requestAnimationFrame(() => {
-                        updateInspectBookTransform(0, 0);
-                    });
-                });
-
-                updateInspectBookTransform(0, 0);
-                window.addEventListener('resize', () => {
-                    updateInspectBookTransform(0, 0);
-                });
-            }
-
             // Mobile sidebar toggle handler
             const mobileToggle = document.getElementById('mobileNavToggle');
             const sidebar = document.querySelector('.sidebar');
