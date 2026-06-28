@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Manage Passbooks</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
@@ -1071,12 +1071,12 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                 <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                     <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                     <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -1187,149 +1187,6 @@
                 </div>
             </div>
 
-            <!-- Stats & Preview Split Grid -->
-            <div class="passbook-preview-layout">
-                <!-- Left Column: Stats + Preview Summary Info -->
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Booklet inspector instructions -->
-                    <div class="glass-card" style="margin-bottom: 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--gray-800); margin-bottom: 8px;"><i class="bx bx-search-alt" style="color: var(--primary-500);"></i> 3D Booklet Inspector Instructions</h4>
-                            <p style="font-size: 0.82rem; color: var(--gray-500); line-height: 1.5;">
-                                Select any passbook application from the table below to load its details into the 3D Booklet Visualizer. 
-                            </p>
-                            <ul style="font-size: 0.8rem; color: var(--gray-600); padding-left: 20px; line-height: 1.7; margin-top: 10px;">
-                                <li>Verify that customer's legal name matches profile.</li>
-                                <li>Verify account number integrity.</li>
-                                <li>Approving changes the customer's account flag to active passbook transaction support.</li>
-                                <li>Rejecting triggers an automatic transaction log and refunds the ₹100.00 debit fee instantly.</li>
-                            </ul>
-                        </div>
-                        <div style="background: rgba(16,185,129,0.04); border: 1px dashed rgba(16,185,129,0.15); border-radius: var(--radius-md); padding: 12px; font-size: 0.75rem; color: var(--gray-500); margin-top: 15px;">
-                            <strong>Note on System:</strong> Passbook modifications use transactional operations under auto-commit control with rollback configurations.
-                        </div>
-                    </div>
-                </div>                <!-- Right Column: Interactive flat booklet visualizer -->
-                <div class="passbook-visualizer-container">
-                    <div class="passbook-flat-preview">
-                        <!-- SVG Gradients Definition -->
-                        <svg style="position: absolute; width: 0; height: 0;">
-                            <defs>
-                                <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#00f0ff" />
-                                    <stop offset="50%" stop-color="#d900ff" />
-                                    <stop offset="100%" stop-color="#ffffff" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-
-                        <!-- Left Page: Account Details -->
-                        <div class="passbook-flat-page">
-                            <div class="account-panel-inside" style="background: rgba(255, 255, 255, 0.05); height: 100%; border: none !important;">
-                                <div>
-                                    <div class="inside-page-header">
-                                        <div class="header-left">
-                                            <div style="width: 14px; height: 14px; display: inline-block;">
-                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <span class="header-center">Account Information</span>
-                                        <span class="header-right">Vertex Galaxy Bank</span>
-                                    </div>
-                                    <table class="tech-credentials-table">
-                                        <tr>
-                                            <td>Account Holder Name</td>
-                                            <td>: <span class="uppercase text-ellipsis" id="pbCustName">CUSTOMER NAME</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Account Number</td>
-                                            <td>: <span class="monospace" id="pbAccNum">SELECT REQUEST</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Account Type</td>
-                                            <td>: <span class="uppercase" id="pbAccType">SAVINGS</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>IFSC Code</td>
-                                            <td>: <span class="monospace" id="pbIfsc">-</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>MICR Code</td>
-                                            <td>: <span class="monospace" id="pbMicr">110202001</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Branch</td>
-                                            <td>: <span id="pbBranch">BHAKTINAGAR, RAJKOT</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Phone Number</td>
-                                            <td>: <span id="pbPhone">-</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nominee Name</td>
-                                            <td>: <span class="uppercase text-ellipsis" id="pbNominee">NEHA MALHOTRA</span></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Page: Transaction Ledger -->
-                        <div class="passbook-flat-page">
-                            <div class="transaction-panel-inside" style="background: rgba(255, 255, 255, 0.05); height: 100%; border: none !important;">
-                                 <!-- Ledger Table -->
-                                 <table class="tech-ledger-grid" style="margin-top: 5px;">
-                                     <colgroup>
-                                         <col style="width: 16%;">
-                                         <col style="width: 29%;">
-                                         <col style="width: 10%;">
-                                         <col style="width: 15%;">
-                                         <col style="width: 15%;">
-                                         <col style="width: 15%;">
-                                     </colgroup>
-                                     <thead>
-                                         <tr>
-                                             <th>Date</th>
-                                             <th>Particulars</th>
-                                             <th>Chq No.</th>
-                                             <th>Withdrawal</th>
-                                             <th>Deposit</th>
-                                             <th>Balance</th>
-                                         </tr>
-                                     </thead>
-                                     <tbody>
-                                         <tr>
-                                             <td>07-Jun-26</td>
-                                             <td class="particulars">Opening Bal</td>
-                                             <td>-</td>
-                                             <td>-</td>
-                                             <td>10,000.00</td>
-                                             <td>10,000.00</td>
-                                         </tr>
-                                         <tr>
-                                             <td>12-Jun-26</td>
-                                             <td class="particulars">Interest Paid</td>
-                                             <td>-</td>
-                                             <td>-</td>
-                                             <td>150.00</td>
-                                             <td>10,150.00</td>
-                                         </tr>
-                                     </tbody>
-                                 </table>
-
-                                 <div class="tech-ledger-footer" style="margin-bottom: 2px;">
-                                     * Please check entries. Report discrepancies immediately.
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="passbook-status-watermark" id="pbWatermark">PREVIEW</div>
-                </div>
-            </div></div>
-                </div>
-            </div>
 
             <!-- Table of all requests -->
             <div class="glass-card">
@@ -1395,36 +1252,41 @@
                                                 </c:choose>
                                             </td>
                                             <td style="padding: 15px; text-align: right;">
-                                                <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                    <button type="button" class="btn" 
-                                                            data-id="${req.requestId}" 
-                                                            data-name="${req.customerName}" 
-                                                            data-account="${req.accountNumber}" 
-                                                            data-type="${req.requestType}" 
-                                                            data-acctype="${req.accountType} Account"
-                                                            data-ifsc="${req['ifscCode']}"
-                                                            data-phone="${req['phoneNo']}"
-                                                            data-nominee="${req['nomineeName']}"
-                                                            data-status="${req.status}"
-                                                            style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                            onclick="inspectRequest(this)">
-                                                        <i class="bx bx-show"></i> Inspect
-                                                    </button>
-                                                    <c:if test="${req.status eq 'pending'}">
-                                                        <a href="${pageContext.request.contextPath}/passbook?action=approve&id=${req.requestId}" 
-                                                           class="btn btn-primary" 
-                                                           style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
-                                                           onclick="return confirm('Are you sure you want to approve this passbook request?');">
-                                                            Approve
-                                                        </a>
-                                                        <a href="${pageContext.request.contextPath}/passbook?action=reject&id=${req.requestId}" 
-                                                           class="btn btn-danger" 
-                                                           style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
-                                                           onclick="return confirm('Are you sure you want to reject this request? Processing fees of ₹100.00 will be refunded.');">
-                                                            Reject
-                                                        </a>
-                                                    </c:if>
-                                                </div>
+                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                                                     <button type="button" class="btn" style="display:none;" 
+                                                             data-id="${req.requestId}" 
+                                                             data-name="${req.customerName}" 
+                                                             data-account="${req.accountNumber}" 
+                                                             data-type="${req.requestType}" 
+                                                             data-acctype="${req.accountType} Account"
+                                                             data-ifsc="${req['ifscCode']}"
+                                                             data-phone="${req['phoneNo']}"
+                                                             data-nominee="${req['nomineeName']}"
+                                                             data-status="${req.status}"
+                                                             style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
+                                                             onclick="inspectRequest(this)">
+                                                         <i class="bx bx-show"></i> Inspect
+                                                     </button>
+                                                     <c:choose>
+                                                         <c:when test="${req.status eq 'pending'}">
+                                                             <a href="${pageContext.request.contextPath}/passbook?action=approve&id=${req.requestId}" 
+                                                                class="btn btn-primary" 
+                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
+                                                                onclick="return confirm('Are you sure you want to approve this passbook request?');">
+                                                                 Approve
+                                                             </a>
+                                                             <a href="${pageContext.request.contextPath}/passbook?action=reject&id=${req.requestId}" 
+                                                                class="btn btn-danger" 
+                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
+                                                                onclick="return confirm('Are you sure you want to reject this request? Processing fees of ₹100.00 will be refunded.');">
+                                                                 Reject
+                                                             </a>
+                                                         </c:when>
+                                                         <c:otherwise>
+                                                             <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
+                                                         </c:otherwise>
+                                                     </c:choose>
+                                                 </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -1504,46 +1366,7 @@
             }
         });
 
-        const container = document.querySelector('.passbook-visualizer-container');
 
-        // View dynamic preview for a selected request
-        function inspectRequest(btn) {
-            if (!btn) return;
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const acc = btn.getAttribute('data-account');
-            const type = btn.getAttribute('data-type');
-            const acctype = btn.getAttribute('data-acctype');
-            const ifsc = btn.getAttribute('data-ifsc');
-            const phone = btn.getAttribute('data-phone');
-            const nominee = btn.getAttribute('data-nominee');
-            const status = btn.getAttribute('data-status');
-
-            const nameEl = document.getElementById('pbCustName');
-            const accEl = document.getElementById('pbAccNum');
-            const accTypeEl = document.getElementById('pbAccType');
-            const ifscEl = document.getElementById('pbIfsc');
-            const phoneEl = document.getElementById('pbPhone');
-            const nomineeEl = document.getElementById('pbNominee');
-            const wm = document.getElementById('pbWatermark');
-
-            if (nameEl) nameEl.innerText = name || '';
-            if (accEl) accEl.innerText = acc || '';
-            if (accTypeEl) accTypeEl.innerText = acctype || '';
-            ifscEl.innerText = ifsc || '-';
-            if (phoneEl) phoneEl.innerText = phone || '-';
-            if (nomineeEl) nomineeEl.innerText = nominee || 'NONE';
-
-            if (wm && status) {
-                wm.innerText = status;
-                wm.className = "passbook-status-watermark " + status.toLowerCase();
-            }
-
-            // Scroll visualizer into view on mobile
-            if (container) {
-                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
     </script>
 </body>
 </html>

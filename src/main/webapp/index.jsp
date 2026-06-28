@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Vertex Galaxy Bank | Next-Gen Digital Banking</title>
-        <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+        <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
 
         <!-- Premium Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1135,7 +1135,7 @@
         <header class="header">
             <a href="#home" class="logo" aria-label="Vertex Galaxy Bank Home"
                 style="display: flex; align-items: center; text-decoration: none;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
 
             <nav class="navbar" aria-label="Main navigation">
@@ -1205,7 +1205,7 @@
                                     <div class="bank-card">
                                         <div class="bank-card-top">
                                             <div class="bank-card-logo-container">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
+                                                <img src="${pageContext.request.contextPath}/assest/images/image.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
                                                 <span class="bank-name-text">Vertex Galaxy Bank</span>
                                             </div>
                                             <svg class="bank-card-chip" viewBox="0 0 100 80" width="45" height="36"
@@ -1304,7 +1304,7 @@
                                         </div>
                                         <div class="ceo-card-right">
                                             <div class="ceo-front-logo-block">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 36px; height: 36px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
+                                                <img src="${pageContext.request.contextPath}/assest/images/image.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 36px; height: 36px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
                                                 <h4 style="margin: 0; font-size: 0.62rem; color: #ffffff;">Vertex Galaxy
                                                 </h4>
                                                 <span>Bank</span>
@@ -1315,7 +1315,7 @@
                                     <div class="flip-card-back">
                                         <div class="ceo-back-content">
                                             <div class="ceo-back-logo-section">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
+                                                <img src="${pageContext.request.contextPath}/assest/images/image.png" class="vg-orbit-logo" alt="VGB Logo" style="object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
                                                 <div class="ceo-back-title">Vertex Galaxy</div>
                                                 <div class="ceo-back-sub">Bank</div>
                                             </div>

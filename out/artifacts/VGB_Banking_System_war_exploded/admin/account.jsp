@@ -108,15 +108,21 @@
             cursor: pointer;
         }
         .vgb-atm-card.debit {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            background: radial-gradient(circle at 80% 80%, #3a007c 0%, #080321 60%, #01000b 100%) !important;
             box-shadow: 0 10px 20px rgba(59, 130, 246, 0.25);
         }
         .vgb-atm-card.credit {
-            background: linear-gradient(135deg, #4c1d95 0%, #8b5cf6 50%, #ec4899 100%);
+            background: 
+                radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.25) 0%, transparent 55%),
+                linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(135deg, #121316 0%, #08090a 100%) !important;
+            background-size: cover, 16px 16px, 16px 16px, cover;
             box-shadow: 0 10px 20px rgba(139, 92, 246, 0.25);
         }
         .vgb-atm-card.inactive-card {
-            background: linear-gradient(135deg, #374151 0%, #4b5563 100%) !important;
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 10px), 
+                        linear-gradient(135deg, #2e3035 0%, #151618 100%) !important;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
             opacity: 0.6;
         }
@@ -1544,14 +1550,14 @@
                         <div id="wizAtmCardDetails" style="display: none; gap: 20px; margin-bottom: 25px;">
                             <div class="form-group" style="flex: 1;">
                                 <label class="form-label">ATM Card Class</label>
-                                <select id="wizCardType" name="wizardCardType" class="form-control" onchange="syncWizAtmCardPreview()" style="cursor: pointer;">
+                                <select id="wizCardType" name="wizardCardType" class="form-control" style="cursor: pointer;">
                                     <option value="debit" selected>Sapphire Debit</option>
                                     <option value="credit">Royale Credit</option>
                                 </select>
                             </div>
                             <div class="form-group" style="flex: 1;">
                                 <label class="form-label">Payment Network Provider</label>
-                                <select id="wizCardProvider" name="wizardCardProvider" class="form-control" onchange="syncWizAtmCardPreview()" style="cursor: pointer;">
+                                <select id="wizCardProvider" name="wizardCardProvider" class="form-control" style="cursor: pointer;">
                                     <option value="visa" selected>Visa Secure</option>
                                     <option value="mastercard">Mastercard ID</option>
                                     <option value="rupay">RuPay Global</option>
@@ -1559,103 +1565,7 @@
                             </div>
                         </div>
 
-                        <!-- Dynamic 3D Selector Showcase Grid -->
-                        <div class="showcase-grid-3d">
-                            <!-- 3D Card Showcase -->
-                            <div class="showcase-item-3d">
-                                <span style="font-weight: 700; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; margin-bottom: 12px; display: block;">3D ATM Card Model</span>
-                                <div id="wizAtmTiltWrapper" class="card-3d-scene" onclick="toggleWizAtmSelection()" style="width: 320px; height: 200px;">
-                                    <div id="wizAtmPreviewCard" class="vgb-atm-card debit inactive-card interactive" onclick="event.stopPropagation(); flipWizAtmCard()">
-                                        <!-- Front -->
-                                        <div class="card-face card-front">
-                                            <div style="display: flex; justify-content: space-between; align-items: center; background: transparent;">
-                                                <span id="wizProviderLabel" style="font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px; font-style: italic;">VISA</span>
-                                                <div style="width: 38px; height: 28px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 4px;"></div>
-                                            </div>
-                                            <div id="wizNumberLabel" style="font-family: monospace; font-size: 1.15rem; letter-spacing: 1.5px; font-weight: 600; margin: 15px 0 5px;">4589  7321  6048  2190</div>
-                                            <div style="display: flex; justify-content: space-between; align-items: flex-end; background: transparent;">
-                                                <div>
-                                                    <span style="font-size: 0.5rem; opacity: 0.7; display: block;">Card Holder</span>
-                                                    <span id="wizHolderLabel" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">NEW HOLDER</span>
-                                                </div>
-                                                <span style="font-size: 0.85rem; font-weight: 800; font-style: italic;">VGB</span>
-                                            </div>
-                                        </div>
-                                        <!-- Back -->
-                                        <div class="card-face card-back">
-                                            <div style="height: 35px; background: #000; margin: 0 -20px;"></div>
-                                            <div style="background: rgba(255, 255, 255, 0.9); height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;">
-                                                <span id="wizCvv" style="font-family: monospace; font-size: 0.85rem; font-weight: 700; color: #334155;" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV">•••</span>
-                                            </div>
-                                            <div style="font-size: 0.45rem; opacity: 0.6; text-align: center;">VGB Bank Customer Support support@vgb.com</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- 3D Cheque Showcase -->
-                            <div class="showcase-item-3d">
-                                <span style="font-weight: 700; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; margin-bottom: 12px; display: block;">3D Cheque Model</span>
-                                <div onclick="toggleWizChequeSelection()">
-                                    <div id="wizChequePreviewCard" class="vgb-cheque-3d inactive-card" onclick="event.stopPropagation(); flipWizServiceCard('wizChequePreviewCard')">
-                                        <div class="cheque-hologram"></div>
-                                        <div class="cheque-header">
-                                            <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
-                                            <div class="cheque-date-box">
-                                                <div class="date-squares">
-                                                    <span>0</span><span>5</span><span>0</span><span>6</span><span>2</span><span>0</span><span>2</span><span>6</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="cheque-row" style="margin-top: 10px;">
-                                            <span class="cheque-label">Pay</span>
-                                            <span class="cheque-line-fill">SELF OR BEARER</span>
-                                        </div>
-                                        <div class="cheque-row">
-                                            <span class="cheque-label">Rupees</span>
-                                            <span class="cheque-line-fill">INITIAL FUNDING DEPOSIT</span>
-                                            <div class="cheque-amount-box">
-                                                <span style="font-weight: 800; border-right: 1px solid #1e3a8a; padding-right: 3px; margin-right: 3px;">₹</span>
-                                                <span style="font-family: monospace; font-weight: 700; margin-left: auto;">1,000.00</span>
-                                            </div>
-                                        </div>
-                                        <div class="cheque-details-row">
-                                            <div class="cheque-acc-box">A/C No: 100098481827</div>
-                                            <div class="cheque-sign-area">
-                                                <span class="cheque-sign-name">Authorized</span>
-                                            </div>
-                                        </div>
-                                        <div class="cheque-micr-band">⑈000076⑈ 360240005⑆</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 3D Passbook Showcase -->
-                            <div class="showcase-item-3d" id="wizPassbookPreviewContainer">
-                                <span style="font-weight: 700; font-size: 0.75rem; color: var(--gray-400); text-transform: uppercase; margin-bottom: 12px; display: block;">3D Passbook Model</span>
-                                <div id="wizPassbookPreviewCard" class="vgb-passbook-3d" onclick="flipWizServiceCard('wizPassbookPreviewCard')">
-                                    <!-- Front cover page -->
-                                    <div class="card-face card-front">
-                                        <h4 style="font-size: 1.15rem; font-weight: 800; letter-spacing: 1px; color: #fbbf24;"><i class="bx bx-shield-quarter"></i> VGB</h4>
-                                        <p style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Savings Account Passbook</p>
-                                        <div style="width: 35px; height: 35px; border: 1.5px solid #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 15px; color: #fbbf24; font-size: 1.15rem;">
-                                            <i class="bx bx-star"></i>
-                                        </div>
-                                    </div>
-                                    <!-- Back info page -->
-                                    <div class="card-face card-back">
-                                        <h5 style="font-size: 0.75rem; font-weight: 700; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 8px;">Signatory Info</h5>
-                                        <p style="font-size: 0.6rem; color: #64748b; line-height: 1.4;">
-                                            This Passbook contains physical transaction ledgers. Please present it at the counter for printing updates.
-                                        </p>
-                                        <p style="font-size: 0.6rem; color: #64748b; margin-top: 8px;">
-                                            <strong>Customer Care:</strong> 1800-VGB-BANK<br>
-                                            <strong>Branch code:</strong> RAJKOT MAIN (0171)
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- STEP 7: Security Credentials & Login Setup -->

@@ -14,7 +14,7 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>VGB | My Cards</title>
-                    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+                    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
                     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap"
                         rel="stylesheet">
                     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -234,52 +234,36 @@
                             background: #080b11;
                         }
 
-                        /* --- DEBIT CARD REDESIGN (COSMIC ORBIT PRESETS) --- */
-                        /* --- DEBIT & CREDIT CARD REDESIGN (COSMIC ORBIT PRESETS) --- */
-                        .vgb-atm-card.debit,
-                        .vgb-atm-card.credit {
-                            background: radial-gradient(circle at 50% 50%, #060b24 0%, #02040c 100%) !important;
-                            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+                        /* --- DEBIT & CREDIT CARD REDESIGN --- */
+                        .vgb-atm-card.debit {
+                            background: radial-gradient(circle at 80% 80%, #3a007c 0%, #080321 60%, #01000b 100%) !important;
+                            box-shadow: 0 12px 30px rgba(58, 0, 124, 0.25) !important;
                             border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
                         }
-                        
-                        /* Cosmic Orbiting rings (orbits) */
-                        .vgb-atm-card.debit .card-front::before,
-                        .vgb-atm-card.debit .card-back::before,
-                        .vgb-atm-card.credit .card-front::before,
-                        .vgb-atm-card.credit .card-back::before {
-                            content: '';
-                            position: absolute;
-                            top: 5%;
-                            left: 30%;
-                            width: 80%;
-                            height: 80%;
-                            border-radius: 50%;
-                            border: 1.5px solid rgba(0, 210, 255, 0.35);
-                            box-shadow: 0 0 10px rgba(0, 210, 255, 0.25), inset 0 0 10px rgba(0, 210, 255, 0.15);
-                            transform: rotate(-25deg) scaleY(0.4);
-                            pointer-events: none;
-                            z-index: 1;
+                        .vgb-atm-card.debit.premium-tier {
+                            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 8px), 
+                                        linear-gradient(135deg, #1b1c21 0%, #0d0e11 100%) !important;
+                            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3) !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
                         }
-                        .vgb-atm-card.debit .card-front::after,
-                        .vgb-atm-card.debit .card-back::after,
-                        .vgb-atm-card.credit .card-front::after,
-                        .vgb-atm-card.credit .card-back::after {
-                            content: '';
-                            position: absolute;
-                            top: -5%;
-                            left: 25%;
-                            width: 90%;
-                            height: 90%;
-                            border-radius: 50%;
-                            border: 2px solid rgba(139, 92, 246, 0.25);
-                            box-shadow: 0 0 12px rgba(139, 92, 246, 0.2), inset 0 0 12px rgba(139, 92, 246, 0.1);
-                            transform: rotate(-30deg) scaleY(0.35);
-                            pointer-events: none;
-                            z-index: 1;
+                        
+                        .vgb-atm-card.credit {
+                            background: 
+                                radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.25) 0%, transparent 55%),
+                                linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                                linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                                linear-gradient(135deg, #121316 0%, #08090a 100%) !important;
+                            background-size: cover, 16px 16px, 16px 16px, cover;
+                            box-shadow: 0 12px 30px rgba(124, 45, 18, 0.25) !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+                        }
+                        .vgb-atm-card.credit.premium-tier {
+                            background: radial-gradient(circle at 75% 35%, #18052b 0%, #030107 70%, #000000 100%) !important;
+                            box-shadow: 0 12px 30px rgba(168, 85, 247, 0.25) !important;
+                            border: 1.5px solid rgba(139, 92, 246, 0.3) !important;
                         }
 
-                        /* Clear the original backgrounds/pseudo-elements for Visa/MC/RuPay credit & debit */
+                        /* Clear original provider-specific background overrides */
                         .vgb-atm-card.debit.visa, 
                         .vgb-atm-card.debit.visa.premium-tier, 
                         .vgb-atm-card.debit.mastercard, 
@@ -288,8 +272,139 @@
                         .vgb-atm-card.credit.visa.premium-tier, 
                         .vgb-atm-card.credit.mastercard, 
                         .vgb-atm-card.credit.rupay {
-                            background: radial-gradient(circle at 50% 50%, #060b24 0%, #02040c 100%) !important;
-                            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+                            /* inherit from base card styles */
+                        }
+
+                        /* 3D orbits and decorative structures based on debit/credit card designs */
+                        .vgb-atm-card.debit .card-front::before {
+                            content: '';
+                            position: absolute;
+                            width: 250px;
+                            height: 250px;
+                            bottom: -90px;
+                            right: -70px;
+                            background: radial-gradient(circle, rgba(162, 23, 221, 0.45) 0%, rgba(93, 23, 221, 0.2) 45%, rgba(20, 10, 80, 0.05) 70%, transparent 80%);
+                            border-radius: 50%;
+                            transform: rotateX(65deg) rotateY(-15deg);
+                            box-shadow: inset 0 0 50px rgba(162, 23, 221, 0.3), 0 0 60px rgba(162, 23, 221, 0.25);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+                        .vgb-atm-card.debit .card-front::after {
+                            content: '';
+                            position: absolute;
+                            width: 190px;
+                            height: 190px;
+                            bottom: -60px;
+                            right: -40px;
+                            border: 1px dashed rgba(186, 85, 211, 0.35);
+                            border-radius: 50%;
+                            transform: rotateX(65deg) rotateY(-15deg);
+                            box-shadow: 0 0 15px rgba(186, 85, 211, 0.25), inset 0 0 15px rgba(186, 85, 211, 0.15);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .vgb-atm-card.debit.premium-tier .card-front::before {
+                            content: '';
+                            position: absolute;
+                            width: 320px;
+                            height: 180px;
+                            bottom: -50px;
+                            left: -50px;
+                            border-top: 4px solid #a855f7;
+                            border-right: 2px solid transparent;
+                            border-radius: 50%;
+                            transform: rotate(-12deg);
+                            box-shadow: 0 -3px 12px rgba(168, 85, 247, 0.6);
+                            filter: drop-shadow(0 0 6px #a855f7);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+                        .vgb-atm-card.debit.premium-tier .card-front::after {
+                            content: '';
+                            position: absolute;
+                            width: 280px;
+                            height: 150px;
+                            bottom: -40px;
+                            left: -40px;
+                            border-top: 2px solid rgba(0, 210, 255, 0.6);
+                            border-right: 2px solid transparent;
+                            border-radius: 50%;
+                            transform: rotate(-10deg);
+                            box-shadow: 0 -3px 12px rgba(0, 210, 255, 0.4);
+                            filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.4));
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .vgb-atm-card.credit .card-front::before {
+                            content: '';
+                            position: absolute;
+                            width: 180px;
+                            height: 180px;
+                            top: 20px;
+                            right: 20px;
+                            border: 2px double #d4af37;
+                            border-radius: 50%;
+                            transform: rotateX(75deg) rotateY(-20deg);
+                            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 25px rgba(212, 175, 55, 0.3);
+                            filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5));
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+                        .vgb-atm-card.credit .card-front::after {
+                            content: '';
+                            position: absolute;
+                            width: 130px;
+                            height: 130px;
+                            top: 35px;
+                            right: 40px;
+                            border: 1px dashed rgba(212, 175, 55, 0.45);
+                            border-radius: 50%;
+                            transform: rotateX(75deg) rotateY(-20deg);
+                            box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .vgb-atm-card.credit.premium-tier .card-front::before {
+                            content: '';
+                            position: absolute;
+                            width: 180px;
+                            height: 180px;
+                            top: 20px;
+                            right: 20px;
+                            border: 2px double #a855f7;
+                            border-radius: 50%;
+                            transform: rotateX(75deg) rotateY(-20deg);
+                            box-shadow: 0 0 25px rgba(168, 85, 247, 0.65), inset 0 0 25px rgba(168, 85, 247, 0.35);
+                            filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5));
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+                        .vgb-atm-card.credit.premium-tier .card-front::after {
+                            content: '';
+                            position: absolute;
+                            width: 130px;
+                            height: 130px;
+                            top: 35px;
+                            right: 40px;
+                            border: 1px dashed rgba(0, 210, 255, 0.4);
+                            border-radius: 50%;
+                            transform: rotateX(75deg) rotateY(-20deg);
+                            box-shadow: 0 0 15px rgba(0, 210, 255, 0.25);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        /* Gold styled text for Royale credit card */
+                        .vgb-atm-card.credit:not(.premium-tier) .card-number-display,
+                        .vgb-atm-card.credit:not(.premium-tier) .holder-name,
+                        .vgb-atm-card.credit:not(.premium-tier) .expiry-value,
+                        .vgb-atm-card.credit:not(.premium-tier) .expiry-label {
+                            color: #d4af37 !important;
+                            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
                         }
                         .vgb-atm-card.debit.visa .card-front::after,
                         .vgb-atm-card.debit.visa.premium-tier .card-front::after,
@@ -616,7 +731,7 @@
 
                         /* 5. Classic Credit (Visa Signature) */
                         .vgb-atm-card.credit.visa {
-                            background: radial-gradient(circle at 70% 35%, #18153c 0%, #080517 75%, #020108 100%);
+                            background: radial-gradient(circle at 70% 35%, #18153c 0%, #080517 75%, #020108 100%) !important;
                             box-shadow: 0 12px 25px rgba(99, 102, 241, 0.2);
                         }
 
@@ -634,8 +749,13 @@
 
                         /* 6. Gold Credit (Mastercard Royale) */
                         .vgb-atm-card.credit.mastercard {
-                            background: radial-gradient(circle at 75% 35%, #181105 0%, #000000 75%);
-                            box-shadow: 0 12px 25px rgba(245, 158, 11, 0.2);
+                            background: 
+                                radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.25) 0%, transparent 55%),
+                                linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                                linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                                linear-gradient(135deg, #121316 0%, #08090a 100%) !important;
+                            background-size: cover, 16px 16px, 16px 16px, cover;
+                            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.2);
                         }
 
                         .vgb-atm-card.credit.mastercard .card-front::after {
@@ -652,7 +772,7 @@
 
                         /* 7. Platinum Credit (RuPay Platinum) */
                         .vgb-atm-card.credit.rupay {
-                            background: linear-gradient(135deg, #1c1c24 0%, #0c0c10 100%);
+                            background: linear-gradient(135deg, #1c1c24 0%, #0c0c10 100%) !important;
                             box-shadow: 0 12px 25px rgba(255, 255, 255, 0.08);
                         }
 
@@ -669,8 +789,8 @@
 
                         /* 8. Infinite Credit (Visa Infinite) */
                         .vgb-atm-card.credit.visa.premium-tier {
-                            background: linear-gradient(135deg, #111111 0%, #030303 100%) !important;
-                            box-shadow: 0 12px 25px rgba(191, 149, 63, 0.25);
+                            background: radial-gradient(circle at 75% 35%, #18052b 0%, #030107 70%, #000000 100%) !important;
+                            box-shadow: 0 12px 25px rgba(168, 85, 247, 0.25);
                         }
 
                         .vgb-atm-card.credit.visa.premium-tier .card-front::after {
@@ -684,7 +804,8 @@
                         }
 
                         .vgb-atm-card.inactive-card {
-                            background: linear-gradient(135deg, #374151 0%, #4b5563 100%) !important;
+                            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 10px), 
+                                        linear-gradient(135deg, #2e3035 0%, #151618 100%) !important;
                             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
                             opacity: 0.8;
                         }
@@ -1387,7 +1508,7 @@
                             </button>
                             <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo"
                                 style="display: flex; align-items: center; text-decoration: none;">
-                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo"
+                                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo"
                                     style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
                             </a>
                         </div>
@@ -1522,7 +1643,7 @@
                                                             <!-- Shared/Common: Bank Name Header -->
                                                             <div class="card-bank-header">
                                                                 <div class="card-logo-v">
-                                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png"
+                                                                    <img src="${pageContext.request.contextPath}/assest/images/image.png"
                                                                         alt="VGB"
                                                                         style="width: 22px; height: 22px; object-fit: contain;">
                                                                 </div>
@@ -1690,7 +1811,7 @@
                                                                     
                                                                     <div class="debit-grid-right">
                                                                         <div class="debit-back-vgb-header">
-                                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
+                                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
                                                                             <div class="logo-text-stacked">
                                                                                 <span class="text-top">VERTEX</span>
                                                                                 <span class="text-bottom">GALAXY BANK</span>
@@ -1754,7 +1875,7 @@
                                                                     
                                                                     <div class="debit-grid-right">
                                                                         <div class="debit-back-vgb-header">
-                                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
+                                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
                                                                             <div class="logo-text-stacked">
                                                                                 <span class="text-top">VERTEX</span>
                                                                                 <span class="text-bottom">GALAXY BANK</span>

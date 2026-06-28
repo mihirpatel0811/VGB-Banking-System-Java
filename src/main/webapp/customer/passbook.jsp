@@ -24,7 +24,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Passbook Services</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
@@ -1161,7 +1161,7 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
@@ -1252,183 +1252,11 @@
                 <c:remove var="success" scope="session" />
             </c:if>
 
-            <!-- Flat Passbook Section -->
-            <div class="passbook-top-layout">
-                <!-- Left: Premium flat 2D Visualizer -->
-                <div class="passbook-visualizer-container">
-                    <div class="passbook-flat-preview">
-                        <!-- SVG Gradients Definition -->
-                        <svg style="position: absolute; width: 0; height: 0;">
-                            <defs>
-                                <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#00f0ff" />
-                                    <stop offset="50%" stop-color="#d900ff" />
-                                    <stop offset="100%" stop-color="#ffffff" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-
-                        <!-- Left Page: Account Details -->
-                        <div class="passbook-flat-page">
-                            <div class="account-panel-inside" style="background: rgba(255, 255, 255, 0.05); height: 100%; border: none !important;">
-                                <div>
-                                    <div class="inside-page-header">
-                                        <div class="header-left">
-                                            <div style="width: 14px; height: 14px; display: inline-block;">
-                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <span class="header-center">Account Information</span>
-                                        <span class="header-right">Vertex Galaxy Bank</span>
-                                    </div>
-                                    <table class="tech-credentials-table">
-                                        <tr>
-                                            <td>Account Holder Name</td>
-                                            <td>: <span class="uppercase text-ellipsis" id="pbCustName"><c:out value="${customer.firstName} ${customer.lastName}" default="CUSTOMER NAME"/></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Account Number</td>
-                                            <td>: <span class="monospace" id="pbAccNum">
-                                                <c:choose>
-                                                    <c:when test="${not empty accounts}">
-                                                        ${accounts[0].accountNumber}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        SELECT ACCOUNT
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Account Type</td>
-                                            <td>: <span class="uppercase" id="pbAccType">
-                                                <c:choose>
-                                                    <c:when test="${not empty accounts}">
-                                                        ${accounts[0].accountType} Account
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        SAVINGS
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>IFSC Code</td>
-                                            <td>: <span class="monospace" id="pbIfsc">
-                                                <c:choose>
-                                                    <c:when test="${not empty accounts}">
-                                                        ${accounts[0].ifscCode}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        VGB0000171
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>MICR Code</td>
-                                            <td>: <span class="monospace" id="pbMicr">110202001</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Branch</td>
-                                            <td>: <span id="pbBranch">BHAKTINAGAR, RAJKOT</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Phone Number</td>
-                                            <td>: <span id="pbPhone"><c:out value="${customer.phoneNo}" default="-"/></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nominee Name</td>
-                                            <td>: <span class="uppercase text-ellipsis" id="pbNominee">
-                                                <c:choose>
-                                                    <c:when test="${not empty accounts}">
-                                                        ${accounts[0].accountType eq 'current' ? accounts[0].businessName : (not empty accounts[0].nomineeName ? accounts[0].nomineeName : 'None')}
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        NEHA MALHOTRA
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </span></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Page: Transaction Ledger -->
-                        <div class="passbook-flat-page">
-                            <div class="transaction-panel-inside" style="background: rgba(255, 255, 255, 0.05); height: 100%; border: none !important;">
-                                 <!-- Ledger Table -->
-                                 <table class="tech-ledger-grid" style="margin-top: 5px;">
-                                     <colgroup>
-                                         <col style="width: 16%;">
-                                         <col style="width: 29%;">
-                                         <col style="width: 10%;">
-                                         <col style="width: 15%;">
-                                         <col style="width: 15%;">
-                                         <col style="width: 15%;">
-                                     </colgroup>
-                                     <thead>
-                                         <tr>
-                                             <th>Date</th>
-                                             <th>Particulars</th>
-                                             <th>Chq No.</th>
-                                             <th>Withdrawals (₹)</th>
-                                             <th>Deposits (₹)</th>
-                                             <th>Balance (₹)</th>
-                                         </tr>
-                                     </thead>
-                                     <tbody>
-                                         <tr>
-                                             <td>01/05/2024</td>
-                                             <td class="particulars">OPENING BALANCE</td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
-                                             <td>10,000.00</td>
-                                         </tr>
-                                         <tr>
-                                             <td>03/05/2024</td>
-                                             <td class="particulars">DEPOSIT - CASH</td>
-                                             <td></td>
-                                             <td></td>
-                                             <td>5,000.00</td>
-                                             <td>15,000.00</td>
-                                         </tr>
-                                         <tr>
-                                             <td>05/05/2024</td>
-                                             <td class="particulars">ATM - CASH WITHDRAWAL</td>
-                                             <td>125689</td>
-                                             <td>2,000.00</td>
-                                             <td></td>
-                                             <td>13,000.00</td>
-                                         </tr>
-                                         <tr>
-                                             <td>07/05/2024</td>
-                                             <td class="particulars">UPI/Payment Received</td>
-                                             <td></td>
-                                             <td></td>
-                                             <td>3,500.00</td>
-                                             <td>16,500.00</td>
-                                         </tr>
-                                     </tbody>
-                                 </table>
-
-                                 <div class="tech-ledger-footer" style="margin-bottom: 2px;">
-                                     * Please check entries. Report discrepancies immediately.
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="passbook-status-watermark" id="pbWatermark">PREVIEW</div>
-                </div>
-                </div>
-
-                <!-- Right: Information & Request form summary -->
-                <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0;">
-                    <div>
+            <!-- Split Dashboard: Service Features -->
+            <div class="passbook-top-layout" style="display: block;">
+                <!-- Quick Features Summary -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;" class="mobile-grid-1">
+                    <div class="glass-card" style="margin-bottom: 0;">
                         <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <i class="bx bx-shield-quarter" style="color: var(--primary-500);"></i> Premium Galaxy Passbook
                         </h3>
@@ -1436,17 +1264,27 @@
                             Our galaxy-class physical passbook comes standard with:
                         </p>
                         <ul style="color: var(--gray-600); font-size: 0.85rem; padding-left: 20px; line-height: 1.8; margin: 15px 0;">
-                            <li>Galaxy navy-blue textured covers with dual metallic gold foil accents</li>
-                            <li>Inline smart EMV-style chip simulator representing next-gen security</li>
+                            <li>Galaxy navy-blue textured covers with gold foil accents</li>
+                            <li>Inline smart EMV-style chip simulator representing security</li>
                             <li>Quick-scan machine-readable ledger columns</li>
-                            <li>Flat processing fee of <strong>₹100.00</strong> (fully refunded if request is rejected by Admin)</li>
+                            <li>Flat processing fee of <strong>₹100.00</strong> (refunded if request rejected)</li>
                         </ul>
                     </div>
-                    <div style="background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-md); padding: 18px; margin-top: 15px;">
-                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Important Policy</span>
-                        <p style="font-size: 0.8rem; color: var(--gray-500); margin: 0; line-height: 1.5;">
-                            Applying for a Passbook will automatically deduct ₹100.00 from your account balance. Upon approval, your account parameters will be updated to enable passbook transactions.
-                        </p>
+                    <div class="glass-card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="bx bx-info-circle" style="color: var(--primary-500);"></i> Important Policy
+                            </h3>
+                            <p style="color: var(--gray-500); font-size: 0.9rem; line-height: 1.6;">
+                                Applying for a Passbook will automatically deduct ₹100.00 from your account balance. Upon approval, your account parameters will be updated to enable passbook transactions.
+                            </p>
+                        </div>
+                        <div style="background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-md); padding: 18px; margin-top: 15px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Note on System</span>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); margin: 0; line-height: 1.5;">
+                                Passbook details are secure and linked to your digital account transactions in real-time.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1514,7 +1352,7 @@
                                             </td>
                                             <td style="text-align: right;">
                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                    <button type="button" class="btn-inspect" 
+                                                     <button type="button" class="btn-inspect" style="display:none;" 
                                                             data-id="${req.requestId}" 
                                                             data-name="${req.customerName}" 
                                                             data-account="${req.accountNumber}" 
@@ -1650,8 +1488,6 @@
             }
         });
 
-        const container = document.querySelector('.passbook-visualizer-container');
-
         // Modal triggers
         function openRequestModal(action, accountIdVal) {
             const modal = document.getElementById('requestModal');
@@ -1673,7 +1509,6 @@
             }
 
             modal.style.display = 'flex';
-            updateModalPreview();
         }
 
         function closeRequestModal() {
@@ -1684,63 +1519,6 @@
             const selectType = document.getElementById('modalRequestType');
             const formAction = document.getElementById('formAction');
             formAction.value = selectType.value;
-        }
-
-        function updateModalPreview() {
-            const selectAcc = document.getElementById('modalAccountId');
-            const selectedOpt = selectAcc.options[selectAcc.selectedIndex];
-            if (!selectedOpt) return;
-
-            const accNum = selectedOpt.getAttribute('data-accnum');
-            const accType = selectedOpt.getAttribute('data-acctype');
-            const ifsc = selectedOpt.getAttribute('data-ifsc');
-            const nominee = selectedOpt.getAttribute('data-nominee');
-            const phone = selectedOpt.getAttribute('data-phone');
-
-            // Sync with Page Preview
-            document.getElementById('pbAccNum').innerText = accNum;
-            document.getElementById('pbAccType').innerText = accType;
-            document.getElementById('pbIfsc').innerText = ifsc || '-';
-            document.getElementById('pbPhone').innerText = phone || '-';
-            document.getElementById('pbNominee').innerText = nominee || 'NONE';
-            
-            // Set Watermark text
-            const wm = document.getElementById('pbWatermark');
-            if (wm) {
-                wm.innerText = "PREVIEW";
-                wm.className = "passbook-status-watermark";
-            }
-        }
-
-        // View dynamic preview for a previous request
-        function inspectRequest(btn) {
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const acc = btn.getAttribute('data-account');
-            const type = btn.getAttribute('data-type');
-            const acctype = btn.getAttribute('data-acctype');
-            const ifsc = btn.getAttribute('data-ifsc');
-            const phone = btn.getAttribute('data-phone');
-            const nominee = btn.getAttribute('data-nominee');
-            const status = btn.getAttribute('data-status');
-
-            document.getElementById('pbCustName').innerText = name;
-            document.getElementById('pbAccNum').innerText = acc;
-            document.getElementById('pbAccType').innerText = acctype;
-            document.getElementById('pbIfsc').innerText = ifsc || '-';
-            document.getElementById('pbPhone').innerText = phone || '-';
-            document.getElementById('pbNominee').innerText = nominee || 'NONE';
-
-            const wm = document.getElementById('pbWatermark');
-            if (wm) {
-                wm.innerText = status;
-                wm.className = "passbook-status-watermark " + status.toLowerCase();
-            }
-
-            // Scroll visualizer into view on mobile
-            if (container) {
-                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
         }
     </script>
 </body>

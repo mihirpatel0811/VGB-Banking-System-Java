@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Manage ATM Cards</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
@@ -556,45 +556,169 @@
 
         /* Gradient presets */
         .vgb-atm-card.debit {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%) !important;
-            box-shadow: 0 12px 25px rgba(30, 58, 138, 0.25) !important;
+            background: radial-gradient(circle at 80% 80%, #3a007c 0%, #080321 60%, #01000b 100%) !important;
+            box-shadow: 0 12px 25px rgba(58, 0, 124, 0.25) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
         }
         .vgb-atm-card.debit.premium-tier {
-            background: linear-gradient(135deg, #475569 0%, #0f172a 100%) !important;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 8px), 
+                        linear-gradient(135deg, #1b1c21 0%, #0d0e11 100%) !important;
             box-shadow: 0 12px 25px rgba(15, 23, 42, 0.3) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
         }
         .vgb-atm-card.credit {
-            background: linear-gradient(135deg, #7c2d12 0%, #1c1917 100%) !important;
+            background: 
+                radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.25) 0%, transparent 55%),
+                linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(135deg, #121316 0%, #08090a 100%) !important;
+            background-size: cover, 16px 16px, 16px 16px, cover;
             box-shadow: 0 12px 25px rgba(124, 45, 18, 0.25) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
         }
         .vgb-atm-card.credit.premium-tier {
-            background: radial-gradient(circle at 75% 25%, #1e1b4b 0%, #030712 100%) !important;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45) !important;
+            background: radial-gradient(circle at 75% 35%, #18052b 0%, #030107 70%, #000000 100%) !important;
+            box-shadow: 0 12px 25px rgba(168, 85, 247, 0.25) !important;
             border: 1.5px solid rgba(139, 92, 246, 0.3) !important;
         }
         .vgb-atm-card.inactive-card {
-            background: linear-gradient(135deg, #374151 0%, #111827 100%) !important;
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 10px), 
+                        linear-gradient(135deg, #2e3035 0%, #151618 100%) !important;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
             opacity: 0.75;
         }
 
-        /* 3D orbits for premium versions */
-        .vgb-atm-card.premium-tier .card-front::before {
+        /* 3D orbits and decorative structures based on debit/credit card designs */
+        .vgb-atm-card.debit .card-front::before {
             content: '';
             position: absolute;
-            top: -10%;
-            left: 20%;
-            width: 90%;
-            height: 90%;
+            width: 250px;
+            height: 250px;
+            bottom: -90px;
+            right: -70px;
+            background: radial-gradient(circle, rgba(162, 23, 221, 0.45) 0%, rgba(93, 23, 221, 0.2) 45%, rgba(20, 10, 80, 0.05) 70%, transparent 80%);
             border-radius: 50%;
-            border: 1.5px dashed rgba(255, 255, 255, 0.1);
+            transform: rotateX(65deg) rotateY(-15deg);
+            box-shadow: inset 0 0 50px rgba(162, 23, 221, 0.3), 0 0 60px rgba(162, 23, 221, 0.2);
             pointer-events: none;
             z-index: 1;
-            transform: rotate(-15deg) scaleY(0.4);
+        }
+        .vgb-atm-card.debit .card-front::after {
+            content: '';
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            bottom: -60px;
+            right: -40px;
+            border: 1px dashed rgba(186, 85, 211, 0.35);
+            border-radius: 50%;
+            transform: rotateX(65deg) rotateY(-15deg);
+            box-shadow: 0 0 15px rgba(186, 85, 211, 0.2), inset 0 0 15px rgba(186, 85, 211, 0.1);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .vgb-atm-card.debit.premium-tier .card-front::before {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 180px;
+            bottom: -50px;
+            left: -50px;
+            border-top: 4px solid #a855f7;
+            border-right: 2px solid transparent;
+            border-radius: 50%;
+            transform: rotate(-12deg);
+            box-shadow: 0 -3px 12px rgba(168, 85, 247, 0.6);
+            filter: drop-shadow(0 0 6px #a855f7);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .vgb-atm-card.debit.premium-tier .card-front::after {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 150px;
+            bottom: -40px;
+            left: -40px;
+            border-top: 2px solid rgba(0, 210, 255, 0.6);
+            border-right: 2px solid transparent;
+            border-radius: 50%;
+            transform: rotate(-10deg);
+            box-shadow: 0 -3px 12px rgba(0, 210, 255, 0.4);
+            filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.4));
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .vgb-atm-card.credit .card-front::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            top: 20px;
+            right: 20px;
+            border: 2px double #d4af37;
+            border-radius: 50%;
+            transform: rotateX(75deg) rotateY(-20deg);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 25px rgba(212, 175, 55, 0.3);
+            filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5));
+            pointer-events: none;
+            z-index: 1;
+        }
+        .vgb-atm-card.credit .card-front::after {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            top: 35px;
+            right: 40px;
+            border: 1px dashed rgba(212, 175, 55, 0.45);
+            border-radius: 50%;
+            transform: rotateX(75deg) rotateY(-20deg);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .vgb-atm-card.credit.premium-tier .card-front::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            top: 20px;
+            right: 20px;
+            border: 2px double #a855f7;
+            border-radius: 50%;
+            transform: rotateX(75deg) rotateY(-20deg);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.65), inset 0 0 25px rgba(168, 85, 247, 0.35);
+            filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5));
+            pointer-events: none;
+            z-index: 1;
+        }
+        .vgb-atm-card.credit.premium-tier .card-front::after {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            top: 35px;
+            right: 40px;
+            border: 1px dashed rgba(0, 210, 255, 0.4);
+            border-radius: 50%;
+            transform: rotateX(75deg) rotateY(-20deg);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.25);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Gold styled text for Royale credit card */
+        .vgb-atm-card.credit:not(.premium-tier) .card-number-display,
+        .vgb-atm-card.credit:not(.premium-tier) .holder-name,
+        .vgb-atm-card.credit:not(.premium-tier) .expiry-value,
+        .vgb-atm-card.credit:not(.premium-tier) .expiry-label {
+            color: #d4af37 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
         }
 
         /* Layout overlays */
@@ -1252,12 +1376,12 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                 <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                     <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                     <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -1382,239 +1506,6 @@
                 </div>
             </div>
 
-            <!-- Premium ATM Card Customizer & Live Simulator Sandbox -->
-            <div class="glass-card" style="border-color: rgba(99, 102, 241, 0.2);">
-                <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
-                    <i class="bx bx-shape-polygon" style="color: var(--primary-500); font-size: 1.6rem;"></i> 
-                    Flagship VGB Premium 3D ATM Card Showcase & Live Simulator
-                </h3>
-                <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 25px;">
-                    Explore interactive 3D tilt tracking. Hover over the card to tilt, click to flip, and customize elements live using controls.
-                </p>
-                
-                <div class="card-customizer-grid">
-                    <!-- Left Column: The 3D Demo Card Display -->
-                    <div class="simulator-display">
-                        <div style="position: absolute; top: 15px; left: 15px; pointer-events: none;">
-                            <span style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 4px;">
-                                <i class="bx bx-expand-alt" style="font-size: 0.9rem;"></i> 3D Sandbox
-                            </span>
-                        </div>
-                        
-                        <!-- Flippable Card Scene -->
-                        <div class="card-3d-scene sandbox-card-wrapper" id="demo3DCardTiltWrapper">
-                            <div id="demo3DCard" class="vgb-atm-card debit interactive" onclick="flipDemoCard()">
-                                <!-- Front Face -->
-                                <div class="card-face card-front">
-                                    <div class="glass-reflection"></div>
-                                    <div class="card-tier-indicator" id="demoTierIndicator"></div>
-                                    
-                                    <!-- Bank Name Header -->
-                                    <div class="card-bank-header" style="display: flex; align-items: center; gap: 8px;">
-                                        <div class="card-logo-v">
-                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 22px; height: 22px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));">
-                                        </div>
-                                        <div class="card-bank-name-stack">
-                                            <span class="bank-title" style="font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; color: #ffffff;">VERTEX</span>
-                                            <span class="bank-subtitle" style="font-size: 0.45rem; font-weight: 600; letter-spacing: 1px; color: rgba(255, 255, 255, 0.7);">GALAXY BANK</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- DEBIT FRONT LAYOUT -->
-                                    <div class="debit-front-layout">
-                                        <div class="debit-header-right">
-                                            <span class="debit-label-txt">DEBIT</span>
-                                            <i class="bx bx-wifi contactless-icon-debit"></i>
-                                        </div>
-
-                                        <div style="margin-top: 15px;">
-                                            <div class="metallic-chip"></div>
-                                        </div>
-
-                                        <div class="card-number-display" id="demoDebitNumber">4589  7321  6048  2190</div>
-
-                                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                            <div class="debit-expiry-row">
-                                                <span class="expiry-label">VALID<br>THRU</span>
-                                                <span class="expiry-value" id="demoDebitExpiry">12/30</span>
-                                            </div>
-                                            <div class="holder-name" id="demoDebitHolder">MIHIR BHAYANI</div>
-                                            <div class="debit-brand-logo-container" id="demoDebitBrandLogo"></div>
-                                        </div>
-                                    </div>
-
-                                    <!-- CREDIT FRONT LAYOUT -->
-                                    <div class="credit-front-layout">
-                                        <div class="debit-header-right">
-                                            <span class="debit-label-txt">CREDIT</span>
-                                            <i class="bx bx-wifi contactless-icon-debit"></i>
-                                        </div>
-
-                                        <div style="margin-top: 15px;">
-                                            <div class="metallic-chip"></div>
-                                        </div>
-
-                                        <div class="card-number-display" id="demoNumber">4589  7321  6048  2190</div>
-
-                                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                            <div class="debit-expiry-row">
-                                                <span class="expiry-label">VALID<br>THRU</span>
-                                                <span class="expiry-value" id="demoExpiry">12/30</span>
-                                            </div>
-                                            <div class="holder-name" id="demoHolder">MIHIR BHAYANI</div>
-                                            <div class="debit-brand-logo-container" id="demoBrandLogo"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Back Face -->
-                                <div class="card-face card-back">
-                                    <div class="glass-reflection"></div>
-                                    
-                                    <!-- DEBIT BACK LAYOUT -->
-                                    <div class="debit-back-layout">
-                                        <div class="card-back-magnetic-strip"></div>
-                                        
-                                        <div class="debit-back-info-bar">
-                                            <span>www.vertexgalaxybank.com</span>
-                                            <span>For service, call +1 234 567 8900</span>
-                                        </div>
-                                        
-                                        <div class="debit-back-grid">
-                                            <div class="debit-grid-left">
-                                                <div class="debit-signature-area">
-                                                    <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
-                                                    <div class="debit-sig-strip-wrapper">
-                                                        <div class="debit-signature-pattern"></div>
-                                                        <div class="debit-sig-cvv-box">
-                                                            <span class="cvv-val" id="demoDebitCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV" style="cursor: pointer;">•••</span>
-                                                        </div>
-                                                    </div>
-                                                    <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
-                                                </div>
-                                                <div class="debit-back-network-logo" id="demoDebitBackEmblem"></div>
-                                            </div>
-                                            
-                                            <div class="debit-grid-right">
-                                                <div class="debit-back-vgb-header">
-                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 16px; height: 16px; object-fit: contain;">
-                                                    <div class="logo-text-stacked">
-                                                        <span class="text-top">VERTEX</span>
-                                                        <span class="text-bottom">GALAXY BANK</span>
-                                                    </div>
-                                                </div>
-                                                <p class="debit-property-disclaimer">
-                                                    This card is corporate property of Vertex Galaxy Bank.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- CREDIT BACK LAYOUT -->
-                                    <div class="credit-back-layout">
-                                        <div class="card-back-magnetic-strip"></div>
-                                        
-                                        <div class="debit-back-info-bar">
-                                            <span>www.vertexgalaxybank.com</span>
-                                            <span>For service, call +1 234 567 8900</span>
-                                        </div>
-                                        
-                                        <div class="debit-back-grid">
-                                            <div class="debit-grid-left">
-                                                <div class="debit-signature-area">
-                                                    <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
-                                                    <div class="debit-sig-strip-wrapper">
-                                                        <div class="debit-signature-pattern"></div>
-                                                        <div class="debit-sig-cvv-box">
-                                                            <span class="cvv-val" id="demoCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV" style="cursor: pointer;">•••</span>
-                                                        </div>
-                                                    </div>
-                                                    <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
-                                                </div>
-                                                <div class="debit-back-network-logo" id="demoBackEmblem"></div>
-                                            </div>
-                                            
-                                            <div class="debit-grid-right">
-                                                <div class="debit-back-vgb-header">
-                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 16px; height: 16px; object-fit: contain;">
-                                                    <div class="logo-text-stacked">
-                                                        <span class="text-top">VERTEX</span>
-                                                        <span class="text-bottom">GALAXY BANK</span>
-                                                    </div>
-                                                </div>
-                                                <p class="debit-property-disclaimer">
-                                                    This card is corporate property of Vertex Galaxy Bank.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-top: 25px; display: flex; gap: 15px; font-size: 0.75rem; color: var(--gray-400); align-items: center;">
-                            <span><i class="bx bx-mouse" style="color: var(--primary-500);"></i> Hover to Tilt</span>
-                            <span>|</span>
-                            <span><i class="bx bx-pointer" style="color: var(--primary-500);"></i> Click Card to Flip</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Right Column: Customizer Controls -->
-                    <div class="simulator-controls">
-                        <div class="control-row">
-                            <div class="control-group">
-                                <label class="control-label">Card Tier</label>
-                                <select id="ctrlCardType" class="control-select" onchange="syncDemoCard()">
-                                    <option value="debit">Sapphire Debit</option>
-                                    <option value="debit-premium">Platinum Debit (Premium)</option>
-                                    <option value="credit">Royale Credit</option>
-                                    <option value="credit-premium">Infinite Credit (Premium)</option>
-                                    <option value="inactive">Blocked / Inactive</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Network Provider</label>
-                                <select id="ctrlCardProvider" class="control-select" onchange="syncDemoCard()">
-                                    <option value="visa">Visa Secure</option>
-                                    <option value="mastercard">Mastercard ID</option>
-                                    <option value="rupay">RuPay Global</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="control-group">
-                            <label class="control-label">Embossed Name</label>
-                            <input type="text" id="ctrlHolderName" class="control-input" value="MIHIR BHAYANI" placeholder="Card Holder Name" oninput="syncDemoCard()" style="text-transform: uppercase;">
-                        </div>
-                        
-                        <div class="control-group">
-                            <label class="control-label">Card Number</label>
-                            <input type="text" id="ctrlCardNumber" class="control-input" value="4589 7321 6048 2190" placeholder="16-Digit Card Number" oninput="syncDemoCard()" maxlength="19">
-                        </div>
-                        
-                        <div class="control-row">
-                            <div class="control-group">
-                                <label class="control-label">Expiry Date</label>
-                                <input type="text" id="ctrlExpiry" class="control-input" value="12/30" placeholder="MM/YY" oninput="syncDemoCard()" maxlength="5">
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">CVV Code</label>
-                                <input type="text" id="ctrlCvv" class="control-input" value="907" placeholder="3 Digits" oninput="syncDemoCard()" maxlength="3">
-                            </div>
-                        </div>
-                        
-                        <div class="control-row" style="margin-top: 10px;">
-                            <button type="button" class="btn btn-secondary" onclick="randomizeDemoCard()" style="padding: 11px; width: 100%; font-size: 0.85rem; font-weight: 600; margin-top: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-color: var(--primary-500); color: var(--primary-500); background: transparent;">
-                                <i class="bx bx-shuffle"></i> Randomize
-                            </button>
-                            <button type="button" class="btn btn-primary" onclick="flipDemoCard()" style="padding: 11px; width: 100%; font-size: 0.85rem; font-weight: 600; margin-top: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-                                <i class="bx bx-rotate-right"></i> Flip Card
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Table 1: Pending Card Approvals -->
             <div class="glass-card">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;">
@@ -1649,9 +1540,7 @@
                                         <td style="font-weight: 700; color: var(--accent-emerald);">₹ ${card.cardFee}</td>
                                         <td><fmt:formatDate value="${card.createdAt}" pattern="yyyy-MM-dd HH:mm" /></td>
                                         <td style="text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                            <button type="button" class="btn-action btn-action-view" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedAppliedDate}', '${card.status}', '${card.dailyLimit}')">
-                                                <i class="bx bx-show"></i> View 3D
-                                            </button>
+
                                             <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}" class="btn-action btn-action-approve">
                                                 <i class="bx bx-check"></i> Approve
                                             </a>
@@ -1750,9 +1639,6 @@
                                                 </c:choose>
                                             </td>
                                             <td style="text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                                <button type="button" class="btn-action btn-action-view" onclick="open3DCardPreview('${card.cardNumber}', '${card.cardHolderName}', '${card.cardType}', '${card.cardProvider}', '${card.cvv}', '${formattedExpiryDate}', '${card.status}', '${card.dailyLimit}')">
-                                                    <i class="bx bx-show"></i> View 3D
-                                                </button>
                                                 <c:if test="${card.status eq 'active'}">
                                                     <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}" class="btn-action btn-action-reject" onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');">
                                                         <i class="bx bx-power-off"></i> Close
@@ -1782,479 +1668,10 @@
         </div>
     </footer>
 
-    <!-- Premium 3D Card Visualizer Modal -->
-    <div id="previewCardModal" class="modal" onclick="close3DCardPreviewOnClickOutside(event)">
-        <div class="glass-card" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(25px); border: 1px solid rgba(99, 102, 241, 0.2); width: 100%; max-width: 470px; border-radius: var(--radius-lg); padding: 30px; position: relative; animation: modalFadeIn 0.3s ease-out; box-shadow: var(--shadow-xl); margin-bottom: 0;">
-            <span onclick="close3DCardPreview()" style="position: absolute; right: 20px; top: 18px; font-size: 1.6rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</span>
-            
-            <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--gray-800); margin-bottom: 25px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class="bx bx-credit-card-front" style="color: var(--primary-500); font-size: 1.5rem;"></i> VGB Premium Card Visualizer
-            </h3>
 
-            <!-- Flippable Card -->
-            <div class="card-3d-scene" id="visualizerCardTiltWrapper" style="width: 100%; display: flex; justify-content: center; margin-bottom: 30px;">
-                <div id="visualizerCard" class="vgb-atm-card interactive" style="width: 340px; height: 220px;" onclick="this.classList.toggle('flipped')">
-                    <!-- Front Face -->
-                    <div class="card-face card-front">
-                        <div class="glass-reflection"></div>
-                        <div class="card-tier-indicator" id="previewTierIndicator"></div>
-                        
-                        <!-- Bank Name Header -->
-                        <div class="card-bank-header" style="display: flex; align-items: center; gap: 8px;">
-                            <div class="card-logo-v">
-                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 22px; height: 22px; object-fit: contain;">
-                            </div>
-                            <div class="card-bank-name-stack">
-                                <span class="bank-title" style="font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; color: #ffffff;">VERTEX</span>
-                                <span class="bank-subtitle" style="font-size: 0.45rem; font-weight: 600; letter-spacing: 1px; color: rgba(255, 255, 255, 0.7);">GALAXY BANK</span>
-                            </div>
-                        </div>
-                        
-                        <!-- DEBIT FRONT LAYOUT -->
-                        <div class="debit-front-layout">
-                            <div class="debit-header-right">
-                                <span class="debit-label-txt">DEBIT</span>
-                                <i class="bx bx-wifi contactless-icon-debit"></i>
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <div class="metallic-chip"></div>
-                            </div>
-                            <div class="card-number-display" id="previewDebitNumber">4589  7321  6048  2190</div>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                <div class="debit-expiry-row">
-                                    <span class="expiry-label">VALID<br>THRU</span>
-                                    <span class="expiry-value" id="previewDebitExpiry">12/29</span>
-                                </div>
-                                <div class="holder-name" id="previewDebitHolder">John Doe</div>
-                                <div class="debit-brand-logo-container" id="previewDebitBrandLogo"></div>
-                            </div>
-                        </div>
-
-                        <!-- CREDIT FRONT LAYOUT -->
-                        <div class="credit-front-layout">
-                            <div class="debit-header-right">
-                                <span class="debit-label-txt">CREDIT</span>
-                                <i class="bx bx-wifi contactless-icon-debit"></i>
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <div class="metallic-chip"></div>
-                            </div>
-                            <div class="card-number-display" id="previewNumber">4589  7321  6048  2190</div>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                <div class="debit-expiry-row">
-                                    <span class="expiry-label">VALID<br>THRU</span>
-                                    <span class="expiry-value" id="previewExpiry">12/29</span>
-                                </div>
-                                <div class="holder-name" id="previewHolder">John Doe</div>
-                                <div class="debit-brand-logo-container" id="previewBrandLogo"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Back Face -->
-                    <div class="card-face card-back">
-                        <div class="glass-reflection"></div>
-                        
-                        <!-- DEBIT BACK LAYOUT -->
-                        <div class="debit-back-layout">
-                            <div class="card-back-magnetic-strip"></div>
-                            <div class="debit-back-info-bar">
-                                <span>www.vertexgalaxybank.com</span>
-                                <span>For service, call +1 234 567 8900</span>
-                            </div>
-                            <div class="debit-back-grid">
-                                <div class="debit-grid-left">
-                                    <div class="debit-signature-area">
-                                        <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
-                                        <div class="debit-sig-strip-wrapper">
-                                            <div class="debit-signature-pattern"></div>
-                                            <div class="debit-sig-cvv-box">
-                                                <span class="cvv-val" id="previewDebitCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV" style="cursor: pointer;">•••</span>
-                                            </div>
-                                        </div>
-                                        <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
-                                    </div>
-                                    <div class="debit-back-network-logo" id="previewDebitBackEmblem"></div>
-                                </div>
-                                <div class="debit-grid-right">
-                                    <div class="debit-back-vgb-header">
-                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 16px; height: 16px; object-fit: contain;">
-                                        <div class="logo-text-stacked">
-                                            <span class="text-top">VERTEX</span>
-                                            <span class="text-bottom">GALAXY BANK</span>
-                                        </div>
-                                    </div>
-                                    <p class="debit-property-disclaimer">
-                                        This card is corporate property of Vertex Galaxy Bank.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- CREDIT BACK LAYOUT -->
-                        <div class="credit-back-layout">
-                            <div class="card-back-magnetic-strip"></div>
-                            <div class="debit-back-info-bar">
-                                <span>www.vertexgalaxybank.com</span>
-                                <span>For service, call +1 234 567 8900</span>
-                            </div>
-                            <div class="debit-back-grid">
-                                <div class="debit-grid-left">
-                                    <div class="debit-signature-area">
-                                        <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
-                                        <div class="debit-sig-strip-wrapper">
-                                            <div class="debit-signature-pattern"></div>
-                                            <div class="debit-sig-cvv-box">
-                                                <span class="cvv-val" id="previewCvv" data-cvv="907" onclick="toggle3DCardCvv(event, this)" title="Click to show CVV" style="cursor: pointer;">•••</span>
-                                            </div>
-                                        </div>
-                                        <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
-                                    </div>
-                                    <div class="debit-back-network-logo" id="previewBackEmblem"></div>
-                                </div>
-                                <div class="debit-grid-right">
-                                    <div class="debit-back-vgb-header">
-                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 16px; height: 16px; object-fit: contain;">
-                                        <div class="logo-text-stacked">
-                                            <span class="text-top">VERTEX</span>
-                                            <span class="text-bottom">GALAXY BANK</span>
-                                        </div>
-                                    </div>
-                                    <p class="debit-property-disclaimer">
-                                        This card is corporate property of Vertex Galaxy Bank.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Spec Sheet -->
-            <div class="modal-card-spec">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div>
-                        <span style="color: var(--gray-400); display: block; font-size: 0.72rem; text-transform: uppercase; font-weight: 600;">Status</span>
-                        <strong id="previewSpecStatus" style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-emerald);">Active</strong>
-                    </div>
-                    <div>
-                        <span style="color: var(--gray-400); display: block; font-size: 0.72rem; text-transform: uppercase; font-weight: 600;">System Limit</span>
-                        <strong id="previewSpecLimit" style="font-size: 0.85rem; color: var(--gray-800);">₹ 50,000.00</strong>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: center; margin-top: 25px;">
-                <button type="button" class="btn btn-secondary" onclick="close3DCardPreview()" style="padding: 12px 25px; font-weight: 600; width: 100%; margin-top: 0; box-shadow: var(--shadow-md);">Close Visualizer</button>
-            </div>
-        </div>
-    </div>
 
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
-        function updateDynamicCardDetails(cardElementId, tierElId, brandLogoElId, backEmblemElId, cardType, provider, dailyLimit, status = 'active') {
-            const card = document.getElementById(cardElementId);
-            const tierEl = document.getElementById(tierElId);
-            const brandLogoEl = document.getElementById(brandLogoElId);
-            const backEmblemEl = document.getElementById(backEmblemElId);
-            
-            if (!card) return;
-
-            let isDebit = true;
-            let isPremium = false;
-            let isInactive = status.toLowerCase() !== 'active' && status.toLowerCase() !== 'pending';
-
-            const normType = cardType.toLowerCase();
-            if (normType === 'debit') {
-                isDebit = true;
-                isPremium = dailyLimit > 50000;
-            } else if (normType === 'debit-premium' || normType === 'debit_premium') {
-                isDebit = true;
-                isPremium = true;
-            } else if (normType === 'credit') {
-                isDebit = false;
-                isPremium = dailyLimit > 50000;
-            } else if (normType === 'credit-premium' || normType === 'credit_premium') {
-                isDebit = false;
-                isPremium = true;
-            } else if (normType === 'inactive') {
-                isInactive = true;
-            }
-
-            card.className = "vgb-atm-card interactive";
-            if (isInactive) {
-                card.classList.add('inactive-card');
-            } else {
-                card.classList.add(isDebit ? 'debit' : 'credit');
-                card.classList.add(provider.toLowerCase());
-                if (isPremium) {
-                    card.classList.add('premium-tier');
-                }
-            }
-
-            // Set Tier Text
-            if (tierEl) {
-                if (!isInactive && (isPremium || (!isDebit && provider.toLowerCase() === 'rupay'))) {
-                    let tierText = 'PLATINUM';
-                    if (!isDebit && provider.toLowerCase() === 'visa') {
-                        tierText = 'INFINITE';
-                    }
-                    tierEl.innerHTML = `<span style="font-size: 0.55rem; font-weight: 800; background: linear-gradient(135deg, #ffd700 0%, #b38728 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">\${tierText}</span>`;
-                } else {
-                    tierEl.innerHTML = '';
-                }
-            }
-
-            // Set Front Brand Logo
-            if (brandLogoEl) {
-                const prov = provider.toLowerCase();
-                if (prov === 'visa') {
-                    brandLogoEl.innerHTML = `
-                        <div class="brand-visa-secure">
-                            <span class="visa-secure-text">VISA</span>
-                            <span class="visa-secure-sub">SECURE</span>
-                        </div>
-                    `;
-                } else if (prov === 'mastercard') {
-                    brandLogoEl.innerHTML = `
-                        <div class="brand-mastercard-id">
-                            <div class="mc-circles-id">
-                                <span class="circle-id red-id"></span>
-                                <span class="circle-id orange-id"></span>
-                            </div>
-                            <span class="mc-id-text">mastercard<br><span style="font-weight:800; text-transform:uppercase; font-size:0.45rem;">ID</span></span>
-                        </div>
-                    `;
-                } else {
-                    brandLogoEl.innerHTML = `
-                        <div class="brand-rupay-global">
-                            <span class="rupay-global-text">RuPay<span class="arrow-accent">▶</span></span>
-                            <span class="rupay-global-sub">GLOBAL</span>
-                        </div>
-                    `;
-                }
-            }
-
-            // Set Back Emblem
-            if (backEmblemEl) {
-                const prov = provider.toLowerCase();
-                if (prov === 'visa') {
-                    backEmblemEl.innerHTML = `
-                        <div class="brand-visa-secure" style="transform: scale(0.85); transform-origin: left bottom;">
-                            <span class="visa-secure-text">VISA</span>
-                            <span class="visa-secure-sub">SECURE</span>
-                        </div>
-                    `;
-                } else if (prov === 'mastercard') {
-                    backEmblemEl.innerHTML = `
-                        <div class="brand-mastercard-id" style="flex-direction: row; gap: 5px; align-items: center; transform: scale(0.85); transform-origin: left bottom;">
-                            <div class="mc-circles-id">
-                                <span class="circle-id red-id"></span>
-                                <span class="circle-id orange-id"></span>
-                            </div>
-                            <span class="mc-id-text" style="text-align: left;">mastercard<br><span style="font-weight:800; text-transform:uppercase; font-size:0.45rem;">ID</span></span>
-                        </div>
-                    `;
-                } else {
-                    backEmblemEl.innerHTML = `
-                        <div class="brand-rupay-global" style="transform: scale(0.85); transform-origin: left bottom;">
-                            <span class="rupay-global-text">RuPay<span class="arrow-accent">▶</span></span>
-                            <span class="rupay-global-sub">GLOBAL</span>
-                        </div>
-                    `;
-                }
-            }
-
-            // Sync debit details
-            const isDemo = brandLogoElId && brandLogoElId.startsWith('demo');
-            const debitBrandLogoElId = isDemo ? 'demoDebitBrandLogo' : 'previewDebitBrandLogo';
-            const debitBackEmblemElId = isDemo ? 'demoDebitBackEmblem' : 'previewDebitBackEmblem';
-            const debitBrandLogoEl = document.getElementById(debitBrandLogoElId);
-            const debitBackEmblemEl = document.getElementById(debitBackEmblemElId);
-
-            if (isDebit) {
-                if (debitBrandLogoEl) debitBrandLogoEl.innerHTML = brandLogoEl ? brandLogoEl.innerHTML : '';
-                if (debitBackEmblemEl) debitBackEmblemEl.innerHTML = backEmblemEl ? backEmblemEl.innerHTML : '';
-            }
-        }
-
-        function open3DCardPreview(number, holder, type, provider, cvv, expiry, status, limit) {
-            const modal = document.getElementById('previewCardModal');
-            
-            // Set front values
-            document.getElementById('previewNumber').innerText = number;
-            document.getElementById('previewHolder').innerText = holder;
-            document.getElementById('previewExpiry').innerText = expiry;
-            
-            const previewDebitNum = document.getElementById('previewDebitNumber');
-            if (previewDebitNum) previewDebitNum.innerText = number;
-            const previewDebitHol = document.getElementById('previewDebitHolder');
-            if (previewDebitHol) previewDebitHol.innerText = holder;
-            const previewDebitExp = document.getElementById('previewDebitExpiry');
-            if (previewDebitExp) previewDebitExp.innerText = expiry;
-            
-            const previewCvvEl = document.getElementById('previewCvv');
-            previewCvvEl.innerText = "•••";
-            previewCvvEl.setAttribute('data-cvv', cvv);
-            
-            const previewDebitCvvEl = document.getElementById('previewDebitCvv');
-            if (previewDebitCvvEl) {
-                previewDebitCvvEl.innerText = "•••";
-                previewDebitCvvEl.setAttribute('data-cvv', cvv);
-            }
-            
-            const numLimit = parseFloat(limit) || 0;
-            
-            updateDynamicCardDetails('visualizerCard', 'previewTierIndicator', 'previewBrandLogo', 'previewBackEmblem', type, provider, numLimit, status);
-            
-            const specStatus = document.getElementById('previewSpecStatus');
-            const specLimit = document.getElementById('previewSpecLimit');
-            
-            const normStatus = status.toLowerCase();
-            if (normStatus === 'active') {
-                specStatus.innerText = "Active";
-                specStatus.style.color = "var(--accent-emerald)";
-            } else if (normStatus === 'pending') {
-                specStatus.innerText = "Pending Review";
-                specStatus.style.color = "#fbbf24";
-            } else if (normStatus === 'expired') {
-                specStatus.innerText = "Expired";
-                specStatus.style.color = "#ef4444";
-            } else {
-                specStatus.innerText = "Closed";
-                specStatus.style.color = "var(--gray-500)";
-            }
-            
-            specLimit.innerText = type.toLowerCase() === 'credit' ? "₹ " + numLimit.toLocaleString('en-IN', {minimumFractionDigits:2}) + " Limit" : "₹ " + numLimit.toLocaleString('en-IN', {minimumFractionDigits:2}) + " Daily";
-            
-            const card = document.getElementById('visualizerCard');
-            card.classList.remove('flipped');
-            
-            const wrapper = document.getElementById('visualizerCardTiltWrapper');
-            if (wrapper) {
-                wrapper.style.transform = "scale(1)";
-            }
-            
-            modal.style.display = 'flex';
-        }
-
-        function close3DCardPreview() {
-            document.getElementById('previewCardModal').style.display = 'none';
-        }
-
-        function close3DCardPreviewOnClickOutside(event) {
-            if (event.target === document.getElementById('previewCardModal')) {
-                close3DCardPreview();
-            }
-        }
-
-        // Live 3D customizer sync
-        function syncDemoCard() {
-            const type = document.getElementById('ctrlCardType').value;
-            const provider = document.getElementById('ctrlCardProvider').value;
-            const holder = document.getElementById('ctrlHolderName').value.trim().toUpperCase() || "DEMO HOLDER";
-            const number = document.getElementById('ctrlCardNumber').value.trim() || "4589 7321 6048 2190";
-            const expiry = document.getElementById('ctrlExpiry').value.trim() || "12/30";
-            const cvv = document.getElementById('ctrlCvv').value.trim() || "907";
-
-            document.getElementById('demoNumber').innerText = number;
-            document.getElementById('demoHolder').innerText = holder;
-            document.getElementById('demoExpiry').innerText = expiry;
-            
-            const demoDebitNum = document.getElementById('demoDebitNumber');
-            if (demoDebitNum) demoDebitNum.innerText = number;
-            const demoDebitHol = document.getElementById('demoDebitHolder');
-            if (demoDebitHol) demoDebitHol.innerText = holder;
-            const demoDebitExp = document.getElementById('demoDebitExpiry');
-            if (demoDebitExp) demoDebitExp.innerText = expiry;
-
-            const demoCvvEl = document.getElementById('demoCvv');
-            demoCvvEl.setAttribute('data-cvv', cvv);
-            if (demoCvvEl.innerText !== '•••') {
-                demoCvvEl.innerText = cvv;
-            }
-            
-            const demoDebitCvvEl = document.getElementById('demoDebitCvv');
-            if (demoDebitCvvEl) {
-                demoDebitCvvEl.setAttribute('data-cvv', cvv);
-                if (demoDebitCvvEl.innerText !== '•••') {
-                    demoDebitCvvEl.innerText = cvv;
-                }
-            }
-
-            const status = type === 'inactive' ? 'inactive' : 'active';
-            const limit = type.includes('premium') ? 100000 : 50000;
-
-            updateDynamicCardDetails('demo3DCard', 'demoTierIndicator', 'demoBrandLogo', 'demoBackEmblem', type, provider, limit, status);
-        }
-
-        function toggle3DCardCvv(event, element) {
-            if (event) event.stopPropagation();
-            const realCvv = element.getAttribute('data-cvv') || "907";
-            if (element.innerText === '•••') {
-                element.innerText = realCvv;
-                element.title = "Click to hide CVV";
-            } else {
-                element.innerText = '•••';
-                element.title = "Click to show CVV";
-            }
-        }
-
-        function randomizeDemoCard() {
-            const names = ["MIHIR BHAYANI", "PARTH TANK", "KARAN PATEL", "SNEHA RAO", "ROHAN SHARMA", "VERTEX MEMBER"];
-            const providers = ["visa", "mastercard", "rupay"];
-            const types = ["debit", "debit-premium", "credit", "credit-premium"];
-            
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            const randomProvider = providers[Math.floor(Math.random() * providers.length)];
-            const randomType = types[Math.floor(Math.random() * types.length)];
-            
-            let cardPrefix = "4";
-            if (randomProvider === 'mastercard') cardPrefix = "5";
-            if (randomProvider === 'rupay') cardPrefix = "6";
-            
-            let cardNumber = cardPrefix;
-            for (let i = 0; i < 15; i++) {
-                if (i > 0 && i % 4 === 3) cardNumber += "  ";
-                cardNumber += Math.floor(Math.random() * 10);
-            }
-
-            const months = ["01", "03", "04", "05", "07", "08", "10", "11", "12"];
-            const randomMonth = months[Math.floor(Math.random() * months.length)];
-            const randomYear = 26 + Math.floor(Math.random() * 5);
-
-            const randomCvv = Math.floor(100 + Math.random() * 900);
-
-            document.getElementById('ctrlCardType').value = randomType;
-            document.getElementById('ctrlCardProvider').value = randomProvider;
-            document.getElementById('ctrlHolderName').value = randomName;
-            document.getElementById('ctrlCardNumber').value = cardNumber;
-            document.getElementById('ctrlExpiry').value = randomMonth + "/" + randomYear;
-            document.getElementById('ctrlCvv').value = randomCvv;
-
-            syncDemoCard();
-        }
-
-        function flipDemoCard() {
-            document.getElementById('demo3DCard').classList.toggle('flipped');
-        }
-
-        // Flat Hover scale effect (2D only)
-        function apply3DTilt(wrapperId, innerCardId) {
-            const wrapper = document.getElementById(wrapperId);
-            const card = document.getElementById(innerCardId);
-            if (!wrapper || !card) return;
-            
-            wrapper.addEventListener('mouseenter', function() {
-                wrapper.style.transition = "transform 0.3s ease";
-                wrapper.style.transform = "scale(1.03)";
-            });
-            wrapper.addEventListener('mouseleave', function() {
-                wrapper.style.transition = "transform 0.3s ease";
-                wrapper.style.transform = "scale(1)";
-            });
-        }
-
         // Client side real-time directory table search & filter
         function filterDirectoryTable() {
             const searchVal = document.getElementById('directorySearchInput').value.toLowerCase();
@@ -2286,14 +1703,7 @@
             }
         }
 
-        function init3DCardTiltEffect() {
-            apply3DTilt('demo3DCardTiltWrapper', 'demo3DCard');
-            apply3DTilt('visualizerCardTiltWrapper', 'visualizerCard');
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            init3DCardTiltEffect();
-            syncDemoCard();
 
             // Mobile menu toggle handler
             const mobileToggle = document.getElementById('mobileNavToggle');

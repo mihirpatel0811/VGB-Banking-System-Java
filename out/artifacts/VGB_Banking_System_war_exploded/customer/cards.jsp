@@ -90,18 +90,24 @@
         }
 
         .vgb-atm-card.debit {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
-            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.3);
+            background: radial-gradient(circle at 80% 80%, #3a007c 0%, #080321 60%, #01000b 100%) !important;
+            box-shadow: 0 12px 25px rgba(58, 0, 124, 0.25) !important;
         }
 
         .vgb-atm-card.credit {
-            background: linear-gradient(135deg, #4c1d95 0%, #8b5cf6 50%, #ec4899 100%);
-            box-shadow: 0 12px 25px rgba(139, 92, 246, 0.3);
+            background: 
+                radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.25) 0%, transparent 55%),
+                linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(135deg, #121316 0%, #08090a 100%) !important;
+            background-size: cover, 16px 16px, 16px 16px, cover;
+            box-shadow: 0 12px 25px rgba(124, 45, 18, 0.25) !important;
         }
 
         .vgb-atm-card.inactive-card {
-            background: linear-gradient(135deg, #374151 0%, #4b5563 100%) !important;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+            background: repeating-linear-gradient(45deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 10px), 
+                        linear-gradient(135deg, #2e3035 0%, #151618 100%) !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
             opacity: 0.8;
         }
 

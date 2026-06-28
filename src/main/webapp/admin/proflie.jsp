@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Admin Profile Settings</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
@@ -317,12 +317,12 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                 <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                     <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                     <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -386,7 +386,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
                             <div style="position: relative; display: inline-block;">
                                 <div class="avatar-holder" id="adminAvatarContainer" style="cursor:  pointer;" onclick="openAdminLightbox();">
-                                    <img id="adminAvatarImage" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin Profile Logo">
+                                    <img id="adminAvatarImage" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Logo">
                                 </div>
                                 <div onclick="document.getElementById('adminAvatarFileInput').click();" style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid white; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20;" title="Click to Change Profile Picture">
                                     <i class="bx bx-camera"></i>
@@ -874,7 +874,7 @@
         /* --- Admin Avatar Upload & Lightbox Methods --- */
         function openAdminLightbox() {
             const adminAvatar = document.getElementById('adminAvatarImage');
-            if (!adminAvatar || adminAvatar.src.includes('logo.png')) {
+            if (!adminAvatar || adminAvatar.src.includes('image.png')) {
                 // If there's no custom avatar path, ignore preview request
                 return;
             }

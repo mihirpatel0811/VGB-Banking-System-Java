@@ -24,7 +24,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Passbook Services</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
@@ -1195,7 +1195,7 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
@@ -1287,302 +1287,11 @@
             </c:if>
 
             <!-- 3D Passbook Section -->
-            <div class="passbook-top-layout">
-                <!-- Left: Premium interactive 3D Visualizer -->
-                <div class="passbook-visualizer-container">
-                    <button type="button" class="btn-flip-book" onclick="toggleBookFlip(event)">
-                        <i class="bx bx-refresh"></i> Flip Booklet
-                    </button>
-                    <div class="passbook-wrapper" onclick="toggleBookOpen()">
-                        <div class="passbook-book" id="3dPassbook">
-                            <!-- SVG Gradients Definition -->
-                            <svg style="position: absolute; width: 0; height: 0;">
-                                <defs>
-                                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#00f0ff" />
-                                        <stop offset="50%" stop-color="#d900ff" />
-                                        <stop offset="100%" stop-color="#ffffff" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-
-                            <!-- 1. Base Page (Stationary Bottom Panel: Transaction Ledger & Back Cover) -->
-                            <div class="passbook-panel base-page">
-                                <!-- Base Page Front: Transaction Ledger -->
-                                <div class="panel-face panel-front">
-                                    <div class="transaction-panel-inside">
-                                        <!-- Watermark V logo in background -->
-                                        <div class="transaction-watermark-v">
-                                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; fill: #334155;">
-                                                <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" />
-                                            </svg>
-                                        </div>
-                                        
-                                        <!-- Top layout -->
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                            <div class="tech-page-header-pill" style="background: linear-gradient(90deg, #6366f1 0%, #3b82f6 100%); margin-bottom: 0;">
-                                                <h4 style="font-size: 0.55rem !important;">Transaction Record</h4>
-                                            </div>
-                                            <div style="width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
-                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                </svg>
-                                            </div>
-                                        </div>
-
-                                        <!-- Ledger Table -->
-                                        <table class="tech-ledger-grid">
-                                            <colgroup>
-                                                <col style="width: 16%;">
-                                                <col style="width: 29%;">
-                                                <col style="width: 10%;">
-                                                <col style="width: 15%;">
-                                                <col style="width: 15%;">
-                                                <col style="width: 15%;">
-                                            </colgroup>
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Particulars</th>
-                                                    <th>Chq No.</th>
-                                                    <th>Withdrawal</th>
-                                                    <th>Deposit</th>
-                                                    <th>Balance</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>07-Jun-26</td>
-                                                    <td class="particulars">Opening Bal</td>
-                                                    <td>-</td>
-                                                    <td>-</td>
-                                                    <td>10,000.00</td>
-                                                    <td>10,000.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>12-Jun-26</td>
-                                                    <td class="particulars">Interest Paid</td>
-                                                    <td>-</td>
-                                                    <td>-</td>
-                                                    <td>150.00</td>
-                                                    <td>10,150.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>18-Jun-26</td>
-                                                    <td class="particulars">ATM Wdl</td>
-                                                    <td>-</td>
-                                                    <td>2,000.00</td>
-                                                    <td>-</td>
-                                                    <td>8,150.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>22-Jun-26</td>
-                                                    <td class="particulars">Passbook Fee</td>
-                                                    <td>-</td>
-                                                    <td>100.00</td>
-                                                    <td>-</td>
-                                                    <td>8,050.00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                        <div class="tech-ledger-footer" style="font-size: 0.35rem; margin-top: 2px; border-top: 1px solid #cbd5e1; padding-top: 3px;">
-                                            BANKING BEYOND BOUNDARIES. BUILDING YOUR GALAXY OF WEALTH.
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Base Page Back: Back Cover -->
-                                <div class="panel-face panel-back">
-                                    <div class="cosmic-cover">
-                                        <!-- Cosmic Orbits background -->
-                                        <div class="cosmic-orbits">
-                                            <svg viewBox="0 0 100 100">
-                                                <ellipse cx="50" cy="40" rx="35" ry="8" fill="none" stroke="rgba(0, 240, 255, 0.25)" stroke-width="0.8" transform="rotate(-25 50 40)" />
-                                                <ellipse cx="50" cy="40" rx="42" ry="12" fill="none" stroke="rgba(217, 0, 255, 0.2)" stroke-width="0.6" transform="rotate(-25 50 40)" />
-                                            </svg>
-                                        </div>
-                                        
-                                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 5px;">
-                                            <div style="width: 26px; height: 26px; margin-bottom: 2px;">
-                                                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                    <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                </svg>
-                                            </div>
-                                            <span style="font-weight: 800; font-size: 0.52rem; letter-spacing: 1.5px; color: #fff; font-family: 'Poppins', sans-serif;">VERTEX GALAXY BANK</span>
-                                            <span style="font-size: 0.38rem; letter-spacing: 0.5px; color: rgba(255,255,255,0.6); margin-top: 2px; font-family: 'Poppins', sans-serif; text-align: center;">Your Universe. Your Future. Our Commitment.</span>
-                                        </div>
-
-                                        <div class="cover-icons-row" style="margin: 4px 0;">
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-lock-alt"></i>
-                                                <span>SECURE</span>
-                                            </div>
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-atom"></i>
-                                                <span>INNOVATIVE</span>
-                                            </div>
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-shield-quarter"></i>
-                                                <span>RELIABLE</span>
-                                            </div>
-                                            <div class="cover-icon-box">
-                                                <i class="bx bx-rocket"></i>
-                                                <span>FUTURISTIC</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="cover-contacts-row" style="padding-top: 4px;">
-                                            <span><i class="bx bx-phone" style="color: #00f0ff;"></i> 1800 123 4567</span>
-                                            <span><i class="bx bx-globe" style="color: #00f0ff;"></i> www.vertexgalaxybank.com</span>
-                                            <span><i class="bx bx-envelope" style="color: #00f0ff;"></i> support@vertexgalaxybank.com</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 2. Cover Flap (Top Panel: Front Cover & Split Info/Instructions) -->
-                            <div class="passbook-panel cover-flap">
-                                <!-- Cover Flap Front: Front Cover (visible when closed) -->
-                                <div class="panel-face panel-front">
-                                    <div class="cosmic-cover">
-                                        <!-- Spine label text (only visible when book is closed and rotated) -->
-                                        <div class="spine-text">
-                                            <span>VERTEX GALAXY BANK</span>
-                                            <span>PASSBOOK</span>
-                                        </div>
-                                        
-                                        <!-- Cosmic Orbits background -->
-                                        <div class="cosmic-orbits">
-                                            <svg viewBox="0 0 100 100">
-                                                <ellipse cx="50" cy="50" rx="36" ry="9" fill="none" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1" transform="rotate(-25 50 50)" />
-                                                <ellipse cx="50" cy="50" rx="44" ry="14" fill="none" stroke="rgba(217, 0, 255, 0.35)" stroke-width="0.8" transform="rotate(-25 50 50)" />
-                                                <circle cx="20" cy="30" r="0.6" fill="#fff" opacity="0.8" />
-                                                <circle cx="85" cy="25" r="0.8" fill="#fff" opacity="0.9" />
-                                                <circle cx="75" cy="75" r="0.5" fill="#fff" opacity="0.6" />
-                                                <circle cx="15" cy="80" r="0.7" fill="#fff" opacity="0.7" />
-                                            </svg>
-                                        </div>
-                                        
-                                        <!-- Top row -->
-                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 12px;">
-                                            <span style="font-weight: 800; font-size: 0.72rem; letter-spacing: 1px; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); font-family: 'Poppins', sans-serif;">VERTEX</span>
-                                            <span style="font-size: 0.95rem; color: #00f0ff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);"><i class="bx bx-chip"></i></span>
-                                        </div>
-                                        
-                                        <!-- Large Glowing V Logo in middle -->
-                                        <div style="align-self: center; width: 62px; height: 62px; filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.45)); margin: 2px 0; display: flex; align-items: center; justify-content: center; position: relative;">
-                                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                            </svg>
-                                        </div>
-
-                                        <!-- Title section -->
-                                        <div style="text-align: center; padding-left: 12px;">
-                                            <div style="font-size: 0.46rem; letter-spacing: 2px; color: rgba(255,255,255,0.7); font-weight: 700; text-transform: uppercase; font-family: 'Poppins', sans-serif;">VERTEX GALAXY BANK</div>
-                                            <div class="cover-title-frame">
-                                                <h2>PASSBOOK</h2>
-                                            </div>
-                                        </div>
-
-                                        <div style="font-size: 0.38rem; color: rgba(255,255,255,0.4); text-align: center; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Poppins', sans-serif; padding-left: 12px;">
-                                            Always Beyond Boundaries
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Cover Flap Back: Split Account Info & Instructions (visible when open) -->
-                                <div class="panel-face panel-back">
-                                    <div class="inside-tech-panel" style="padding: 10px 14px; flex-direction: row; gap: 12px; align-items: stretch; justify-content: space-between;">
-                                        <!-- Left Column: Account Information -->
-                                        <div style="flex: 1.3; display: flex; flex-direction: column; justify-content: space-between;">
-                                            <div>
-                                                <div class="tech-page-header-pill" style="margin-bottom: 4px;">
-                                                    <h4>Account Info</h4>
-                                                </div>
-                                                <table class="tech-credentials-table">
-                                                    <tr>
-                                                        <td>Name</td>
-                                                        <td>: <span class="uppercase text-ellipsis" id="pbCustName"><c:out value="${customer.firstName} ${customer.lastName}" default="CUSTOMER NAME"/></span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A/C No.</td>
-                                                        <td>: <span class="monospace" id="pbAccNum">
-                                                            <c:choose>
-                                                                <c:when test="${not empty accounts}">
-                                                                    ${accounts[0].accountNumber}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    SELECT ACCOUNT
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>IFSC Code</td>
-                                                        <td>: <span class="monospace">VGB0000171</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>A/C Type</td>
-                                                        <td>: <span class="uppercase" id="pbAccType">
-                                                            <c:choose>
-                                                                <c:when test="${not empty accounts}">
-                                                                    ${accounts[0].accountType}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    SAVINGS
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Branch</td>
-                                                        <td>: <span>BHAKTINAGAR, RAJKOT</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Date</td>
-                                                        <td>: <span>08-AUG-2022</span></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <div style="font-size: 0.33rem; color: rgba(255,255,255,0.4); text-align: left; font-weight: 500; font-family: 'Poppins', sans-serif;">
-                                                Thank you for banking with VERTEX GALAXY BANK
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Right Column: Important Instructions -->
-                                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; border-left: 1px dashed rgba(255,255,255,0.15); padding-left: 12px;">
-                                            <div>
-                                                <h4 style="font-size: 0.52rem; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; margin: 0 0 6px 0; font-family: 'Poppins', sans-serif; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 3px; text-align: center;">Instructions</h4>
-                                                <ul class="instructions-tech-list" style="gap: 4px;">
-                                                    <li><i class="bx bx-check-shield" style="font-size: 0.6rem;"></i> Bring passbook for all counter transactions.</li>
-                                                    <li><i class="bx bx-shield-quarter" style="font-size: 0.6rem;"></i> Report any discrepancy immediately.</li>
-                                                    <li><i class="bx bx-credit-card-front" style="font-size: 0.6rem;"></i> Property of Vertex Galaxy Bank.</li>
-                                                    <li><i class="bx bx-error-alt" style="font-size: 0.6rem;"></i> Keep secure. Do not fold/tear.</li>
-                                                </ul>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div class="circular-lock-badge" style="width: 22px; height: 22px; border-width: 1px;">
-                                                    <i class="bx bx-shield-quarter" style="font-size: 0.75rem;"></i>
-                                                </div>
-                                                <div style="width: 22px; height: 11px; opacity: 0.8;">
-                                                    <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
-                                                        <path d="M15 15 L32 15 L50 62 L68 15 L85 15 L55 85 L45 85 Z" fill="url(#logoGrad)" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="passbook-status-watermark" id="pbWatermark">PREVIEW</div>
-                        </div>
-                    </div>
-                    <div class="click-hint" id="pbHint"><i class="bx bx-pointer"></i> Click to Open</div>
-                </div>
-
-                <!-- Right: Information & Request form summary -->
-                <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0;">
-                    <div>
+            <!-- Split Dashboard: Service Features -->
+            <div class="passbook-top-layout" style="display: block;">
+                <!-- Quick Features Summary -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;" class="mobile-grid-1">
+                    <div class="glass-card" style="margin-bottom: 0;">
                         <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <i class="bx bx-shield-quarter" style="color: var(--primary-500);"></i> Premium Galaxy Passbook
                         </h3>
@@ -1590,17 +1299,27 @@
                             Our galaxy-class physical passbook comes standard with:
                         </p>
                         <ul style="color: var(--gray-600); font-size: 0.85rem; padding-left: 20px; line-height: 1.8; margin: 15px 0;">
-                            <li>Galaxy navy-blue textured covers with dual metallic gold foil accents</li>
-                            <li>Inline smart EMV-style chip simulator representing next-gen security</li>
+                            <li>Galaxy navy-blue textured covers with gold foil accents</li>
+                            <li>Inline smart EMV-style chip simulator representing security</li>
                             <li>Quick-scan machine-readable ledger columns</li>
-                            <li>Flat processing fee of <strong>₹100.00</strong> (fully refunded if request is rejected by Admin)</li>
+                            <li>Flat processing fee of <strong>₹100.00</strong> (refunded if request rejected)</li>
                         </ul>
                     </div>
-                    <div style="background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-md); padding: 18px; margin-top: 15px;">
-                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Important Policy</span>
-                        <p style="font-size: 0.8rem; color: var(--gray-500); margin: 0; line-height: 1.5;">
-                            Applying for a Passbook will automatically deduct ₹100.00 from your account balance. Upon approval, your account parameters will be updated to enable passbook transactions.
-                        </p>
+                    <div class="glass-card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="bx bx-info-circle" style="color: var(--primary-500);"></i> Important Policy
+                            </h3>
+                            <p style="color: var(--gray-500); font-size: 0.9rem; line-height: 1.6;">
+                                Applying for a Passbook will automatically deduct ₹100.00 from your account balance. Upon approval, your account parameters will be updated to enable passbook transactions.
+                            </p>
+                        </div>
+                        <div style="background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-md); padding: 18px; margin-top: 15px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-600); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Note on System</span>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); margin: 0; line-height: 1.5;">
+                                Passbook details are secure and linked to your digital account transactions in real-time.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1608,7 +1327,8 @@
             <!-- List of previous requests -->
             <div class="glass-card">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;"><i class="bx bx-list-ol"></i> Application History</h3>
-                <div style="overflow-x: auto;">
+
+
                     <table class="passbook-history-table">
                         <thead>
                             <tr>
@@ -1668,7 +1388,7 @@
                                             </td>
                                             <td style="text-align: right;">
                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                    <button type="button" class="btn-inspect" 
+                                                    <button type="button" class="btn-inspect" style="display:none;" 
                                                             data-id="${req.requestId}" 
                                                             data-name="${req.customerName}" 
                                                             data-account="${req.accountNumber}" 
@@ -1796,89 +1516,6 @@
             }
         });
 
-        const book = document.getElementById('3dPassbook');
-        const container = document.querySelector('.passbook-visualizer-container');
-        const hint = document.getElementById('pbHint');
-
-        // Dynamically scale book to fit container width without clipping
-        function updateBookTransform(rotX = 0, rotY = 0) {
-            if (!book || !container) return;
-            const containerWidth = container.clientWidth;
-            if (book.classList.contains('open')) {
-                // Open vertical book height is 360px, width is 420px
-                const openScale = Math.min((containerWidth - 30) / 420, 0.75);
-                book.style.transform = `rotateX(${25 + rotX}deg) rotateY(${-5 + rotY}deg) scale(${openScale})`;
-            } else if (book.classList.contains('flipped-back')) {
-                // Flipped closed book
-                const closedScale = Math.min((containerWidth - 20) / 420, 0.85);
-                book.style.transform = `rotateX(${195 + rotX}deg) rotateY(${10 + rotY}deg) scale(${closedScale})`;
-            } else {
-                // Closed book width is 420px, height is 180px
-                const closedScale = Math.min((containerWidth - 20) / 420, 0.85);
-                book.style.transform = `rotateX(${15 + rotX}deg) rotateY(${-10 + rotY}deg) scale(${closedScale})`;
-            }
-        }
-
-        if (container && book) {
-            container.addEventListener('mousemove', (e) => {
-                const rect = container.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const maxRotX = book.classList.contains('open') ? 10 : 15;
-                const maxRotY = book.classList.contains('open') ? 8 : 15;
-
-                const rotX = -((y - centerY) / centerY) * maxRotX;
-                const rotY = ((x - centerX) / centerX) * maxRotY;
-
-                requestAnimationFrame(() => {
-                    updateBookTransform(rotX, rotY);
-                });
-            });
-
-            container.addEventListener('mouseleave', () => {
-                requestAnimationFrame(() => {
-                    updateBookTransform(0, 0);
-                });
-            });
-
-            // Initial scale update
-            updateBookTransform(0, 0);
-            
-            // Re-scale on window resize
-            window.addEventListener('resize', () => {
-                updateBookTransform(0, 0);
-            });
-        }
-
-        function toggleBookOpen() {
-            if (!book) return;
-            book.classList.remove('flipped-back');
-            book.classList.toggle('open');
-            if (book.classList.contains('open')) {
-                if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Close';
-            } else {
-                if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Open';
-            }
-            updateBookTransform(0, 0);
-        }
-
-        function toggleBookFlip(event) {
-            if (event) event.stopPropagation();
-            if (!book) return;
-            book.classList.remove('open');
-            book.classList.toggle('flipped-back');
-            if (book.classList.contains('flipped-back')) {
-                if (hint) hint.innerHTML = '<i class="bx bx-refresh"></i> Back Cover View';
-            } else {
-                if (hint) hint.innerHTML = '<i class="bx bx-pointer"></i> Click to Open';
-            }
-            updateBookTransform(0, 0);
-        }
-
         // Modal triggers
         function openRequestModal(action, accountIdVal) {
             const modal = document.getElementById('requestModal');
@@ -1900,7 +1537,6 @@
             }
 
             modal.style.display = 'flex';
-            updateModalPreview();
         }
 
         function closeRequestModal() {
@@ -1911,51 +1547,6 @@
             const selectType = document.getElementById('modalRequestType');
             const formAction = document.getElementById('formAction');
             formAction.value = selectType.value;
-        }
-
-        function updateModalPreview() {
-            const selectAcc = document.getElementById('modalAccountId');
-            const selectedOpt = selectAcc.options[selectAcc.selectedIndex];
-            if (!selectedOpt) return;
-
-            const accNum = selectedOpt.getAttribute('data-accnum');
-            const accType = selectedOpt.getAttribute('data-acctype');
-
-            // Sync with 3D Page Preview
-            document.getElementById('pbAccNum').innerText = accNum;
-            document.getElementById('pbAccType').innerText = accType;
-            
-            // Set Watermark text
-            const wm = document.getElementById('pbWatermark');
-            wm.innerText = "PREVIEW";
-            wm.className = "passbook-status-watermark";
-        }
-
-        // View dynamic preview for a previous request
-        function inspectRequest(btn) {
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const acc = btn.getAttribute('data-account');
-            const type = btn.getAttribute('data-type');
-            const acctype = btn.getAttribute('data-acctype');
-            const status = btn.getAttribute('data-status');
-
-            document.getElementById('pbCustName').innerText = name;
-            document.getElementById('pbAccNum').innerText = acc;
-            document.getElementById('pbAccType').innerText = acctype;
-
-            const wm = document.getElementById('pbWatermark');
-            wm.innerText = status;
-            wm.className = "passbook-status-watermark " + status.toLowerCase();
-
-            // Open book cover automatically to show info
-            book.classList.remove('flipped-back');
-            if (!book.classList.contains('open')) {
-                toggleBookOpen();
-            }
-
-            // Scroll visualizer into view on mobile
-            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     </script>
 </body>

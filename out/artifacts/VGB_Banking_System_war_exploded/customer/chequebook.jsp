@@ -775,10 +775,10 @@
                 <c:remove var="success" scope="session" />
             </c:if>
 
-            <!-- Split Dashboard: Service Features & Interactive 3D Cheque Visualizer -->
-            <div class="cheque-top-layout">
-                <!-- Left: Quick Features Summary -->
-                <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+            <!-- Split Dashboard: Service Features -->
+            <div class="cheque-top-layout" style="display: block;">
+                <!-- Quick Features Summary -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;" class="mobile-grid-1">
                     <div class="service-feature-card primary" style="flex: 1; min-height: 140px; padding: 20px;">
                         <div>
                             <span style="font-size: 0.8rem; font-weight: 700; opacity: 0.85; text-transform: uppercase;">Standard Services</span>
@@ -801,68 +801,6 @@
                             <span>Deliveries fully tracked in dashboard</span>
                         </div>
                         <i class="bx bx-shield-quarter icon-bg" style="font-size: 6rem;"></i>
-                    </div>
-                </div>
-
-                <!-- Right: Interactive 3D Cheque Visualizer -->
-                <div class="cheque-visualizer-container">
-                    <div class="vgb-cheque-3d" id="chequeLeaf3D">
-                        <!-- Hologram ribbon -->
-                        <div class="cheque-hologram"></div>
-                        
-                        <!-- Header -->
-                        <div class="cheque-header">
-                            <div class="cheque-bank-info">
-                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
-                                <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
-                            </div>
-                            <div class="cheque-date-box">
-                                <div class="date-squares" id="chequeDateSquares">
-                                    <span>3</span><span>1</span><span>0</span><span>5</span><span>2</span><span>0</span><span>2</span><span>6</span>
-                                </div>
-                                <span class="date-validity">Valid for 3 months only</span>
-                            </div>
-                        </div>
-
-                        <!-- Pay row -->
-                        <div class="cheque-row" style="margin-top: 12px;">
-                            <span class="cheque-label">Pay <span class="hindi-text">अदा करें</span></span>
-                            <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.85rem;" id="chequePayeeDisplay">Self or Bearer</span>
-                            <span class="cheque-label bearer-text">Or Bearer <span class="hindi-text">या धारक को</span></span>
-                        </div>
-
-                        <!-- Rupees row -->
-                        <div class="cheque-row">
-                            <span class="cheque-label">Rupees <span class="hindi-text">रुपये</span></span>
-                            <span class="cheque-line-fill" id="chequeRupeesTextDisplay">One Hundred and Fifty Rupees Only</span>
-                            <div class="cheque-amount-box">
-                                <span class="rupee-symbol">₹</span>
-                                <span class="amount-val" id="chequeAmountDisplay">150.00</span>
-                            </div>
-                        </div>
-
-                        <!-- Account details row -->
-                        <div class="cheque-details-row">
-                            <div class="cheque-acc-box">
-                                <span class="acc-label">A/c No.<br><span class="hindi-text">खाता क्र.</span></span>
-                                <span class="acc-val" id="chequeAccountDisplayVal">50100170255263</span>
-                            </div>
-                            <div class="cheque-branch-codes">
-                                Brn: 0171 Pdt: 105<br>SB A/C
-                            </div>
-                            <div class="cheque-payable-text">
-                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
-                            </div>
-                            <div class="cheque-sign-area">
-                                <span class="cheque-sign-name" id="chequeSignatureVal">${customer.firstName} ${customer.lastName}</span>
-                                <span class="cheque-sign-label">Please sign above / कृपया यहाँ हस्ताक्षर करें</span>
-                            </div>
-                        </div>
-
-                        <!-- Bottom MICR band -->
-                        <div class="cheque-micr-band" id="chequeMicrVal">
-                            ⑈000076⑈ 360240005⑆ 018696⑈ 31
-                        </div>
                     </div>
                 </div>
             </div>
@@ -923,7 +861,7 @@
                                             </td>
                                             <td style="padding: 15px; text-align: right;">
                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                    <button type="button" class="btn" 
+                                                    <button type="button" class="btn" style="display:none;" 
                                                             data-id="${req.requestId}" 
                                                             data-name="${req.customerName}" 
                                                             data-account="${req.accountNumber}" 
@@ -1225,238 +1163,17 @@
 
             syncChequeVisualizer();
 
-            const cheque = document.getElementById('chequeLeaf3D');
-            if (cheque) {
-                const container = cheque.parentElement;
-                container.addEventListener('mousemove', (e) => {
-                    const rect = cheque.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const rX = -(y / rect.height) * 15;
-                    const rY = (x / rect.width) * 15;
-                    
-                    requestAnimationFrame(() => {
-                        cheque.style.transform = `translateY(-5px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.025)`;
-                    });
-                });
-                
-                container.addEventListener('mouseleave', () => {
-                    requestAnimationFrame(() => {
-                        cheque.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
-                    });
-                });
-            }
         });
 
         window.onclick = function(event) {
             const requestModal = document.getElementById('requestModal');
-            const inspectModal = document.getElementById('inspectModal');
             if (event.target === requestModal) {
                 closeRequestModal();
             }
-            if (event.target === inspectModal) {
-                closeInspectModal();
-            }
         }
     </script>
 
-    <!-- Modal: Premium 3D Cheque Inspector -->
-    <div id="inspectModal" class="modal">
-        <div class="modal-content" style="max-width: 680px;">
-            <div class="modal-header">
-                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800);"><i class="bx bx-show"></i> Cheque Leaf Inspector</h3>
-                <button type="button" onclick="closeInspectModal()" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body" style="padding-top: 20px;">
-                
-                <!-- Cheque Info Card Grid -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; color: var(--gray-600); padding: 0 10px;">
-                    <div><strong>Request ID:</strong> <span id="inspectRequestId" style="font-weight: 700; color: var(--gray-900);">#--</span></div>
-                    <div><strong>Capacity:</strong> <span id="inspectCapacity" style="font-weight: 700; color: var(--gray-900);">--</span></div>
-                    <div><strong>Charges:</strong> <span id="inspectCharges" style="font-weight: 700; color: var(--gray-900);">--</span></div>
-                </div>
 
-                <!-- 3D Cheque Visualizer -->
-                <div class="cheque-visualizer-container" style="margin-bottom: 20px;">
-                    <div class="vgb-cheque-3d" id="inspectChequeLeaf3D">
-                        <!-- Hologram ribbon -->
-                        <div class="cheque-hologram"></div>
-                        
-                        <!-- Header -->
-                        <div class="cheque-header">
-                            <div class="cheque-bank-info">
-                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
-                                <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
-                            </div>
-                            <div class="cheque-date-box">
-                                <div class="date-squares" id="inspectChequeDateSquares">
-                                    <!-- Populated by JS -->
-                                </div>
-                                <span class="date-validity">Valid for 3 months only</span>
-                            </div>
-                        </div>
-
-                        <!-- Pay row -->
-                        <div class="cheque-row" style="margin-top: 12px;">
-                            <span class="cheque-label">Pay <span class="hindi-text">अदा करें</span></span>
-                            <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.85rem;" id="inspectChequePayeeDisplay">Self or Bearer</span>
-                            <span class="cheque-label bearer-text">Or Bearer <span class="hindi-text">या धारक को</span></span>
-                        </div>
-
-                        <!-- Rupees row -->
-                        <div class="cheque-row">
-                            <span class="cheque-label">Rupees <span class="hindi-text">रुपये</span></span>
-                            <span class="cheque-line-fill" id="inspectChequeRupeesTextDisplay">--</span>
-                            <div class="cheque-amount-box">
-                                <span class="rupee-symbol">₹</span>
-                                <span class="amount-val" id="inspectChequeAmountDisplay">--</span>
-                            </div>
-                        </div>
-
-                        <!-- Account details row -->
-                        <div class="cheque-details-row">
-                            <div class="cheque-acc-box">
-                                <span class="acc-label">A/c No.<br><span class="hindi-text">खाता क्र.</span></span>
-                                <span class="acc-val" id="inspectChequeAccountDisplayVal">--</span>
-                            </div>
-                            <div class="cheque-branch-codes">
-                                Brn: 0171 Pdt: 105<br>SB A/C
-                            </div>
-                            <div class="cheque-payable-text">
-                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
-                            </div>
-                            <div class="cheque-sign-area">
-                                <span class="cheque-sign-name" id="inspectChequeSignatureVal">--</span>
-                                <span class="cheque-sign-label">Please sign above / कृपया यहाँ हस्ताक्षर करें</span>
-                            </div>
-                        </div>
-
-                        <!-- Bottom MICR band -->
-                        <div class="cheque-micr-band" id="inspectChequeMicrVal">
-                            <!-- Populated by JS -->
-                        </div>
-
-                        <!-- Diagonal Stamp overlay -->
-                        <div class="cheque-processed-stamp" id="stampOverlay">APPROVED</div>
-                    </div>
-                </div>
-
-                <div style="text-align: center; margin-top: 15px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeInspectModal()" style="padding: 10px 25px; font-size: 0.9rem; font-weight: 600;">Close View</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripting for Inspector Operations -->
-    <script>
-        function openInspectModal(requestId, customerName, accountNumber, leavesCount, charges, requestedDateStr, status) {
-            const modal = document.getElementById('inspectModal');
-            
-            // Set dynamic fields
-            document.getElementById('inspectRequestId').innerHTML = '#' + requestId;
-            document.getElementById('inspectCapacity').innerHTML = leavesCount + ' Leaves';
-            document.getElementById('inspectCharges').innerHTML = '₹ ' + charges.toFixed(2);
-            
-            // Sync Cheque visualizer
-            document.getElementById('inspectChequePayeeDisplay').innerHTML = 'Self or Bearer';
-            
-            let words = "One Hundred and Fifty Rupees Only";
-            if (leavesCount === 25) {
-                words = "One Hundred Rupees Only";
-            } else if (leavesCount === 50) {
-                words = "One Hundred and Fifty Rupees Only";
-            } else if (leavesCount === 100) {
-                words = "Two Hundred and Fifty Rupees Only";
-            }
-            
-            document.getElementById('inspectChequeRupeesTextDisplay').innerHTML = words;
-            document.getElementById('inspectChequeAmountDisplay').innerHTML = charges.toFixed(2);
-            document.getElementById('inspectChequeAccountDisplayVal').innerHTML = accountNumber;
-            document.getElementById('inspectChequeSignatureVal').innerHTML = customerName ? customerName.toUpperCase() : '';
-            
-            // MICR Band parsing
-            const last6 = accountNumber.length >= 6 ? accountNumber.substring(accountNumber.length - 6) : "018696";
-            document.getElementById('inspectChequeMicrVal').innerHTML = `⑈000076⑈ 360240005⑆ ${last6}⑈ 31`;
-            
-            // Date Squares parsing (Format expected: ddMMyyyy)
-            const squares = document.getElementById('inspectChequeDateSquares');
-            if (squares) {
-                let dateStr = requestedDateStr;
-                if (!dateStr || dateStr.length !== 8) {
-                    // Fallback to today
-                    const today = new Date();
-                    const dd = String(today.getDate()).padStart(2, '0');
-                    const mm = String(today.getMonth() + 1).padStart(2, '0');
-                    const yyyy = String(today.getFullYear());
-                    dateStr = dd + mm + yyyy;
-                }
-                let dateHtml = "";
-                for (let i = 0; i < dateStr.length; i++) {
-                    dateHtml += `<span>${dateStr.charAt(i)}</span>`;
-                }
-                squares.innerHTML = dateHtml;
-            }
-
-            // Handle stamp overlay
-            const stampOverlay = document.getElementById('stampOverlay');
-            if (status === 'approved' || status === 'delivered') {
-                stampOverlay.innerHTML = 'APPROVED';
-                stampOverlay.className = 'cheque-processed-stamp approved';
-                stampOverlay.style.display = 'block';
-            } else if (status === 'rejected') {
-                stampOverlay.innerHTML = 'REJECTED';
-                stampOverlay.className = 'cheque-processed-stamp rejected';
-                stampOverlay.style.display = 'block';
-            } else {
-                stampOverlay.innerHTML = 'PENDING';
-                stampOverlay.className = 'cheque-processed-stamp pending';
-                stampOverlay.style.display = 'block';
-            }
-            
-            modal.style.display = 'flex';
-        }
-
-        function closeInspectModal() {
-            document.getElementById('inspectModal').style.display = 'none';
-        }
-
-        function inspectRequest(btn) {
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const account = btn.getAttribute('data-account');
-            const leaves = parseInt(btn.getAttribute('data-leaves'));
-            const charges = parseFloat(btn.getAttribute('data-charges'));
-            const date = btn.getAttribute('data-date');
-            const status = btn.getAttribute('data-status');
-            openInspectModal(id, name, account, leaves, charges, date, status);
-        }
-        
-        // Add 3D tilt interaction for inspector modal cheque
-        document.addEventListener('DOMContentLoaded', () => {
-            const inspectCheque = document.getElementById('inspectChequeLeaf3D');
-            if (inspectCheque) {
-                const container = inspectCheque.parentElement;
-                container.addEventListener('mousemove', (e) => {
-                    const rect = inspectCheque.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const rX = -(y / rect.height) * 15;
-                    const rY = (x / rect.width) * 15;
-                    
-                    requestAnimationFrame(() => {
-                        inspectCheque.style.transform = `translateY(-5px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.025)`;
-                    });
-                });
-                
-                container.addEventListener('mouseleave', () => {
-                    requestAnimationFrame(() => {
-                        inspectCheque.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
-                    });
-                });
-            }
-        });
-    </script>
     
     <!-- Standard Core Scripts -->
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>

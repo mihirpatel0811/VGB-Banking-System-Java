@@ -8,7 +8,7 @@
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>VGB | Admin Loan Review</title>
-                <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+                <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
                 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet">
                 <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -921,13 +921,13 @@
                         </button>
                         <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo"
                             style="display: flex; align-items: center;">
-                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
+                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
                                 alt="Vertex Galaxy Bank Logo" style="height: 38px; width: auto;">
                         </a>
                     </div>
                     <div class="nav-actions">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png"
+                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
                                 alt="Admin Profile Avatar"
                                 style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
                             <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i>

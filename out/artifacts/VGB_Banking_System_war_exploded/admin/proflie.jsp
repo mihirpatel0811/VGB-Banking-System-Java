@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Admin Profile Settings</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
@@ -318,7 +318,7 @@
         </div>
         <div class="nav-actions">
             <div style="display: flex; align-items: center; gap: 8px;">
-                <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
                 <span style="font-weight: 600; color: var(--gray-700);"><i class="bx bx-shield-quarter"></i> Admin Workspace</span>
             </div>
             <button class="theme-toggle" id="themeToggle" type="button"><i class="bx bx-moon"></i></button>
@@ -368,7 +368,7 @@
                         <!-- Floating Avatar -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
                             <div class="avatar-holder">
-                                <img src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Logo">
+                                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Logo">
                             </div>
                             <div style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-size: 0.72rem; font-weight: 700; padding: 5px 12px; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(16, 185, 129, 0.2);">
                                 <i class="bx bxs-circle" style="font-size: 0.55rem; vertical-align: middle; margin-right: 4px;"></i> Active

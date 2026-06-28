@@ -656,135 +656,7 @@
             </div>
 
 
-            <!-- Flagship Interactive VGB 3D Cheque Demo Showcase & Live Simulator -->
-            <div class="glass-card" style="padding: 30px; margin-bottom: 40px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.65) 100%); border: 1px solid rgba(99, 102, 241, 0.2);">
-                <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--gray-800); margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
-                    <i class="bx bx-cube" style="color: var(--primary-500); font-size: 1.5rem;"></i> 
-                    Flagship VGB Premium 3D Cheque Showcase & Live Simulator
-                </h3>
-                <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 25px;">
-                    Explore the flagship dynamic 3D Cheque layout. Hover to trigger interactive tilt physics. Use the controls to adjust date squares, cursive signatory values, and capacity live!
-                </p>
-                
-                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;" class="mobile-grid-1">
-                    <!-- Left: Cheque Visualizer Showcase -->
-                    <div class="cheque-visualizer-container" style="padding: 40px 20px; min-height: 330px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, rgba(6, 182, 212, 0.04) 100%); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: var(--radius-lg); position: relative; box-shadow: inset 0 2px 8px rgba(99, 102, 241, 0.05); display: flex; align-items: center; justify-content: center;">
-                        <div style="position: absolute; top: 12px; left: 15px; display: flex; gap: 8px; align-items: center; pointer-events: none;">
-                            <span style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 4px;">
-                                <i class="bx bx-expand-alt" style="font-size: 0.8rem;"></i> 3D Sandbox
-                            </span>
-                        </div>
 
-                        <div class="vgb-cheque-3d" id="demoChequeLeaf3D">
-                            <!-- Hologram ribbon -->
-                            <div class="cheque-hologram"></div>
-                            
-                            <!-- Header -->
-                            <div class="cheque-header">
-                                <div class="cheque-bank-info">
-                                    <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
-                                    <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
-                                </div>
-                                <div class="cheque-date-box">
-                                    <div class="date-squares" id="demoChequeDateSquares">
-                                        <span>3</span><span>1</span><span>0</span><span>5</span><span>2</span><span>0</span><span>2</span><span>6</span>
-                                    </div>
-                                    <span class="date-validity">Valid for 3 months only</span>
-                                </div>
-                            </div>
-
-                            <!-- Pay row -->
-                            <div class="cheque-row" style="margin-top: 12px;">
-                                <span class="cheque-label">Pay <span class="hindi-text">अदा करें</span></span>
-                                <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.85rem;" id="demoChequePayeeDisplay">Self or Bearer</span>
-                                <span class="cheque-label bearer-text">Or Bearer <span class="hindi-text">या धारक को</span></span>
-                            </div>
-
-                            <!-- Rupees row -->
-                            <div class="cheque-row">
-                                <span class="cheque-label">Rupees <span class="hindi-text">रुपये</span></span>
-                                <span class="cheque-line-fill" id="demoChequeRupeesTextDisplay">One Hundred and Fifty Rupees Only</span>
-                                <div class="cheque-amount-box">
-                                    <span class="rupee-symbol">₹</span>
-                                    <span class="amount-val" id="demoChequeAmountDisplay">150.00</span>
-                                </div>
-                            </div>
-
-                            <!-- Account details row -->
-                            <div class="cheque-details-row">
-                                <div class="cheque-acc-box">
-                                    <span class="acc-label">A/c No.<br><span class="hindi-text">खाता क्र.</span></span>
-                                    <span class="acc-val" id="demoChequeAccountDisplayVal">50100170255263</span>
-                                </div>
-                                <div class="cheque-branch-codes">
-                                    Brn: 0171 Pdt: 105<br>SB A/C
-                                </div>
-                                <div class="cheque-payable-text">
-                                    Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
-                                </div>
-                                <div class="cheque-sign-area">
-                                    <span class="cheque-sign-name" id="demoChequeSignatureVal">MIHIR BHAYANI</span>
-                                    <span class="cheque-sign-label">Please sign above / कृपया यहाँ हस्ताक्षर करें</span>
-                                </div>
-                            </div>
-
-                            <!-- Bottom MICR band -->
-                            <div class="cheque-micr-band" id="demoChequeMicrVal">
-                                ⑈000076⑈ 360240005⑆ 255263⑈ 31
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right: Customizer Controls -->
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.75px;">Book Capacity</label>
-                                <select id="ctrlLeavesCount" class="control-select" onchange="syncDemoCheque()" style="width: 100%; padding: 11px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; font-size: 0.9rem; color: var(--gray-800); font-family: inherit;">
-                                    <option value="25">25 Leaves (₹100)</option>
-                                    <option value="50" selected>50 Leaves (₹150)</option>
-                                    <option value="100">100 Leaves (₹250)</option>
-                                </select>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.75px;">Cheque Color</label>
-                                <select id="ctrlChequeTheme" class="control-select" onchange="syncDemoCheque()" style="width: 100%; padding: 11px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; font-size: 0.9rem; color: var(--gray-800); font-family: inherit;">
-                                    <option value="sky" selected>Sky Blue (HDFC Style)</option>
-                                    <option value="gold">Gold Mint (Royale)</option>
-                                    <option value="emerald">Jade Emerald (Classic)</option>
-                                    <option value="purple">Velvet Orchid (Premium)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.75px;">Customer Account Name</label>
-                            <input type="text" id="ctrlCustomerName" class="control-input" value="MIHIR BHAYANI" placeholder="CUSTOMER NAME" oninput="syncDemoCheque()" style="width: 100%; padding: 11px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; font-size: 0.9rem; color: var(--gray-800); font-family: inherit; text-transform: uppercase;">
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.75px;">Account Number</label>
-                            <input type="text" id="ctrlAccountNumber" class="control-input" value="50100170255263" placeholder="14-Digit Account Number" oninput="syncDemoCheque()" style="width: 100%; padding: 11px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; font-size: 0.9rem; color: var(--gray-800); font-family: inherit;" maxlength="14">
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.75px;">Requested Date</label>
-                                <input type="text" id="ctrlDate" class="control-input" value="31/05/2026" placeholder="DD/MM/YYYY" oninput="syncDemoCheque()" style="width: 100%; padding: 11px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; font-size: 0.9rem; color: var(--gray-800); font-family: inherit;" maxlength="10">
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.75px;">Signature Pen</label>
-                                <select id="ctrlPenColor" class="control-select" onchange="syncDemoCheque()" style="width: 100%; padding: 11px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: white; font-size: 0.9rem; color: var(--gray-800); font-family: inherit;">
-                                    <option value="#2563eb" selected>Blue Pen</option>
-                                    <option value="#0f172a">Black Pen</option>
-                                    <option value="#10b981">Green Pen</option>
-                                    <option value="#ef4444">Red Pen</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Global Requests Logs -->
             <div class="glass-card">
@@ -846,18 +718,6 @@
                                                 <c:choose>
                                                     <c:when test="${req.status eq 'pending'}">
                                                         <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                            <button type="button" class="btn" 
-                                                                    data-id="${req.requestId}" 
-                                                                    data-name="${req.customerName}" 
-                                                                    data-account="${req.accountNumber}" 
-                                                                    data-leaves="${req.leavesCount}" 
-                                                                    data-charges="${req.charges}" 
-                                                                    data-date="${formattedDate}" 
-                                                                    data-status="${req.status}"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                                    onclick="inspectRequest(this)">
-                                                                <i class="bx bx-show"></i> View Leaf
-                                                            </button>
                                                             <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
                                                                class="btn btn-primary" 
                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
@@ -869,23 +729,11 @@
                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
                                                                onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">
                                                                 Reject
-                                                            </a>
+                                                             </a>
                                                         </div>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                            <button type="button" class="btn" 
-                                                                    data-id="${req.requestId}" 
-                                                                    data-name="${req.customerName}" 
-                                                                    data-account="${req.accountNumber}" 
-                                                                    data-leaves="${req.leavesCount}" 
-                                                                    data-charges="${req.charges}" 
-                                                                    data-date="${formattedDate}" 
-                                                                    data-status="${req.status}"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                                    onclick="inspectRequest(this)">
-                                                                <i class="bx bx-show"></i> View Leaf
-                                                            </button>
                                                             <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
                                                         </div>
                                                     </c:otherwise>
@@ -909,330 +757,34 @@
         </div>
     </main>
 
-    <!-- Modal: Premium 3D Cheque Inspector -->
-    <div id="inspectModal" class="modal">
-        <div class="modal-content" style="max-width: 680px;">
-            <div class="modal-header">
-                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800);"><i class="bx bx-show"></i> Interactive Cheque Inspector</h3>
-                <button type="button" onclick="closeInspectModal()" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body" style="padding-top: 20px;">
-                
-                <!-- Cheque Info Card Grid -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; color: var(--gray-600); padding: 0 10px;">
-                    <div><strong>Request ID:</strong> <span id="inspectRequestId" style="font-weight: 700; color: var(--gray-900);">#--</span></div>
-                    <div><strong>Capacity:</strong> <span id="inspectCapacity" style="font-weight: 700; color: var(--gray-900);">--</span></div>
-                    <div><strong>Charges:</strong> <span id="inspectCharges" style="font-weight: 700; color: var(--gray-900);">--</span></div>
-                </div>
-
-                <!-- 3D Cheque Visualizer -->
-                <div class="cheque-visualizer-container">
-                    <div class="vgb-cheque-3d" id="inspectChequeLeaf3D">
-                        <!-- Hologram ribbon -->
-                        <div class="cheque-hologram"></div>
-                        
-                        <!-- Header -->
-                        <div class="cheque-header">
-                            <div class="cheque-bank-info">
-                                <span class="cheque-bank-name"><i class="bx bx-shield-quarter"></i> VERTEX GALAXY BANK</span>
-                                <span class="cheque-branch-details">BHAKTINAGAR CIRCLE, BHAKTINAGAR CO-OP HOUSING SOC LTD,<br>80 FT ROAD CORNER, RAJKOT-360002 GUJARAT<br>RTGS / NEFT IFSC : VGB0000171</span>
-                            </div>
-                            <div class="cheque-date-box">
-                                <div class="date-squares" id="inspectChequeDateSquares">
-                                    <!-- Populated by JS -->
-                                </div>
-                                <span class="date-validity">Valid for 3 months only</span>
-                            </div>
-                        </div>
-
-                        <!-- Pay row -->
-                        <div class="cheque-row" style="margin-top: 12px;">
-                            <span class="cheque-label">Pay <span class="hindi-text">अदा करें</span></span>
-                            <span class="cheque-line-fill" style="text-transform: uppercase; font-family: monospace; font-size: 0.85rem;" id="inspectChequePayeeDisplay">Self or Bearer</span>
-                            <span class="cheque-label bearer-text">Or Bearer <span class="hindi-text">या धारक को</span></span>
-                        </div>
-
-                        <!-- Rupees row -->
-                        <div class="cheque-row">
-                            <span class="cheque-label">Rupees <span class="hindi-text">रुपये</span></span>
-                            <span class="cheque-line-fill" id="inspectChequeRupeesTextDisplay">--</span>
-                            <div class="cheque-amount-box">
-                                <span class="rupee-symbol">₹</span>
-                                <span class="amount-val" id="inspectChequeAmountDisplay">--</span>
-                            </div>
-                        </div>
-
-                        <!-- Account details row -->
-                        <div class="cheque-details-row">
-                            <div class="cheque-acc-box">
-                                <span class="acc-label">A/c No.<br><span class="hindi-text">खाता क्र.</span></span>
-                                <span class="acc-val" id="inspectChequeAccountDisplayVal">--</span>
-                            </div>
-                            <div class="cheque-branch-codes">
-                                Brn: 0171 Pdt: 105<br>SB A/C
-                            </div>
-                            <div class="cheque-payable-text">
-                                Payable at par through clearing/transfer at all branches of VERTEX GALAXY BANK LTD
-                            </div>
-                            <div class="cheque-sign-area">
-                                <span class="cheque-sign-name" id="inspectChequeSignatureVal">--</span>
-                                <span class="cheque-sign-label">Please sign above / कृपया यहाँ हस्ताक्षर करें</span>
-                            </div>
-                        </div>
-
-                        <!-- Bottom MICR band -->
-                        <div class="cheque-micr-band" id="inspectChequeMicrVal">
-                            <!-- Populated by JS -->
-                        </div>
-
-                        <!-- Diagonal Stamp overlay -->
-                        <div class="cheque-processed-stamp" id="stampOverlay">APPROVED</div>
-                    </div>
-                </div>
-
-                <!-- Admin Action Buttons (for pending requests) -->
-                <div id="inspectActionButtons" style="display: flex; gap: 15px; margin-top: 20px;">
-                    <a href="#" id="inspectApproveBtn" class="btn btn-primary" style="flex: 1; text-align: center; padding: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 1rem; border-radius: var(--radius-md); text-decoration: none;">
-                        Approve Request
-                    </a>
-                    <a href="#" id="inspectRejectBtn" class="btn btn-danger" style="flex: 1; text-align: center; padding: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 1rem; border-radius: var(--radius-md); background: #ef4444; color: white; border: none; text-decoration: none;">
-                        Reject Request
-                    </a>
-                </div>
-
-                <div style="text-align: center; margin-top: 15px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeInspectModal()" style="padding: 10px 25px; font-size: 0.9rem; font-weight: 600;">Close View</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Standard Scripts -->
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
-    <script>
-        function openInspectModal(requestId, customerName, accountNumber, leavesCount, charges, requestedDateStr, status) {
-            const modal = document.getElementById('inspectModal');
-            
-            // Set dynamic fields
-            document.getElementById('inspectRequestId').innerHTML = '#' + requestId;
-            document.getElementById('inspectCapacity').innerHTML = leavesCount + ' Leaves';
-            document.getElementById('inspectCharges').innerHTML = '₹ ' + charges.toFixed(2);
-            
-            // Sync Cheque visualizer
-            document.getElementById('inspectChequePayeeDisplay').innerHTML = 'Self or Bearer';
-            
-            let words = "One Hundred and Fifty Rupees Only";
-            if (leavesCount === 25) {
-                words = "One Hundred Rupees Only";
-            } else if (leavesCount === 50) {
-                words = "One Hundred and Fifty Rupees Only";
-            } else if (leavesCount === 100) {
-                words = "Two Hundred and Fifty Rupees Only";
-            }
-            
-            document.getElementById('inspectChequeRupeesTextDisplay').innerHTML = words;
-            document.getElementById('inspectChequeAmountDisplay').innerHTML = charges.toFixed(2);
-            document.getElementById('inspectChequeAccountDisplayVal').innerHTML = accountNumber;
-            document.getElementById('inspectChequeSignatureVal').innerHTML = customerName ? customerName.toUpperCase() : '';
-            
-            // MICR Band parsing
-            const last6 = accountNumber.length >= 6 ? accountNumber.substring(accountNumber.length - 6) : "018696";
-            document.getElementById('inspectChequeMicrVal').innerHTML = `⑈000076⑈ 360240005⑆ ${last6}⑈ 31`;
-            
-            // Date Squares parsing (Format expected: ddMMyyyy)
-            const squares = document.getElementById('inspectChequeDateSquares');
-            if (squares) {
-                let dateStr = requestedDateStr;
-                if (!dateStr || dateStr.length !== 8) {
-                    // Fallback to today
-                    const today = new Date();
-                    const dd = String(today.getDate()).padStart(2, '0');
-                    const mm = String(today.getMonth() + 1).padStart(2, '0');
-                    const yyyy = String(today.getFullYear());
-                    dateStr = dd + mm + yyyy;
-                }
-                let dateHtml = "";
-                for (let i = 0; i < dateStr.length; i++) {
-                    dateHtml += `<span>${dateStr.charAt(i)}</span>`;
-                }
-                squares.innerHTML = dateHtml;
-            }
-
-            // Handle stamp overlay
-            const stampOverlay = document.getElementById('stampOverlay');
-            if (status === 'approved' || status === 'delivered') {
-                stampOverlay.innerHTML = 'APPROVED';
-                stampOverlay.className = 'cheque-processed-stamp approved';
-                stampOverlay.style.display = 'block';
-                document.getElementById('inspectActionButtons').style.display = 'none';
-            } else if (status === 'rejected') {
-                stampOverlay.innerHTML = 'REJECTED';
-                stampOverlay.className = 'cheque-processed-stamp rejected';
-                stampOverlay.style.display = 'block';
-                document.getElementById('inspectActionButtons').style.display = 'none';
-            } else {
-                // Pending request
-                stampOverlay.style.display = 'none';
-                document.getElementById('inspectActionButtons').style.display = 'flex';
-                
-                // Bind links to buttons
-                const approveBtn = document.getElementById('inspectApproveBtn');
-                const rejectBtn = document.getElementById('inspectRejectBtn');
-                
-                approveBtn.href = `${pageContext.request.contextPath}/chequebook?action=approve&id=${requestId}`;
-                approveBtn.onclick = function() {
-                    return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');
-                };
-                
-                rejectBtn.href = `${pageContext.request.contextPath}/chequebook?action=reject&id=${requestId}`;
-                rejectBtn.onclick = function() {
-                    return confirm(`Are you sure you want to reject this cheque book request? upfront fees of ₹${charges.toFixed(2)} will be refunded to customer account.`);
-                };
-            }
-            
-            modal.style.display = 'flex';
-        }
-
-        function closeInspectModal() {
-            document.getElementById('inspectModal').style.display = 'none';
-        }
-
-        function inspectRequest(btn) {
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const account = btn.getAttribute('data-account');
-            const leaves = parseInt(btn.getAttribute('data-leaves'));
-            const charges = parseFloat(btn.getAttribute('data-charges'));
-            const date = btn.getAttribute('data-date');
-            const status = btn.getAttribute('data-status');
-            openInspectModal(id, name, account, leaves, charges, date, status);
-        }
-        
-        // Add outside click close listener and 3D tilt interaction
+        // Interactive Cheque visualizers removed.
         document.addEventListener('DOMContentLoaded', () => {
-            const cheque = document.getElementById('inspectChequeLeaf3D');
-            if (cheque) {
-                const container = cheque.parentElement;
-                container.addEventListener('mousemove', (e) => {
-                    const rect = cheque.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const rX = -(y / rect.height) * 15;
-                    const rY = (x / rect.width) * 15;
-                    
-                    requestAnimationFrame(() => {
-                        cheque.style.transform = `translateY(-5px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.025)`;
-                    });
+            // Mobile menu toggle handler
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (mobileToggle && sidebar) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                    const icon = mobileToggle.querySelector('i');
+                    if (sidebar.classList.contains('active')) {
+                        icon.className = 'bx bx-x';
+                    } else {
+                        icon.className = 'bx bx-menu';
+                    }
                 });
-                
-                container.addEventListener('mouseleave', () => {
-                    requestAnimationFrame(() => {
-                        cheque.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
-                    });
+
+                // Close sidebar if clicking outside
+                document.addEventListener('click', (e) => {
+                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                        mobileToggle.querySelector('i').className = 'bx bx-menu';
+                    }
                 });
             }
-
-            const demoCheque = document.getElementById('demoChequeLeaf3D');
-            if (demoCheque) {
-                const container = demoCheque.parentElement;
-                container.addEventListener('mousemove', (e) => {
-                    const rect = demoCheque.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const rX = -(y / rect.height) * 15;
-                    const rY = (x / rect.width) * 15;
-                    
-                    requestAnimationFrame(() => {
-                        demoCheque.style.transform = `translateY(-5px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.025)`;
-                    });
-                });
-                
-                container.addEventListener('mouseleave', () => {
-                    requestAnimationFrame(() => {
-                        demoCheque.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
-                    });
-                });
-            }
-
-            // Sync initial state of showcase cheque
-            syncDemoCheque();
         });
 
-        function syncDemoCheque() {
-            const leaves = parseInt(document.getElementById('ctrlLeavesCount').value);
-            const theme = document.getElementById('ctrlChequeTheme').value;
-            const name = document.getElementById('ctrlCustomerName').value.toUpperCase();
-            const accNum = document.getElementById('ctrlAccountNumber').value;
-            const dateStr = document.getElementById('ctrlDate').value;
-            const penColor = document.getElementById('ctrlPenColor').value;
 
-            // 1. Fee and text update
-            let charges = 150;
-            let words = "One Hundred and Fifty Rupees Only";
-            if (leaves === 25) {
-                charges = 100;
-                words = "One Hundred Rupees Only";
-            } else if (leaves === 50) {
-                charges = 150;
-                words = "One Hundred and Fifty Rupees Only";
-            } else if (leaves === 100) {
-                charges = 250;
-                words = "Two Hundred and Fifty Rupees Only";
-            }
-            document.getElementById('demoChequeRupeesTextDisplay').innerHTML = words;
-            document.getElementById('demoChequeAmountDisplay').innerHTML = charges.toFixed(2);
-
-            // 2. Name & Account & Signature
-            document.getElementById('demoChequeAccountDisplayVal').innerHTML = accNum;
-            document.getElementById('demoChequeSignatureVal').innerHTML = name;
-            document.getElementById('demoChequeSignatureVal').style.color = penColor;
-
-            const last6 = accNum.length >= 6 ? accNum.substring(accNum.length - 6) : "255263";
-            document.getElementById('demoChequeMicrVal').innerHTML = `⑈000076⑈ 360240005⑆ ${last6}⑈ 31`;
-
-            // 3. Theme application
-            const cheque = document.getElementById('demoChequeLeaf3D');
-            if (theme === 'sky') {
-                cheque.style.backgroundColor = '#e0f2fe';
-                cheque.style.backgroundImage = 'radial-gradient(circle at 10% 90%, rgba(99, 102, 241, 0.05) 0%, transparent 60%), radial-gradient(circle at 90% 10%, rgba(6, 182, 212, 0.04) 0%, transparent 50%), linear-gradient(to right, #bae6fd, #e0f2fe)';
-                cheque.style.borderColor = '#93c5fd';
-            } else if (theme === 'gold') {
-                cheque.style.backgroundColor = '#fef3c7';
-                cheque.style.backgroundImage = 'radial-gradient(circle at 10% 90%, rgba(245, 158, 11, 0.06) 0%, transparent 60%), radial-gradient(circle at 90% 10%, rgba(217, 119, 6, 0.04), transparent 50%), linear-gradient(to right, #fde68a, #fef3c7)';
-                cheque.style.borderColor = '#fcd34d';
-            } else if (theme === 'emerald') {
-                cheque.style.backgroundColor = '#d1fae5';
-                cheque.style.backgroundImage = 'radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 60%), radial-gradient(circle at 90% 10%, rgba(4, 120, 87, 0.04) 0%, transparent 50%), linear-gradient(to right, #a7f3d0, #d1fae5)';
-                cheque.style.borderColor = '#6ee7b7';
-            } else if (theme === 'purple') {
-                cheque.style.backgroundColor = '#f3e8ff';
-                cheque.style.backgroundImage = 'radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 60%), radial-gradient(circle at 90% 10%, rgba(109, 40, 217, 0.04) 0%, transparent 50%), linear-gradient(to right, #e9d5ff, #f3e8ff)';
-                cheque.style.borderColor = '#d8b4fe';
-            }
-
-            // 4. Date parsing (Format dd/mm/yyyy or simple text)
-            const squares = document.getElementById('demoChequeDateSquares');
-            if (squares) {
-                // Remove slashes
-                const pureDate = dateStr.replace(/\//g, '');
-                let dateHtml = "";
-                for (let i = 0; i < Math.min(8, pureDate.length); i++) {
-                    dateHtml += `<span>${pureDate.charAt(i)}</span>`;
-                }
-                // Fill up remaining squares
-                for (let i = pureDate.length; i < 8; i++) {
-                    dateHtml += `<span>-</span>`;
-                }
-                squares.innerHTML = dateHtml;
-            }
-        }
-
-        window.onclick = function(event) {
-            const inspectModal = document.getElementById('inspectModal');
-            if (event.target === inspectModal) {
-                closeInspectModal();
-            }
-        }
     </script>
 </body>
 </html>

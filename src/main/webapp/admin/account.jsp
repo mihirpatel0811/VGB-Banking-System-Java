@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Manage Accounts</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.7" rel="stylesheet">
@@ -797,56 +797,84 @@
         }
 
         .vgb-atm-card.visa {
-            background: linear-gradient(135deg, #091326 0%, #030611 100%);
-            box-shadow: 0 12px 25px rgba(29, 78, 216, 0.25);
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 8px), 
+                        linear-gradient(135deg, #1b1c21 0%, #0d0e11 100%) !important;
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.3) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
         }
 
         .vgb-atm-card.visa .card-front::after {
             content: '';
             position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.35) 0%, transparent 60%),
-                linear-gradient(125deg, transparent 40%, rgba(255, 255, 255, 0.18) 47%, rgba(255, 255, 255, 0.32) 50%, rgba(255, 255, 255, 0.18) 53%, transparent 60%);
+            width: 320px;
+            height: 180px;
+            bottom: -50px;
+            left: -50px;
+            border-top: 4px solid #a855f7;
+            border-right: 2px solid transparent;
+            border-radius: 50%;
+            transform: rotate(-12deg);
+            box-shadow: 0 -3px 12px rgba(168, 85, 247, 0.6);
+            filter: drop-shadow(0 0 6px #a855f7);
             pointer-events: none;
             z-index: 1;
-            border-radius: inherit;
         }
 
         .vgb-atm-card.mastercard {
-            background: radial-gradient(circle at 75% 35%, #181105 0%, #000000 75%);
-            box-shadow: 0 12px 25px rgba(191, 149, 63, 0.15);
+            background: 
+                radial-gradient(circle at 75% 35%, rgba(212, 175, 55, 0.25) 0%, transparent 55%),
+                linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+                linear-gradient(135deg, #121316 0%, #08090a 100%) !important;
+            background-size: cover, 16px 16px, 16px 16px, cover;
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.2) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
         }
 
         .vgb-atm-card.mastercard .card-front::after {
             content: '';
             position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 75% 35%, rgba(254, 240, 138, 0.35) 0%, rgba(202, 138, 4, 0.2) 20%, rgba(113, 63, 18, 0.05) 40%, transparent 65%),
-                repeating-radial-gradient(ellipse 220px 110px at 75% 35%, transparent 0px, transparent 12px, rgba(217, 119, 6, 0.03) 15px, transparent 18px);
+            width: 180px;
+            height: 180px;
+            top: 20px;
+            right: 20px;
+            border: 2px double #d4af37;
+            border-radius: 50%;
+            transform: rotateX(75deg) rotateY(-20deg);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 25px rgba(212, 175, 55, 0.3);
+            filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5));
             pointer-events: none;
-            transform: rotate(-15deg);
             z-index: 1;
-            border-radius: inherit;
+        }
+
+        /* Gold styled text for Mastercard (Royale design) in preview */
+        .vgb-atm-card.mastercard .card-number-display,
+        .vgb-atm-card.mastercard .holder-name,
+        .vgb-atm-card.mastercard .expiry-value,
+        .vgb-atm-card.mastercard .expiry-label {
+            color: #d4af37 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
         }
 
         .vgb-atm-card.rupay {
-            background: linear-gradient(135deg, #050d24 0%, #0c0822 50%, #030209 100%);
-            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.2);
+            background: radial-gradient(circle at 80% 80%, #3a007c 0%, #080321 60%, #01000b 100%) !important;
+            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.25) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
         }
 
         .vgb-atm-card.rupay .card-front::after {
             content: '';
             position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 10% 85%, rgba(59, 130, 246, 0.22) 0%, transparent 55%),
-                radial-gradient(circle at 80% 15%, rgba(139, 92, 246, 0.18) 0%, transparent 55%),
-                linear-gradient(55deg, transparent 30%, rgba(99, 102, 241, 0.12) 45%, rgba(236, 72, 153, 0.15) 55%, transparent 70%);
+            width: 250px;
+            height: 250px;
+            bottom: -90px;
+            right: -70px;
+            background: radial-gradient(circle, rgba(162, 23, 221, 0.45) 0%, rgba(93, 23, 221, 0.2) 45%, rgba(20, 10, 80, 0.05) 70%, transparent 80%);
+            border-radius: 50%;
+            transform: rotateX(65deg) rotateY(-15deg);
+            box-shadow: inset 0 0 50px rgba(162, 23, 221, 0.3), 0 0 60px rgba(162, 23, 221, 0.25);
             pointer-events: none;
             z-index: 1;
-            border-radius: inherit;
         }
 
         .card-bank-header {
@@ -1682,12 +1710,12 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/profile-logo.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                 <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                     <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                     <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -2684,214 +2712,37 @@
                     <!-- STEP 4: Assets selection (ATM, Cheque, Passbook) -->
                     <div class="wizard-step" id="step4">
                         <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 5px;">Select Banking Services & Instruments</h4>
-                        <p style="font-size: 0.82rem; color: var(--gray-500); margin-bottom: 25px;">Activate offline transacting items. Inspect real-time 3D mockups below.</p>
+                        <p style="font-size: 0.82rem; color: var(--gray-500); margin-bottom: 25px;">Activate offline transacting items for the new account.</p>
 
                         <div class="form-row row-3" style="background: rgba(99, 102, 241, 0.02); padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--glass-border); margin-bottom:30px;">
                             <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;">
-                                <input type="checkbox" name="atmCard" id="wizAtmCard" onchange="toggleWizardAssetView('atm')" value="on"> ATM Debit Card
+                                <input type="checkbox" name="atmCard" id="wizAtmCard" value="on"> ATM Debit Card
                             </label>
                             <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;">
-                                <input type="checkbox" name="chequeBook" id="wizChequeBook" onchange="toggleWizardAssetView('cheque')" value="on"> Cheque Book Request
+                                <input type="checkbox" name="chequeBook" id="wizChequeBook" value="on"> Cheque Book Request
                             </label>
                             <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;" id="wizPassbookLabel">
-                                <input type="checkbox" name="passbook" id="wizPassbook" onchange="toggleWizardAssetView('passbook')" value="on" checked> Offline Passbook Booklet
+                                <input type="checkbox" name="passbook" id="wizPassbook" value="on" checked> Offline Passbook Booklet
                             </label>
                         </div>
 
                         <!-- Visualizers -->
                         <div class="visualizer-preview-grid">
 
-                            <!-- ATM Card Visualizer -->
-                            <div class="visualizer-container" id="wizCardVisualizer" style="display:none;">
-                                <div style="position:absolute; top:12px; left:20px; font-size:0.75rem; font-weight:700; color:var(--gray-500); text-transform:uppercase;">ATM Card Visual Model</div>
-                                <div style="position:absolute; top:12px; right:20px; font-size:0.7rem; color:var(--primary-500); cursor:pointer; font-weight:600;" onclick="flip3DCard()">Flip Card</div>
-
-                                <div style="margin-bottom:12px;">
-                                    <label style="font-size:0.7rem; font-weight:700; color:var(--gray-500);">Card Provider:</label>
-                                    <select name="cardProvider" id="wizCardProvider" onchange="updateCardProvider(this.value)" style="padding:4px 8px; border:1px solid var(--gray-300); border-radius:4px; font-size:0.75rem; margin-left:5px;">
+                            <!-- ATM Card Configuration -->
+                            <div class="visualizer-container" id="wizCardVisualizer" style="display:none; padding: 25px; flex-direction: column; justify-content: flex-start; align-items: flex-start; min-height: auto;">
+                                <div style="font-size:0.75rem; font-weight:700; color:var(--gray-500); text-transform:uppercase; margin-bottom: 15px;">ATM Card Configuration</div>
+                                <div class="form-group" style="width: 100%; margin-bottom: 0;">
+                                    <label style="font-size:0.85rem; font-weight:600; color:var(--gray-600); display: block; margin-bottom: 8px;">Select Card Network Provider</label>
+                                    <select name="cardProvider" id="wizCardProvider" style="width: 100%; padding:10px; border:1.5px solid var(--gray-200); border-radius:var(--radius-md); font-size:0.9rem; background: white;">
                                         <option value="visa">Visa Classic</option>
                                         <option value="mastercard">Mastercard Royale</option>
                                         <option value="rupay">RuPay Platinum</option>
                                     </select>
                                 </div>
-
-                                <div class="vgb-atm-card visa" id="3dAtmCard" onclick="flip3DCard()">
-                                    <!-- Front Face -->
-                                    <div class="card-face card-front">
-                                        <!-- Gold V-Logo & Stacked Bank Name Header -->
-                                        <div class="card-bank-header">
-                                            <div class="card-logo-v">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));">
-                                            </div>
-                                            <div class="card-bank-name-stack">
-                                                <span class="bank-title">VERTEX</span>
-                                                <span class="bank-subtitle">GALAXY BANK</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Metallic Chip & Wireless Waves Row -->
-                                        <div class="card-middle-row">
-                                            <div class="metallic-chip"></div>
-                                            <i class="bx bx-wifi contactless-icon"></i>
-                                        </div>
-
-                                        <!-- Centered Card Number -->
-                                        <div class="card-number-display" id="wizCardNumber">4000 1234 5678 9010</div>
-
-                                        <!-- Details & Network Provider Footer Row -->
-                                        <div class="card-bottom-row">
-                                            <div class="card-holder-info">
-                                                <div class="expiry-info">
-                                                    <span class="expiry-label">VALID THRU</span>
-                                                    <span class="expiry-value">12/30</span>
-                                                </div>
-                                                <div class="holder-name" id="wizCardHolderName">CUSTOMER NAME</div>
-                                            </div>
-                                            <div class="card-brand-logo" id="wizCardBrandLogo">
-                                                <div class="brand-visa">
-                                                    <span class="visa-text">Visa</span>
-                                                    <span class="visa-sub">debit</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Back Face -->
-                                    <div class="card-face card-back">
-                                        <div class="card-back-header">
-                                            <span class="back-helpline">For customer service, call 1800 123 4567 or visit www.vertexgalaxybank.com</span>
-                                            <span class="back-card-id">VGB9999</span>
-                                        </div>
-                                        <div class="card-back-magnetic-strip"></div>
-                                        <div class="card-back-signature-container">
-                                            <div class="signature-strip-text">
-                                                <span>AUTHORIZED SIGNATURE</span>
-                                                <span>NOT VALID UNLESS SIGNED</span>
-                                            </div>
-                                            <div class="signature-strip-cvv">
-                                                <span class="cvv-val" id="wizCardCvv">342</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-back-bottom">
-                                            <div class="back-left-emblem">
-                                                <div class="mc-hologram"></div>
-                                            </div>
-                                            <div class="back-right-logo">
-                                                <div class="back-logo-v">
-                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 15px; height: 15px; object-fit: contain; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));">
-                                                    <span class="logo-text-stacked">
-                                                        <span class="text-top">VERTEX</span>
-                                                        <span class="text-bottom">GALAXY BANK</span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="back-property-text">
-                                            This card is the property of Vertex Galaxy Bank. If found, please return to the nearest branch.
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
-                            <!-- Cheque Visualizer -->
-                            <div class="visualizer-container" id="wizChequeVisualizer" style="display:none;">
-                                <div style="position:absolute; top:12px; left:20px; font-size:0.75rem; font-weight:700; color:var(--gray-500); text-transform:uppercase;">Cheque Book (Leaves)</div>
-                                <div class="vgb-cheque-3d" onclick="toggleChequeOpen()">
-                                    <div class="cheque-hologram"></div>
-                                    <div class="cheque-header">
-                                        <div class="cheque-bank-info">
-                                            <div class="cheque-bank-name"><i class="bx bxs-bank"></i> VERTEX GALAXY BANK</div>
-                                            <div class="cheque-branch-details">BHAKTINAGAR BRANCH, RAJKOT - 360002<br>IFS Code: VGB0000171</div>
-                                        </div>
-                                        <div class="cheque-date-box">
-                                            <div class="date-squares">
-                                                <span>D</span><span>D</span><span>M</span><span>M</span><span>Y</span><span>Y</span><span>Y</span><span>Y</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="cheque-row">
-                                        <span class="cheque-label">Pay <span class="hindi-text">/ पाने वाले को</span></span>
-                                        <div class="cheque-line-fill bearer-text">Self or Bearer</div>
-                                    </div>
-                                    <div class="cheque-row">
-                                        <span class="cheque-label">Rupees <span class="hindi-text">/ रुपये</span></span>
-                                        <div class="cheque-line-fill" id="wizChequeWords">Initial Deposit Amount</div>
-                                        <div class="cheque-amount-box">
-                                            <span class="rupee-symbol">₹</span>
-                                            <span class="amount-val" id="wizChequeAmount">***1,000.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="cheque-details-row">
-                                        <div class="cheque-acc-box">
-                                            <span class="acc-label">A/C NO.</span>
-                                            <span class="acc-val" id="wizChequeAccNum">171931XXXXXX</span>
-                                        </div>
-                                        <div class="cheque-branch-codes">
-                                            Brn: 0171 Pdt: 105<br>SB A/C
-                                        </div>
-                                        <div class="cheque-payable-text">PAYABLE AT PAR AT ALL BRANCHES</div>
-                                        <div class="cheque-sign-area">
-                                            <div class="cheque-sign-name" id="wizChequeSign">Sign</div>
-                                            <span class="cheque-sign-label">AUTHORISED SIGNATORY</span>
-                                        </div>
-                                    </div>
-                                    <div class="cheque-micr-band">
-                                        "001254" 360240171: 014524" 10
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Passbook Visualizer -->
-                            <div class="visualizer-container" id="wizPassbookVisualizer" style="display:block;">
-                                <div style="position:absolute; top:12px; left:20px; font-size:0.75rem; font-weight:700; color:var(--gray-500); text-transform:uppercase;">Passbook Booklet</div>
-                                <div class="passbook-wrapper" onclick="toggleWizardPassbook()">
-                                    <div class="passbook-book" id="3dWizardPassbook">
-                                        <!-- Inside details page -->
-                                        <div class="passbook-page">
-                                            <div style="border-bottom:1.5px solid #cbd5e1; padding-bottom:3px; text-align:center; font-size:0.5rem; font-weight:800; color:#1e293b;">
-                                                OFFICIAL VGB PASSBOOK
-                                            </div>
-                                            <table style="width:100%; font-size:0.48rem; line-height:1.4; border-collapse:collapse; margin-top:5px;">
-                                                <tr>
-                                                    <td style="color:#64748b; padding:2px 0;">Holder Name:</td>
-                                                    <td style="font-weight:700; color:#1e293b;" id="pbWizName">SELECT CUSTOMER</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="color:#64748b; padding:2px 0;">Account No:</td>
-                                                    <td style="font-weight:700; font-family:monospace; color:#1e293b;" id="pbWizAccNum">17193XXXXXXXXX</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="color:#64748b; padding:2px 0;">Branch:</td>
-                                                    <td style="font-weight:700; color:#1e293b;">RAJKOT MAIN, VGB</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="color:#64748b; padding:2px 0;">IFSC Code:</td>
-                                                    <td style="font-weight:700; font-family:monospace; color:#1e293b;">VGB0000171</td>
-                                                </tr>
-                                            </table>
-                                            <div style="font-size:0.42rem; color:rgba(99,102,241,0.2); font-weight:800; border:1px solid; border-radius:3px; padding:1px 4px; text-align:center; margin-top:3px;">
-                                                ACTIVE LEDGER SUPPORT
-                                            </div>
-                                        </div>
-                                        <!-- Cover wrapper -->
-                                        <div class="passbook-cover-wrapper">
-                                            <div class="passbook-cover-front">
-                                                <div style="display:flex; justify-content:space-between; align-items:center;">
-                                                    <span style="font-weight:800; font-size:0.75rem; letter-spacing:1px; background:linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">VGB</span>
-                                                    <span style="font-size:0.8rem; color:#d4af37;"><i class="bx bx-chip"></i></span>
-                                                </div>
-                                                <div style="text-align:center; margin-top:5px;">
-                                                    <h3 style="font-size:0.95rem; font-weight:800; letter-spacing:2px; background:linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin:0;">PASSBOOK</h3>
-                                                </div>
-                                                <div style="font-size:0.35rem; color:#a5b4fc; text-transform:uppercase; text-align:center;">Vertex Galaxy Bank</div>
-                                            </div>
-                                            <div class="passbook-cover-inside">
-                                                <div>VERTEX GALAXY BANK</div>
-                                                <div style="margin-top:10px; font-size:0.4rem; line-height:1.2;">This document logs all deposits, transfers, interest ledger, and withdrawals. Keep securely.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -3699,17 +3550,11 @@
             submitBtn.style.display = currentWizardStep === 7 ? '' : 'none';
 
             if (currentWizardStep === 4) {
-                // ATM, Cheque and Passbook designs - hide/show assets depending on checkboxes
-                toggleWizardAssetView('atm');
-                toggleWizardAssetView('cheque');
-                toggleWizardAssetView('passbook');
-                
                 var passbookLabel = document.getElementById('wizPassbookLabel');
                 if (wizType === 'current') {
                     // Passbook not available for current accounts
                     document.getElementById('wizPassbook').checked = false;
                     passbookLabel.style.display = 'none';
-                    document.getElementById('wizPassbookVisualizer').style.display = 'none';
                 } else {
                     passbookLabel.style.display = '';
                 }
@@ -3965,61 +3810,9 @@
             return true;
         }
 
-        // ATM, Cheque and Passbook 3D visualization triggers
-        function toggleWizardAssetView(type) {
-            var wizType = document.getElementById('wizAccountType').value;
-            if (type === 'atm') {
-                var checked = document.getElementById('wizAtmCard').checked;
-                document.getElementById('wizCardVisualizer').style.display = checked ? 'flex' : 'none';
-            } else if (type === 'cheque') {
-                var checked = document.getElementById('wizChequeBook').checked;
-                document.getElementById('wizChequeVisualizer').style.display = checked ? 'flex' : 'none';
-            } else if (type === 'passbook') {
-                var checked = document.getElementById('wizPassbook').checked;
-                document.getElementById('wizPassbookVisualizer').style.display = checked ? 'flex' : 'none';
-            }
-        }
-
-        function updateCardProvider(val) {
-            var card = document.getElementById('3dAtmCard');
-            var logo = document.getElementById('wizCardBrandLogo');
-            card.className = "vgb-atm-card " + val;
-
-            logo.className = "card-brand-logo";
-            if (val === 'visa') {
-                logo.innerHTML = '<div class="brand-visa"><span class="visa-text">Visa</span><span class="visa-sub">debit</span></div>';
-            } else if (val === 'mastercard') {
-                logo.innerHTML = '<div class="brand-mastercard"><div class="mc-circles"><div class="circle red"></div><div class="circle orange"></div></div><span class="mc-text">mastercard</span></div>';
-            } else {
-                logo.innerHTML = '<div class="brand-rupay"><span class="rupay-text">RuPay</span><span class="rupay-sub">platinum</span></div>';
-            }
-        }
-
-        function flip3DCard() {
-            var card = document.getElementById('3dAtmCard');
-            card.classList.toggle('flipped');
-        }
-
-        function toggleChequeOpen() {
-            // Cheque details alert
-            var chq = document.querySelector('.vgb-cheque-3d');
-            chq.style.transform = "scale(1.05) rotateX(15deg) rotateY(-5deg)";
-            setTimeout(function () {
-                chq.style.transform = "";
-            }, 800);
-        }
-
-        function toggleWizardPassbook() {
-            var book = document.getElementById('3dWizardPassbook');
-            book.classList.toggle('open');
-        }
-
+        // Visualizer helpers removed.
         function updateChequeAmount(val) {
-            var num = parseFloat(val);
-            if (!isNaN(num)) {
-                document.getElementById('wizChequeAmount').textContent = "***" + num.toLocaleString('en-IN', { minimumFractionDigits: 2 });
-                document.getElementById('wizChequeWords').textContent = numberToWords(num) + " Rupees Only";
-            }
+            // Visualizer removed
         }
 
         // Dynamic Partners Input fields
