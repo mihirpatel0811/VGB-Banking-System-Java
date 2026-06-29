@@ -446,7 +446,7 @@
         .loan-paper-form {
             background: #fff;
             border: 1.5px solid var(--gray-300);
-            padding: 45px;
+            padding: 25px 20px;
             border-radius: 4px;
             color: #1e293b;
             font-family: 'Times New Roman', Times, serif;
@@ -455,7 +455,9 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-lg);
             position: relative;
             max-width: 800px;
-            margin: 0 auto;
+            width: calc(100% - 40px);
+            margin: 20px auto 0;
+            box-sizing: border-box;
         }
         .loan-paper-form h1, .loan-paper-form h2, .loan-paper-form h3 {
             font-family: 'Poppins', sans-serif;

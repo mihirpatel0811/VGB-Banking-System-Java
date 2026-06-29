@@ -228,10 +228,45 @@
                             z-index: 2;
                         }
 
+                        .vgb-atm-card.debit .card-front {
+                            background: url('${pageContext.request.contextPath}/assest/images/debit card.png') no-repeat center/cover !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+                        }
+
+                        .vgb-atm-card.credit .card-front {
+                            background: url('${pageContext.request.contextPath}/assest/images/credit card.png') no-repeat center/cover !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+                        }
+
                         .vgb-atm-card .card-back {
                             transform: rotateY(180deg);
                             z-index: 1;
                             background: #080b11;
+                        }
+
+                        .vgb-atm-card.debit .card-back {
+                            background: radial-gradient(circle at 50% 50%, #1e0a3d 0%, #0a0314 100%) !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+                        }
+
+                        .vgb-atm-card.credit .card-back {
+                            background: radial-gradient(circle at 50% 50%, #1a1612 0%, #080706 100%) !important;
+                            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+                        }
+
+                        .vgb-atm-card.debit .card-front::before,
+                        .vgb-atm-card.debit .card-front::after,
+                        .vgb-atm-card.debit.premium-tier .card-front::before,
+                        .vgb-atm-card.debit.premium-tier .card-front::after,
+                        .vgb-atm-card.credit .card-front::before,
+                        .vgb-atm-card.credit .card-front::after,
+                        .vgb-atm-card.credit.premium-tier .card-front::before,
+                        .vgb-atm-card.credit.premium-tier .card-front::after,
+                        .vgb-atm-card.credit.visa .card-front::after,
+                        .vgb-atm-card.credit.mastercard .card-front::after,
+                        .vgb-atm-card.credit.rupay .card-front::after,
+                        .vgb-atm-card.credit.visa.premium-tier .card-front::after {
+                            display: none !important;
                         }
 
                         /* --- DEBIT & CREDIT CARD REDESIGN --- */
@@ -808,6 +843,10 @@
                                         linear-gradient(135deg, #2e3035 0%, #151618 100%) !important;
                             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
                             opacity: 0.8;
+                        }
+                        .vgb-atm-card.inactive-card .card-front,
+                        .vgb-atm-card.inactive-card .card-back {
+                            filter: grayscale(100%) brightness(0.65) contrast(90%) !important;
                         }
 
                         /* Card Back Visual Layouts */
@@ -2042,7 +2081,7 @@
                                 <div class="modal-body" style="padding-top: 15px;">
                                     <!-- The Formal Banking Paper Form -->
                                     <div class="apply-paper-form"
-                                        style="background: #fff; border: 1.5px solid var(--gray-200); padding: 35px 30px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
+                                        style="background: #fff; border: 1.5px solid var(--gray-200); padding: 25px 20px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-top: 20px; margin-bottom: 15px; width: calc(100% - 40px); box-sizing: border-box; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
                                         <!-- Watermark -->
                                         <div
                                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 7.5rem; font-weight: 900; color: rgba(99, 102, 241, 0.03); pointer-events: none; user-select: none; font-family: 'Poppins', sans-serif; letter-spacing: 5px;">
@@ -2382,7 +2421,7 @@
                                 <div class="modal-body" style="padding-top: 15px;">
                                     <!-- The Formal Banking Paper Form -->
                                     <div class="renewal-paper-form"
-                                        style="background: #fff; border: 1.5px solid var(--gray-200); padding: 35px 30px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
+                                        style="background: #fff; border: 1.5px solid var(--gray-200); padding: 25px 20px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-top: 20px; margin-bottom: 15px; width: calc(100% - 40px); box-sizing: border-box; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
                                         <!-- Watermark -->
                                         <div
                                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 7.5rem; font-weight: 900; color: rgba(99, 102, 241, 0.03); pointer-events: none; user-select: none; font-family: 'Poppins', sans-serif; letter-spacing: 5px;">

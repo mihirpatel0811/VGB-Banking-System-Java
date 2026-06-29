@@ -351,7 +351,7 @@
                     .loan-paper-form {
                         background: #fff;
                         border: 1.5px solid var(--gray-200);
-                        padding: 40px;
+                        padding: 25px 20px;
                         border-radius: var(--radius-sm);
                         color: #1e293b;
                         font-family: 'Times New Roman', Times, serif;
@@ -360,7 +360,8 @@
                         box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02), var(--shadow-lg);
                         position: relative;
                         max-width: 800px;
-                        margin: 0 auto;
+                        width: calc(100% - 40px);
+                        margin: 20px auto 0;
                         transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
                     }
 
@@ -902,6 +903,190 @@
                         background: var(--primary-500) !important;
                         color: white !important;
                     }
+
+                    /* --- LOOKUP CONTAINER REDESIGN --- */
+                    .lookup-container {
+                        padding: 24px;
+                        display: flex;
+                        gap: 12px;
+                        align-items: center;
+                        border-bottom: 1px dashed rgba(99, 102, 241, 0.15);
+                        width: 100%;
+                        box-sizing: border-box;
+                        background: #f8fafc;
+                    }
+
+                    body.dark-mode .lookup-container {
+                        background: rgba(15, 23, 42, 0.3);
+                    }
+
+                    .modal-content {
+                        background: #ffffff !important;
+                        border: 1.5px solid var(--gray-200) !important;
+                        width: 100%;
+                        border-radius: var(--radius-lg);
+                        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+                        animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        overflow: hidden;
+                        max-height: 90vh;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    body.dark-mode .modal-content {
+                        background: #1e293b !important;
+                        border-color: rgba(255, 255, 255, 0.08) !important;
+                        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35) !important;
+                    }
+
+                    .lookup-input-wrapper {
+                        position: relative;
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .lookup-input-wrapper i {
+                        position: absolute;
+                        left: 14px;
+                        font-size: 1.2rem;
+                        color: var(--primary-500);
+                        pointer-events: none;
+                    }
+
+                    .lookup-input {
+                        width: 100%;
+                        padding: 12px 16px 12px 42px !important;
+                        border: 2px solid rgba(99, 102, 241, 0.15) !important;
+                        border-radius: var(--radius-md) !important;
+                        font-size: 0.9rem !important;
+                        outline: none !important;
+                        background: #ffffff !important;
+                        color: var(--gray-800) !important;
+                        font-family: 'Poppins', sans-serif !important;
+                        font-weight: 500 !important;
+                        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.04) !important;
+                        transition: all 0.3s ease !important;
+                    }
+
+                    body.dark-mode .lookup-input {
+                        background: rgba(15, 23, 42, 0.6) !important;
+                        border-color: rgba(255, 255, 255, 0.1) !important;
+                        color: #ffffff !important;
+                        box-shadow: none !important;
+                    }
+
+                    .lookup-input::placeholder {
+                        color: var(--gray-400) !important;
+                        font-weight: 400;
+                    }
+
+                    .lookup-input:focus {
+                        border-color: var(--primary-500) !important;
+                        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12) !important;
+                    }
+
+                    .btn-lookup {
+                        padding: 12px 24px !important;
+                        margin: 0 !important;
+                        font-weight: 600 !important;
+                        background: var(--gradient-primary) !important;
+                        color: white !important;
+                        border: none !important;
+                        border-radius: var(--radius-md) !important;
+                        cursor: pointer !important;
+                        display: inline-flex !important;
+                        align-items: center !important;
+                        gap: 8px !important;
+                        font-size: 0.9rem !important;
+                        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+                        transition: all 0.3s ease !important;
+                    }
+
+                    .btn-lookup:hover {
+                        transform: translateY(-1px);
+                        box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3) !important;
+                    }
+
+                    .btn-lookup:active {
+                        transform: translateY(1px);
+                    }
+
+                    #lookupResultsContainer {
+                        background: #ffffff;
+                    }
+
+                    body.dark-mode #lookupResultsContainer {
+                        background: rgba(15, 23, 42, 0.4);
+                        border-color: rgba(255, 255, 255, 0.08);
+                    }
+
+                    /* --- LOOKUP RESULT CARDS --- */
+                    .lookup-result-card {
+                        background: #ffffff;
+                        border: 1.5px solid var(--gray-200);
+                        border-radius: var(--radius-md);
+                        padding: 16px 20px;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+                        text-align: left;
+                        margin-bottom: 12px;
+                        display: block;
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+
+                    body.dark-mode .lookup-result-card {
+                        background: rgba(15, 23, 42, 0.4);
+                        border-color: rgba(255, 255, 255, 0.08);
+                        box-shadow: none;
+                    }
+
+                    .lookup-result-card:hover {
+                        border-color: var(--primary-400);
+                        background: rgba(99, 102, 241, 0.02);
+                        transform: translateY(-2px);
+                        box-shadow: 0 6px 15px rgba(99, 102, 241, 0.06);
+                    }
+
+                    body.dark-mode .lookup-result-card:hover {
+                        background: rgba(99, 102, 241, 0.08);
+                        border-color: var(--primary-500);
+                    }
+
+                    .lookup-result-card-title {
+                        font-size: 0.95rem;
+                        font-weight: 700;
+                        color: var(--gray-800);
+                        margin: 0 0 6px 0;
+                        font-family: 'Poppins', sans-serif;
+                    }
+
+                    body.dark-mode .lookup-result-card-title {
+                        color: #ffffff;
+                    }
+
+                    .lookup-result-card-details {
+                        font-size: 0.85rem;
+                        color: var(--gray-400);
+                        font-family: 'Poppins', sans-serif;
+                        font-weight: 500;
+                    }
+
+                    body.dark-mode .lookup-result-card-details {
+                        color: var(--gray-500);
+                    }
+
+                    .lookup-result-card-details span {
+                        font-family: monospace;
+                        font-weight: 600;
+                        color: var(--gray-600);
+                    }
+
+                    body.dark-mode .lookup-result-card-details span {
+                        color: var(--gray-300);
+                    }
                 </style>
             </head>
 
@@ -931,6 +1116,14 @@
                     <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                            <script>
+                                (function() {
+                                    const avatar = localStorage.getItem('admin_avatar');
+                                    if (avatar) {
+                                        document.getElementById('adminHeaderAvatar').src = avatar;
+                                    }
+                                })();
+                            </script>
                             <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                                 <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                                 <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -2356,7 +2549,7 @@
                                         class="bx bx-x"></i></button>
                             </div>
                             <div class="modal-body"
-                                style="padding: 30px; overflow-y: auto; flex-grow: 1; background: var(--gray-100);">
+                                style="padding: 15px 20px; overflow-y: auto; flex-grow: 1; background: var(--gray-100);">
                                 <form id="adminApplyForm" action="${pageContext.request.contextPath}/loan" method="post"
                                     onsubmit="return serializeAdminLoanForm(event)">
                                     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
@@ -2370,31 +2563,42 @@
                                     <input type="hidden" id="submitAdminInterestRate" name="interestRate">
                                     <input type="hidden" id="adminSubmitFormDetails" name="formDetails">
 
-                                    <!-- Select Customer Dropdown (outside printable page area but inside form) -->
-                                    <div class="no-print"
-                                        style="background: white; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow-sm);">
-                                        <label
-                                            style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--gray-700); margin-bottom: 8px;">Select
-                                            Customer Profile to Apply For:</label>
-                                        <select id="adminApplyCustomerId" name="customerId" required
-                                            onchange="syncAdminCustomerDetails(this)" class="control-select"
-                                            style="font-weight: 600;">
-                                            <option value="" disabled selected>-- Choose Customer --</option>
-                                            <c:forEach var="cust" items="${customers}">
-                                                <option value="${cust.customerId}" data-fullname="${cust.fullName}"
-                                                    data-phone="${cust.phoneNo}" data-email="${cust.email}"
-                                                    data-aadhaar="${cust.aadhaarCard}" data-pan="${cust.panCard}"
-                                                    data-address="${cust.address}" data-city="${cust.city}"
-                                                    data-state="${cust.state}" data-zipcode="${cust.zipCode}"
-                                                    data-dob="${cust.dob}" data-gender="${cust.gender}"
-                                                    data-occupation="${cust.occupation}">
-                                                    ${cust.fullName} (ID: #${cust.customerId})
-                                                </option>
-                                            </c:forEach>
-                                        </select>
+                                    <!-- Select Customer Dropdown (hidden, but populated to support properties sync) -->
+                                    <select id="adminApplyCustomerId" name="customerId" class="control-select" style="display: none !important;">
+                                        <option value="" disabled selected>-- Choose Customer --</option>
+                                        <c:forEach var="cust" items="${customers}">
+                                            <option value="${cust.customerId}" data-fullname="${cust.fullName}"
+                                                data-phone="${cust.phoneNo}" data-email="${cust.email}"
+                                                data-aadhaar="${cust.aadhaarCard}" data-pan="${cust.panCard}"
+                                                data-address="${cust.address}" data-city="${cust.city}"
+                                                data-state="${cust.state}" data-zipcode="${cust.zipCode}"
+                                                data-dob="${cust.dob}" data-gender="${cust.gender}"
+                                                data-occupation="${cust.occupation}">
+                                                ${cust.fullName} (ID: #${cust.customerId})
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+
+                                    <!-- Dynamic Customer Lookup Input & Results List -->
+                                    <div class="no-print" id="adminLoanLookupWrapper" style="margin-bottom: 20px;">
+                                        <div class="lookup-container" style="border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); padding: 16px 20px; box-shadow: var(--shadow-sm);">
+                                            <div class="lookup-input-wrapper">
+                                                <i class="bx bx-search-alt"></i>
+                                                <input type="text" id="lookupAccountNumber" class="lookup-input" placeholder="Search Customer by Name, ID, or Account..." onkeypress="if(event.key === 'Enter') { event.preventDefault(); fetchCustomerDetailsForLoan(); }">
+                                            </div>
+                                            <button type="button" onclick="fetchCustomerDetailsForLoan()" class="btn-lookup" style="border-radius: var(--radius-md);"><i class="bx bx-loader-alt bx-spin" id="lookupLoader" style="display: none;"></i><i class="bx bx-search-alt" id="lookupSearchIcon"></i> Fetch Details</button>
+                                        </div>
                                     </div>
 
-                                    <div class="loan-paper-form">
+                                    <!-- Lookup Results Container -->
+                                    <div id="lookupResultsContainer" style="display: none; max-height: 220px; overflow-y: auto; padding: 15px 24px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); box-sizing: border-box; width: 100%; margin-bottom: 20px;">
+                                        <h4 style="margin: 0 0 10px; font-size: 0.85rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; text-align: left;">Search Results</h4>
+                                        <div id="lookupResultsList" style="display: flex; flex-direction: column;"></div>
+                                    </div>
+
+                                    <!-- Hidden by default until customer is selected or in Edit mode -->
+                                    <div id="loanFormPaperSection" style="display: none;">
+                                        <div class="loan-paper-form">
                                         <h1>Loan Application Form</h1>
 
                                         <!-- 1. Applicant Information -->
@@ -2666,21 +2870,22 @@
                                         </div>
                                     </div>
 
-                                    <!-- Action Buttons (inside form, shown only on screen) -->
-                                    <div class="no-print"
-                                        style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
-                                        <button type="button" class="btn btn-secondary" onclick="closeAdminApplyModal()"
-                                            style="padding: 10px 22px;">Close</button>
-                                        <button type="button" class="btn btn-secondary" onclick="printAdminApplyForm()"
-                                            style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
-                                            <i class="bx bx-printer"></i>
-                                            <span>Print Form</span>
-                                        </button>
-                                        <button type="submit" class="btn btn-primary"
-                                            style="padding: 10px 25px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none;">
-                                            <span>Submit Application</span>
-                                            <i class="bx bx-paper-plane"></i>
-                                        </button>
+                                        <!-- Action Buttons (inside form, shown only on screen) -->
+                                        <div class="no-print"
+                                            style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                                            <button type="button" class="btn btn-secondary" onclick="closeAdminApplyModal()"
+                                                style="padding: 10px 22px;">Close</button>
+                                            <button type="button" class="btn btn-secondary" onclick="printAdminApplyForm()"
+                                                style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
+                                                <i class="bx bx-printer"></i>
+                                                <span>Print Form</span>
+                                            </button>
+                                            <button type="submit" class="btn btn-primary"
+                                                style="padding: 10px 25px; background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%); border: none;">
+                                                <span>Submit Application</span>
+                                                <i class="bx bx-paper-plane"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -3655,6 +3860,11 @@
                         adminCurrentMaxLimit = 999999999; // bypass limit validation on updates
                         calculateAdminPaperEMI();
 
+                        // Configure lookup visibility
+                        document.getElementById('adminLoanLookupWrapper').style.display = 'none';
+                        document.getElementById('lookupResultsContainer').style.display = 'none';
+                        document.getElementById('loanFormPaperSection').style.display = 'block';
+
                         document.getElementById('adminApplyModal').style.display = 'flex';
                     }
 
@@ -3715,11 +3925,111 @@
                         document.getElementById('adminFormLoanTermUnit').value = "years";
                         syncAdminPaperTermMonths();
 
+                        // Reset search parameters & visibility
+                        document.getElementById('lookupAccountNumber').value = '';
+                        document.getElementById('lookupResultsList').innerHTML = '';
+                        document.getElementById('lookupResultsContainer').style.display = 'none';
+                        document.getElementById('adminLoanLookupWrapper').style.display = 'block';
+                        document.getElementById('loanFormPaperSection').style.display = 'block';
+
                         document.getElementById('adminApplyModal').style.display = 'flex';
                     }
 
                     function closeAdminApplyModal() {
                         document.getElementById('adminApplyModal').style.display = 'none';
+                    }
+
+                    function escapeHtml(text) {
+                        if (!text) return '';
+                        return text
+                            .replace(/&/g, "&amp;")
+                            .replace(/</g, "&lt;")
+                            .replace(/>/g, "&gt;")
+                            .replace(/"/g, "&quot;")
+                            .replace(/'/g, "&#039;");
+                    }
+
+                    function fetchCustomerDetailsForLoan() {
+                        const queryVal = document.getElementById('lookupAccountNumber').value.trim();
+                        if (!queryVal) {
+                            alert('Please enter Account Number, Customer ID, or Name');
+                            return;
+                        }
+
+                        const resultsContainer = document.getElementById('lookupResultsContainer');
+                        const resultsList = document.getElementById('lookupResultsList');
+                        const loader = document.getElementById('lookupLoader');
+                        const searchIcon = document.getElementById('lookupSearchIcon');
+
+                        if (loader && searchIcon) {
+                            loader.style.display = 'inline-block';
+                            searchIcon.style.display = 'none';
+                        }
+                        resultsContainer.style.display = 'none';
+                        resultsList.innerHTML = '';
+
+                        fetch('${pageContext.request.contextPath}/account?action=details&searchQuery=' + encodeURIComponent(queryVal))
+                            .then(response => response.json())
+                            .then(data => {
+                                if (loader && searchIcon) {
+                                    loader.style.display = 'none';
+                                    searchIcon.style.display = 'inline-block';
+                                }
+                                if (!data || data.length === 0) {
+                                    alert('No customer details found matching search query.');
+                                    return;
+                                }
+                                
+                                resultsContainer.style.display = 'block';
+                                data.forEach(item => {
+                                    const card = document.createElement('div');
+                                    card.className = 'lookup-result-card';
+                                    
+                                    card.innerHTML = `
+                                        <div class="lookup-result-card-title">
+                                            \${escapeHtml(item.customerName)} | \${item.accountType.toUpperCase()}
+                                        </div>
+                                        <div class="lookup-result-card-details">
+                                            Acc: <span>\${item.accountNumber}</span> | Bal: <span>₹\${parseFloat(item.balance).toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                                        </div>
+                                    `;
+                                    
+                                    card.addEventListener('click', () => {
+                                        // Set value in hidden dropdown and sync details
+                                        const custSelect = document.getElementById('adminApplyCustomerId');
+                                        custSelect.value = item.customerId;
+                                        syncAdminCustomerDetails(custSelect);
+
+                                        // Set linked account dropdown automatically to matching searched account
+                                        setTimeout(() => {
+                                            const linkSelect = document.getElementById('adminFormLinkAccount');
+                                            if (linkSelect) {
+                                                // Find option matching this specific account
+                                                for (let i = 0; i < linkSelect.options.length; i++) {
+                                                    const opt = linkSelect.options[i];
+                                                    if (opt.getAttribute('data-acc-no') === item.accountNumber) {
+                                                        linkSelect.selectedIndex = i;
+                                                        syncAdminLinkedAccountDetails(linkSelect);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }, 150);
+
+                                        resultsContainer.style.display = 'none';
+                                        document.getElementById('loanFormPaperSection').style.display = 'block';
+                                    });
+                                    resultsList.appendChild(card);
+                                });
+                            })
+                            .catch(err => {
+                                if (loader && searchIcon) {
+                                    loader.style.display = 'none';
+                                    searchIcon.style.display = 'inline-block';
+                                }
+                                console.error('Error fetching details:', err);
+                                alert('Failed to fetch customer details. Please check the search query.');
+                            });
                     }
 
                     function syncAdminCustomerDetails(select) {

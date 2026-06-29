@@ -213,6 +213,11 @@ public class CardServlet extends BaseServlet {
         Long customerId = getUserId(request);
         boolean requestFromAdmin = isAdmin(request);
 
+        if (!requestFromAdmin && customerId == null) {
+            redirectToLogin(request, response);
+            return;
+        }
+
         if (!validateCSRFToken(request)) {
             request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
             response.sendRedirect(request.getContextPath() + "/card");
@@ -236,9 +241,14 @@ public class CardServlet extends BaseServlet {
             if (accountId == 0) {
                 accountId = card.getAccountId();
             }
-            if (requestFromAdmin) {
-                customerId = card.getCustomerId();
+
+            // Verify ownership
+            if (!requestFromAdmin && card.getCustomerId() != customerId) {
+                request.getSession().setAttribute("error", "Unauthorized access.");
+                response.sendRedirect(request.getContextPath() + "/card");
+                return;
             }
+
             if (cardService.renewCard(cardId, accountId)) {
                 request.getSession().setAttribute("success", "Card renewal request submitted successfully! Paid renewal fee. Awaiting Admin approval.");
             } else {

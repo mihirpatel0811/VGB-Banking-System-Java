@@ -349,12 +349,15 @@
         .paper-form {
             background: #fdfbf7;
             border: 1.5px solid rgba(191, 149, 63, 0.35);
-            padding: 30px;
+            padding: 25px 20px;
             border-radius: var(--radius-md);
             color: #334155;
             font-family: 'Poppins', sans-serif;
             font-size: 0.95rem;
             line-height: 1.6;
+            margin: 20px auto 15px;
+            width: calc(100% - 40px);
+            box-sizing: border-box;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.02), 0 10px 30px rgba(0,0,0,0.05);
             position: relative;
             overflow: hidden;
@@ -1157,9 +1160,6 @@
     <!-- Header -->
     <header class="header scrolled">
         <div style="display: flex; align-items: center; gap: 15px;">
-            <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle Navigation" style="align-items: center; justify-content: center; background: none; border: none; font-size: 1.8rem; color: var(--gray-700); cursor: pointer; padding: 5px; border-radius: var(--radius-sm); transition: background 0.2s;">
-                <i class="bx bx-menu"></i>
-            </button>
             <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
             </a>

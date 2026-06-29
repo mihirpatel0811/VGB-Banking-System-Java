@@ -64,10 +64,33 @@ const PortfolioConfig = {
    2. CORE INITIALIZATION
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
+    // Load saved admin avatar
+    try {
+        const savedAvatar = localStorage.getItem('admin_avatar');
+        if (savedAvatar) {
+            const headerAvatar = document.getElementById('adminHeaderAvatar');
+            if (headerAvatar) {
+                headerAvatar.src = savedAvatar;
+            }
+        }
+    } catch (e) {
+        console.error("Error loading admin avatar:", e);
+    }
+
     console.log("%c Portfolio Initialized Successfully ", "background: #6366f1; color: #fff; padding: 5px; border-radius: 3px;");
 
     // Core Engine Starts
     App.init();
+});
+
+// Listen for storage changes to sync profile image updates across multiple open tabs in real-time
+window.addEventListener('storage', (e) => {
+    if (e.key === 'admin_avatar' && e.newValue) {
+        const headerAvatar = document.getElementById('adminHeaderAvatar');
+        if (headerAvatar) {
+            headerAvatar.src = e.newValue;
+        }
+    }
 });
 
 const App = {

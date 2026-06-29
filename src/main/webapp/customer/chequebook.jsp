@@ -301,13 +301,15 @@
         .paper-form {
             background: #fff;
             border: 1.5px solid var(--gray-200);
-            padding: 35px 30px;
+            padding: 25px 20px;
             border-radius: var(--radius-sm);
             color: #1e293b;
             font-family: 'Times New Roman', Times, serif;
             font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin: 20px auto 15px;
+            width: calc(100% - 40px);
+            box-sizing: border-box;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm);
             position: relative;
             overflow: hidden;

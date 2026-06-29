@@ -1159,45 +1159,69 @@ public class AccountServlet extends BaseServlet {
     }
 
     private void getAccountDetailsJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String accountNumber = getParameter(request, "accountNumber", "");
+        String searchQuery = getParameter(request, "searchQuery", "");
+        if (searchQuery.isEmpty()) {
+            searchQuery = getParameter(request, "accountNumber", "");
+        }
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         java.io.PrintWriter out = response.getWriter();
 
-        if (accountNumber.isEmpty()) {
-            out.print("{\"error\":\"Account number is required\"}");
+        if (searchQuery.isEmpty()) {
+            out.print("[]");
             out.flush();
             return;
         }
 
-        Account account = accountService.getAccountByNumber(accountNumber);
-        if (account == null) {
-            out.print("{\"error\":\"Account not found\"}");
-            out.flush();
-            return;
+        String q = searchQuery.toLowerCase().trim();
+        List<Account> allAccounts = accountService.getAllAccounts();
+        com.vgb.service.CustomerService customerService = new com.vgb.service.CustomerService();
+
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+
+        for (Account account : allAccounts) {
+            Customer customer = customerService.getCustomerById(account.getCustomerId());
+            if (customer == null) continue;
+
+            String fullName = customer.getFirstName() + (customer.getMiddleName() != null && !customer.getMiddleName().isEmpty() ? " " + customer.getMiddleName() : "") + " " + customer.getLastName();
+            String cidStr = String.valueOf(customer.getCustomerId());
+            String accNum = account.getAccountNumber();
+
+            boolean isMatch = accNum.toLowerCase().contains(q) || 
+                              cidStr.equals(q) || 
+                              fullName.toLowerCase().contains(q);
+
+            if (isMatch) {
+                if (!first) {
+                    sb.append(",");
+                }
+                first = false;
+                String fullAddress = customer.getAddress() + ", " + customer.getCity() + ", " + customer.getState() + " - " + customer.getZipCode();
+                
+                sb.append("{")
+                  .append("\"accountId\":").append(account.getAccountId()).append(",")
+                  .append("\"accountNumber\":\"").append(escapeJson(account.getAccountNumber())).append("\",")
+                  .append("\"accountType\":\"").append(escapeJson(account.getAccountType())).append("\",")
+                  .append("\"balance\":").append(account.getBalance()).append(",")
+                  .append("\"customerId\":").append(customer.getCustomerId()).append(",")
+                  .append("\"customerName\":\"").append(escapeJson(fullName)).append("\",")
+                  .append("\"email\":\"").append(escapeJson(customer.getEmail() != null ? customer.getEmail() : "")).append("\",")
+                  .append("\"phone\":\"").append(escapeJson(customer.getPhoneNo() != null ? customer.getPhoneNo() : "")).append("\",")
+                  .append("\"address\":\"").append(escapeJson(fullAddress)).append("\",")
+                  .append("\"aadhaar\":\"").append(escapeJson(customer.getAadhaarCard() != null ? customer.getAadhaarCard() : "")).append("\",")
+                  .append("\"pan\":\"").append(escapeJson(customer.getPanCard() != null ? customer.getPanCard() : "")).append("\",")
+                  .append("\"dob\":\"").append(escapeJson(customer.getDob() != null ? customer.getDob().toString() : "")).append("\",")
+                  .append("\"gender\":\"").append(escapeJson(customer.getGender() != null ? customer.getGender() : "")).append("\",")
+                  .append("\"occupation\":\"").append(escapeJson(customer.getOccupation() != null ? customer.getOccupation() : "")).append("\",")
+                  .append("\"addressStreet\":\"").append(escapeJson(customer.getAddress() != null ? customer.getAddress() : "")).append("\",")
+                  .append("\"city\":\"").append(escapeJson(customer.getCity() != null ? customer.getCity() : "")).append("\",")
+                  .append("\"state\":\"").append(escapeJson(customer.getState() != null ? customer.getState() : "")).append("\",")
+                  .append("\"zipcode\":\"").append(escapeJson(customer.getZipCode() != null ? customer.getZipCode() : "")).append("\"")
+                  .append("}");
+            }
         }
-
-        Customer customer = new com.vgb.service.CustomerService().getCustomerById(account.getCustomerId());
-        if (customer == null) {
-            out.print("{\"error\":\"Customer details not found\"}");
-            out.flush();
-            return;
-        }
-
-        String fullName = customer.getFirstName() + (customer.getMiddleName() != null && !customer.getMiddleName().isEmpty() ? " " + customer.getMiddleName() : "") + " " + customer.getLastName();
-        String fullAddress = customer.getAddress() + ", " + customer.getCity() + ", " + customer.getState() + " - " + customer.getZipCode();
-
-        StringBuilder sb = new StringBuilder("{");
-        sb.append("\"accountId\":").append(account.getAccountId()).append(",")
-          .append("\"accountNumber\":\"").append(escapeJson(account.getAccountNumber())).append("\",")
-          .append("\"accountType\":\"").append(escapeJson(account.getAccountType())).append("\",")
-          .append("\"balance\":").append(account.getBalance()).append(",")
-          .append("\"customerId\":").append(customer.getCustomerId()).append(",")
-          .append("\"customerName\":\"").append(escapeJson(fullName)).append("\",")
-          .append("\"email\":\"").append(escapeJson(customer.getEmail() != null ? customer.getEmail() : "")).append("\",")
-          .append("\"phone\":\"").append(escapeJson(customer.getPhoneNo() != null ? customer.getPhoneNo() : "")).append("\",")
-          .append("\"address\":\"").append(escapeJson(fullAddress)).append("\"")
-          .append("}");
+        sb.append("]");
 
         out.print(sb.toString());
         out.flush();

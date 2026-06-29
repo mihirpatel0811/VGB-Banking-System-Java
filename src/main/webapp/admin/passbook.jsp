@@ -1051,6 +1051,257 @@
         body.dark-mode .close-btn:hover {
             color: white;
         }
+
+        /* --- LOOKUP CONTAINER REDESIGN --- */
+        .lookup-container {
+            padding: 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border-bottom: 1px dashed rgba(99, 102, 241, 0.15);
+            width: 100%;
+            box-sizing: border-box;
+            background: #f8fafc;
+        }
+
+        body.dark-mode .lookup-container {
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .modal-content {
+            background: #ffffff !important;
+            border: 1.5px solid var(--gray-200) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        body.dark-mode .modal-content {
+            background: #1e293b !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .lookup-input-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .lookup-input-wrapper i {
+            position: absolute;
+            left: 14px;
+            font-size: 1.2rem;
+            color: var(--primary-500);
+            pointer-events: none;
+        }
+
+        .lookup-input {
+            width: 100%;
+            padding: 12px 16px 12px 42px !important;
+            border: 2px solid rgba(99, 102, 241, 0.15) !important;
+            border-radius: var(--radius-md) !important;
+            font-size: 0.9rem !important;
+            outline: none !important;
+            background: #ffffff !important;
+            color: var(--gray-800) !important;
+            font-family: 'Poppins', sans-serif !important;
+            font-weight: 500 !important;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.04) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        body.dark-mode .lookup-input {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        .lookup-input::placeholder {
+            color: var(--gray-400) !important;
+            font-weight: 400;
+        }
+
+        .lookup-input:focus {
+            border-color: var(--primary-500) !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12) !important;
+        }
+
+        .btn-lookup {
+            padding: 12px 24px !important;
+            margin: 0 !important;
+            font-weight: 600 !important;
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: var(--radius-md) !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .btn-lookup:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3) !important;
+        }
+
+        .btn-lookup:active {
+            transform: translateY(1px);
+        }
+
+        /* --- LOOKUP RESULT CARDS --- */
+        .lookup-result-card {
+            background: #ffffff;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            text-align: left;
+            margin-bottom: 12px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        body.dark-mode .lookup-result-card {
+            background: rgba(15, 23, 42, 0.4);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+
+        .lookup-result-card:hover {
+            border-color: var(--primary-400);
+            background: rgba(99, 102, 241, 0.02);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.06);
+        }
+
+        body.dark-mode .lookup-result-card:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: var(--primary-500);
+        }
+
+        .lookup-result-card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin: 0 0 6px 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body.dark-mode .lookup-result-card-title {
+            color: #ffffff;
+        }
+
+        .lookup-result-card-details {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        body.dark-mode .lookup-result-card-details {
+            color: var(--gray-500);
+        }
+
+        .lookup-result-card-details span {
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        body.dark-mode .lookup-result-card-details span {
+            color: var(--gray-300);
+        }
+
+        /* --- SEARCH AND FILTER SYSTEM --- */
+        .search-filter-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input-group {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+            min-width: 250px;
+        }
+
+        .search-input-group .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .search-input-group input {
+            width: 100%;
+            padding: 10px 15px 10px 42px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: white;
+            font-size: 0.85rem;
+            outline: none;
+            color: var(--gray-800);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-mode .search-input-group input {
+            background: rgba(15, 23, 42, 0.45);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        .search-input-group input:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .filter-select-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select-group select {
+            padding: 10px 15px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: white;
+            font-size: 0.85rem;
+            outline: none;
+            color: var(--gray-700);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 150px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-mode .filter-select-group select {
+            background: rgba(15, 23, 42, 0.45);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        .filter-select-group select:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
     </style>
 </head>
 <body class="bank-home-page">
@@ -1077,6 +1328,14 @@
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                <script>
+                    (function() {
+                        const avatar = localStorage.getItem('admin_avatar');
+                        if (avatar) {
+                            document.getElementById('adminHeaderAvatar').src = avatar;
+                        }
+                    })();
+                </script>
                 <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                     <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                     <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
@@ -1116,13 +1375,13 @@
         <div class="container" style="max-width: 1200px; padding: 0;">
             <!-- Welcome Header -->
              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-                 <div>
-                     <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">Manage Passbook Requests</h2>
-                     <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Review customer passbook applications, inspect booklet configurations, and issue approvals/refunds.</p>
-                 </div>
-                 <button onclick="openApplyModal()" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin: 0; background: var(--gradient-primary); color: white; border: none; cursor: pointer; transition: all 0.3s ease;">
-                     <i class="bx bx-plus-circle"></i> Apply / Renew Passbook
-                 </button>
+                  <div>
+                      <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">Manage Passbook Requests</h2>
+                      <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Review customer passbook applications, inspect booklet configurations, and issue approvals/refunds.</p>
+                  </div>
+                  <button onclick="openApplyModal()" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin: 0; background: var(--gradient-primary); color: white; border: none; cursor: pointer; transition: all 0.3s ease;">
+                      <i class="bx bx-plus-circle"></i> Apply / Renew Passbook
+                  </button>
              </div>
 
             <!-- Alerts -->
@@ -1194,6 +1453,23 @@
             <!-- Table of all requests -->
             <div class="glass-card">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;"><i class="bx bx-list-ol" style="color: var(--primary-500);"></i> Passbook Applications</h3>
+                
+                <!-- Client-side real-time filter controls -->
+                <div class="search-filter-wrapper">
+                    <div class="search-input-group">
+                        <i class="bx bx-search search-icon"></i>
+                        <input type="text" id="directorySearchInput" onkeyup="filterDirectoryTable()" placeholder="Search by request ID, customer, account...">
+                    </div>
+                    <div class="filter-select-group">
+                        <select id="directoryStatusFilter" onchange="filterDirectoryTable()">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="table-responsive" style="overflow-x: auto; width: 100%;">
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead>
@@ -1208,7 +1484,7 @@
                                 <th style="padding: 12px 15px; text-align: right;">Action Control</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="directoryTableBody">
                             <c:choose>
                                 <c:when test="${not empty requests}">
                                     <c:forEach var="req" items="${requests}">
@@ -1317,201 +1593,35 @@
 
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-
-            // Mobile menu toggle logic
-            const mobileToggle = document.getElementById('mobileNavToggle');
-            const sidebar = document.querySelector('.sidebar');
-            if (mobileToggle && sidebar) {
-                mobileToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    sidebar.classList.toggle('active');
-                    const icon = mobileToggle.querySelector('i');
-                    if (icon) {
-                        icon.className = sidebar.classList.contains('active') ? 'bx bx-x' : 'bx bx-menu';
-                    }
-                });
-
-                // Close sidebar when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
-                        sidebar.classList.remove('active');
-                        const icon = mobileToggle.querySelector('i');
-                        if (icon) icon.className = 'bx bx-menu';
-                    }
-                });
-            }
-
-            // Cursor glow follower
-            const glow = document.querySelector('.cursor-glow');
-            if (glow) {
-                window.addEventListener('mousemove', (e) => {
-                    requestAnimationFrame(() => {
-                        glow.style.left = e.clientX + 'px';
-                        glow.style.top = e.clientY + 'px';
-                    });
-                });
-            }
-
-            // Preloader fadeout
-            const preloader = document.querySelector('.preloader');
-            if (preloader) {
-                setTimeout(() => {
-                    preloader.classList.add('hidden');
-                }, 300);
-            }
+        // Client-side real-time table search & filter
+        function filterDirectoryTable() {
+            const searchVal = document.getElementById('directorySearchInput').value.toLowerCase();
+            const statusVal = document.getElementById('directoryStatusFilter').value.toLowerCase();
             
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 4px solid var(--accent-emerald);">
-                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                        <i class="bx bx-check-double"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Approved Books</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${approvedCount}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 4px solid var(--secondary-500);">
-                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
-                        <i class="bx bx-x-circle"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Rejected / Refunded</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${rejectedCount}</h3>
-                    </div>
-                </div>
-            </div>
+            const table = document.getElementById('directoryTableBody');
+            if (!table) return;
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                if (row.cells.length < 8) continue; // Skip empty list state rows
+                
+                const requestId = row.cells[0].textContent.toLowerCase();
+                const customerName = row.cells[1].textContent.toLowerCase();
+                const accountNumber = row.cells[2].textContent.toLowerCase();
+                const status = row.cells[6].textContent.trim().toLowerCase();
+                
+                const matchesSearch = requestId.includes(searchVal) || customerName.includes(searchVal) || accountNumber.includes(searchVal);
+                const matchesStatus = statusVal === '' || status.includes(statusVal);
+                
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
 
-
-            <!-- Table of all requests -->
-            <div class="glass-card">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;"><i class="bx bx-list-ol" style="color: var(--primary-500);"></i> Passbook Applications</h3>
-                <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px;">ID</th>
-                                <th style="padding: 12px 15px;">Customer Name</th>
-                                <th style="padding: 12px 15px;">Account Number</th>
-                                <th style="padding: 12px 15px;">Type</th>
-                                <th style="padding: 12px 15px;">Fee Status</th>
-                                <th style="padding: 12px 15px;">Requested Date</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: right;">Action Control</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${not empty requests}">
-                                    <c:forEach var="req" items="${requests}">
-                                        <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);"><span class="badge-id">#${req.requestId}</span></td>
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
-                                            <td style="padding: 15px;"><span class="badge-id">${req.accountNumber}</span></td>
-                                            <td style="padding: 15px;">
-                                                <c:choose>
-                                                    <c:when test="${req.requestType eq 'new'}">
-                                                        <span class="badge-new">New Cover</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge-renew">Renewal</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px;">
-                                                <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
-                                                <c:choose>
-                                                    <c:when test="${req.chargesPaid}">
-                                                        <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Paid</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Refunded</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px; color: var(--gray-500);">
-                                                <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
-                                            </td>
-                                            <td style="padding: 15px;">
-                                                <c:choose>
-                                                    <c:when test="${req.status eq 'approved' or req.status eq 'delivered'}">
-                                                        <span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>
-                                                    </c:when>
-                                                    <c:when test="${req.status eq 'pending'}">
-                                                        <span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px; text-align: right;">
-                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                     <button type="button" class="btn" style="display:none;" 
-                                                             data-id="${req.requestId}" 
-                                                             data-name="${req.customerName}" 
-                                                             data-account="${req.accountNumber}" 
-                                                             data-type="${req.requestType}" 
-                                                             data-acctype="${req.accountType} Account"
-                                                             data-ifsc="${req['ifscCode']}"
-                                                             data-phone="${req['phoneNo']}"
-                                                             data-nominee="${req['nomineeName']}"
-                                                             data-status="${req.status}"
-                                                             style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                             onclick="inspectRequest(this)">
-                                                         <i class="bx bx-show"></i> Inspect
-                                                     </button>
-                                                     <c:choose>
-                                                         <c:when test="${req.status eq 'pending'}">
-                                                             <a href="${pageContext.request.contextPath}/passbook?action=approve&id=${req.requestId}" 
-                                                                class="btn btn-primary" 
-                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
-                                                                onclick="return confirm('Are you sure you want to approve this passbook request?');">
-                                                                 Approve
-                                                             </a>
-                                                             <a href="${pageContext.request.contextPath}/passbook?action=reject&id=${req.requestId}" 
-                                                                class="btn btn-danger" 
-                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
-                                                                onclick="return confirm('Are you sure you want to reject this request? Processing fees of ₹100.00 will be refunded.');">
-                                                                 Reject
-                                                             </a>
-                                                         </c:when>
-                                                         <c:otherwise>
-                                                             <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
-                                                         </c:otherwise>
-                                                     </c:choose>
-                                                 </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <tr>
-                                        <td colspan="8" style="padding: 30px; text-align: center; color: var(--gray-400); font-style: italic;">
-                                            <i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No passbook requests have been submitted.
-                                        </td>
-                                    </tr>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer" style="padding: 20px 0; margin-left: 280px; background: white; border-top: 1px solid rgba(99, 102, 241, 0.15);">
-        <div class="container" style="text-align: center; max-width: 1200px; padding: 0;">
-            <p style="font-size: 0.85rem; color: var(--gray-500);">&copy; <span data-current-year>2026</span> Vertex Galaxy Bank. Internal administrative access.</p>
-        </div>
-    </footer>
-
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
-    <script>
         document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -1566,6 +1676,8 @@
 
         function openApplyModal() {
             document.getElementById('lookupAccountNumber').value = '';
+            document.getElementById('lookupResultsContainer').style.display = 'none';
+            document.getElementById('lookupResultsList').innerHTML = '';
             document.getElementById('passbookForm').style.display = 'none';
             document.getElementById('applyPassbookModal').style.display = 'flex';
         }
@@ -1574,47 +1686,101 @@
             document.getElementById('applyPassbookModal').style.display = 'none';
         }
 
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         function fetchCustomerDetails() {
-            const accNo = document.getElementById('lookupAccountNumber').value.trim();
-            if (!accNo) {
-                alert('Please enter a valid Account Number');
+            const queryVal = document.getElementById('lookupAccountNumber').value.trim();
+            if (!queryVal) {
+                alert('Please enter Account Number, Customer ID, or Name');
                 return;
             }
 
-            fetch('${pageContext.request.contextPath}/account?action=details&accountNumber=' + accNo)
+            const resultsContainer = document.getElementById('lookupResultsContainer');
+            const resultsList = document.getElementById('lookupResultsList');
+            const loader = document.getElementById('lookupLoader');
+            const searchIcon = document.getElementById('lookupSearchIcon');
+
+            if (loader && searchIcon) {
+                loader.style.display = 'inline-block';
+                searchIcon.style.display = 'none';
+            }
+            resultsContainer.style.display = 'none';
+            resultsList.innerHTML = '';
+            document.getElementById('passbookForm').style.display = 'none';
+
+            fetch('${pageContext.request.contextPath}/account?action=details&searchQuery=' + encodeURIComponent(queryVal))
                 .then(response => response.json())
                 .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                        document.getElementById('passbookForm').style.display = 'none';
-                    } else {
-                        // Populate form fields
-                        document.getElementById('formAccountId').value = data.accountId;
-                        document.getElementById('formAccountNumber').value = data.accountNumber;
-                        
-                        document.getElementById('paperAccountNumberDisplay').textContent = data.accountNumber + ' - ' + data.accountType + ' (Available: ₹ ' + parseFloat(data.balance).toLocaleString('en-IN', {minimumFractionDigits: 2}) + ')';
-                        document.getElementById('paperCustomerIdDisplay').textContent = data.customerId;
-                        document.getElementById('paperMobileDisplay').textContent = data.phone;
-                        document.getElementById('paperEmailDisplay').textContent = data.email;
-                        document.getElementById('paperAddressDisplay').textContent = data.address;
-                        
-                        document.getElementById('applyFormSignature').textContent = data.customerName;
-
-                        // Date
-                        const today = new Date();
-                        const dd = String(today.getDate()).padStart(2, '0');
-                        const mm = String(today.getMonth() + 1).padStart(2, '0');
-                        const yyyy = today.getFullYear();
-                        document.getElementById('applyFormDateStr').value = dd + ' / ' + mm + ' / ' + yyyy;
-
-                        // Show form
-                        document.getElementById('passbookForm').style.display = 'block';
+                    if (loader && searchIcon) {
+                        loader.style.display = 'none';
+                        searchIcon.style.display = 'inline-block';
                     }
+                    if (!data || data.length === 0) {
+                        alert('No customer details found matching search query.');
+                        return;
+                    }
+                    
+                    resultsContainer.style.display = 'block';
+                    data.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'lookup-result-card';
+                        
+                        card.innerHTML = `
+                            <div class="lookup-result-card-title">
+                                \${escapeHtml(item.customerName)} | \${item.accountType.toUpperCase()}
+                            </div>
+                            <div class="lookup-result-card-details">
+                                Acc: <span>\${item.accountNumber}</span> | Bal: <span>₹\${parseFloat(item.balance).toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                            </div>
+                        `;
+                        
+                        card.addEventListener('click', () => {
+                            populateCustomerForm(item);
+                            resultsContainer.style.display = 'none';
+                        });
+                        resultsList.appendChild(card);
+                    });
                 })
                 .catch(err => {
+                    if (loader && searchIcon) {
+                        loader.style.display = 'none';
+                        searchIcon.style.display = 'inline-block';
+                    }
                     console.error('Error fetching details:', err);
-                    alert('Failed to fetch customer details. Please check the account number.');
+                    alert('Failed to fetch customer details. Please check the search query.');
                 });
+        }
+
+        function populateCustomerForm(data) {
+            // Populate form fields
+            document.getElementById('formAccountId').value = data.accountId;
+            document.getElementById('formAccountNumber').value = data.accountNumber;
+            
+            document.getElementById('paperAccountNumberDisplay').textContent = data.accountNumber + ' - ' + data.accountType + ' (Available: ₹ ' + parseFloat(data.balance).toLocaleString('en-IN', {minimumFractionDigits: 2}) + ')';
+            document.getElementById('paperCustomerIdDisplay').textContent = data.customerId;
+            document.getElementById('paperMobileDisplay').textContent = data.phone;
+            document.getElementById('paperEmailDisplay').textContent = data.email;
+            document.getElementById('paperAddressDisplay').textContent = data.address;
+            
+            document.getElementById('applyFormSignature').textContent = data.customerName;
+
+            // Date
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            document.getElementById('applyFormDateStr').value = dd + ' / ' + mm + ' / ' + yyyy;
+
+            // Show form
+            document.getElementById('passbookForm').style.display = 'block';
         }
 
         function updateApplyFeeAndNotice(actionType) {
@@ -1627,24 +1793,33 @@
 
     <!-- Modal: Apply / Renew Passbook -->
     <div id="applyPassbookModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
-        <div class="modal-content" style="max-width: 720px; width: 100%; background: var(--glass-bg); backdrop-filter: blur(25px); border: 1.5px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--panel-shadow); display: flex; flex-direction: column;">
+        <div class="modal-content" style="max-width: 720px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
             <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer Passbook</h3>
                 <button type="button" onclick="closeApplyModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
             </div>
             
-            <div style="padding: 20px 24px 15px; display: flex; gap: 10px; align-items: center; border-bottom: 1px dashed rgba(99,102,241,0.1); width: 100%; box-sizing: border-box; background: rgba(99,102,241,0.01);">
-                <input type="text" id="lookupAccountNumber" placeholder="Enter customer account number (e.g. 171931936244)" style="flex: 1; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); font-size: 0.9rem; outline: none; background: transparent; color: var(--gray-800); font-family: monospace; font-weight: 600;" onkeypress="if(event.key === 'Enter') fetchCustomerDetails();">
-                <button type="button" onclick="fetchCustomerDetails()" class="btn btn-primary" style="padding: 10px 20px; margin: 0; font-weight: 600; background: var(--gradient-primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><i class="bx bx-search-alt"></i> Fetch Details</button>
+            <div class="lookup-container">
+                <div class="lookup-input-wrapper">
+                    <i class="bx bx-search-alt"></i>
+                    <input type="text" id="lookupAccountNumber" class="lookup-input" placeholder="Enter Account Number, Customer ID or Name (e.g. 171931936244)" onkeypress="if(event.key === 'Enter') fetchCustomerDetails();">
+                </div>
+                <button type="button" onclick="fetchCustomerDetails()" class="btn-lookup"><i class="bx bx-loader-alt bx-spin" id="lookupLoader" style="display: none;"></i><i class="bx bx-search-alt" id="lookupSearchIcon"></i> Fetch Details</button>
+            </div>
+
+            <!-- Lookup Results Container -->
+            <div id="lookupResultsContainer" style="display: none; max-height: 200px; overflow-y: auto; padding: 15px 24px; border-bottom: 1px dashed rgba(99,102,241,0.1); box-sizing: border-box; width: 100%;">
+                <h4 style="margin: 0 0 10px; font-size: 0.85rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; text-align: left;">Search Results</h4>
+                <div id="lookupResultsList" style="display: flex; flex-direction: column;"></div>
             </div>
 
             <!-- Beautiful Paper Form container (hidden by default until details loaded) -->
-            <form id="passbookForm" action="${pageContext.request.contextPath}/passbook?action=apply" method="post" style="display: none; padding: 24px; max-height: 65vh; overflow-y: auto; width: 100%; box-sizing: border-box; text-align: left;">
+            <form id="passbookForm" action="${pageContext.request.contextPath}/passbook?action=apply" method="post" style="display: none; padding: 12px 20px; max-height: 70vh; overflow-y: auto; width: 100%; box-sizing: border-box; text-align: left;">
                 <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <input type="hidden" id="formAccountId" name="accountId" value="">
                 <input type="hidden" id="formAccountNumber" name="accountNumber" value="">
                 
-                <div class="apply-paper-form" style="background: #fff; border: 1.5px solid var(--gray-200); padding: 35px 30px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
+                <div class="apply-paper-form" style="background: #fff; border: 1.5px solid var(--gray-200); padding: 25px 20px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-top: 20px; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
                     <!-- Watermark -->
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 7.5rem; font-weight: 900; color: rgba(99, 102, 241, 0.03); pointer-events: none; user-select: none; font-family: 'Poppins', sans-serif; letter-spacing: 5px;">VGB</div>
 
