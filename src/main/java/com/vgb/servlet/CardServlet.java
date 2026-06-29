@@ -157,10 +157,7 @@ public class CardServlet extends BaseServlet {
 
     private void applyCard(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Long customerId = getUserId(request);
-        if (customerId == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        boolean requestFromAdmin = isAdmin(request);
 
         if (!validateCSRFToken(request)) {
             request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
@@ -169,13 +166,33 @@ public class CardServlet extends BaseServlet {
         }
 
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        String accountNumber = getParameter(request, "accountNumber", "");
         String cardType = getParameter(request, "cardType", "");
         String cardProvider = getParameter(request, "cardProvider", "");
         String cardHolderName = getParameter(request, "cardHolderName", "");
 
+        if (accountId == 0 && !accountNumber.isEmpty()) {
+            try {
+                Account account = accountService.getAccountByNumber(accountNumber);
+                if (account != null) {
+                    accountId = account.getAccountId();
+                    if (requestFromAdmin) {
+                        customerId = account.getCustomerId();
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Failed to find account by number: " + accountNumber, e);
+            }
+        }
+
         if (accountId == 0 || cardType.isEmpty() || cardProvider.isEmpty() || cardHolderName.isEmpty()) {
             request.getSession().setAttribute("error", "All fields are required to apply for a card.");
             response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+
+        if (customerId == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -194,10 +211,7 @@ public class CardServlet extends BaseServlet {
 
     private void renewCard(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Long customerId = getUserId(request);
-        if (customerId == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        boolean requestFromAdmin = isAdmin(request);
 
         if (!validateCSRFToken(request)) {
             request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
@@ -208,13 +222,23 @@ public class CardServlet extends BaseServlet {
         long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
 
-        if (cardId == 0 || accountId == 0) {
+        if (cardId == 0) {
             request.getSession().setAttribute("error", "Invalid inputs for card renewal.");
             response.sendRedirect(request.getContextPath() + "/card");
             return;
         }
 
         try {
+            Card card = cardService.getCardById(cardId);
+            if (card == null) {
+                throw new Exception("Card not found.");
+            }
+            if (accountId == 0) {
+                accountId = card.getAccountId();
+            }
+            if (requestFromAdmin) {
+                customerId = card.getCustomerId();
+            }
             if (cardService.renewCard(cardId, accountId)) {
                 request.getSession().setAttribute("success", "Card renewal request submitted successfully! Paid renewal fee. Awaiting Admin approval.");
             } else {

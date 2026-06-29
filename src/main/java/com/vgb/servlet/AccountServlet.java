@@ -57,6 +57,9 @@ public class AccountServlet extends BaseServlet {
             if (adminId != null) {
                 // Admin Actions
                 switch (action) {
+                    case "details":
+                        getAccountDetailsJsonAction(request, response);
+                        break;
                     case "close":
                         closeAccountAction(request, response);
                         break;
@@ -1153,6 +1156,51 @@ public class AccountServlet extends BaseServlet {
                 }
             }
         }
+    }
+
+    private void getAccountDetailsJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String accountNumber = getParameter(request, "accountNumber", "");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        java.io.PrintWriter out = response.getWriter();
+
+        if (accountNumber.isEmpty()) {
+            out.print("{\"error\":\"Account number is required\"}");
+            out.flush();
+            return;
+        }
+
+        Account account = accountService.getAccountByNumber(accountNumber);
+        if (account == null) {
+            out.print("{\"error\":\"Account not found\"}");
+            out.flush();
+            return;
+        }
+
+        Customer customer = new com.vgb.service.CustomerService().getCustomerById(account.getCustomerId());
+        if (customer == null) {
+            out.print("{\"error\":\"Customer details not found\"}");
+            out.flush();
+            return;
+        }
+
+        String fullName = customer.getFirstName() + (customer.getMiddleName() != null && !customer.getMiddleName().isEmpty() ? " " + customer.getMiddleName() : "") + " " + customer.getLastName();
+        String fullAddress = customer.getAddress() + ", " + customer.getCity() + ", " + customer.getState() + " - " + customer.getZipCode();
+
+        StringBuilder sb = new StringBuilder("{");
+        sb.append("\"accountId\":").append(account.getAccountId()).append(",")
+          .append("\"accountNumber\":\"").append(escapeJson(account.getAccountNumber())).append("\",")
+          .append("\"accountType\":\"").append(escapeJson(account.getAccountType())).append("\",")
+          .append("\"balance\":").append(account.getBalance()).append(",")
+          .append("\"customerId\":").append(customer.getCustomerId()).append(",")
+          .append("\"customerName\":\"").append(escapeJson(fullName)).append("\",")
+          .append("\"email\":\"").append(escapeJson(customer.getEmail() != null ? customer.getEmail() : "")).append("\",")
+          .append("\"phone\":\"").append(escapeJson(customer.getPhoneNo() != null ? customer.getPhoneNo() : "")).append("\",")
+          .append("\"address\":\"").append(escapeJson(fullAddress)).append("\"")
+          .append("}");
+
+        out.print(sb.toString());
+        out.flush();
     }
 
     private String escapeJson(String str) {

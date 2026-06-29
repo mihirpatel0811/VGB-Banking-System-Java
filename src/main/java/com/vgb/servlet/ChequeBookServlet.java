@@ -133,10 +133,7 @@ public class ChequeBookServlet extends BaseServlet {
 
     private void applyChequeBook(HttpServletRequest request, HttpServletResponse response, String actionType) throws Exception {
         Long customerId = getUserId(request);
-        if (customerId == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
+        boolean requestFromAdmin = isAdmin(request);
 
         if (!validateCSRFToken(request)) {
             request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
@@ -145,11 +142,31 @@ public class ChequeBookServlet extends BaseServlet {
         }
 
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        String accountNumber = getParameter(request, "accountNumber", "");
         int leavesCount = Integer.parseInt(getParameter(request, "leavesCount", "0"));
+
+        if (accountId == 0 && !accountNumber.isEmpty()) {
+            try {
+                Account account = accountService.getAccountByNumber(accountNumber);
+                if (account != null) {
+                    accountId = account.getAccountId();
+                    if (requestFromAdmin) {
+                        customerId = account.getCustomerId();
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Failed to find account by number: " + accountNumber, e);
+            }
+        }
 
         if (accountId == 0 || leavesCount == 0) {
             request.getSession().setAttribute("error", "Invalid account or leaves selection.");
             response.sendRedirect(request.getContextPath() + "/chequebook");
+            return;
+        }
+
+        if (customerId == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 

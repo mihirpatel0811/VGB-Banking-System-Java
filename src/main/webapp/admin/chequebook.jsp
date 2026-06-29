@@ -340,1263 +340,12 @@
             align-items: center;
             gap: 4px;
         }
-
-        /* ===== 3D CHEQUE BOOK BOOKLET STYLING ===== */
-        .cheque-top-layout {
-            display: grid;
-            grid-template-columns: 1fr 1.4fr;
-            gap: 30px;
-            margin-bottom: 35px;
-            align-items: stretch;
-        }
-        @media (max-width: 991px) {
-            .cheque-top-layout {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        .cheque-visualizer-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(30, 27, 75, 0.02) 0%, rgba(99, 102, 241, 0.05) 100%);
-            border: 1px solid rgba(99, 102, 241, 0.12);
-            border-radius: var(--radius-lg);
-            padding: 45px 20px;
-            box-shadow: inset 0 2px 8px rgba(99, 102, 241, 0.02);
-            height: 100%;
-            perspective: 1000px;
-            position: relative;
-            overflow: hidden;
-            min-height: 340px;
-        }
-
-        .cheque-leaf-container-wrapper {
-            width: 480px;
-            height: 210px;
-            position: relative;
-        }
-        @media (max-width: 576px) {
-            .cheque-leaf-container-wrapper {
-                width: 340px;
-                height: 150px;
-            }
-        }
-
-        /* Front side of the cover with leather spine */
-        .chequebook-cover-front {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            background: radial-gradient(circle at 65% 50%, #151145 0%, #06041a 60%, #010008 100%);
-            border-radius: 12px;
-            box-shadow: 12px 18px 40px rgba(0, 0, 0, 0.45), inset -1px 0 2px rgba(255, 255, 255, 0.1);
-            padding: 24px 20px 16px 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 2;
-        }
-
-        .chequebook-cover-front::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            height: 12px;
-            background: linear-gradient(180deg, #09090b 0%, #202025 45%, #09090b 85%, #020204 100%);
-            z-index: 10;
-            border-radius: 12px 12px 0 0;
-            box-shadow: inset 0 -1px 2px rgba(255,255,255,0.05), 0 3px 5px rgba(0,0,0,0.45);
-        }
-
-        .chequebook-cover-front::after {
-            content: '';
-            position: absolute;
-            left: 4px;
-            right: 4px;
-            top: 10px;
-            height: 1px;
-            border-bottom: 1px dashed rgba(191, 149, 63, 0.4);
-            z-index: 11;
-        }
-
-        .chequebook-cover-front .cover-nebula-bg {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .cover-cosmic-logo {
-            width: 85px;
-            height: 85px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 5;
-        }
-
-        .cb-cosmic-v-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .cover-text-group {
-            text-align: center;
-            position: relative;
-            z-index: 5;
-            margin-top: 5px;
-        }
-
-        .cover-bank-name {
-            font-size: 1.45rem;
-            font-weight: 800;
-            letter-spacing: 5px;
-            color: #ffffff;
-            line-height: 1.1;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .cover-bank-sub {
-            font-size: 0.68rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            color: #00d2ff;
-            margin-top: 3px;
-            text-transform: uppercase;
-        }
-
-        .cover-checkbook-title {
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 6px;
-            color: rgba(255,255,255,0.7);
-            margin-top: 10px;
-            text-transform: uppercase;
-        }
-
-        /* Inside side of the cover (visible when open) - Safety Protection Page */
-        .chequebook-cover-inside {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            transform: rotateX(180deg);
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            border-radius: 12px;
-            padding: 16px 20px;
-            color: #334155;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border-bottom: 1.5px solid rgba(0, 0, 0, 0.05);
-            box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.05);
-            z-index: 1;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .inside-rings-watermark {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(121, 40, 202, 0.025) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .protection-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            height: calc(100% - 22px);
-            z-index: 2;
-            position: relative;
-        }
-
-        .protection-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 0.85;
-        }
-
-        .protection-left svg {
-            width: 45px;
-            height: 45px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-        }
-
-        .protection-bank-name {
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: #0b0922;
-            letter-spacing: 1.5px;
-            margin-top: 4px;
-            line-height: 1.1;
-        }
-
-        .protection-bank-sub {
-            font-size: 0.48rem;
-            font-weight: 700;
-            color: #64748b;
-            letter-spacing: 1px;
-        }
-
-        .protection-divider {
-            width: 1px;
-            height: 80%;
-            background-color: #cbd5e1;
-        }
-
-        .protection-right {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex: 1.15;
-            align-items: flex-start;
-        }
-
-        .protection-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            text-align: left;
-        }
-
-        .protection-item i {
-            font-size: 1.05rem;
-            color: #0b0922;
-            margin-top: 2px;
-        }
-
-        .protection-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .protection-text strong {
-            font-size: 0.52rem;
-            color: #0b0922;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .protection-text span {
-            font-size: 0.42rem;
-            color: #475569;
-            line-height: 1.25;
-        }
-
-        .protection-footer {
-            font-size: 0.55rem;
-            font-weight: 600;
-            color: #8b5cf6;
-            letter-spacing: 1.5px;
-            text-align: center;
-            border-top: 1px solid rgba(226, 232, 240, 0.8);
-            padding-top: 4px;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Square digit boxes for inputs */
-        .digit-boxes {
-            display: inline-flex;
-            gap: 2px;
-            margin-left: 4px;
-            vertical-align: middle;
-        }
-        .digit-boxes span {
-            width: 13px;
-            height: 15px;
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-weight: 700;
-            color: #334155;
-            font-family: monospace;
-            border-radius: 1px;
-        }
-
-        /* Inside Page (bottom page/content page) */
-        .chequebook-page {
-            position: absolute;
-            width: 98%;
-            height: 96%;
-            top: 2%;
-            left: 1%;
-            background: #faf8f5;
-            border-radius: 4px 4px 10px 10px;
-            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.15), 5px 10px 20px rgba(0,0,0,0.15);
-            padding: 0;
-            color: #334155;
-            overflow: hidden;
-        }
-
-        .chequebook-page.page-instructions {
-            transform-origin: center top;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            z-index: 25;
-        }
-
-
-        /* Inside check register layout styling */
-        .check-register-title-bar {
-            background-color: #0b0922;
-            color: #ffffff;
-            font-size: 0.62rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            padding: 4px 0;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        .check-register-content {
-            padding: 5px 8px;
-            height: calc(100% - 22px);
-            box-sizing: border-box;
-            background: radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 60%), #faf8f6;
-            position: relative;
-        }
-
-        .check-register-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .check-register-table th {
-            background-color: transparent;
-            color: #0b0922;
-            font-size: 0.42rem;
-            font-weight: 800;
-            padding: 3px 2px;
-            border: 1px solid #cbd5e1;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .check-register-table td {
-            height: 18px;
-            border: 1px solid #cbd5e1;
-            background-color: rgba(255, 255, 255, 0.55);
-        }
-
-        .instructions-front, .instructions-back {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-        }
-        .instructions-front {
-            z-index: 2;
-            background: #faf8f5;
-        }
-        .instructions-back {
-            transform: rotateX(180deg);
-            z-index: 1;
-            background: #faf8f5;
-            border-top: 1.5px solid rgba(0, 0, 0, 0.05);
-            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.05);
-            height: 100%;
-        }
-
-        /* Dynamic classes for turned page */
-        .chequebook-page.page-instructions.turned {
-            transform: rotateX(175deg);
-            z-index: 28 !important;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
-        }
-
-        /* Back Cover Styles updated for premium visuals */
-        .chequebook-back {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 35%, #110e3d 0%, #06041c 70%, #01000b 100%) !important;
-            border-radius: 12px;
-            box-shadow: 12px 18px 45px rgba(0, 0, 0, 0.45);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            padding: 25px 20px;
-            color: rgba(255, 255, 255, 0.8);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            overflow: hidden;
-            transform: rotateX(180deg);
-            backface-visibility: hidden;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* Decorative glowing nebulas and lines */
-        .chequebook-back .cb-back-nebula-bg {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.22) 0%, transparent 60%),
-                radial-gradient(circle at 10% 10%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .cb-back-neon-curves {
-            position: absolute;
-            bottom: -50px;
-            right: -30px;
-            width: 280px;
-            height: 160px;
-            border-radius: 50%;
-            border: 1px solid transparent;
-            border-top: 2.5px solid rgba(139, 92, 246, 0.45);
-            border-right: 3.5px solid rgba(139, 92, 246, 0.65);
-            filter: blur(2px);
-            transform: rotate(-25deg);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .cb-back-neon-curves-2 {
-            position: absolute;
-            bottom: -65px;
-            right: -45px;
-            width: 310px;
-            height: 175px;
-            border-radius: 50%;
-            border: 1px solid transparent;
-            border-top: 2px solid rgba(0, 210, 255, 0.4);
-            border-right: 3px solid rgba(0, 210, 255, 0.6);
-            filter: blur(1px);
-            transform: rotate(-25deg);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .cb-back-logo-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .cb-back-bank-name {
-            font-weight: 800;
-            font-size: 1.1rem !important;
-            letter-spacing: 4px !important;
-            color: #ffffff !important;
-            margin-top: 6px;
-            line-height: 1.1;
-        }
-
-        .cb-back-bank-sub {
-            font-size: 0.58rem !important;
-            letter-spacing: 2.5px !important;
-            color: #00d2ff !important;
-            font-weight: 700 !important;
-            margin-top: 2px;
-            text-transform: uppercase;
-        }
-
-        .cb-back-slogan {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            margin-top: 10px;
-            background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(167, 139, 250, 0.15);
-        }
-
-        .cb-back-info-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 5px;
-            z-index: 2;
-            position: relative;
-            width: 100%;
-        }
-
-        .cb-back-info-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.62rem;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-
-        .cb-back-info-item.address {
-            align-items: flex-start;
-        }
-
-        .cb-back-info-item i {
-            color: #38bdf8;
-            font-size: 0.85rem;
-            margin-top: 1px;
-        }
-
-        .cb-back-info-item.address i {
-            margin-top: 3px;
-        }
-
-        .cb-back-info-item span {
-            line-height: 1.4;
-            font-family: 'Poppins', sans-serif;
-            text-align: left;
-        }
-
-        @media (max-width: 576px) {
-            .chequebook-back {
-                padding: 12px 15px !important;
-                gap: 8px !important;
-            }
-            .chequebook-back svg {
-                width: 32px !important;
-                height: 32px !important;
-            }
-            .cb-back-bank-name {
-                font-size: 0.85rem !important;
-                letter-spacing: 2.5px !important;
-            }
-            .cb-back-bank-sub {
-                font-size: 0.48rem !important;
-                letter-spacing: 1.5px !important;
-            }
-            .cb-back-slogan {
-                font-size: 0.58rem !important;
-                margin-top: 4px !important;
-                letter-spacing: 1px !important;
-            }
-            .cb-back-info-block {
-                gap: 6px !important;
-                margin-top: 2px !important;
-            }
-            .cb-back-info-item {
-                font-size: 0.48rem !important;
-                gap: 6px !important;
-            }
-            .cb-back-info-item i {
-                font-size: 0.65rem !important;
-            }
-            .cb-back-neon-curves {
-                width: 180px !important;
-                height: 100px !important;
-            }
-            .cb-back-neon-curves-2 {
-                width: 200px !important;
-                height: 110px !important;
-            }
-        }
-
-        /* Technical Dotted pattern for back cover */
-        .chequebook-back::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-            background-size: 12px 12px;
-            opacity: 0.7;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .chequebook-cover-title h2 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin: 0;
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .cheque-leaf-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .cheque-leaf-wrapper.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .cheque-leaf-front, .cheque-leaf-back-side {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        .cheque-leaf-front {
-            background-color: #f5f3ff;
-            background-image: 
-                radial-gradient(circle at 80% 85%, #dbeafe 0%, #e0e7ff 50%, #f5f3ff 100%);
-            border: 1.5px solid #a5b4fc;
-            padding: 12px 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            z-index: 2;
-        }
-
-        .cheque-leaf-back-side {
-            transform: rotateY(180deg);
-            background: #f1f5f9;
-            border: 1.5px solid #cbd5e1;
-            color: #475569;
-            padding: 12px 16px;
-            z-index: 1;
-        }
-
-        /* Faint watermark logo in the center of booklet pages */
-        .watermark-bg-svg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 180px;
-            height: 180px;
-            opacity: 0.05;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .cheque-hologram {
-            position: absolute;
-            left: 10px;
-            top: 0;
-            bottom: 0;
-            width: 12px;
-            background: linear-gradient(90deg, #94a3b8 0%, #cbd5e1 50%, #94a3b8 100%);
-            border-left: 1px solid rgba(255,255,255,0.2);
-            border-right: 1px solid rgba(255,255,255,0.2);
-            opacity: 0.8;
-            box-shadow: 0 0 5px rgba(0,0,0,0.05);
-            z-index: 2;
-        }
-
-        .cheque-hologram::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255, 255, 255, 0.15) 5px, rgba(255, 255, 255, 0.15) 10px);
-        }
-
-        .cheque-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            z-index: 3;
-            margin-left: 10px;
-        }
-
-        .cheque-bank-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .cheque-bank-name {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-            color: #0b0922;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .cheque-branch-details {
-            font-size: 0.48rem;
-            color: #475569;
-            line-height: 1.25;
-            margin-top: 1px;
-            text-align: left;
-        }
-
-        .cheque-date-box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .date-squares {
-            display: flex;
-            gap: 1px;
-            margin-bottom: 2px;
-        }
-
-        .date-squares span {
-            width: 12px;
-            height: 14px;
-            border: 1px solid #0b0922;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.52rem;
-            font-weight: 700;
-            color: #0b0922;
-            border-radius: 1px;
-        }
-
-        .date-validity {
-            font-size: 0.4rem;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .cheque-row {
-            display: flex;
-            align-items: flex-end;
-            margin: 4px 0;
-            z-index: 3;
-            margin-left: 10px;
-        }
-
-        .cheque-label {
-            font-weight: bold;
-            font-size: 0.65rem;
-            color: #0b0922;
-            white-space: nowrap;
-            display: flex;
-            align-items: baseline;
-            gap: 2px;
-        }
-
-        .hindi-text {
-            font-size: 0.55rem;
-            font-weight: normal;
-            color: #64748b;
-        }
-
-        .cheque-line-fill {
-            flex: 1;
-            border-bottom: 1.5px dotted #64748b;
-            margin: 0 6px;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 0.88rem;
-            font-style: italic;
-            font-weight: 700;
-            color: #0f172a;
-            padding-bottom: 1px;
-            padding-left: 4px;
-        }
-
-        .bearer-text {
-            font-size: 0.55rem !important;
-        }
-
-        .cheque-amount-box {
-            width: 110px;
-            height: 24px;
-            border: 2px double #0b0922;
-            background: white;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            padding: 0 6px;
-            position: relative;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .rupee-symbol {
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #0b0922;
-            border-right: 1.5px solid #0b0922;
-            padding-right: 5px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .amount-val {
-            flex: 1;
-            font-family: monospace;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-align: right;
-            color: #0b0922;
-        }
-
-        .cheque-details-row {
-            display: grid;
-            grid-template-columns: 1.3fr 0.6fr 1.3fr 1fr;
-            gap: 10px;
-            align-items: flex-end;
-            margin-top: 6px;
-            z-index: 3;
-            margin-left: 10px;
-        }
-
-        .cheque-acc-box {
-            border: 1.5px solid #0b0922;
-            background: white;
-            border-radius: 3px;
-            display: flex;
-            align-items: center;
-            padding: 3px 6px;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .acc-label {
-            font-size: 0.45rem;
-            font-weight: bold;
-            color: #0b0922;
-            border-right: 1px solid #cbd5e1;
-            padding-right: 4px;
-            margin-right: 4px;
-            line-height: 1.2;
-            white-space: nowrap;
-        }
-
-        .acc-val {
-            font-family: monospace;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #0f172a;
-        }
-
-        .cheque-branch-codes {
-            font-size: 0.45rem;
-            color: #475569;
-            font-family: monospace;
-            line-height: 1.2;
-            font-weight: 600;
-            text-align: left;
-        }
-
-        .cheque-payable-text {
-            font-size: 0.42rem;
-            color: #64748b;
-            line-height: 1.2;
-            border-left: 1px solid #cbd5e1;
-            padding-left: 6px;
-            text-align: left;
-        }
-
-        .cheque-sign-area {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            text-align: right;
-        }
-
-        .cheque-sign-name {
-            font-family: 'Brush Script MT', cursive, sans-serif;
-            font-size: 1.15rem;
-            font-style: italic;
-            color: #2563eb;
-            margin-bottom: 1px;
-            font-weight: 500;
-            max-width: 110px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .cheque-sign-label {
-            font-size: 0.44rem;
-            color: #475569;
-            font-weight: bold;
-        }
-
-        .cheque-micr-band {
-            text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #0b0922;
-            margin-top: 10px;
-            margin-bottom: 1px;
-            border-top: 1px dashed rgba(99, 102, 241, 0.1);
-            padding-top: 6px;
-            z-index: 3;
-            margin-left: 10px;
-        }
-
-        /* Watermark stamp for processed cheques */
-        .cheque-processed-stamp {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            font-size: 2.5rem;
-            font-weight: 900;
-            padding: 6px 16px;
-            border: 4px solid;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            z-index: 50;
-            pointer-events: none;
-            display: none;
-            background: rgba(255, 255, 255, 0.92);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-
-        .cheque-processed-stamp.approved {
-            color: #10b981;
-            border-color: #10b981;
-        }
-
-        .cheque-processed-stamp.rejected {
-            color: #ef4444;
-            border-color: #ef4444;
-        }
-
-        .cheque-processed-stamp.pending {
-            color: #fbbf24;
-            border-color: #fbbf24;
-        }
-
-        /* Interactive hint animation */
-        .click-hint {
-            position: absolute;
-            bottom: 12px;
-            right: 15px;
-            font-size: 0.65rem;
-            color: var(--primary-400);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 500;
-            animation: pulseHint 2s infinite;
-            pointer-events: none;
-            z-index: 60;
-        }
-
-        /* Unified Class-Based styles for Cheque Book Visuals */
-        .cb-back-logo-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            position: relative;
-            z-index: 2;
-        }
-        .cb-back-logo-img-box {
-            width: 45px;
-            height: 45px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .cb-back-logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .cb-back-bank-name {
-            font-weight: 800;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            color: #fff;
-            margin-top: 4px;
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.1;
-        }
-        .cb-back-bank-sub {
-            font-size: 0.52rem;
-            letter-spacing: 1.5px;
-            color: rgba(255,255,255,0.7);
-            font-weight: bold;
-            font-family: 'Poppins', sans-serif;
-        }
-        .cb-back-bank-motto {
-            font-size: 0.42rem;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 500;
-            font-family: 'Poppins', sans-serif;
-            margin-top: 3px;
-            text-transform: uppercase;
-        }
-        .cb-back-footer-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            position: relative;
-            z-index: 2;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding-top: 6px;
-        }
-        .cb-back-address {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.42rem;
-            line-height: 1.25;
-            color: rgba(255,255,255,0.5);
-            text-align: left;
-        }
-        .cb-back-contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.45rem;
-            color: rgba(255,255,255,0.6);
-            align-items: flex-end;
-        }
-        .cb-back-contact-info span i {
-            vertical-align: middle;
-            color: #00d2ff;
-            margin-right: 3px;
-        }
-        
-        .cb-inside-body {
-            flex: 1;
-            padding: 8px 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            position: relative;
-            z-index: 2;
-        }
-        .cb-inside-body-title {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #475569;
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .cb-inside-table {
-            width: 100%;
-            border-collapse: collapse;
-            line-height: 1.35;
-        }
-        .cb-inside-row {
-            border-bottom: 1px dashed #cbd5e1;
-        }
-        .cb-inside-label {
-            color: #64748b;
-            padding: 2px 0;
-            font-size: 0.62rem;
-        }
-        .cb-inside-value {
-            font-weight: 700;
-            color: #0f172a;
-            padding: 2px 0;
-            font-size: 0.65rem;
-        }
-        .cb-inside-value.caps {
-            text-transform: uppercase;
-        }
-        .cb-inside-value.mono {
-            font-family: monospace;
-        }
-
-        @keyframes pulseHint {
-            0%, 100% { opacity: 0.5; transform: translateX(0); }
-            50% { opacity: 1; transform: translateX(3px); }
-        }
-
-        /* Glassmorphic Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1000;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: rgba(255, 255, 255, 0.85) !important;
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.5) !important;
-            width: 100%;
-            max-width: 680px;
-            border-radius: var(--radius-lg);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            overflow: hidden;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes modalScaleUp {
-            from { transform: scale(0.9) translateY(10px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .modal-body {
-            padding: 25px;
-            overflow-y: auto;
-            max-height: calc(90vh - 80px);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--gray-400);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .close-btn:hover {
-            color: #ef4444;
-        }
-
-        /* --- MONOSPACE ID BADGE --- */
-        .badge-id {
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: 700;
-            font-size: 0.8rem;
-            background: rgba(99, 102, 241, 0.06);
-            color: var(--primary-500);
-            padding: 5px 10px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(99, 102, 241, 0.08);
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        body.dark-mode .badge-id {
-            background: rgba(99, 102, 241, 0.12);
-            color: var(--primary-300);
-        }
-
-        /* --- DARK MODE SIMULATOR & CUSTOMIZER CONTROLS --- */
-        body.dark-mode .control-label {
-            color: var(--gray-400);
-        }
-        body.dark-mode .control-input, body.dark-mode .control-select {
-            background: rgba(15, 23, 42, 0.45) !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-            color: var(--white) !important;
-        }
-        body.dark-mode .control-input:focus, body.dark-mode .control-select:focus {
-            border-color: var(--primary-500) !important;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
-        }
-        body.dark-mode .simulator-display {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(6, 182, 212, 0.02) 100%) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
-        }
-        body.dark-mode .modal-content {
-            background: rgba(15, 23, 42, 0.85) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        }
-
-        /* --- RESPONSIVE WORKOUTS --- */
-        @media (max-width: 991px) {
-            .mobile-nav-toggle {
-                display: flex !important;
-            }
-            .sidebar {
-                left: -280px !important;
-                top: 80px;
-                height: calc(100vh - 80px);
-                z-index: 1000;
-            }
-            .sidebar.active {
-                left: 0 !important;
-            }
-            .main-content {
-                margin-left: 0 !important;
-                padding: 120px 20px 40px !important;
-            }
-            .footer {
-                margin-left: 0 !important;
-            }
-            .mobile-grid-1 {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        /* Show both pages side-by-side in modals on larger viewports */
-        @media (min-width: 768px) {
-            .modal .chequebook-book.open .chequebook-cover-wrapper {
-                opacity: 1 !important;
-                visibility: visible !important;
-                pointer-events: auto !important;
-            }
-
-            .modal .chequebook-page.page-instructions.turned {
-                opacity: 1 !important;
-                visibility: visible !important;
-                pointer-events: auto !important;
-            }
-        }
-
-        /* Modal scaling rules to ensure perfect sizing and no cropping */
-        .modal .chequebook-wrapper {
-            transform: scale(1);
-            transform-origin: center center;
-            transition: transform 0.3s ease;
-        }
-
-        @media (max-width: 991px) {
-            .modal .chequebook-wrapper {
-                transform: scale(0.8);
-            }
-        }
-
-        @media (max-width: 767px) {
-            /* Fallback to centered single page mode on mobile modal viewports */
-            .modal .chequebook-wrapper {
-                transform: scale(0.75);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .modal .chequebook-wrapper {
-                transform: scale(0.65);
-            }
-        }
     </style>
 </head>
-<body class="bank-home-page">
+<body>
+    <!-- Preloader -->
     <div class="preloader">
-        <div class="loader">
+        <div class="loader-content">
             <div class="loader-ring"></div>
             <div class="loader-ring-outer"></div>
             <span class="loader-watermark">VGB</span>
@@ -1725,12 +474,16 @@
                 </div>
             </div>
 
-
             <!-- Global Requests Logs -->
             <div class="glass-card">
-                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <i class="bx bx-task" style="color: var(--primary-500);"></i> Executive Cheque Book Request Ledger
-                </h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
+                        <i class="bx bx-task" style="color: var(--primary-500);"></i> Executive Cheque Book Request Ledger
+                    </h3>
+                    <button onclick="openApplyModal()" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin: 0; background: var(--gradient-primary); color: white; border: none; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="bx bx-plus-circle"></i> Apply Cheque Book
+                    </button>
+                </div>
                 <div class="table-responsive">
                     <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead>
@@ -1749,7 +502,6 @@
                             <c:choose>
                                 <c:when test="${not empty requests}">
                                      <c:forEach var="req" items="${requests}">
-                                         <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
                                          <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
                                              <td style="padding: 15px;"><span class="badge-id">#${req.requestId}</span></td>
                                              <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
@@ -1804,202 +556,7 @@
                                                           <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
                                                               <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
                                                           </div>
-                                                      </c:otherwise>
-            </button>
-            <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
-            </a>
-        </div>
-        <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png" alt="Admin Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
-                <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
-                    <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
-                    <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
-                        <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); display: inline-block;"></span>
-                        Admin Workspace
-                    </span>
-                </div>
-            </div>
-            <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
-                <i class="bx bx-log-out"></i>
-                <span>Logout</span>
-            </a>
-        </div>
-    </header>
-
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <div class="sidebar-menu">
-            <a href="${pageContext.request.contextPath}/admin-dashboard"><i class="bx bx-grid-alt"></i> Dashboard</a>
-            <a href="${pageContext.request.contextPath}/account?action=list"><i class="bx bx-user-check"></i> Manage Accounts</a>
-            <a href="${pageContext.request.contextPath}/admin/transfer.jsp"><i class="bx bx-transfer-alt"></i> Admin Counter</a>
-            <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i> Manage Cards</a>
-            <a href="${pageContext.request.contextPath}/chequebook?action=list" class="active"><i class="bx bx-book-bookmark"></i> Cheque Requests</a>
-            <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
-            <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Review Loans</a>
-            <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
-        </div>
-        <div style="padding: 15px; background: rgba(99, 102, 241, 0.05); border-radius: var(--radius-md); text-align: center;">
-            <p style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Admin Controls</p>
-            <p style="font-size: 0.9rem; color: var(--primary-500); font-weight: 700; margin-top: 3px;">INTERNAL USE ONLY</p>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container" style="max-width: 1200px; padding: 0;">
-            <!-- Page Header -->
-            <div style="margin-bottom: 40px;">
-                <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">Cheque Book Request Management</h2>
-                <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Manage customer cheque book requests. Rejections automatically refund upfront fees and post statement entries.</p>
-            </div>
-
-            <!-- Alerts -->
-            <c:if test="${not empty error or not empty sessionScope.error}">
-                <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; color: #b91c1c; padding: 12px 15px; border-radius: var(--radius-sm); margin-bottom: 25px; font-size: 0.875rem; display: flex; align-items: center; gap: 10px;">
-                    <i class="bx bx-error-circle" style="font-size: 1.2rem;"></i>
-                    <span>${not empty error ? error : sessionScope.error}</span>
-                </div>
-                <c:remove var="error" scope="session" />
-            </c:if>
-            <c:if test="${not empty success or not empty sessionScope.success}">
-                <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; color: #047857; padding: 12px 15px; border-radius: var(--radius-sm); margin-bottom: 25px; font-size: 0.875rem; display: flex; align-items: center; gap: 10px;">
-                    <i class="bx bx-check-circle" style="font-size: 1.2rem;"></i>
-                    <span>${not empty success ? success : sessionScope.success}</span>
-                </div>
-                <c:remove var="success" scope="session" />
-            </c:if>
-
-            <!-- Dynamic Statistics Cards -->
-            <c:set var="pendingCount" value="0"/>
-            <c:set var="approvedCount" value="0"/>
-            <c:set var="rejectedCount" value="0"/>
-            <c:forEach var="r" items="${requests}">
-                <c:if test="${r.status eq 'pending'}"><c:set var="pendingCount" value="${pendingCount + 1}"/></c:if>
-                <c:if test="${r.status eq 'approved' or r.status eq 'delivered'}"><c:set var="approvedCount" value="${approvedCount + 1}"/></c:if>
-                <c:if test="${r.status eq 'rejected'}"><c:set var="rejectedCount" value="${rejectedCount + 1}"/></c:if>
-            </c:forEach>
-
-            <div class="stat-grid">
-                <div class="stat-card" style="border-left: 5px solid var(--primary-500);">
-                    <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
-                        <i class="bx bx-book-open"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Total Requests</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${requests.size()}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 5px solid #fbbf24;">
-                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
-                        <i class="bx bx-time"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Pending Review</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 5px solid var(--accent-emerald);">
-                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                        <i class="bx bx-check-double"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Approved Books</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${approvedCount}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 5px solid #ef4444;">
-                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
-                        <i class="bx bx-x-circle"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Rejected / Refunded</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${rejectedCount}</h3>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Global Requests Logs -->
-            <div class="glass-card">
-                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <i class="bx bx-task" style="color: var(--primary-500);"></i> Executive Cheque Book Request Ledger
-                </h3>
-                <div class="table-responsive">
-                    <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); padding-bottom: 10px; color: var(--gray-500); font-weight: 600; font-size: 0.85rem;">
-                                <th style="padding: 12px;">ID</th>
-                                <th style="padding: 12px;">Customer</th>
-                                <th style="padding: 12px;">Linked Account</th>
-                                <th style="padding: 12px;">Capacity</th>
-                                <th style="padding: 12px;">Charges</th>
-                                <th style="padding: 12px;">Requested Date</th>
-                                <th style="padding: 12px;">Status</th>
-                                <th style="padding: 12px; text-align: right;">Action Control</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${not empty requests}">
-                                     <c:forEach var="req" items="${requests}">
-                                         <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
-                                         <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                             <td style="padding: 15px;"><span class="badge-id">#${req.requestId}</span></td>
-                                             <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
-                                             <td style="padding: 15px;"><span class="badge-id">${req.accountNumber}</span></td>
-                                             <td style="padding: 15px;"><strong>${req.leavesCount} Leaves</strong></td>
-                                             <td style="padding: 15px;">
-                                                 <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
-                                                 <c:choose>
-                                                     <c:when test="${req.chargesPaid}">
-                                                         <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Paid</span>
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                         <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Refunded</span>
                                                      </c:otherwise>
-                                                 </c:choose>
-                                             </td>
-                                             <td style="padding: 15px; color: var(--gray-500);">
-                                                 <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
-                                             </td>
-                                             <td style="padding: 15px;">
-                                                 <c:choose>
-                                                     <c:when test="${req.status eq 'approved'}">
-                                                         <span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>
-                                                     </c:when>
-                                                     <c:when test="${req.status eq 'pending'}">
-                                                         <span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                         <span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>
-                                                     </c:otherwise>
-                                                 </c:choose>
-                                             </td>
-                                             <td style="padding: 15px; text-align: right;">
-                                                 <c:choose>
-                                                     <c:when test="${req.status eq 'pending'}">
-                                                          <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                              <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
-                                                                 class="btn btn-primary" 
-                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
-                                                                 onclick="return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');">
-                                                                  Approve
-                                                              </a>
-                                                              <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}" 
-                                                                 class="btn btn-danger" 
-                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
-                                                                 onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">
-                                                                  Reject
-                                                              </a>
-                                                          </div>
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                          <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                              <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
-                                                          </div>
-                                                      </c:otherwise>
                                                  </c:choose>
                                              </td>
                                          </tr>
@@ -2049,6 +606,193 @@
                 });
             }
         });
-     </script>
-</body>
-</html>
+
+          function openApplyModal() {
+              document.getElementById('lookupAccountNumber').value = '';
+              document.getElementById('applyChequeBookForm').style.display = 'none';
+              document.getElementById('applyChequeBookModal').style.display = 'flex';
+          }
+
+          function closeApplyModal() {
+              document.getElementById('applyChequeBookModal').style.display = 'none';
+          }
+
+          function fetchCustomerDetails() {
+              const accNo = document.getElementById('lookupAccountNumber').value.trim();
+              if (!accNo) {
+                  alert('Please enter a valid Account Number');
+                  return;
+              }
+
+              fetch('${pageContext.request.contextPath}/account?action=details&accountNumber=' + accNo)
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.error) {
+                          alert(data.error);
+                          document.getElementById('applyChequeBookForm').style.display = 'none';
+                      } else {
+                          // Populate form fields
+                          document.getElementById('formAccountId').value = data.accountId;
+                          document.getElementById('formAccountNumber').value = data.accountNumber;
+                          
+                          document.getElementById('paperAccountNumberDisplay').textContent = data.accountNumber + ' - ' + data.accountType + ' (Available: ₹ ' + parseFloat(data.balance).toLocaleString('en-IN', {minimumFractionDigits: 2}) + ')';
+                          document.getElementById('paperCustomerIdDisplay').textContent = data.customerId;
+                          document.getElementById('paperMobileDisplay').textContent = data.phone;
+                          document.getElementById('paperEmailDisplay').textContent = data.email;
+                          document.getElementById('paperAddressDisplay').textContent = data.address;
+                          
+                          document.getElementById('applyFormSignature').textContent = data.customerName;
+
+                          // Date
+                          const today = new Date();
+                          const dd = String(today.getDate()).padStart(2, '0');
+                          const mm = String(today.getMonth() + 1).padStart(2, '0');
+                          const yyyy = today.getFullYear();
+                          document.getElementById('applyFormDateStr').value = dd + ' / ' + mm + ' / ' + yyyy;
+
+                          // Show form
+                          document.getElementById('applyChequeBookForm').style.display = 'block';
+                      }
+                  })
+                  .catch(err => {
+                      console.error('Error fetching details:', err);
+                      alert('Failed to fetch customer details. Please check the account number.');
+                  });
+          }
+
+          function updateApplyFeeAndNotice(leaves) {
+              let feeVal = '₹ 150.00';
+              if (leaves === '25') feeVal = '₹ 100.00';
+              if (leaves === '100') feeVal = '₹ 250.00';
+              document.getElementById('applyFeeValue').textContent = feeVal;
+          }
+       </script>
+
+       <!-- Modal: Apply Cheque Book -->
+       <div id="applyChequeBookModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
+           <div class="modal-content" style="max-width: 720px; width: 100%; background: var(--glass-bg); backdrop-filter: blur(25px); border: 1.5px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--panel-shadow); display: flex; flex-direction: column;">
+               <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
+                   <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer Cheque Book</h3>
+                   <button type="button" onclick="closeApplyModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
+               </div>
+               
+               <div style="padding: 20px 24px 15px; display: flex; gap: 10px; align-items: center; border-bottom: 1px dashed rgba(99,102,241,0.1); width: 100%; box-sizing: border-box; background: rgba(99,102,241,0.01);">
+                   <input type="text" id="lookupAccountNumber" placeholder="Enter customer account number (e.g. 171931936244)" style="flex: 1; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); font-size: 0.9rem; outline: none; background: transparent; color: var(--gray-800); font-family: monospace; font-weight: 600;" onkeypress="if(event.key === 'Enter') fetchCustomerDetails();">
+                   <button type="button" onclick="fetchCustomerDetails()" class="btn btn-primary" style="padding: 10px 20px; margin: 0; font-weight: 600; background: var(--gradient-primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><i class="bx bx-search-alt"></i> Fetch Details</button>
+               </div>
+
+               <!-- Beautiful Paper Form container (hidden by default until details loaded) -->
+               <form id="applyChequeBookForm" action="${pageContext.request.contextPath}/chequebook?action=apply" method="post" style="display: none; padding: 24px; max-height: 65vh; overflow-y: auto; width: 100%; box-sizing: border-box; text-align: left;">
+                   <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                   <input type="hidden" id="formAccountId" name="accountId" value="">
+                   <input type="hidden" id="formAccountNumber" name="accountNumber" value="">
+                   
+                   <div class="apply-paper-form" style="background: #fff; border: 1.5px solid var(--gray-200); padding: 35px 30px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
+                       <!-- Watermark -->
+                       <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 7.5rem; font-weight: 900; color: rgba(99, 102, 241, 0.03); pointer-events: none; user-select: none; font-family: 'Poppins', sans-serif; letter-spacing: 5px;">VGB</div>
+
+                       <!-- Form Header -->
+                       <div style="text-align: center; border-bottom: 2px double #475569; padding-bottom: 12px; margin-bottom: 20px; position: relative;">
+                           <h2 style="font-size: 1.35rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin: 0; font-family: 'Poppins', sans-serif;">Vertex Galaxy Bank</h2>
+                           <h3 style="font-size: 1rem; font-weight: 700; color: #475569; margin: 4px 0 0; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">Cheque Book Issuance Request Form</h3>
+                           <span style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); font-family: 'Poppins', sans-serif;">
+                               Fee Due: <strong id="applyFeeValue" style="font-weight: 800;">₹ 150.00</strong>
+                           </span>
+                       </div>
+
+                       <!-- Header Details -->
+                       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                           <tr>
+                               <td style="width: 60%; vertical-align: top; padding: 2px 0;">
+                                   <strong>To,</strong><br>
+                                   The Branch Manager<br>
+                                   <strong>Vertex Galaxy Bank</strong><br>
+                                   Branch: <input type="text" name="branch" style="width: 250px; border: none; border-bottom: 1px dotted #475569; padding: 0 5px; background: transparent; font-weight: 600; font-family: inherit; font-size: inherit; outline: none; color: #0f172a;" value="Main Corporate Branch, Mumbai">
+                               </td>
+                               <td style="width: 40%; text-align: right; vertical-align: top; padding: 2px 0;">
+                                   <strong>Date:</strong> <input type="text" name="formDate" id="applyFormDateStr" style="width: 120px; border: none; border-bottom: 1px solid #475569; padding: 0 5px; background: transparent; font-weight: 600; font-family: inherit; font-size: inherit; outline: none; text-align: center; color: #0f172a;" value="" readonly>
+                               </td>
+                           </tr>
+                       </table>
+
+                       <div style="margin-bottom: 20px;">
+                           <strong>Subject:</strong> <span style="font-weight: 600; border-bottom: 1px solid #475569; padding-bottom: 2px;">Request for New Multi-City Cheque Book Issuance</span>
+                       </div>
+
+                       <!-- Customer Information -->
+                       <div style="margin-bottom: 20px;">
+                           <h4 style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">Customer Information</h4>
+                           <table style="width: 100%; border-collapse: collapse;">
+                               <tr>
+                                   <td style="width: 35%; padding: 5px 0;"><strong>Account Number:</strong></td>
+                                   <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperAccountNumberDisplay">
+                                   </td>
+                               </tr>
+                               <tr>
+                                   <td style="padding: 5px 0;"><strong>Customer ID:</strong></td>
+                                   <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperCustomerIdDisplay">
+                                   </td>
+                               </tr>
+                               <tr>
+                                   <td style="padding: 5px 0;"><strong>Mobile Number:</strong></td>
+                                   <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperMobileDisplay">
+                                   </td>
+                               </tr>
+                               <tr>
+                                   <td style="padding: 5px 0;"><strong>Email ID:</strong></td>
+                                   <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperEmailDisplay">
+                                   </td>
+                               </tr>
+                               <tr>
+                                   <td style="padding: 5px 0; vertical-align: top;"><strong>Address:</strong></td>
+                                   <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: inherit; font-size: 0.9rem; color: #0f172a; white-space: normal; word-break: break-word;" id="paperAddressDisplay">
+                                   </td>
+                               </tr>
+                           </table>
+                       </div>
+
+                       <!-- Specification Details Box -->
+                       <div style="margin-bottom: 25px;">
+                           <h4 style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">Cheque Book Specifications</h4>
+                           <table style="width: 100%; border-collapse: collapse;">
+                               <tr>
+                                   <td style="width: 45%; padding: 5px 0;"><strong>Book Capacity (Leaves):</strong></td>
+                                   <td style="border-bottom: 1px dotted #475569; padding: 0;">
+                                       <select name="leavesCount" required onchange="updateApplyFeeAndNotice(this.value)" style="width: 100%; border: none; padding: 5px 8px; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 0.9rem; outline: none; background: transparent; color: #0f172a; cursor: pointer;">
+                                           <option value="25">25 Leaves Booklet (₹100)</option>
+                                           <option value="50" selected>50 Leaves Booklet (₹150)</option>
+                                           <option value="100">100 Leaves Booklet (₹250)</option>
+                                       </select>
+                                   </td>
+                               </tr>
+                           </table>
+                       </div>
+
+                       <!-- Declaration -->
+                       <div style="margin-bottom: 25px; text-align: justify; font-size: 0.85rem; line-height: 1.5; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+                           <p style="margin: 0 0 10px;"><strong>Request Description:</strong> I hereby request the bank to issue a new multi-city Cheque Book linked to my account number mentioned above. I confirm my account contains sufficient funds to cover the applicable service charge.</p>
+                           <p style="margin: 0;"><strong>Declaration:</strong> I declare that all signatures are mine and the information provided is correct. The bank holds the right to reject this application if any details are invalid.</p>
+                       </div>
+
+                       <!-- Signatures Row -->
+                       <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px; padding: 0 10px;">
+                           <div>
+                               <span style="display: block; font-size: 0.8rem; font-style: italic; color: #3b82f6; font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.4rem; padding-bottom: 5px;" id="applyFormSignature"></span>
+                               <span style="border-top: 1px solid #475569; display: inline-block; width: 170px; text-align: center; font-size: 0.8rem; font-weight: 600; padding-top: 3px; font-family: 'Poppins', sans-serif;">Customer Signature</span>
+                           </div>
+                           <div style="text-align: center;">
+                               <div style="width: 150px; height: 50px; border: 1px dashed #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #64748b; font-family: 'Poppins', sans-serif;">BANK USE ONLY</div>
+                               <span style="border-top: 1px solid #475569; display: inline-block; width: 150px; text-align: center; font-size: 0.8rem; font-weight: 600; padding-top: 3px; font-family: 'Poppins', sans-serif; margin-top: 5px;">Officer Signature</span>
+                           </div>
+                       </div>
+                   </div>
+
+                   <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                       <button type="button" onclick="closeApplyModal()" class="btn-action btn-action-reject" style="padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); color: #ef4444;">Cancel</button>
+                       <button type="submit" class="btn btn-primary" style="padding: 8px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; background: var(--gradient-primary); color: white; border: none;">Submit Application</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+  </body>
+ </html>

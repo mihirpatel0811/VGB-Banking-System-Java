@@ -346,6 +346,42 @@
             background: rgba(255, 255, 255, 0.01);
         }
 
+        /* --- PRODUCT CATALOGUE CARD STYLING --- */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.25) !important;
+        }
+        body.dark-mode .product-card:hover {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
         /* --- SEARCH AND FILTER SYSTEM --- */
         .search-filter-wrapper {
             display: flex;
@@ -1506,6 +1542,148 @@
                 </div>
             </div>
 
+            <!-- VGB ATM Card Product Catalogue -->
+            <div class="glass-card" style="margin-bottom: 30px;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                    <i class="bx bx-book-open" style="color: var(--primary-500);"></i> VGB Bank Card Product Specifications & Suite
+                </h3>
+                <div class="catalog-grid">
+                    
+                    <!-- Card 1: Classic Debit -->
+                    <div class="product-card" style="background: rgba(99, 102, 241, 0.03); border: 1.5px solid rgba(99, 102, 241, 0.1);">
+                        <div style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(99, 102, 241, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">DEBIT</div>
+                        <div>
+                            <span style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Classic Tier</span>
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">VGB Classic Debit Card</h4>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">Standard transactional card linked directly to savings/checking accounts for daily retail needs.</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(99,102,241,0.1); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Issuance/Renewal:</span>
+                                    <strong style="color: var(--gray-800);">₹250.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(99,102,241,0.1); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Daily Limit:</span>
+                                    <strong style="color: var(--gray-800);">₹50,000.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(99,102,241,0.1); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Validity Period:</span>
+                                    <strong style="color: var(--gray-800);">4 Years</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Features & Usage:</h5>
+                            <ul style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px;">
+                                <li>Global ATM Cash Withdrawals & POS usage</li>
+                                <li>Zero Liability Fraud Protection coverage</li>
+                                <li>Real-time SMS & Email transaction alerts</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Premium Debit -->
+                    <div class="product-card" style="background: rgba(6, 182, 212, 0.03); border: 1.5px solid rgba(6, 182, 212, 0.1);">
+                        <div style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(6, 182, 212, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">DEBIT</div>
+                        <div>
+                            <span style="background: rgba(6, 182, 212, 0.1); color: #0891b2; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Premium Tier</span>
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">VGB Premium Debit Card</h4>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">High-limit savings-linked card for affluent customers requesting elevated transaction bounds.</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Issuance/Renewal:</span>
+                                    <strong style="color: var(--gray-800);">₹500.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Daily Limit:</span>
+                                    <strong style="color: var(--gray-800);">₹2,00,000.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Validity Period:</span>
+                                    <strong style="color: var(--gray-800);">4 Years</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Features & Usage:</h5>
+                            <ul style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px;">
+                                <li>2 Free Domestic Airport Lounge Access per quarter</li>
+                                <li>Enhanced Purchase Insurance Protection</li>
+                                <li>Zero surcharge on select merchant terminal usage</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Royale Credit -->
+                    <div class="product-card" style="background: rgba(212, 175, 55, 0.03); border: 1.5px solid rgba(212, 175, 55, 0.15);">
+                        <div style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(212, 175, 55, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">CREDIT</div>
+                        <div>
+                            <span style="background: rgba(212, 175, 55, 0.12); color: #b58d16; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Royale Tier</span>
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">VGB Royale Credit Card</h4>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">General credit card providing flexible spending margins and revolving outstanding balances.</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Issuance/Renewal:</span>
+                                    <strong style="color: var(--gray-800);">₹500.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Credit Limit:</span>
+                                    <strong style="color: var(--gray-800);">₹50,000.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Grace Period:</span>
+                                    <strong style="color: var(--gray-800);">Up to 45 Days</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Features & Usage:</h5>
+                            <ul style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px;">
+                                <li>3 Reward Points per ₹100 spent (redeemable)</li>
+                                <li>1% Fuel Surcharge Waiver at partner outlets</li>
+                                <li>Easy EMI conversion options via Mobile Portal</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Infinite Credit -->
+                    <div class="product-card" style="background: rgba(139, 92, 246, 0.03); border: 1.5px solid rgba(139, 92, 246, 0.12);">
+                        <div style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(139, 92, 246, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">CREDIT</div>
+                        <div>
+                            <span style="background: rgba(139, 92, 246, 0.1); color: #7c3aed; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Infinite Tier</span>
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">VGB Infinite Credit Card</h4>
+                            <p style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">Elite premium credit offering featuring extreme credit caps and exclusive lifestyle perks.</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(139,92,246,0.2); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Issuance/Renewal:</span>
+                                    <strong style="color: var(--gray-800);">₹2,000.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(139,92,246,0.2); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Credit Limit:</span>
+                                    <strong style="color: var(--gray-800);">₹5,00,000.00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(139,92,246,0.2); padding-bottom: 4px;">
+                                    <span style="color: var(--gray-500);">Grace Period:</span>
+                                    <strong style="color: var(--gray-800);">Up to 45 Days</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Features & Usage:</h5>
+                            <ul style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px;">
+                                <li>24/7 Dedicated Luxury Concierge Assistance</li>
+                                <li>Uncapped international airport lounge access</li>
+                                <li>Comprehensive Travel Insurance up to ₹1 Crore</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             <!-- Table 1: Pending Card Approvals -->
             <div class="glass-card">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;">
@@ -1572,6 +1750,9 @@
                     <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
                         <i class="bx bx-credit-card-front" style="color: var(--primary-500);"></i> All System Issued Cards Directory
                     </h3>
+                    <button onclick="openApplyModal()" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin: 0; background: var(--gradient-primary); color: white; border: none; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="bx bx-plus-circle"></i> Apply / Renew Card
+                    </button>
                 </div>
 
                 <!-- Client-side real-time filter controls -->
@@ -1642,6 +1823,11 @@
                                                 <c:if test="${card.status eq 'active'}">
                                                     <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}" class="btn-action btn-action-reject" onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');">
                                                         <i class="bx bx-power-off"></i> Close
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${card.status ne 'pending'}">
+                                                    <a href="${pageContext.request.contextPath}/card?action=renew&cardId=${card.cardId}&csrfToken=${sessionScope.csrfToken}" class="btn-action btn-action-approve" onclick="return confirm('Are you sure you want to renew/reissue card #${card.cardId}?');">
+                                                        <i class="bx bx-refresh"></i> Renew
                                                     </a>
                                                 </c:if>
                                             </td>
@@ -1740,6 +1926,225 @@
                 });
             }
         });
+
+        function openApplyModal() {
+            document.getElementById('lookupAccountNumber').value = '';
+            document.getElementById('applyCardForm').style.display = 'none';
+            document.getElementById('applyModal').style.display = 'flex';
+        }
+
+        function closeApplyModal() {
+            document.getElementById('applyModal').style.display = 'none';
+        }
+
+        function fetchCustomerDetails() {
+            const accNo = document.getElementById('lookupAccountNumber').value.trim();
+            if (!accNo) {
+                alert('Please enter a valid Account Number');
+                return;
+            }
+
+            fetch('${pageContext.request.contextPath}/account?action=details&accountNumber=' + accNo)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        document.getElementById('applyCardForm').style.display = 'none';
+                    } else {
+                        // Populate form fields
+                        document.getElementById('formAccountId').value = data.accountId;
+                        document.getElementById('formAccountNumber').value = data.accountNumber;
+                        document.getElementById('applyCardHolderName').value = data.customerName;
+                        
+                        document.getElementById('paperAccountNumberDisplay').textContent = data.accountNumber + ' - ' + data.accountType + ' (Available: ₹ ' + parseFloat(data.balance).toLocaleString('en-IN', {minimumFractionDigits: 2}) + ')';
+                        document.getElementById('paperCustomerIdDisplay').textContent = data.customerId;
+                        document.getElementById('paperMobileDisplay').textContent = data.phone;
+                        document.getElementById('paperEmailDisplay').textContent = data.email;
+                        document.getElementById('paperAddressDisplay').textContent = data.address;
+                        
+                        document.getElementById('applyFormSignature').textContent = data.customerName;
+                        document.getElementById('applyFormNameLabel').textContent = data.customerName;
+
+                        // Date
+                        const today = new Date();
+                        const dd = String(today.getDate()).padStart(2, '0');
+                        const mm = String(today.getMonth() + 1).padStart(2, '0');
+                        const yyyy = today.getFullYear();
+                        document.getElementById('applyFormDateStr').value = dd + ' / ' + mm + ' / ' + yyyy;
+
+                        // Show form
+                        document.getElementById('applyCardForm').style.display = 'block';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching details:', err);
+                    alert('Failed to fetch customer details. Please check the account number.');
+                });
+        }
+
+        function updateApplyFeeAndNotice(type) {
+            const feeVal = type === 'credit' ? '₹ 500.00' : '₹ 250.00';
+            document.getElementById('applyFeeValue').textContent = feeVal;
+        }
     </script>
+
+    <!-- Modal: Apply / Renew Card -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content" style="max-width: 720px; width: 100%; background: var(--glass-bg); backdrop-filter: blur(25px); border: 1.5px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--panel-shadow); display: flex; flex-direction: column;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer ATM Card</h3>
+                <button type="button" onclick="closeApplyModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
+            </div>
+            
+            <div style="padding: 20px 24px 15px; display: flex; gap: 10px; align-items: center; border-bottom: 1px dashed rgba(99,102,241,0.1); width: 100%; box-sizing: border-box; background: rgba(99,102,241,0.01);">
+                <input type="text" id="lookupAccountNumber" placeholder="Enter customer account number (e.g. 171931936244)" style="flex: 1; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); font-size: 0.9rem; outline: none; background: transparent; color: var(--gray-800); font-family: monospace; font-weight: 600;" onkeypress="if(event.key === 'Enter') fetchCustomerDetails();">
+                <button type="button" onclick="fetchCustomerDetails()" class="btn btn-primary" style="padding: 10px 20px; margin: 0; font-weight: 600; background: var(--gradient-primary); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;"><i class="bx bx-search-alt"></i> Fetch Details</button>
+            </div>
+
+            <!-- Beautiful Paper Form container (hidden by default until details loaded) -->
+            <form id="applyCardForm" action="${pageContext.request.contextPath}/card?action=apply" method="post" style="display: none; padding: 24px; max-height: 65vh; overflow-y: auto; width: 100%; box-sizing: border-box; text-align: left;">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                <input type="hidden" id="formAccountId" name="accountId" value="">
+                <input type="hidden" id="formAccountNumber" name="accountNumber" value="">
+                
+                <div class="apply-paper-form" style="background: #fff; border: 1.5px solid var(--gray-200); padding: 35px 30px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
+                    <!-- Watermark -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 7.5rem; font-weight: 900; color: rgba(99, 102, 241, 0.03); pointer-events: none; user-select: none; font-family: 'Poppins', sans-serif; letter-spacing: 5px;">VGB</div>
+
+                    <!-- Form Header -->
+                    <div style="text-align: center; border-bottom: 2px double #475569; padding-bottom: 12px; margin-bottom: 20px; position: relative;">
+                        <h2 style="font-size: 1.35rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin: 0; font-family: 'Poppins', sans-serif;">Vertex Galaxy Bank</h2>
+                        <h3 style="font-size: 1rem; font-weight: 700; color: #475569; margin: 4px 0 0; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">ATM Card Application Request Form</h3>
+                        <span style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); font-family: 'Poppins', sans-serif;">
+                            Issuance Fee Due: <strong id="applyFeeValue" style="font-weight: 800;">₹ 250.00</strong>
+                        </span>
+                    </div>
+
+                    <!-- Header Details -->
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tr>
+                            <td style="width: 60%; vertical-align: top; padding: 2px 0;">
+                                <strong>To,</strong><br>
+                                The Branch Manager<br>
+                                <strong>Vertex Galaxy Bank</strong><br>
+                                Branch: <input type="text" name="branch" style="width: 250px; border: none; border-bottom: 1px dotted #475569; padding: 0 5px; background: transparent; font-weight: 600; font-family: inherit; font-size: inherit; outline: none; color: #0f172a;" value="Main Corporate Branch, Mumbai">
+                            </td>
+                            <td style="width: 40%; text-align: right; vertical-align: top; padding: 2px 0;">
+                                <strong>Date:</strong> <input type="text" name="formDate" id="applyFormDateStr" style="width: 120px; border: none; border-bottom: 1px solid #475569; padding: 0 5px; background: transparent; font-weight: 600; font-family: inherit; font-size: inherit; outline: none; text-align: center; color: #0f172a;" value="" readonly>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-bottom: 20px;">
+                        <strong>Subject:</strong> <span style="font-weight: 600; border-bottom: 1px solid #475569; padding-bottom: 2px;">Request for ATM/Debit Card Renewal & Issuance</span>
+                    </div>
+
+                    <!-- Customer Information -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">Customer Information</h4>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 35%; padding: 5px 0;"><strong>Account Holder Name:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 0;">
+                                    <input type="text" id="applyCardHolderName" name="cardHolderName" required readonly style="width: 100%; border: none; padding: 5px 8px; font-weight: 600; text-transform: uppercase; font-family: monospace; font-size: 1rem; color: #0f172a; outline: none; background: transparent;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Account Number:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperAccountNumberDisplay">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Customer ID:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperCustomerIdDisplay">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Mobile Number:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperMobileDisplay">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Email ID:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1rem; color: #0f172a;" id="paperEmailDisplay">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; vertical-align: top;"><strong>Address:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: inherit; font-size: 0.9rem; color: #0f172a; white-space: normal; word-break: break-word;" id="paperAddressDisplay">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Card Details Box -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">ATM/Debit Card Details</h4>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 45%; padding: 5px 0;"><strong>Existing ATM/Debit Card (Last 4 Digits):</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 0;">
+                                    <input type="text" name="existingCardLast4" readonly style="width: 100%; border: none; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 1.05rem; outline: none; background: transparent; color: #0f172a;" value="N/A (NEW CARD APPLICATION)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Card Expiry Date:</strong></td>
+                                <td style="border-bottom: 1px dotted #475569; padding: 0;">
+                                    <input type="text" name="cardExpiry" readonly style="width: 100%; border: none; padding: 5px 8px; font-weight: 600; font-family: monospace; outline: none; background: transparent; color: #0f172a;" value="____ / ____">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Card Category:</strong></td>
+                                <td style="padding: 5px 8px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                    <label style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
+                                        <input type="radio" id="applyCardTypeDebit" name="cardType" value="debit" checked onchange="updateApplyFeeAndNotice('debit')" style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                        Debit Card (Fee: ₹250)
+                                    </label>
+                                    <label style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
+                                        <input type="radio" id="applyCardTypeCredit" name="cardType" value="credit" onchange="updateApplyFeeAndNotice('credit')" style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                        Credit Card (Fee: ₹500)
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0;"><strong>Card Network:</strong></td>
+                                <td style="padding: 5px 8px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                    <label style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer;">
+                                        <input type="radio" name="cardProvider" id="applyProviderVisa" value="visa" checked style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                        Visa
+                                    </label>
+                                    <label style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer;">
+                                        <input type="radio" name="cardProvider" id="applyProviderMastercard" value="mastercard" style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                        MasterCard
+                                    </label>
+                                    <label style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer;">
+                                        <input type="radio" name="cardProvider" id="applyProviderRuPay" value="rupay" style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                        RuPay
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Signatures Row -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px; padding: 0 10px;">
+                        <div>
+                            <span style="display: block; font-size: 0.8rem; font-style: italic; color: #3b82f6; font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.4rem; padding-bottom: 5px;" id="applyFormSignature"></span>
+                            <span style="border-top: 1px solid #475569; display: inline-block; width: 170px; text-align: center; font-size: 0.8rem; font-weight: 600; padding-top: 3px; font-family: 'Poppins', sans-serif;">Customer Signature</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="display: block; font-family: monospace; font-size: 0.95rem; font-weight: 600; color: #0f172a; text-transform: uppercase; padding-bottom: 5px;" id="applyFormNameLabel"></span>
+                            <span style="border-top: 1px solid #475569; display: inline-block; width: 170px; text-align: center; font-size: 0.8rem; font-weight: 600; padding-top: 3px; font-family: 'Poppins', sans-serif;">Name</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeApplyModal()" class="btn-action btn-action-reject" style="padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); color: #ef4444;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; background: var(--gradient-primary); color: white; border: none;">Submit Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

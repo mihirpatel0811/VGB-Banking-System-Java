@@ -895,55 +895,6 @@
             50% { opacity: 1; transform: translateX(3px); }
         }
 
-        /* --- PREMIUM MODERN TABLES --- */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            padding: 16px 20px;
-            color: var(--gray-500);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
-            white-space: nowrap;
-        }
-
-        body.dark-mode th {
-            color: var(--gray-400);
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-
-        td {
-            padding: 18px 20px;
-            font-size: 0.875rem;
-            color: var(--gray-700);
-            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-
-        body.dark-mode td {
-            color: var(--gray-300);
-            border-bottom-color: rgba(255, 255, 255, 0.04);
-        }
-
-        tr {
-            transition: background 0.2s ease;
-        }
-
-        tr:hover td {
-            background: rgba(99, 102, 241, 0.02);
-        }
-
-        body.dark-mode tr:hover td {
-            background: rgba(255, 255, 255, 0.01);
-        }
-
         /* --- RESPONSIVE WORKOUTS --- */
         @media (max-width: 991px) {
             .mobile-nav-toggle {
@@ -1103,7 +1054,6 @@
             <a href="${pageContext.request.contextPath}/passbook?action=list" class="active"><i class="bx bx-book-open"></i> Passbook Requests</a>
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Review Loans</a>
             <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My Profile</a>
-
         </div>
         <div style="padding: 15px; background: rgba(99, 102, 241, 0.05); border-radius: var(--radius-md); text-align: center;">
             <p style="font-size: 0.75rem; color: var(--gray-500); font-weight: 500;">Admin Controls</p>
@@ -1362,201 +1312,6 @@
                 }, 300);
             }
             
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 4px solid var(--accent-emerald);">
-                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                        <i class="bx bx-check-double"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Approved Books</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${approvedCount}</h3>
-                    </div>
-                </div>
-                <div class="stat-card" style="border-left: 4px solid var(--secondary-500);">
-                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
-                        <i class="bx bx-x-circle"></i>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Rejected / Refunded</span>
-                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${rejectedCount}</h3>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Table of all requests -->
-            <div class="glass-card">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;"><i class="bx bx-list-ol" style="color: var(--primary-500);"></i> Passbook Applications</h3>
-                <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                <th style="padding: 12px 15px;">ID</th>
-                                <th style="padding: 12px 15px;">Customer Name</th>
-                                <th style="padding: 12px 15px;">Account Number</th>
-                                <th style="padding: 12px 15px;">Type</th>
-                                <th style="padding: 12px 15px;">Fee Status</th>
-                                <th style="padding: 12px 15px;">Requested Date</th>
-                                <th style="padding: 12px 15px;">Status</th>
-                                <th style="padding: 12px 15px; text-align: right;">Action Control</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${not empty requests}">
-                                    <c:forEach var="req" items="${requests}">
-                                        <fmt:formatDate value="${req.requestedAt}" pattern="ddMMyyyy" var="formattedDate" />
-                                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; vertical-align: middle;">
-                                            <td style="padding: 15px; font-weight: 700; color: var(--gray-700);"><span class="badge-id">#${req.requestId}</span></td>
-                                            <td style="padding: 15px; font-weight: 600; color: var(--gray-800);">${req.customerName}</td>
-                                            <td style="padding: 15px;"><span class="badge-id">${req.accountNumber}</span></td>
-                                            <td style="padding: 15px;">
-                                                <c:choose>
-                                                    <c:when test="${req.requestType eq 'new'}">
-                                                        <span class="badge-new">New Cover</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge-renew">Renewal</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px;">
-                                                <span style="font-weight: 600; color: var(--gray-700);">₹<fmt:formatNumber value="${req.charges}" minFractionDigits="2"/></span>
-                                                <c:choose>
-                                                    <c:when test="${req.chargesPaid}">
-                                                        <span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Paid</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-sm); margin-left: 5px;">Refunded</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px; color: var(--gray-500);">
-                                                <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
-                                            </td>
-                                            <td style="padding: 15px;">
-                                                <c:choose>
-                                                    <c:when test="${req.status eq 'approved' or req.status eq 'delivered'}">
-                                                        <span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>
-                                                    </c:when>
-                                                    <c:when test="${req.status eq 'pending'}">
-                                                        <span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="padding: 15px; text-align: right;">
-                                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                     <button type="button" class="btn" style="display:none;" 
-                                                             data-id="${req.requestId}" 
-                                                             data-name="${req.customerName}" 
-                                                             data-account="${req.accountNumber}" 
-                                                             data-type="${req.requestType}" 
-                                                             data-acctype="${req.accountType} Account"
-                                                             data-ifsc="${req['ifscCode']}"
-                                                             data-phone="${req['phoneNo']}"
-                                                             data-nominee="${req['nomineeName']}"
-                                                             data-status="${req.status}"
-                                                             style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #6366f1; color: white; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"
-                                                             onclick="inspectRequest(this)">
-                                                         <i class="bx bx-show"></i> Inspect
-                                                     </button>
-                                                     <c:choose>
-                                                         <c:when test="${req.status eq 'pending'}">
-                                                             <a href="${pageContext.request.contextPath}/passbook?action=approve&id=${req.requestId}" 
-                                                                class="btn btn-primary" 
-                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
-                                                                onclick="return confirm('Are you sure you want to approve this passbook request?');">
-                                                                 Approve
-                                                             </a>
-                                                             <a href="${pageContext.request.contextPath}/passbook?action=reject&id=${req.requestId}" 
-                                                                class="btn btn-danger" 
-                                                                style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
-                                                                onclick="return confirm('Are you sure you want to reject this request? Processing fees of ₹100.00 will be refunded.');">
-                                                                 Reject
-                                                             </a>
-                                                         </c:when>
-                                                         <c:otherwise>
-                                                             <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
-                                                         </c:otherwise>
-                                                     </c:choose>
-                                                 </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <tr>
-                                        <td colspan="8" style="padding: 30px; text-align: center; color: var(--gray-400); font-style: italic;">
-                                            <i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No passbook requests have been submitted.
-                                        </td>
-                                    </tr>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer" style="padding: 20px 0; margin-left: 280px; background: white; border-top: 1px solid rgba(99, 102, 241, 0.15);">
-        <div class="container" style="text-align: center; max-width: 1200px; padding: 0;">
-            <p style="font-size: 0.85rem; color: var(--gray-500);">&copy; <span data-current-year>2026</span> Vertex Galaxy Bank. Internal administrative access.</p>
-        </div>
-    </footer>
-
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-
-            // Mobile menu toggle logic
-            const mobileToggle = document.getElementById('mobileNavToggle');
-            const sidebar = document.querySelector('.sidebar');
-            if (mobileToggle && sidebar) {
-                mobileToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    sidebar.classList.toggle('active');
-                    const icon = mobileToggle.querySelector('i');
-                    if (icon) {
-                        icon.className = sidebar.classList.contains('active') ? 'bx bx-x' : 'bx bx-menu';
-                    }
-                });
-
-                // Close sidebar when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
-                        sidebar.classList.remove('active');
-                        const icon = mobileToggle.querySelector('i');
-                        if (icon) icon.className = 'bx bx-menu';
-                    }
-                });
-            }
-
-            // Cursor glow follower
-            const glow = document.querySelector('.cursor-glow');
-            if (glow) {
-                window.addEventListener('mousemove', (e) => {
-                    requestAnimationFrame(() => {
-                        glow.style.left = e.clientX + 'px';
-                        glow.style.top = e.clientY + 'px';
-                    });
-                });
-            }
-
-            // Preloader fadeout
-            const preloader = document.querySelector('.preloader');
-            if (preloader) {
-                setTimeout(() => {
-                    preloader.classList.add('hidden');
-                }, 300);
-            }
-            
             // Set current year in footer dynamically
             const yearEl = document.querySelector('[data-current-year]');
             if (yearEl) {
@@ -1572,6 +1327,11 @@
 
         function closeApplyModal() {
             document.getElementById('applyPassbookModal').style.display = 'none';
+        }
+
+        // Inspection function
+        function inspectRequest(btn) {
+            // Unused dynamic booklet inspector, redirect standard request handler.
         }
 
         function fetchCustomerDetails() {
@@ -1627,7 +1387,7 @@
 
     <!-- Modal: Apply / Renew Passbook -->
     <div id="applyPassbookModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
-        <div class="modal-content" style="max-width: 720px; width: 100%; background: var(--glass-bg); backdrop-filter: blur(25px); border: 1.5px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--panel-shadow); display: flex; flex-direction: column;">
+        <div class="modal-content" style="max-width: 720px; width: 100%; background: var(--glass-bg); backdrop-filter: blur(25px); border: 1.5px solid var(--glass-border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--panel-shadow); display: none; flex-direction: column;">
             <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer Passbook</h3>
                 <button type="button" onclick="closeApplyModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
