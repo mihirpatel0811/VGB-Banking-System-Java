@@ -793,7 +793,7 @@
                                         <div class="strength-indicator" id="strengthBar" style="background: #ef4444; width: 0%;"></div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary" style="align-self: start; padding: 12px 28px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 8px;">
+                                <button type="submit" class="btn btn-primary" style="align-self: start; display: inline-flex; align-items: center; gap: 8px;">
                                     <i class="bx bx-lock-alt" style="font-size: 1.1rem;"></i> Update Password
                                 </button>
                             </form>
@@ -812,7 +812,7 @@
                                         <i class="bx bx-hide password-eye-icon" onclick="togglePasswordVisibility('newPinInput', this)"></i>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary" style="align-self: start; padding: 12px 28px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); display: inline-flex; align-items: center; gap: 8px;">
+                                <button type="submit" class="btn btn-primary" style="align-self: start; display: inline-flex; align-items: center; gap: 8px;">
                                     <i class="bx bx-shield" style="font-size: 1.1rem;"></i> Update PIN
                                 </button>
                             </form>

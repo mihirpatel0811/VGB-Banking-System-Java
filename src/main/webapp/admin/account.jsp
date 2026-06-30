@@ -389,6 +389,9 @@
             transform: scale(1.1);
             color: white !important;
         }
+        .btn-action-circle:active {
+            transform: scale(0.95) !important;
+        }
 
         .btn-action-view:hover {
             border-color: var(--primary-500);
@@ -2300,7 +2303,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('closeAccountModal')">Cancel</button>
-                <button type="button" class="btn" style="background:#ef4444; color:white; border:none;" onclick="confirmCloseAccount()">Confirm Close Account</button>
+                <button type="button" class="btn btn-danger" onclick="confirmCloseAccount()">Confirm Close Account</button>
             </div>
         </div>
     </div>
@@ -2837,7 +2840,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="wizPrevBtn" onclick="navigateWizardStep(-1)">Back</button>
                     <button type="button" class="btn btn-primary" id="wizNextBtn" onclick="navigateWizardStep(1)">Next Step</button>
-                    <button type="submit" class="btn" style="background: var(--accent-emerald); color: white; border: none; display:none;" id="wizSubmitBtn" disabled>Open Account</button>
+                    <button type="submit" class="btn btn-success" style="display:none;" id="wizSubmitBtn" disabled>Open Account</button>
                 </div>
             </form>
         </div>
@@ -2941,7 +2944,7 @@
                         <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
                             <i class="bx bx-history" style="color: var(--primary-500);"></i> Transaction Ledger Log
                         </h4>
-                        <button type="button" onclick="window.print()" class="btn btn-primary no-print" style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">
+                        <button type="button" onclick="window.print()" class="btn btn-primary no-print" style="display: inline-flex; align-items: center; gap: 6px;">
                             <span>Print Document</span>
                             <i class="bx bx-printer"></i>
                         </button>
@@ -2983,7 +2986,7 @@
 
                 <!-- Modal Controls (hidden in print) -->
                 <div style="display: flex; justify-content: center; align-items: center; margin-top: 35px; border-top: 1px solid var(--gray-100); padding-top: 25px;" class="no-print">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('statementModal')" style="border-radius: var(--radius-full); padding: 10px 32px; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; border: 1.5px solid var(--gray-300); background: transparent; color: var(--gray-700); transition: all 0.2s;" onmouseover="this.style.background='var(--gray-100)';" onmouseout="this.style.background='transparent';">Close View</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('statementModal')">Close View</button>
                 </div>
             </div>
         </div>

@@ -1122,6 +1122,9 @@
             box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
             transform: translateY(-1px);
         }
+        .btn-inspect:active {
+            transform: scale(0.96) !important;
+        }
 
         .btn-renew-action {
             padding: 6px 12px;
@@ -1143,6 +1146,10 @@
             color: white !important;
             border-color: transparent !important;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+        .btn-renew-action:active {
+            transform: scale(0.96) !important;
         }
     </style>
 </head>
@@ -1446,8 +1453,8 @@
                     </div>
                     
                     <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 15px;">
-                        <button type="button" class="btn btn-secondary" style="padding: 10px 20px;" onclick="closeRequestModal()">Cancel</button>
-                        <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600;">Confirm & Debit ₹100.00</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeRequestModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm & Debit ₹100.00</button>
                     </div>
                 </form>
             </div>

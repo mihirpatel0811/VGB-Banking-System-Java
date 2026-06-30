@@ -204,6 +204,9 @@
             border-color: transparent;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
         }
+        .statement-type-btn:active {
+            transform: scale(0.96) !important;
+        }
 
         .filter-select, .filter-input {
             width: 100%;

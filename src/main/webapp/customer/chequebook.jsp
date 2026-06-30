@@ -1628,6 +1628,10 @@
             transform: translateY(-1px);
         }
         
+        .btn-view-leaf:active {
+            transform: scale(0.96) !important;
+        }
+        
         .btn-renew-action {
             background: rgba(16, 185, 129, 0.08) !important;
             color: #047857 !important;
@@ -1646,6 +1650,10 @@
             border-color: transparent !important;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
             transform: translateY(-1px);
+        }
+        
+        .btn-renew-action:active {
+            transform: scale(0.96) !important;
         }
         
         .info-tag-text {

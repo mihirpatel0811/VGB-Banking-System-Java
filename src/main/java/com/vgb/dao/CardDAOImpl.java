@@ -12,7 +12,7 @@ public class CardDAOImpl {
     private static final Logger logger = LoggerFactory.getLogger(CardDAOImpl.class);
 
     public boolean create(Card card) throws SQLException {
-        String sql = "INSERT INTO card (account_id, customer_id, card_number, card_type, card_provider, card_holder_name, cvv, expiry_date, status, daily_limit, atm_limit, online_limit, international_enabled, card_fee, outstanding_balance, is_fee_paid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO card (account_id, customer_id, card_number, card_type, card_provider, card_holder_name, cvv, expiry_date, status, daily_limit, atm_limit, online_limit, international_enabled, card_fee, outstanding_balance, is_fee_paid, card_tier) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -34,6 +34,7 @@ public class CardDAOImpl {
             stmt.setBigDecimal(14, card.getCardFee());
             stmt.setBigDecimal(15, card.getOutstandingBalance());
             stmt.setInt(16, card.isFeePaid() ? 1 : 0);
+            stmt.setString(17, card.getCardTier());
 
             int affected = stmt.executeUpdate();
             if (affected > 0) {
@@ -261,6 +262,7 @@ public class CardDAOImpl {
         card.setCardFee(rs.getBigDecimal("card_fee"));
         card.setOutstandingBalance(rs.getBigDecimal("outstanding_balance"));
         card.setFeePaid(rs.getInt("is_fee_paid") == 1);
+        card.setCardTier(rs.getString("card_tier"));
         card.setCreatedAt(rs.getTimestamp("created_at"));
 
         // Transient fields

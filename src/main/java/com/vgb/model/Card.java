@@ -22,6 +22,7 @@ public class Card {
     private BigDecimal cardFee;
     private BigDecimal outstandingBalance;
     private boolean isFeePaid;
+    private String cardTier;
     private Timestamp createdAt;
 
     // Additional transient helper fields (optional for JSP rendering)
@@ -35,6 +36,7 @@ public class Card {
         this.internationalEnabled = false;
         this.outstandingBalance = BigDecimal.ZERO;
         this.isFeePaid = false;
+        this.cardTier = "classic";
     }
 
     public long getCardId() {
@@ -195,6 +197,14 @@ public class Card {
 
     public void setInternationalEnabled(boolean internationalEnabled) {
         this.internationalEnabled = internationalEnabled;
+    }
+
+    public String getCardTier() {
+        return cardTier;
+    }
+
+    public void setCardTier(String cardTier) {
+        this.cardTier = cardTier;
     }
 
     // Helper mask method

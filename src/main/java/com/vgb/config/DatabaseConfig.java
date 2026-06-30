@@ -155,6 +155,7 @@ public class DatabaseConfig {
                         "    card_fee DECIMAL(15, 4) NOT NULL DEFAULT 250.0000, " +
                         "    outstanding_balance DECIMAL(15, 4) NOT NULL DEFAULT 0.0000, " +
                         "    is_fee_paid TINYINT(1) NOT NULL DEFAULT 0, " +
+                        "    card_tier VARCHAR(20) NOT NULL DEFAULT 'classic', " +
                         "    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                         "    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE, " +
                         "    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE" +
@@ -170,6 +171,13 @@ public class DatabaseConfig {
                             stmt.execute("ALTER TABLE card ADD COLUMN online_limit DECIMAL(15, 4) NOT NULL DEFAULT 50000.0000");
                             stmt.execute("ALTER TABLE card ADD COLUMN international_enabled TINYINT(1) NOT NULL DEFAULT 0");
                             logger.info("Card table limits migration completed successfully.");
+                        }
+                    }
+                    try (ResultSet cols = metaData.getColumns(null, null, "card", "card_tier")) {
+                        if (!cols.next()) {
+                            logger.info("Migrating schema: adding card_tier column to card table");
+                            stmt.execute("ALTER TABLE card ADD COLUMN card_tier VARCHAR(20) NOT NULL DEFAULT 'classic'");
+                            logger.info("Card table card_tier migration completed successfully.");
                         }
                     }
                 }

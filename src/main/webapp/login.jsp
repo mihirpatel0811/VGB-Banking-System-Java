@@ -451,7 +451,7 @@
                 }
 
                 .btn-submit-premium:active {
-                    transform: translateY(0);
+                    transform: scale(0.96) !important;
                 }
 
                 .btn-submit-premium i {

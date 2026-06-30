@@ -217,6 +217,7 @@ CREATE TABLE card (
                       card_fee DECIMAL(15, 4) NOT NULL DEFAULT 250.0000,
                       outstanding_balance DECIMAL(15, 4) NOT NULL DEFAULT 0.0000,
                       is_fee_paid TINYINT(1) NOT NULL DEFAULT 0,
+                      card_tier VARCHAR(20) NOT NULL DEFAULT 'classic',
                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                       FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE,
                       FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE

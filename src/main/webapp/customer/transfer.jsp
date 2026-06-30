@@ -360,7 +360,7 @@
             box-shadow: 0 12px 28px rgba(99, 102, 241, 0.32);
         }
         .btn-submit-premium:active {
-            transform: translateY(0);
+            transform: scale(0.96) !important;
         }
         .btn-submit-premium i {
             font-size: 1.2rem;
@@ -894,6 +894,9 @@
             background: rgba(99, 102, 241, 0.05);
             border-color: var(--primary-400);
             transform: translateY(-1px);
+        }
+        .btn-verify-modern:active {
+            transform: scale(0.96) !important;
         }
     </style>
 </head>

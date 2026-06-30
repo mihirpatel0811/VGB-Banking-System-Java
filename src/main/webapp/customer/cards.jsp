@@ -298,17 +298,6 @@
                             border: 1.5px solid rgba(139, 92, 246, 0.3) !important;
                         }
 
-                        /* Clear original provider-specific background overrides */
-                        .vgb-atm-card.debit.visa, 
-                        .vgb-atm-card.debit.visa.premium-tier, 
-                        .vgb-atm-card.debit.mastercard, 
-                        .vgb-atm-card.debit.rupay,
-                        .vgb-atm-card.credit.visa, 
-                        .vgb-atm-card.credit.visa.premium-tier, 
-                        .vgb-atm-card.credit.mastercard, 
-                        .vgb-atm-card.credit.rupay {
-                            /* inherit from base card styles */
-                        }
 
                         /* 3D orbits and decorative structures based on debit/credit card designs */
                         .vgb-atm-card.debit .card-front::before {
@@ -1501,6 +1490,7 @@
                         /* Beautiful Slider Custom Styling */
                         .limit-slider {
                             -webkit-appearance: none;
+                            appearance: none;
                             height: 6px;
                             border-radius: 5px;
                             background: var(--gray-200);
@@ -1640,10 +1630,14 @@
                                         Debit and Credit Cards, clear dues, and extend your cards validity dynamically.
                                     </p>
                                 </div>
-                                <div>
-                                    <button onclick="openApplyModal()" class="btn btn-primary"
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button onclick="openApplyModal('debit')" class="btn btn-primary"
                                         style="display: inline-flex; align-items: center; gap: 8px;">
-                                        <i class="bx bx-plus-circle"></i> Apply New Card
+                                        <i class="bx bx-plus-circle"></i> Apply Debit Card
+                                    </button>
+                                    <button onclick="openApplyModal('credit')" class="btn"
+                                        style="display: inline-flex; align-items: center; gap: 8px; background: var(--accent-gradient); color: white; border: none; padding: 10px 20px; font-weight: 600; border-radius: var(--radius-full); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);">
+                                        <i class="bx bx-plus-circle"></i> Apply Credit Card
                                     </button>
                                 </div>
                             </div>
@@ -1984,8 +1978,8 @@
                                                             <c:if test="${card.status eq 'active'}">
                                                                 <button type="button"
                                                                     onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', '${card.internationalEnabled}')"
-                                                                    class="btn"
-                                                                    style="background: rgba(99, 102, 241, 0.08); color: var(--primary-500); padding: 4px 8px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: 1px solid rgba(99, 102, 241, 0.15); margin: 0; display: inline-flex; align-items: center; gap: 3px;"
+                                                                    class="btn btn-secondary btn-sm"
+                                                                    style="margin: 0; display: inline-flex; align-items: center; gap: 3px;"
                                                                     title="Manage Limits & Controls">
                                                                     <i class="bx bx-slider-alt" style="font-size: 0.9rem;"></i> Limits
                                                                 </button>
@@ -1994,9 +1988,8 @@
                                                                 test="${card.cardType eq 'credit' and card.status eq 'active' and card.outstandingBalance gt 0}">
                                                                 <button type="button"
                                                                     onclick="openPayDuesModal('${card.cardId}', '${card.outstandingBalance}')"
-                                                                    class="btn"
-                                                                    style="background: var(--gradient-primary); color: white; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: none; margin: 0; box-shadow: var(--shadow-sm);">Pay
-                                                                    Dues</button>
+                                                                    class="btn btn-primary btn-sm"
+                                                                    style="margin: 0;">Pay Dues</button>
                                                             </c:if>
                                                             <c:if
                                                                 test="${card.status eq 'expired' or card.status eq 'closed'}">
@@ -2004,14 +1997,14 @@
                                                                     var="formattedExpiryDate" />
                                                                 <button type="button"
                                                                     onclick="openRenewModal('${card.cardId}', '${card.cardType}', '${card.cardFee}', '${card.cardNumber}', '${formattedExpiryDate}', '${card.cardProvider}')"
-                                                                    class="btn"
-                                                                    style="background: #10b981; color: white; padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; border: none; margin: 0;">Renew</button>
+                                                                    class="btn btn-success btn-sm"
+                                                                    style="margin: 0;">Renew</button>
                                                             </c:if>
                                                             <c:if test="${card.status eq 'active'}">
                                                                 <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
-                                                                    class="btn"
+                                                                    class="btn btn-danger btn-sm"
                                                                     onclick="return confirm('Are you sure you want to permanently close this VGB card?');"
-                                                                    style="background: rgba(239, 68, 68, 0.08); color: #ef4444; padding: 4px 8px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; border: 1px solid rgba(239, 68, 68, 0.15); margin: 0;">Close</a>
+                                                                    style="margin: 0; text-decoration: none;">Close</a>
                                                             </c:if>
                                                         </div>
                                                     </div>
@@ -2041,26 +2034,23 @@
                                     <div>
                                         <strong
                                             style="color: var(--gray-800); font-size: 0.9rem; display: block; margin-bottom: 5px;">VGB
-                                            Debit Card</strong>
+                                            Debit Card Suite</strong>
                                         <p style="font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
-                                            - **Issuance / Renewal Fee**: ₹250.00 (debited upfront).<br>
-                                            - **Daily Card Limit**: ₹50,000.00 per day.<br>
-                                            - **Card Validity**: 4 years (automatically closes, renewable upon paying
-                                            the renewal fee).<br>
-                                            - **Ledger Source**: Directly debited from linked bank account balance.
+                                            - **Classic Debit Card**: ₹250.00 Issuance/Renewal fee. ₹50,000.00 Daily spending limit.<br>
+                                            - **Premium Debit Card**: ₹500.00 Issuance/Renewal fee. ₹2,00,000.00 Daily spending limit.<br>
+                                            - **Card Validity**: 4 years (automatically closes, renewable upon paying the renewal fee).<br>
+                                            - **Ledger Source**: Directly debited from linked VGB bank account balance.
                                         </p>
                                     </div>
                                     <div>
                                         <strong
                                             style="color: var(--gray-800); font-size: 0.9rem; display: block; margin-bottom: 5px;">VGB
-                                            Credit Card</strong>
+                                            Credit Card Suite</strong>
                                         <p style="font-size: 0.85rem; color: var(--gray-600); line-height: 1.6;">
-                                            - **Issuance / Renewal Fee**: ₹500.00 (debited upfront).<br>
-                                            - **Credit Limit**: ₹50,000.00 outstanding capacity.<br>
-                                            - **Card Validity**: 4 years (automatically closes, renewable upon paying
-                                            the renewal fee).<br>
-                                            - **Ledger Source**: Outstanding balance billed, clear dues from any linked
-                                            VGB bank account.
+                                            - **Royale Credit Card**: ₹500.00 Issuance/Renewal fee. ₹50,000.00 Credit limit.<br>
+                                            - **Infinite Credit Card**: ₹2,000.00 Issuance/Renewal fee. ₹5,00,000.00 Credit limit.<br>
+                                            - **Card Validity**: 4 years (automatically closes, renewable upon paying the renewal fee).<br>
+                                            - **Ledger Source**: Outstanding balance billed, clear dues from any linked VGB bank account.
                                         </p>
                                     </div>
                                 </div>
@@ -2078,6 +2068,8 @@
                             </div>
                             <form action="${pageContext.request.contextPath}/card?action=apply" method="post">
                                 <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                                <input type="hidden" id="formCardType" name="cardType" value="debit">
+                                <input type="hidden" id="formCardTier" name="cardTier" value="classic">
                                 <div class="modal-body" style="padding-top: 15px;">
                                     <!-- The Formal Banking Paper Form -->
                                     <div class="apply-paper-form"
@@ -2093,7 +2085,7 @@
                                             <h2
                                                 style="font-size: 1.35rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin: 0; font-family: 'Poppins', sans-serif;">
                                                 Vertex Galaxy Bank</h2>
-                                            <h3
+                                            <h3 id="applyFormHeading"
                                                 style="font-size: 1rem; font-weight: 700; color: #475569; margin: 4px 0 0; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">
                                                 ATM Card Application Request Form</h3>
                                             <span
@@ -2125,7 +2117,7 @@
                                         </table>
 
                                         <div style="margin-bottom: 20px;">
-                                            <strong>Subject:</strong> <span
+                                            <strong>Subject:</strong> <span id="applyFormSubject"
                                                 style="font-weight: 600; border-bottom: 1px solid #475569; padding-bottom: 2px;">Request
                                                 for ATM/Debit Card Renewal & Issuance</span>
                                         </div>
@@ -2203,7 +2195,7 @@
 
                                         <!-- Card Details Box -->
                                         <div style="margin-bottom: 25px;">
-                                            <h4
+                                            <h4 id="applyDetailsBoxHeading"
                                                 style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">
                                                 ATM/Debit Card Details</h4>
                                             <table style="width: 100%; border-collapse: collapse;">
@@ -2224,25 +2216,49 @@
                                                             value="____ / ____">
                                                     </td>
                                                 </tr>
+                                                <tr id="applyLimitRow">
+                                                    <td style="padding: 5px 0;"><strong>Card Limits:</strong></td>
+                                                    <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 0.95rem; color: #0f172a;" id="applyLimitValue">
+                                                        ₹50,000 / Day
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <td style="padding: 5px 0;"><strong>Card Category:</strong></td>
                                                     <td
                                                         style="padding: 5px 8px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                                                        <label
+                                                        <!-- Debit Options -->
+                                                        <label id="applyClassicDebitWrapper"
                                                             style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
-                                                            <input type="radio" id="applyCardTypeDebit" name="cardType"
-                                                                value="debit" checked
-                                                                onchange="updateApplyFeeAndNotice('debit')"
+                                                            <input type="radio" id="applyTierClassicDebit" name="cardProductRadio"
+                                                                value="classic_debit" checked
+                                                                onchange="updateApplyFormForTier('classic_debit')"
                                                                 style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
-                                                            Debit Card (Fee: ₹250)
+                                                            Classic Debit (Fee: ₹250)
                                                         </label>
-                                                        <label
+                                                        <label id="applyPremiumDebitWrapper"
                                                             style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
-                                                            <input type="radio" id="applyCardTypeCredit" name="cardType"
-                                                                value="credit"
-                                                                onchange="updateApplyFeeAndNotice('credit')"
+                                                            <input type="radio" id="applyTierPremiumDebit" name="cardProductRadio"
+                                                                value="premium_debit"
+                                                                onchange="updateApplyFormForTier('premium_debit')"
                                                                 style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
-                                                            Credit Card (Fee: ₹500)
+                                                            Premium Debit (Fee: ₹500)
+                                                        </label>
+                                                        <!-- Credit Options -->
+                                                        <label id="applyRoyaleCreditWrapper"
+                                                            style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
+                                                            <input type="radio" id="applyTierRoyaleCredit" name="cardProductRadio"
+                                                                value="royale_credit"
+                                                                onchange="updateApplyFormForTier('royale_credit')"
+                                                                style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                                            Royale Credit (Fee: ₹500)
+                                                        </label>
+                                                        <label id="applyInfiniteCreditWrapper"
+                                                            style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
+                                                            <input type="radio" id="applyTierInfiniteCredit" name="cardProductRadio"
+                                                                value="infinite_credit"
+                                                                onchange="updateApplyFormForTier('infinite_credit')"
+                                                                style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                                            Infinite Credit (Fee: ₹2,000)
                                                         </label>
                                                     </td>
                                                 </tr>
@@ -2350,7 +2366,7 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary"
-                                        style="width: 100%; padding: 12px; background: #3b82f6; border-color: #3b82f6; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Poppins', sans-serif;"><i
+                                        style="width: 100%;"><i
                                             class="bx bx-check-shield"></i> Confirm and Submit Application Form</button>
                                 </div>
                             </form>
@@ -2401,7 +2417,7 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary"
-                                        style="width: 100%; padding: 12px;">Process Card Dues Settlement</button>
+                                        style="width: 100%;">Process Card Dues Settlement</button>
                                 </div>
                             </form>
                         </div>
@@ -2668,8 +2684,8 @@
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary"
-                                        style="width: 100%; padding: 12px; background: #10b981; border-color: #10b981; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Poppins', sans-serif;"><i
+                                    <button type="submit" class="btn btn-success"
+                                        style="width: 100%;"><i
                                             class="bx bx-check-shield"></i> Confirm and Submit Renewal Form</button>
                                 </div>
                             </form>
@@ -2734,7 +2750,7 @@
                                         <input type="hidden" id="intlEnabledInput" name="internationalEnabled">
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 5px; font-weight: 600;">
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 5px;">
                                         Save Control Preferences
                                     </button>
                                 </div>
@@ -2744,7 +2760,7 @@
 
                     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
                     <script>
-                        function openApplyModal() {
+                        function openApplyModal(cardTypeOrTier) {
                             // Initialize dates inside the paper form
                             const today = new Date();
                             const dd = String(today.getDate()).padStart(2, '0');
@@ -2755,8 +2771,8 @@
                             document.getElementById('applyFormDateStr').value = dateStr;
                             document.getElementById('applyFormReceivedOnStr').textContent = dateStr;
 
-                            // Sync card type fee
-                            updateApplyFeeAndNotice('debit');
+                            // Sync card type details and labels
+                            updateApplyFormForTier(cardTypeOrTier || 'debit');
 
                             // Sync holder name & signature
                             const inputName = document.getElementById('applyCardHolderName').value;
@@ -2860,9 +2876,115 @@
                             document.getElementById('intlEnabledInput').value = checked ? 'true' : 'false';
                         }
 
-                        function updateApplyFeeAndNotice(cardType) {
-                            const feeValue = cardType === 'credit' ? '500.00' : '250.00';
-                            document.getElementById('applyFeeValue').textContent = '₹ ' + feeValue;
+                        function updateApplyFormForTier(tier) {
+                            // Tiers: 'classic_debit', 'premium_debit', 'royale_credit', 'infinite_credit', 'debit', 'credit'
+                            let type = 'debit';
+                            let actualTier = 'classic';
+                            let fee = '250.00';
+                            let heading = 'ATM / Debit Card Application Request Form';
+                            let subject = 'Request for ATM/Debit Card Renewal & Issuance';
+                            let detailsHeading = 'ATM/Debit Card Details';
+                            let limitText = '₹ 50,000.00 / Daily limit';
+                            
+                            if (tier === 'classic_debit') {
+                                type = 'debit';
+                                actualTier = 'classic';
+                                fee = '250.00';
+                                heading = 'Classic Debit Card Application Request Form';
+                                subject = 'Request for Classic Debit Card Renewal & Issuance';
+                                detailsHeading = 'Classic Debit Card Details';
+                                limitText = '₹ 50,000.00 / Daily spending limit';
+                            } else if (tier === 'premium_debit') {
+                                type = 'debit';
+                                actualTier = 'premium';
+                                fee = '500.00';
+                                heading = 'Premium Debit Card Application Request Form';
+                                subject = 'Request for Premium Debit Card Renewal & Issuance';
+                                detailsHeading = 'Premium Debit Card Details';
+                                limitText = '₹ 2,00,000.00 / Daily spending limit';
+                            } else if (tier === 'royale_credit') {
+                                type = 'credit';
+                                actualTier = 'royale';
+                                fee = '500.00';
+                                heading = 'Royale Credit Card Application Request Form';
+                                subject = 'Request for Royale Credit Card Renewal & Issuance';
+                                detailsHeading = 'Royale Credit Card Details';
+                                limitText = '₹ 50,000.00 / Credit Limit';
+                            } else if (tier === 'infinite_credit') {
+                                type = 'credit';
+                                actualTier = 'infinite';
+                                fee = '2000.00';
+                                heading = 'Infinite Credit Card Application Request Form';
+                                subject = 'Request for Infinite Credit Card Renewal & Issuance';
+                                detailsHeading = 'Infinite Credit Card Details';
+                                limitText = '₹ 5,00,000.00 / Credit Limit';
+                            } else if (tier === 'credit') {
+                                type = 'credit';
+                                actualTier = 'royale'; // default for credit
+                                fee = '500.00';
+                                heading = 'Royale Credit Card Application Request Form';
+                                subject = 'Request for Royale Credit Card Renewal & Issuance';
+                                detailsHeading = 'Royale Credit Card Details';
+                                limitText = '₹ 50,000.00 / Credit Limit';
+                            } else {
+                                // default 'debit' or general
+                                type = 'debit';
+                                actualTier = 'classic';
+                                fee = '250.00';
+                                heading = 'Classic Debit Card Application Request Form';
+                                subject = 'Request for Classic Debit Card Renewal & Issuance';
+                                detailsHeading = 'Classic Debit Card Details';
+                                limitText = '₹ 50,000.00 / Daily spending limit';
+                            }
+
+                            // Sync actual checkboxes / radios
+                            const radioIdMap = {
+                                'classic_debit': 'applyTierClassicDebit',
+                                'premium_debit': 'applyTierPremiumDebit',
+                                'royale_credit': 'applyTierRoyaleCredit',
+                                'infinite_credit': 'applyTierInfiniteCredit',
+                                'debit': 'applyTierClassicDebit',
+                                'credit': 'applyTierRoyaleCredit'
+                            };
+                            const radioId = radioIdMap[tier] || 'applyTierClassicDebit';
+                            const targetRadio = document.getElementById(radioId);
+                            if (targetRadio) targetRadio.checked = true;
+
+                            document.getElementById('formCardType').value = type;
+                            document.getElementById('formCardTier').value = actualTier;
+                            document.getElementById('applyFeeValue').textContent = '₹ ' + fee;
+                            document.getElementById('applyFormHeading').textContent = heading;
+                            document.getElementById('applyFormSubject').textContent = subject;
+                            document.getElementById('applyDetailsBoxHeading').textContent = detailsHeading;
+                            document.getElementById('applyLimitValue').textContent = limitText;
+
+                            const classicDebitEl = document.getElementById('applyClassicDebitWrapper');
+                            const premiumDebitEl = document.getElementById('applyPremiumDebitWrapper');
+                            const royaleCreditEl = document.getElementById('applyRoyaleCreditWrapper');
+                            const infiniteCreditEl = document.getElementById('applyInfiniteCreditWrapper');
+
+                            if (type === 'debit') {
+                                if (classicDebitEl) classicDebitEl.style.display = 'inline-flex';
+                                if (premiumDebitEl) premiumDebitEl.style.display = 'inline-flex';
+                                if (royaleCreditEl) royaleCreditEl.style.display = 'none';
+                                if (infiniteCreditEl) infiniteCreditEl.style.display = 'none';
+                            } else {
+                                if (classicDebitEl) classicDebitEl.style.display = 'none';
+                                if (premiumDebitEl) premiumDebitEl.style.display = 'none';
+                                if (royaleCreditEl) royaleCreditEl.style.display = 'inline-flex';
+                                if (infiniteCreditEl) infiniteCreditEl.style.display = 'inline-flex';
+                            }
+
+                            // Calculate expiry date: today + 4 years (MM/YYYY format)
+                            const today = new Date();
+                            const expiryYear = today.getFullYear() + 4;
+                            const expiryMonth = String(today.getMonth() + 1).padStart(2, '0');
+                            const expiryDateStr = expiryMonth + ' / ' + expiryYear;
+
+                            const expiryInput = document.querySelector('#applyModal input[name="cardExpiry"]');
+                            if (expiryInput) {
+                                expiryInput.value = expiryDateStr;
+                            }
                         }
 
                         function updateApplyFormHolderName(nameValue) {

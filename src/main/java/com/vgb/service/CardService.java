@@ -84,6 +84,11 @@ public class CardService {
      * Apply for a new VGB Card. The card fee is paid immediately from the bank account balance.
      */
     public Card applyForCard(long customerId, long accountId, String cardType, String cardProvider, String cardHolderName) throws Exception {
+        String defaultTier = "credit".equalsIgnoreCase(cardType) ? "royale" : "classic";
+        return applyForCard(customerId, accountId, cardType, cardProvider, cardHolderName, defaultTier);
+    }
+
+    public Card applyForCard(long customerId, long accountId, String cardType, String cardProvider, String cardHolderName, String cardTier) throws Exception {
         runExpiryCheck();
         
         // 1. Verify account is active and owned by the customer
@@ -131,8 +136,33 @@ public class CardService {
             throw new Exception("Database error checking account details: " + e.getMessage());
         }
 
-        // 2. Set card fee based on Debit/Credit
-        BigDecimal cardFee = "credit".equalsIgnoreCase(cardType) ? new java.math.BigDecimal("500.0000") : new java.math.BigDecimal("250.0000");
+        // 2. Set card fee and limits based on selected card product tier
+        BigDecimal cardFee = BigDecimal.ZERO;
+        BigDecimal dailyLimit = new BigDecimal("50000.0000");
+        BigDecimal atmLimit = new BigDecimal("25000.0000");
+        BigDecimal onlineLimit = new BigDecimal("50000.0000");
+
+        if ("premium".equalsIgnoreCase(cardTier)) {
+            cardFee = new BigDecimal("500.0000");
+            dailyLimit = new BigDecimal("200000.0000");
+            atmLimit = new BigDecimal("50000.0000");
+            onlineLimit = new BigDecimal("150000.0000");
+        } else if ("royale".equalsIgnoreCase(cardTier)) {
+            cardFee = new BigDecimal("500.0000");
+            dailyLimit = new BigDecimal("50000.0000"); // Credit limit
+            atmLimit = new BigDecimal("25000.0000");
+            onlineLimit = new BigDecimal("50000.0000");
+        } else if ("infinite".equalsIgnoreCase(cardTier)) {
+            cardFee = new BigDecimal("2000.0000");
+            dailyLimit = new BigDecimal("500000.0000"); // Credit limit
+            atmLimit = new BigDecimal("50000.0000");
+            onlineLimit = new BigDecimal("450000.0000");
+        } else { // "classic" or default
+            cardFee = new BigDecimal("250.0000");
+            dailyLimit = new BigDecimal("50000.0000");
+            atmLimit = new BigDecimal("25000.0000");
+            onlineLimit = new BigDecimal("50000.0000");
+        }
 
         // 3. Verify sufficient balance in selected account to pay the card fee
         if (account.getBalance().compareTo(cardFee) < 0) {
@@ -158,8 +188,12 @@ public class CardService {
         card.setExpiryDate(expiryDate);
         card.setStatus("pending"); // Awaiting admin approval
         card.setCardFee(cardFee);
+        card.setDailyLimit(dailyLimit);
+        card.setAtmLimit(atmLimit);
+        card.setOnlineLimit(onlineLimit);
         card.setOutstandingBalance(BigDecimal.ZERO);
         card.setFeePaid(false); // fee will be paid on approval
+        card.setCardTier(cardTier.toLowerCase());
 
         try {
             // Create card record
@@ -265,7 +299,7 @@ public class CardService {
             transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
             transaction.setAmount(amount);
             transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-            transaction.setDescription("VGB Credit Card Bill Payment (Card: " + card.getMaskedCardNumber() + ")");
+            transaction.setDescription("VGB " + card.getCardTier().toUpperCase() + " Credit Card Bill Payment (Card: " + card.getMaskedCardNumber() + ")");
             transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
             transactionDAO.create(transaction);
 
@@ -309,7 +343,7 @@ public class CardService {
                 transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_FEE);
                 transaction.setAmount(card.getCardFee());
                 transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-                transaction.setDescription("VGB " + card.getCardProvider().toUpperCase() + " " + card.getCardType().toUpperCase() + " Card Fee");
+                transaction.setDescription("VGB " + card.getCardProvider().toUpperCase() + " " + card.getCardTier().toUpperCase() + " " + card.getCardType().toUpperCase() + " Card Fee");
                 transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
                 transactionDAO.create(transaction);
 
@@ -347,7 +381,7 @@ public class CardService {
                     transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_DEPOSIT);
                     transaction.setAmount(card.getCardFee());
                     transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-                    transaction.setDescription("Refund: VGB Card Application Rejection (Card: " + card.getMaskedCardNumber() + ")");
+                    transaction.setDescription("Refund: VGB " + card.getCardTier().toUpperCase() + " " + card.getCardType().toUpperCase() + " Card Application Rejection (Card: " + card.getMaskedCardNumber() + ")");
                     transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
                     transactionDAO.create(transaction);
 

@@ -170,15 +170,34 @@ public class CardServlet extends BaseServlet {
         String cardType = getParameter(request, "cardType", "");
         String cardProvider = getParameter(request, "cardProvider", "");
         String cardHolderName = getParameter(request, "cardHolderName", "");
+        String cardTier = getParameter(request, "cardTier", "classic");
 
-        if (accountId == 0 && !accountNumber.isEmpty()) {
+        if (requestFromAdmin) {
+            if (accountId != 0) {
+                try {
+                    Account account = accountService.getAccountById(accountId);
+                    if (account != null) {
+                        customerId = account.getCustomerId();
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to find account by ID for admin card application: " + accountId, e);
+                }
+            } else if (!accountNumber.isEmpty()) {
+                try {
+                    Account account = accountService.getAccountByNumber(accountNumber);
+                    if (account != null) {
+                        accountId = account.getAccountId();
+                        customerId = account.getCustomerId();
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to find account by number for admin card application: " + accountNumber, e);
+                }
+            }
+        } else if (accountId == 0 && !accountNumber.isEmpty()) {
             try {
                 Account account = accountService.getAccountByNumber(accountNumber);
                 if (account != null) {
                     accountId = account.getAccountId();
-                    if (requestFromAdmin) {
-                        customerId = account.getCustomerId();
-                    }
                 }
             } catch (Exception e) {
                 logger.error("Failed to find account by number: " + accountNumber, e);
@@ -197,7 +216,7 @@ public class CardServlet extends BaseServlet {
         }
 
         try {
-            Card card = cardService.applyForCard(customerId, accountId, cardType, cardProvider, cardHolderName);
+            Card card = cardService.applyForCard(customerId, accountId, cardType, cardProvider, cardHolderName, cardTier);
             if (card != null) {
                 request.getSession().setAttribute("success", "Card application submitted successfully! Charged card fee of ₹" + card.getCardFee().setScale(2) + ". Awaiting Admin approval.");
             } else {

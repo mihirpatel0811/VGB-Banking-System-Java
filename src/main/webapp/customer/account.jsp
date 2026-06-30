@@ -273,6 +273,9 @@
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
             transform: translateY(-1px);
         }
+        .btn-ledger:active {
+            transform: scale(0.96) !important;
+        }
         .btn-ledger i {
             font-size: 0.95rem;
         }

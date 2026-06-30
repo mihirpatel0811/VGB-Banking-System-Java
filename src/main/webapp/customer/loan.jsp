@@ -1034,8 +1034,8 @@
                 
                 <!-- Footer buttons -->
                 <div style="padding: 20px 30px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 15px; background: white;">
-                    <button type="button" class="btn btn-secondary" onclick="closeDetailsModal()" style="padding: 10px 22px;">Close</button>
-                    <button type="button" id="detailsApplyBtn" class="btn btn-primary" style="padding: 10px 25px; display: flex; align-items: center; gap: 8px; border: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);">
+                    <button type="button" class="btn btn-secondary" onclick="closeDetailsModal()">Close</button>
+                    <button type="button" id="detailsApplyBtn" class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;">
                         <span>Apply Now</span>
                         <i class="bx bx-chevron-right"></i>
                     </button>
@@ -1278,12 +1278,12 @@
                         
                         <!-- Action Buttons -->
                         <div class="no-print" style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--gray-200);">
-                            <button type="button" class="btn btn-secondary" onclick="closeLoanModal()" style="padding: 10px 22px;">Close</button>
-                            <button type="button" class="btn btn-secondary" onclick="printApplicationForm()" style="padding: 10px 22px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-300); color: var(--gray-700); background: white;">
+                            <button type="button" class="btn btn-secondary" onclick="closeLoanModal()">Close</button>
+                            <button type="button" class="btn btn-secondary" onclick="printApplicationForm()" style="display: flex; align-items: center; gap: 8px;">
                                 <i class="bx bx-printer"></i>
                                 <span>Print Form</span>
                             </button>
-                            <button type="submit" class="btn btn-primary" style="padding: 10px 25px;">
+                            <button type="submit" class="btn btn-primary">
                                 <span>Submit Application</span>
                                 <i class="bx bx-paper-plane"></i>
                             </button>

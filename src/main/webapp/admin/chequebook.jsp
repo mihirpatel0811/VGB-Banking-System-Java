@@ -537,7 +537,7 @@
         }
 
         .btn-lookup:active {
-            transform: translateY(1px);
+            transform: scale(0.96) !important;
         }
 
         /* --- LOOKUP RESULT CARDS --- */
@@ -754,7 +754,7 @@
                     <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
                         <i class="bx bx-task" style="color: var(--primary-500);"></i> Executive Cheque Book Request Ledger
                     </h3>
-                    <button onclick="openApplyModal()" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin: 0; background: var(--gradient-primary); color: white; border: none; cursor: pointer; transition: all 0.3s ease;">
+                    <button onclick="openApplyModal()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">
                         <i class="bx bx-plus-circle"></i> Apply Cheque Book
                     </button>
                 </div>
@@ -1173,8 +1173,8 @@
                    </div>
 
                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                       <button type="button" onclick="closeApplyModal()" class="btn-action btn-action-reject" style="padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); color: #ef4444;">Cancel</button>
-                       <button type="submit" class="btn btn-primary" style="padding: 8px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; background: var(--gradient-primary); color: white; border: none;">Submit Application</button>
+                        <button type="button" onclick="closeApplyModal()" class="btn btn-danger">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
                    </div>
                </form>
            </div>
