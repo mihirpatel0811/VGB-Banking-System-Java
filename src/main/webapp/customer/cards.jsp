@@ -1515,6 +1515,7 @@
                             transform: scale(1.15);
                         }
                     </style>
+                    <link href="${pageContext.request.contextPath}/assest/css/cards3d.css" rel="stylesheet">
                 </head>
 
                 <body class="bank-home-page">
@@ -1630,16 +1631,14 @@
                                         Debit and Credit Cards, clear dues, and extend your cards validity dynamically.
                                     </p>
                                 </div>
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                    <button onclick="openApplyModal('debit')" class="btn btn-primary"
-                                        style="display: inline-flex; align-items: center; gap: 8px;">
-                                        <i class="bx bx-plus-circle"></i> Apply Debit Card
-                                    </button>
-                                    <button onclick="openApplyModal('credit')" class="btn"
-                                        style="display: inline-flex; align-items: center; gap: 8px; background: var(--accent-gradient); color: white; border: none; padding: 10px 20px; font-weight: 600; border-radius: var(--radius-full); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);">
-                                        <i class="bx bx-plus-circle"></i> Apply Credit Card
-                                    </button>
-                                </div>
+                                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                     <button onclick="openApplyModal('debit')" class="btn-apply-debit">
+                                         <i class="bx bx-plus-circle"></i> Apply Debit Card
+                                     </button>
+                                     <button onclick="openApplyModal('credit')" class="btn-apply-credit">
+                                         <i class="bx bx-plus-circle"></i> Apply Credit Card
+                                     </button>
+                                 </div>
                             </div>
 
                             <!-- Alerts -->
@@ -1673,251 +1672,114 @@
                                                         class="vgb-atm-card ${card.cardType} ${card.cardProvider} ${card.dailyLimit gt 50000 ? 'premium-tier' : ''} ${card.status ne 'active' ? 'inactive-card' : ''}">
                                                         <!-- Front Face -->
                                                         <div class="card-face card-front">
-                                                            <!-- Shared/Common: Bank Name Header -->
-                                                            <div class="card-bank-header">
-                                                                <div class="card-logo-v">
-                                                                    <img src="${pageContext.request.contextPath}/assest/images/image.png"
-                                                                        alt="VGB"
-                                                                        style="width: 22px; height: 22px; object-fit: contain;">
+                                                            <!-- Header -->
+                                                            <div class="card-header">
+                                                                <div class="bank-info">
+                                                                    <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" class="card-bank-logo">
+                                                                    <div class="bank-name">
+                                                                        <span class="bank-title">VERTEX</span>
+                                                                        <span class="bank-subtitle">GALAXY BANK</span>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="card-bank-name-stack">
-                                                                    <span class="bank-title">VERTEX</span>
-                                                                    <span class="bank-subtitle">GALAXY BANK</span>
+                                                                <div class="card-type-label">
+                                                                    <span class="type-text">${card.cardType}</span>
+                                                                    <span class="card-provider-name">${card.cardProvider}</span>
                                                                 </div>
                                                             </div>
 
-                                                            <!-- DEBIT FRONT LAYOUT -->
-                                                            <div class="debit-front-layout">
-                                                                <div class="debit-header-right">
-                                                                    <span class="debit-label-txt">DEBIT</span>
-                                                                    <i class="bx bx-wifi contactless-icon-debit"></i>
+                                                            <!-- Body -->
+                                                            <div class="card-body">
+                                                                <div class="chip-wifi-row">
+                                                                    <svg class="card-chip-svg" viewBox="0 0 100 80" width="42" height="34" xmlns="http://www.w3.org/2000/svg">
+                                                                        <rect width="100" height="80" rx="10" fill="url(#chipGoldVal)" />
+                                                                        <path d="M 0 30 H 100 M 0 50 H 100 M 40 0 V 80 M 60 0 V 80" stroke="#78350f" stroke-width="1.5" fill="none" opacity="0.4"/>
+                                                                        <rect x="15" y="15" width="20" height="15" rx="3" fill="none" stroke="#78350f" stroke-width="1.5" opacity="0.4"/>
+                                                                        <rect x="65" y="15" width="20" height="15" rx="3" fill="none" stroke="#78350f" stroke-width="1.5" opacity="0.4"/>
+                                                                        <rect x="15" y="50" width="20" height="15" rx="3" fill="none" stroke="#78350f" stroke-width="1.5" opacity="0.4"/>
+                                                                        <rect x="65" y="50" width="20" height="15" rx="3" fill="none" stroke="#78350f" stroke-width="1.5" opacity="0.4"/>
+                                                                        <defs>
+                                                                            <linearGradient id="chipGoldVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                                <stop offset="0%" stop-color="#fbbf24" />
+                                                                                <stop offset="50%" stop-color="#d97706" />
+                                                                                <stop offset="100%" stop-color="#b45309" />
+                                                                            </linearGradient>
+                                                                        </defs>
+                                                                    </svg>
+                                                                    <i class="bx bx-wifi contactless-icon"></i>
                                                                 </div>
-
-                                                                <div class="debit-chip-row">
-                                                                    <div class="metallic-chip"></div>
-                                                                </div>
-
-                                                                <div class="card-number-display debit-number">
-                                                                    ${card.cardNumber}
-                                                                </div>
-
-                                                                <div class="debit-expiry-row">
-                                                                    <span class="expiry-label">VALID<br>THRU</span>
-                                                                    <span class="expiry-value">
-                                                                        <fmt:formatDate value="${card.expiryDate}" pattern="MM/yy" />
-                                                                    </span>
-                                                                </div>
-
-                                                                <div class="debit-bottom-row">
-                                                                    <div class="holder-name debit-holder">${card.cardHolderName}</div>
-                                                                    <div class="debit-brand-logo-container">
-                                                                        <c:choose>
-                                                                            <c:when test="${card.cardProvider eq 'visa'}">
-                                                                                <div class="brand-visa-secure">
-                                                                                    <span class="visa-secure-text">VISA</span>
-                                                                                    <span class="visa-secure-sub">SECURE</span>
-                                                                                </div>
-                                                                            </c:when>
-                                                                            <c:when test="${card.cardProvider eq 'mastercard'}">
-                                                                                <div class="brand-mastercard-id">
-                                                                                    <div class="mc-circles-id">
-                                                                                        <span class="circle-id red-id"></span>
-                                                                                        <span class="circle-id orange-id"></span>
-                                                                                    </div>
-                                                                                    <span class="mc-id-text">mastercard<br><span class="id-text">ID</span></span>
-                                                                                </div>
-                                                                            </c:when>
-                                                                            <c:otherwise>
-                                                                                <div class="brand-rupay-global">
-                                                                                    <span class="rupay-global-text">RuPay<span class="arrow-accent">▶</span></span>
-                                                                                    <span class="rupay-global-sub">GLOBAL</span>
-                                                                                </div>
-                                                                            </c:otherwise>
-                                                                        </c:choose>
-                                                                    </div>
-                                                                </div>
+                                                                <div class="card-number-display">${card.cardNumber}</div>
                                                             </div>
 
-                                                            <!-- CREDIT FRONT LAYOUT -->
-                                                            <div class="credit-front-layout">
-                                                                <div class="debit-header-right">
-                                                                    <span class="debit-label-txt">CREDIT</span>
-                                                                    <i class="bx bx-wifi contactless-icon-debit"></i>
+                                                            <!-- Footer -->
+                                                            <div class="card-footer">
+                                                                <div class="footer-info">
+                                                                    <span class="footer-label">Card Holder</span>
+                                                                    <span class="footer-value holder-name-text">${card.cardHolderName}</span>
                                                                 </div>
-
-                                                                <div class="debit-chip-row">
-                                                                    <div class="metallic-chip"></div>
-                                                                </div>
-
-                                                                <div class="card-number-display debit-number">
-                                                                    ${card.cardNumber}
-                                                                </div>
-
-                                                                <div class="debit-expiry-row">
-                                                                    <span class="expiry-label">VALID<br>THRU</span>
-                                                                    <span class="expiry-value">
+                                                                <div class="footer-info expiry-container">
+                                                                    <span class="footer-label">Expires</span>
+                                                                    <span class="footer-value">
                                                                         <fmt:formatDate value="${card.expiryDate}" pattern="MM/yy" />
                                                                     </span>
                                                                 </div>
-
-                                                                <div class="debit-bottom-row">
-                                                                    <div class="holder-name debit-holder">${card.cardHolderName}</div>
-                                                                    <div class="debit-brand-logo-container">
-                                                                        <c:choose>
-                                                                            <c:when test="${card.cardProvider eq 'visa'}">
-                                                                                <div class="brand-visa-secure">
-                                                                                    <span class="visa-secure-text">VISA</span>
-                                                                                    <span class="visa-secure-sub">SECURE</span>
+                                                                <div class="card-logo-container">
+                                                                    <c:choose>
+                                                                        <c:when test="${card.cardProvider eq 'visa'}">
+                                                                            <div class="logo-visa">
+                                                                                <span class="brand-text">VISA</span>
+                                                                                <span class="brand-sub">SECURE</span>
+                                                                            </div>
+                                                                        </c:when>
+                                                                        <c:when test="${card.cardProvider eq 'mastercard'}">
+                                                                            <div class="logo-mastercard">
+                                                                                <div class="mc-circles-wrapper">
+                                                                                    <span class="mc-circle mc-red"></span>
+                                                                                    <span class="mc-circle mc-orange"></span>
                                                                                 </div>
-                                                                            </c:when>
-                                                                            <c:when test="${card.cardProvider eq 'mastercard'}">
-                                                                                <div class="brand-mastercard-id">
-                                                                                    <div class="mc-circles-id">
-                                                                                        <span class="circle-id red-id"></span>
-                                                                                        <span class="circle-id orange-id"></span>
-                                                                                    </div>
-                                                                                    <span class="mc-id-text">mastercard<br><span class="id-text">ID</span></span>
-                                                                                </div>
-                                                                            </c:when>
-                                                                            <c:otherwise>
-                                                                                <div class="brand-rupay-global">
-                                                                                    <span class="rupay-global-text">RuPay<span class="arrow-accent">▶</span></span>
-                                                                                    <span class="rupay-global-sub">GLOBAL</span>
-                                                                                </div>
-                                                                            </c:otherwise>
-                                                                        </c:choose>
-                                                                    </div>
+                                                                                <span class="brand-text-mc">mastercard</span>
+                                                                            </div>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <div class="logo-rupay">
+                                                                                <span class="rupay-text-main">RuPay</span>
+                                                                                <span class="rupay-sub-main">GLOBAL</span>
+                                                                            </div>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <!-- Back Face -->
                                                         <div class="card-face card-back">
-                                                            <!-- DEBIT BACK LAYOUT -->
-                                                            <div class="debit-back-layout">
-                                                                <div class="card-back-magnetic-strip" style="margin: 0 -25px;"></div>
-                                                                
-                                                                <div class="debit-back-info-bar">
-                                                                    <span class="debit-info-web">www.vertexgalaxybank.com</span>
-                                                                    <span class="debit-info-phone">For customer service, call +1 234 567 8900</span>
-                                                                </div>
-                                                                
-                                                                <div class="debit-back-grid">
-                                                                    <div class="debit-grid-left">
-                                                                        <div class="debit-signature-area">
-                                                                            <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
-                                                                            <div class="debit-sig-strip-wrapper">
-                                                                                <div class="debit-signature-pattern"></div>
-                                                                                <div class="debit-sig-cvv-box" onclick="toggleCvv(this, '${card.cvv}')" title="Click to show CVV" style="cursor: pointer;">
-                                                                                    <span class="cvv-val cvv-text">•••</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
-                                                                        </div>
-                                                                        
-                                                                        <div class="debit-back-network-logo">
-                                                                            <c:choose>
-                                                                                <c:when test="${card.cardProvider eq 'visa'}">
-                                                                                    <div class="brand-visa-secure">
-                                                                                        <span class="visa-secure-text" style="font-size: 1rem;">VISA</span>
-                                                                                        <span class="visa-secure-sub" style="font-size: 0.35rem; letter-spacing: 0.8px;">SECURE</span>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:when test="${card.cardProvider eq 'mastercard'}">
-                                                                                    <div class="brand-mastercard-id" style="flex-direction: row; gap: 6px; align-items: center;">
-                                                                                        <div class="mc-circles-id">
-                                                                                            <span class="circle-id red-id"></span>
-                                                                                            <span class="circle-id orange-id"></span>
-                                                                                        </div>
-                                                                                        <span class="mc-id-text" style="text-align: left;">mastercard<br><span class="id-text">ID</span></span>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <div class="brand-rupay-global">
-                                                                                        <span class="rupay-global-text" style="font-size: 0.95rem;">RuPay<span class="arrow-accent">▶</span></span>
-                                                                                        <span class="rupay-global-sub" style="font-size: 0.35rem;">GLOBAL</span>
-                                                                                    </div>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </div>
+                                                            <div class="magnetic-strip"></div>
+                                                            <div class="back-body">
+                                                                <div class="signature-cvv-section">
+                                                                    <div class="signature-strip">
+                                                                        <span class="signature-watermark">VERTEX GALAXY BANK</span>
                                                                     </div>
-                                                                    
-                                                                    <div class="debit-grid-right">
-                                                                        <div class="debit-back-vgb-header">
-                                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
-                                                                            <div class="logo-text-stacked">
-                                                                                <span class="text-top">VERTEX</span>
-                                                                                <span class="text-bottom">GALAXY BANK</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <p class="debit-property-disclaimer">
-                                                                            This card is the property of Vertex Galaxy Bank and must be returned upon request.
-                                                                        </p>
+                                                                    <div class="cvv-box" onclick="event.stopPropagation(); toggleCvv(this, '${card.cvv}')" title="Click to show CVV">
+                                                                        <span class="cvv-label">CVV</span>
+                                                                        <span class="cvv-value cvv-text">•••</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="back-extra-info">
+                                                                    <p class="disclaimer-text">
+                                                                        This card is property of Vertex Galaxy Bank. Use of this card is subject to the cardholder agreement. If found, please return to: Vertex Galaxy Bank, Main Corporate Branch, Mumbai.
+                                                                    </p>
+                                                                    <div class="back-contact-info">
+                                                                        <span>Support: 1800-VGB-BANK</span>
+                                                                        <span>Web: www.vertexgalaxybank.com</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                            <!-- CREDIT BACK LAYOUT -->
-                                                            <div class="credit-back-layout">
-                                                                <div class="card-back-magnetic-strip" style="margin: 0 -25px;"></div>
-                                                                
-                                                                <div class="debit-back-info-bar">
-                                                                    <span class="debit-info-web">www.vertexgalaxybank.com</span>
-                                                                    <span class="debit-info-phone">For customer service, call +1 234 567 8900</span>
+                                                            <div class="back-footer">
+                                                                <div class="back-bank-brand">
+                                                                    <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" class="back-logo-img">
+                                                                    <span class="back-bank-name">VERTEX GALAXY BANK</span>
                                                                 </div>
-                                                                
-                                                                <div class="debit-back-grid">
-                                                                    <div class="debit-grid-left">
-                                                                        <div class="debit-signature-area">
-                                                                            <span class="debit-sig-label">AUTHORIZED SIGNATURE</span>
-                                                                            <div class="debit-sig-strip-wrapper">
-                                                                                <div class="debit-signature-pattern"></div>
-                                                                                <div class="debit-sig-cvv-box" onclick="toggleCvv(this, '${card.cvv}')" title="Click to show CVV" style="cursor: pointer;">
-                                                                                    <span class="cvv-val cvv-text">•••</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <span class="debit-sig-label">NOT VALID UNLESS SIGNED</span>
-                                                                        </div>
-                                                                        
-                                                                        <div class="debit-back-network-logo">
-                                                                            <c:choose>
-                                                                                <c:when test="${card.cardProvider eq 'visa'}">
-                                                                                    <div class="brand-visa-secure">
-                                                                                        <span class="visa-secure-text" style="font-size: 1rem;">VISA</span>
-                                                                                        <span class="visa-secure-sub" style="font-size: 0.35rem; letter-spacing: 0.8px;">SECURE</span>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:when test="${card.cardProvider eq 'mastercard'}">
-                                                                                    <div class="brand-mastercard-id" style="flex-direction: row; gap: 6px; align-items: center;">
-                                                                                        <div class="mc-circles-id">
-                                                                                            <span class="circle-id red-id"></span>
-                                                                                            <span class="circle-id orange-id"></span>
-                                                                                        </div>
-                                                                                        <span class="mc-id-text" style="text-align: left;">mastercard<br><span class="id-text">ID</span></span>
-                                                                                    </div>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <div class="brand-rupay-global">
-                                                                                        <span class="rupay-global-text" style="font-size: 0.95rem;">RuPay<span class="arrow-accent">▶</span></span>
-                                                                                        <span class="rupay-global-sub" style="font-size: 0.35rem;">GLOBAL</span>
-                                                                                    </div>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </div>
-                                                                    </div>
-                                                                    
-                                                                    <div class="debit-grid-right">
-                                                                        <div class="debit-back-vgb-header">
-                                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 16px; height: 16px; object-fit: contain;">
-                                                                            <div class="logo-text-stacked">
-                                                                                <span class="text-top">VERTEX</span>
-                                                                                <span class="text-bottom">GALAXY BANK</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <p class="debit-property-disclaimer">
-                                                                            This card is the property of Vertex Galaxy Bank and must be returned upon request.
-                                                                        </p>
-                                                                    </div>
+                                                                <div class="back-hologram">
+                                                                    <div class="hologram-seal"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1925,71 +1787,45 @@
                                                 </div>
 
                                                 <!-- External Control Bar & Limits summary under the 3D card wrapper -->
-                                                <div style="width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 8px;">
+                                                <div style="width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 12px;">
                                                     <!-- Limits Badges Summary -->
                                                     <c:if test="${card.status eq 'active'}">
-                                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
-                                                             <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 6px 10px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.12); display: flex; flex-direction: column; gap: 1px; box-shadow: var(--shadow-sm);">
-                                                                 <span style="font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 4px;"><i class="bx bx-atm" style="font-size: 0.8rem; color: var(--accent-emerald);"></i> ATM Limit</span>
-                                                                 <strong style="font-size: 0.8rem; color: var(--gray-700);">₹ <fmt:formatNumber value="${card.atmLimit}" minFractionDigits="2" maxFractionDigits="2"/></strong>
+                                                        <div class="card-limits-summary">
+                                                             <div class="limit-box">
+                                                                 <span class="limit-box-label">ATM Limit</span>
+                                                                 <strong class="limit-box-value">₹ <fmt:formatNumber value="${card.atmLimit}" minFractionDigits="2" maxFractionDigits="2"/></strong>
                                                              </div>
-                                                             <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 6px 10px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.12); display: flex; flex-direction: column; gap: 1px; box-shadow: var(--shadow-sm);">
-                                                                 <span style="font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 4px;"><i class="bx bx-shopping-bag" style="font-size: 0.8rem; color: #d97706;"></i> Online Limit</span>
-                                                                 <strong style="font-size: 0.8rem; color: var(--gray-700);">₹ <fmt:formatNumber value="${card.onlineLimit}" minFractionDigits="2" maxFractionDigits="2"/></strong>
+                                                             <div class="limit-box">
+                                                                 <span class="limit-box-label">
+                                                                     <i class="bx bx-shopping-bag" style="color: #d97706; font-size: 0.85rem;"></i> Online Limit
+                                                                 </span>
+                                                                 <strong class="limit-box-value">₹ <fmt:formatNumber value="${card.onlineLimit}" minFractionDigits="2" maxFractionDigits="2"/></strong>
                                                              </div>
                                                         </div>
                                                     </c:if>
                                                     
-                                                    <div
-                                                        style="display: flex; justify-content: space-between; align-items: center; width: 100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.15); box-shadow: var(--shadow-sm);">
+                                                    <div class="card-action-bar">
                                                         <div>
-                                                            <c:choose>
-                                                                <c:when test="${card.status eq 'active'}">
-                                                                    <span
-                                                                        style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                            class="bx bxs-circle"
-                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                        Active</span>
-                                                                </c:when>
-                                                                <c:when test="${card.status eq 'pending'}">
-                                                                    <span
-                                                                        style="background: rgba(245, 158, 11, 0.12); color: #b45309; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                            class="bx bxs-circle"
-                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                        Pending</span>
-                                                                </c:when>
-                                                                <c:when test="${card.status eq 'expired'}">
-                                                                    <span
-                                                                        style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                            class="bx bxs-circle"
-                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                        Expired</span>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <span
-                                                                        style="background: rgba(156, 163, 175, 0.12); color: #4b5563; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-sm); text-transform: uppercase;"><i
-                                                                            class="bx bxs-circle"
-                                                                            style="font-size: 0.5rem; vertical-align: middle;"></i>
-                                                                        Closed</span>
-                                                                </c:otherwise>
-                                                            </c:choose>
+                                                            <div class="status-badge-vertical ${card.status}">
+                                                                <span class="status-dot"></span>
+                                                                <span class="status-text">${card.status}</span>
+                                                            </div>
                                                         </div>
                                                         <div style="display: flex; gap: 8px; align-items: center;">
                                                             <c:if test="${card.status eq 'active'}">
                                                                 <button type="button"
                                                                     onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', '${card.internationalEnabled}')"
-                                                                    class="btn btn-secondary btn-sm"
-                                                                    style="margin: 0; display: inline-flex; align-items: center; gap: 3px;"
+                                                                    class="btn-limits-action"
                                                                     title="Manage Limits & Controls">
-                                                                    <i class="bx bx-slider-alt" style="font-size: 0.9rem;"></i> Limits
+                                                                    <i class="bx bx-slider-alt"></i> Limits
                                                                 </button>
                                                             </c:if>
                                                             <c:if
                                                                 test="${card.cardType eq 'credit' and card.status eq 'active' and card.outstandingBalance gt 0}">
                                                                 <button type="button"
                                                                     onclick="openPayDuesModal('${card.cardId}', '${card.outstandingBalance}')"
-                                                                    class="btn btn-primary btn-sm"
-                                                                    style="margin: 0;">Pay Dues</button>
+                                                                    class="btn-renew-action"
+                                                                    style="background: #ef4444 !important;">Pay Dues</button>
                                                             </c:if>
                                                             <c:if
                                                                 test="${card.status eq 'expired' or card.status eq 'closed'}">
@@ -1997,14 +1833,12 @@
                                                                     var="formattedExpiryDate" />
                                                                 <button type="button"
                                                                     onclick="openRenewModal('${card.cardId}', '${card.cardType}', '${card.cardFee}', '${card.cardNumber}', '${formattedExpiryDate}', '${card.cardProvider}')"
-                                                                    class="btn btn-success btn-sm"
-                                                                    style="margin: 0;">Renew</button>
+                                                                    class="btn-renew-action">Renew</button>
                                                             </c:if>
                                                             <c:if test="${card.status eq 'active'}">
                                                                 <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
-                                                                    class="btn btn-danger btn-sm"
-                                                                    onclick="return confirm('Are you sure you want to permanently close this VGB card?');"
-                                                                    style="margin: 0; text-decoration: none;">Close</a>
+                                                                    class="btn-close-action"
+                                                                    onclick="return confirm('Are you sure you want to permanently close this VGB card?');">Close</a>
                                                             </c:if>
                                                         </div>
                                                     </div>
@@ -3056,6 +2890,76 @@
                                     }
                                 });
                             }
+
+                            // 3D Card Hover Tilt and Gloss Sheen Effect
+                            const wrappers = document.querySelectorAll('.card-3d-wrapper');
+                            wrappers.forEach(wrapper => {
+                                const card = wrapper.querySelector('.vgb-atm-card');
+                                if (!card || card.classList.contains('inactive-card')) return;
+
+                                // Add dynamic shine/glare element to front and back faces
+                                const frontFace = wrapper.querySelector('.card-front');
+                                const backFace = wrapper.querySelector('.card-back');
+
+                                const shineFront = document.createElement('div');
+                                shineFront.className = 'card-shine';
+                                if (frontFace) frontFace.appendChild(shineFront);
+
+                                const shineBack = document.createElement('div');
+                                shineBack.className = 'card-shine';
+                                if (backFace) backFace.appendChild(shineBack);
+
+                                wrapper.addEventListener('mousemove', (e) => {
+                                    const rect = wrapper.getBoundingClientRect();
+                                    const x = e.clientX - rect.left;
+                                    const y = e.clientY - rect.top;
+
+                                    const px = x / rect.width;
+                                    const py = y / rect.height;
+
+                                    if (card.classList.contains('flipped')) {
+                                        // Back face hover tilt calculations
+                                        const ry = 180 + (px - 0.5) * 25; // range 167.5 to 192.5
+                                        const rx = -(py - 0.5) * 25;      // range -12.5 to 12.5
+                                        card.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+
+                                        // Back face shine mapping
+                                        const shineX = (1 - px) * 100;
+                                        const shineY = py * 100;
+                                        if (shineBack) {
+                                            shineBack.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                                        }
+                                    } else {
+                                        // Front face hover tilt calculations
+                                        const ry = (px - 0.5) * 25; // range -12.5 to 12.5
+                                        const rx = -(py - 0.5) * 25; // range -12.5 to 12.5
+                                        card.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+
+                                        // Front face shine mapping
+                                        const shineX = px * 100;
+                                        const shineY = py * 100;
+                                        if (shineFront) {
+                                            shineFront.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                                        }
+                                    }
+                                });
+
+                                wrapper.addEventListener('mouseleave', () => {
+                                    card.style.transition = 'transform 0.5s ease';
+                                    if (card.classList.contains('flipped')) {
+                                        card.style.transform = 'rotateY(180deg)';
+                                    } else {
+                                        card.style.transform = 'rotateY(0deg)';
+                                    }
+
+                                    if (shineFront) shineFront.style.background = 'none';
+                                    if (shineBack) shineBack.style.background = 'none';
+
+                                    setTimeout(() => {
+                                        card.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                                    }, 500);
+                                });
+                            });
                         });
                     </script>
                 </body>

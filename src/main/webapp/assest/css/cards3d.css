@@ -1,0 +1,824 @@
+/* 3D ATM CARD GRID LAYOUT & INTERACTIVE MODELS */
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* ATM CARD SCENE STYLING */
+.card-3d-wrapper {
+    width: 340px;
+    height: 215px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    perspective: 1200px;
+}
+
+.vgb-atm-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    border-radius: 16px;
+}
+
+.vgb-atm-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.vgb-atm-card .card-face {
+    position: absolute;
+    inset: 0;
+    padding: 22px 24px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    color: #ffffff;
+    transform-style: preserve-3d;
+}
+
+.vgb-atm-card .card-front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.vgb-atm-card .card-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+    padding: 0;
+    background: #0c0d12;
+}
+
+/* --- DEBIT & CREDIT CARD THEMES --- */
+
+/* 1. Classic Debit */
+.vgb-atm-card.debit:not(.premium-tier) .card-front {
+    background: radial-gradient(circle at 10% 20%, #1e3c72 0%, #122548 90%) !important;
+    box-shadow: 0 12px 30px rgba(30, 60, 114, 0.3) !important;
+}
+.vgb-atm-card.debit:not(.premium-tier) .card-back {
+    background: radial-gradient(circle at 50% 50%, #122548 0%, #070f1e 100%) !important;
+    border: 1.5px solid rgba(30, 60, 114, 0.2) !important;
+}
+
+/* 2. Premium Debit */
+.vgb-atm-card.debit.premium-tier .card-front {
+    background: radial-gradient(circle at 10% 20%, #1e293b 0%, #0f172a 90%) !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35) !important;
+    border: 1.5px solid rgba(6, 182, 212, 0.35) !important;
+}
+.vgb-atm-card.debit.premium-tier .card-front::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(6, 182, 212, 0.03) 0px, rgba(6, 182, 212, 0.03) 2px, transparent 2px, transparent 12px);
+    pointer-events: none;
+}
+.vgb-atm-card.debit.premium-tier .card-back {
+    background: radial-gradient(circle at 50% 50%, #1e293b 0%, #090d16 100%) !important;
+    border: 1.5px solid rgba(6, 182, 212, 0.35) !important;
+}
+
+/* 3. Royale Credit */
+.vgb-atm-card.credit:not(.premium-tier) .card-front {
+    background: radial-gradient(circle at 10% 20%, #4c0519 0%, #1c0009 90%) !important;
+    box-shadow: 0 12px 30px rgba(76, 5, 25, 0.3) !important;
+    border: 1.5px solid rgba(220, 38, 38, 0.2) !important;
+}
+.vgb-atm-card.credit:not(.premium-tier) .card-front .footer-value,
+.vgb-atm-card.credit:not(.premium-tier) .card-number-display {
+    color: #f59e0b !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+.vgb-atm-card.credit:not(.premium-tier) .card-back {
+    background: radial-gradient(circle at 50% 50%, #25020c 0%, #0b0003 100%) !important;
+    border: 1.5px solid rgba(220, 38, 38, 0.2) !important;
+}
+
+/* 4. Infinite Credit */
+.vgb-atm-card.credit.premium-tier .card-front {
+    background: linear-gradient(135deg, #0f0f12 0%, #1a1a24 45%, #050508 100%) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5) !important;
+    border: 1.5px solid rgba(168, 85, 247, 0.4) !important;
+}
+.vgb-atm-card.credit.premium-tier .card-front::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(-45deg, transparent 0px, transparent 8px, rgba(168, 85, 247, 0.04) 8px, rgba(168, 85, 247, 0.04) 10px);
+    pointer-events: none;
+}
+.vgb-atm-card.credit.premium-tier .card-front .footer-value,
+.vgb-atm-card.credit.premium-tier .card-number-display {
+    color: #f3e8ff !important;
+    text-shadow: 0 0 8px rgba(168, 85, 247, 0.5) !important;
+}
+.vgb-atm-card.credit.premium-tier .card-back {
+    background: radial-gradient(circle at 50% 50%, #151124 0%, #05030a 100%) !important;
+    border: 1.5px solid rgba(168, 85, 247, 0.4) !important;
+}
+
+/* Inactive / Expired / Closed Cards */
+.vgb-atm-card.inactive-card {
+    opacity: 0.85;
+}
+.vgb-atm-card.inactive-card .card-face {
+    filter: grayscale(100%) brightness(0.6) contrast(90%) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+.vgb-atm-card.inactive-card::after {
+    content: 'INACTIVE';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg) translateZ(30px);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: rgba(239, 68, 68, 0.4);
+    border: 2px solid rgba(239, 68, 68, 0.4);
+    padding: 4px 12px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    z-index: 15;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+
+/* Card Interactive Glow/Shine Overlay */
+.card-shine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 12;
+    border-radius: inherit;
+    mix-blend-mode: overlay;
+    transition: background 0.05s ease;
+}
+
+/* Chip & Contactless Icons */
+.card-chip-svg {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    z-index: 5;
+}
+
+.contactless-icon {
+    font-size: 1.35rem;
+    color: rgba(255, 255, 255, 0.8);
+    transform: rotate(90deg);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+/* Fonts & Text Fields */
+.card-number-display {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.3rem;
+    letter-spacing: 2.5px;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    margin: 15px 0 5px;
+    z-index: 5;
+    transform: translateZ(20px);
+}
+
+.card-face .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+}
+
+.bank-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-bank-logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.bank-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.bank-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.bank-subtitle {
+    font-size: 0.45rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Poppins', sans-serif;
+}
+
+.card-type-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.1;
+}
+
+.type-text {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.card-provider-name {
+    font-size: 0.45rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 1px;
+}
+
+.card-face .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 5;
+}
+
+.chip-wifi-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.card-face .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 5;
+    transform: translateZ(15px);
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.footer-label {
+    font-size: 0.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.holder-name-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+}
+
+.expiry-container {
+    margin-left: 15px;
+}
+
+/* Brand Logos Front */
+.card-logo-container {
+    display: flex;
+    align-items: flex-end;
+    height: 28px;
+}
+
+.logo-visa {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 0.95;
+}
+
+.logo-visa .brand-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-style: italic;
+    color: #ffffff;
+}
+
+.logo-visa .brand-sub {
+    font-size: 0.38rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 1px;
+}
+
+.logo-mastercard {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mc-circles-wrapper {
+    display: flex;
+    position: relative;
+    width: 26px;
+    height: 16px;
+}
+
+.mc-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.mc-red {
+    background: #eb001b;
+    left: 0;
+}
+
+.mc-orange {
+    background: #ff5f00;
+    right: 0;
+    opacity: 0.9;
+}
+
+.brand-text-mc {
+    font-size: 0.45rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.logo-rupay {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 0.95;
+}
+
+.rupay-text-main {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-style: italic;
+    color: #ffffff;
+}
+
+.rupay-sub-main {
+    font-size: 0.38rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.8px;
+}
+
+/* --- CARD BACK FACING DETAILS --- */
+.magnetic-strip {
+    height: 36px;
+    background: #111215;
+    width: 100%;
+    margin-top: 15px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.back-body {
+    padding: 15px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.signature-cvv-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.signature-strip {
+    background: repeating-linear-gradient(45deg, #f1f5f9, #f1f5f9 6px, #cbd5e1 6px, #cbd5e1 12px);
+    height: 28px;
+    flex-grow: 1;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.signature-watermark {
+    font-family: 'Brush Script MT', cursive, sans-serif;
+    font-size: 0.85rem;
+    color: #64748b;
+    letter-spacing: 1px;
+    user-select: none;
+    opacity: 0.7;
+}
+
+.cvv-box {
+    background: #ffffff;
+    height: 28px;
+    width: 45px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    padding: 2px 0;
+    box-sizing: border-box;
+}
+
+.cvv-label {
+    font-size: 0.38rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.cvv-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+}
+
+.back-extra-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.disclaimer-text {
+    font-size: 0.4rem;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+    text-align: justify;
+}
+
+.back-contact-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.4rem;
+    color: rgba(255, 255, 255, 0.55);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 4px;
+}
+
+.back-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 24px 15px;
+    background: rgba(0, 0, 0, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.back-footer .back-bank-brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.back-footer .back-logo-img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.back-footer .back-bank-name {
+    font-size: 0.52rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.back-hologram {
+    display: flex;
+    align-items: center;
+}
+
+.hologram-seal {
+    width: 32px;
+    height: 20px;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #a855f7 0%, #06b6d4 50%, #f59e0b 100%);
+    background-size: 200% 200%;
+    opacity: 0.85;
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4);
+    animation: hologramShift 6s ease infinite alternate;
+}
+
+@keyframes hologramShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* Resets for old pseudo-elements to avoid clashing with the new 3D models */
+.vgb-atm-card::before,
+.vgb-atm-card::after,
+.vgb-atm-card .card-front::before,
+.vgb-atm-card .card-front::after,
+.vgb-atm-card .card-back::before,
+.vgb-atm-card .card-back::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Card Controls & Limits Summary under 3D Cards */
+.card-limits-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+}
+
+.limit-box {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.limit-box-label {
+    font-size: 0.65rem !important;
+    color: #64748b !important;
+    text-transform: uppercase;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.limit-box-value {
+    font-size: 0.95rem !important;
+    color: #0f172a !important;
+    font-weight: 800 !important;
+}
+
+.card-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 10px 16px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    box-sizing: border-box;
+}
+
+.status-badge-vertical {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #e6f4ea !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+    color: #137333 !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    min-width: 48px;
+}
+
+.status-badge-vertical .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #137333 !important;
+    margin-bottom: 4px;
+}
+
+/* Status variants */
+.status-badge-vertical.pending {
+    background: #fef3c7 !important;
+    color: #d97706 !important;
+}
+.status-badge-vertical.pending .status-dot {
+    background-color: #d97706 !important;
+}
+
+.status-badge-vertical.expired {
+    background: #fde8e8 !important;
+    color: #c81e1e !important;
+}
+.status-badge-vertical.expired .status-dot {
+    background-color: #c81e1e !important;
+}
+
+.status-badge-vertical.closed {
+    background: #f3f4f6 !important;
+    color: #4b5563 !important;
+}
+.status-badge-vertical.closed .status-dot {
+    background-color: #4b5563 !important;
+}
+
+/* Action buttons */
+.btn-limits-action {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 20px !important;
+    padding: 8px 18px !important;
+    color: #334155 !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-limits-action:hover {
+    background: #f8fafc !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+}
+
+.btn-close-action {
+    background: none !important;
+    border: none !important;
+    color: #475569 !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 6px 12px !important;
+    transition: color 0.2s ease;
+}
+
+.btn-close-action:hover {
+    color: #ef4444 !important;
+}
+
+.btn-renew-action {
+    background: #10b981 !important;
+    border: none !important;
+    border-radius: 20px !important;
+    padding: 8px 18px !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+.btn-renew-action:hover {
+    opacity: 0.9 !important;
+}
+
+/* Apply buttons */
+.btn-apply-debit {
+    background: linear-gradient(135deg, #6366f1 0%, #d946ef 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    border-radius: 30px !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+.btn-apply-debit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45) !important;
+}
+
+.btn-apply-credit {
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    border-radius: 30px !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+.btn-apply-credit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45) !important;
+}
+
+/* Catalog Card styling adjustments using scale transform to prevent clipping */
+.catalog-card-container {
+    width: 100% !important;
+    height: 160px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: visible !important;
+    margin: 5px 0 !important;
+}
+
+.catalog-card-wrapper {
+    width: 320px !important;
+    height: 200px !important;
+    transform: scale(0.75) !important;
+    transform-origin: center center !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Catalog apply buttons styled to match mockup gradient */
+.btn-apply-catalog {
+    background: linear-gradient(135deg, #6366f1 0%, #d946ef 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    font-weight: 700 !important;
+    font-size: 0.8rem !important;
+    border-radius: 30px !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    width: 100% !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    margin-top: 15px !important;
+}
+
+.btn-apply-catalog:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45) !important;
+}
+
+
+
+

@@ -14,6 +14,7 @@
                     rel="stylesheet">
                 <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
                 <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
+                <link href="${pageContext.request.contextPath}/assest/css/cards3d.css" rel="stylesheet">
                 <style>
                     :root {
                         --glass-bg: rgba(255, 255, 255, 0.45);
@@ -200,6 +201,9 @@
                         box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
                         margin-bottom: 30px;
                         transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+                        box-sizing: border-box;
+                        max-width: 100%;
+                        overflow: hidden;
                     }
 
                     body.dark-mode .glass-card {
@@ -300,9 +304,36 @@
 
                     /* --- PREMIUM MODERN TABLES --- */
                     .table-responsive {
-                        overflow-x: auto;
+                        overflow: auto;
+                        max-height: 400px;
                         border-radius: var(--radius-md);
                         border: 1px solid var(--glass-border);
+                        -webkit-overflow-scrolling: touch;
+                    }
+                    .table-responsive::-webkit-scrollbar {
+                        height: 8px;
+                        width: 8px;
+                    }
+                    .table-responsive::-webkit-scrollbar-track {
+                        background: rgba(99, 102, 241, 0.02);
+                        border-radius: 10px;
+                    }
+                    .table-responsive::-webkit-scrollbar-thumb {
+                        background: rgba(99, 102, 241, 0.15);
+                        border-radius: 10px;
+                        transition: background 0.2s ease;
+                    }
+                    .table-responsive::-webkit-scrollbar-thumb:hover {
+                        background: rgba(99, 102, 241, 0.3);
+                    }
+                    body.dark-mode .table-responsive::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.02);
+                    }
+                    body.dark-mode .table-responsive::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+                    body.dark-mode .table-responsive::-webkit-scrollbar-thumb:hover {
+                        background: rgba(255, 255, 255, 0.2);
                     }
 
                     table {
@@ -312,6 +343,9 @@
                     }
 
                     th {
+                        position: sticky;
+                        top: 0;
+                        z-index: 10;
                         padding: 16px 20px;
                         color: var(--gray-500);
                         font-size: 0.75rem;
@@ -320,12 +354,12 @@
                         letter-spacing: 1px;
                         border-bottom: 2px solid rgba(99, 102, 241, 0.1);
                         white-space: nowrap;
-                        background: rgba(99, 102, 241, 0.02);
+                        background: #ffffff;
                     }
 
                     body.dark-mode th {
                         color: var(--gray-400);
-                        background: rgba(15, 23, 42, 0.15);
+                        background: #1e293b;
                     }
 
                     td {
@@ -355,11 +389,10 @@
                         background: rgba(255, 255, 255, 0.01);
                     }
 
-                    /* --- PRODUCT CATALOGUE CARD STYLING --- */
                     .catalog-grid {
-                        display: grid;
-                        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-                        gap: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 25px;
                     }
 
                     .product-card {
@@ -1678,6 +1711,685 @@
                     body.dark-mode .lookup-result-card-details span {
                         color: var(--gray-300);
                     }
+
+                    /* Card Subtype Badges */
+                    .badge-card-type {
+                        padding: 4px 8px !important;
+                        border-radius: var(--radius-sm) !important;
+                        font-size: 0.72rem !important;
+                        font-weight: 600 !important;
+                        text-transform: uppercase !important;
+                        display: inline-block !important;
+                        letter-spacing: 0.3px !important;
+                        white-space: nowrap !important;
+                    }
+
+                    .badge-card-type.classic-debit {
+                        background: rgba(14, 165, 233, 0.1) !important;
+                        color: #0284c7 !important;
+                    }
+
+                    .badge-card-type.premium-debit {
+                        background: rgba(139, 92, 246, 0.1) !important;
+                        color: #7c3aed !important;
+                    }
+
+                    .badge-card-type.royale-credit {
+                        background: rgba(225, 29, 72, 0.1) !important;
+                        color: #e11d48 !important;
+                    }
+
+                    .badge-card-type.infinite-credit {
+                        background: rgba(15, 23, 42, 0.08) !important;
+                        color: #0f172a !important;
+                        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+                    }
+
+                    body.dark-mode .badge-card-type.infinite-credit {
+                        background: rgba(255, 255, 255, 0.08) !important;
+                        color: #f1f5f9 !important;
+                        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                    }
+
+                    /* --- ADMIN CARDS REDESIGN STYLES --- */
+                    .page-title-container {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 40px;
+                    }
+                    .page-title {
+                        font-size: 2.2rem;
+                        font-weight: 800;
+                        color: var(--gray-900);
+                        letter-spacing: -0.5px;
+                    }
+                    body.dark-mode .page-title {
+                        color: #ffffff;
+                    }
+                    .page-subtitle {
+                        color: var(--gray-500);
+                        font-size: 0.95rem;
+                        margin-top: 6px;
+                    }
+                    body.dark-mode .page-subtitle {
+                        color: var(--gray-400);
+                    }
+                    .stat-label {
+                        font-size: 0.8rem;
+                        color: var(--gray-500);
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+                    body.dark-mode .stat-label {
+                        color: var(--gray-400);
+                    }
+                    .stat-value {
+                        font-size: 1.75rem;
+                        font-weight: 800;
+                        color: var(--gray-800);
+                        margin: 2px 0 0 0;
+                        line-height: 1.1;
+                    }
+                    body.dark-mode .stat-value {
+                        color: #ffffff;
+                    }
+
+                    .card-section-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+                        padding-bottom: 15px;
+                        margin-bottom: 20px;
+                        flex-wrap: wrap;
+                        gap: 15px;
+                    }
+                    .card-section-title {
+                        font-size: 1.25rem;
+                        font-weight: 700;
+                        color: var(--gray-800);
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        margin: 0;
+                    }
+                    body.dark-mode .card-section-title {
+                        color: #ffffff;
+                    }
+                    .card-section-actions {
+                        display: flex;
+                        gap: 10px;
+                        flex-wrap: wrap;
+                    }
+
+                    .table-sr-no {
+                        font-weight: 600;
+                        color: var(--gray-500);
+                    }
+                    body.dark-mode .table-sr-no {
+                        color: var(--gray-400);
+                    }
+                    .table-holder-name {
+                        font-weight: 500;
+                    }
+                    body.dark-mode .table-holder-name {
+                        color: #ffffff;
+                    }
+                    .table-provider {
+                        text-transform: uppercase;
+                        font-weight: 500;
+                        color: var(--gray-600);
+                    }
+                    body.dark-mode .table-provider {
+                        color: var(--gray-400);
+                    }
+                    .table-actions-cell {
+                        text-align: center;
+                        display: flex;
+                        gap: 8px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .status-badge {
+                        padding: 4px 8px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-block;
+                    }
+                    .status-badge-active {
+                        background: rgba(16, 185, 129, 0.1);
+                        color: var(--accent-emerald);
+                    }
+                    .status-badge-pending {
+                        background: rgba(245, 158, 11, 0.1);
+                        color: #fbbf24;
+                    }
+                    .status-badge-expired {
+                        background: rgba(239, 68, 68, 0.1);
+                        color: #b91c1c;
+                    }
+                    .status-badge-closed {
+                        background: rgba(156, 163, 175, 0.1);
+                        color: var(--gray-500);
+                    }
+
+                    /* Catalog Card Container adjustments */
+                    .catalog-scroll-container {
+                        width: 100%;
+                        overflow-x: auto;
+                        padding-bottom: 12px;
+                        margin-bottom: 10px;
+                        -webkit-overflow-scrolling: touch;
+                    }
+                    .catalog-scroll-container::-webkit-scrollbar {
+                        height: 8px;
+                    }
+                    .catalog-scroll-container::-webkit-scrollbar-track {
+                        background: rgba(99, 102, 241, 0.02);
+                        border-radius: 10px;
+                    }
+                    .catalog-scroll-container::-webkit-scrollbar-thumb {
+                        background: rgba(99, 102, 241, 0.15);
+                        border-radius: 10px;
+                        transition: background 0.2s ease;
+                    }
+                    .catalog-scroll-container::-webkit-scrollbar-thumb:hover {
+                        background: rgba(99, 102, 241, 0.3);
+                    }
+                    body.dark-mode .catalog-scroll-container::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.02);
+                    }
+                    body.dark-mode .catalog-scroll-container::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+                    body.dark-mode .catalog-scroll-container::-webkit-scrollbar-thumb:hover {
+                        background: rgba(255, 255, 255, 0.2);
+                    }
+
+                    .catalog-grid {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 24px;
+                        width: max-content;
+                        align-items: stretch;
+                        padding: 4px;
+                    }
+                    .product-card {
+                        width: 320px;
+                        flex-shrink: 0;
+                        border-radius: var(--radius-lg);
+                        padding: 24px;
+                        display: flex;
+                        flex-direction: column !important;
+                        gap: 16px;
+                        position: relative;
+                        overflow: hidden;
+                        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+                        background: #ffffff;
+                    }
+                    body.dark-mode .product-card {
+                        background: #1e293b;
+                    }
+                    .product-card-bg-debit-classic {
+                        background: rgba(99, 102, 241, 0.02);
+                        border: 1.5px solid rgba(99, 102, 241, 0.08);
+                    }
+                    body.dark-mode .product-card-bg-debit-classic {
+                        background: rgba(99, 102, 241, 0.04);
+                        border-color: rgba(99, 102, 241, 0.15);
+                    }
+                    .product-card-bg-debit-premium {
+                        background: rgba(6, 182, 212, 0.02);
+                        border: 1.5px solid rgba(6, 182, 212, 0.08);
+                    }
+                    body.dark-mode .product-card-bg-debit-premium {
+                        background: rgba(6, 182, 212, 0.04);
+                        border-color: rgba(6, 182, 212, 0.15);
+                    }
+                    .product-card-bg-credit-royale {
+                        background: rgba(244, 63, 94, 0.02);
+                        border: 1.5px solid rgba(244, 63, 94, 0.08);
+                    }
+                    body.dark-mode .product-card-bg-credit-royale {
+                        background: rgba(244, 63, 94, 0.04);
+                        border-color: rgba(244, 63, 94, 0.15);
+                    }
+                    .product-card-bg-credit-infinite {
+                        background: rgba(245, 158, 11, 0.02);
+                        border: 1.5px solid rgba(245, 158, 11, 0.08);
+                    }
+                    body.dark-mode .product-card-bg-credit-infinite {
+                        background: rgba(245, 158, 11, 0.04);
+                        border-color: rgba(245, 158, 11, 0.15);
+                    }
+
+                    .product-card-watermark {
+                        position: absolute;
+                        top: -10px;
+                        right: -10px;
+                        font-size: 5.5rem;
+                        font-weight: 800;
+                        transform: rotate(-15deg);
+                        pointer-events: none;
+                        user-select: none;
+                        line-height: 1;
+                    }
+                    .watermark-debit {
+                        color: rgba(99, 102, 241, 0.025);
+                    }
+                    body.dark-mode .watermark-debit {
+                        color: rgba(255, 255, 255, 0.015);
+                    }
+                    .watermark-credit {
+                        color: rgba(244, 63, 94, 0.025);
+                    }
+                    body.dark-mode .watermark-credit {
+                        color: rgba(255, 255, 255, 0.015);
+                    }
+
+                    /* Card columns styling */
+                    .catalog-details-col {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+                    .catalog-spec-badge {
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        align-self: flex-start;
+                    }
+                    .spec-badge-classic {
+                        background: rgba(99, 102, 241, 0.08);
+                        color: var(--primary-500);
+                    }
+                    .spec-badge-premium {
+                        background: rgba(6, 182, 212, 0.08);
+                        color: #0891b2;
+                    }
+                    .spec-badge-royale {
+                        background: rgba(244, 63, 94, 0.08);
+                        color: #e11d48;
+                    }
+                    .spec-badge-infinite {
+                        background: rgba(245, 158, 11, 0.08);
+                        color: #d97706;
+                    }
+
+                    .catalog-card-title {
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        color: var(--gray-800);
+                        margin: 0;
+                    }
+                    body.dark-mode .catalog-card-title {
+                        color: #ffffff;
+                    }
+
+                    .catalog-card-desc {
+                        font-size: 0.85rem;
+                        color: var(--gray-500);
+                        line-height: 1.5;
+                        margin: 0;
+                    }
+                    body.dark-mode .catalog-card-desc {
+                        color: var(--gray-400);
+                    }
+
+                    .catalog-specs-table {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        width: 100%;
+                        margin-top: 5px;
+                    }
+                    .catalog-spec-row {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 0.82rem;
+                        border-bottom: 1px dashed rgba(99, 102, 241, 0.08);
+                        padding-bottom: 5px;
+                    }
+                    body.dark-mode .catalog-spec-row {
+                        border-bottom-color: rgba(255, 255, 255, 0.05);
+                    }
+                    .catalog-spec-label {
+                        color: var(--gray-500);
+                    }
+                    body.dark-mode .catalog-spec-label {
+                        color: var(--gray-400);
+                    }
+                    .catalog-spec-value {
+                        color: var(--gray-800);
+                        font-weight: 700;
+                    }
+                    body.dark-mode .catalog-spec-value {
+                        color: #ffffff;
+                    }
+
+                    .catalog-features-col {
+                        width: 100%;
+                        border-top: 1px dashed rgba(99, 102, 241, 0.12);
+                        padding-top: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+                    body.dark-mode .catalog-features-col {
+                        border-top-color: rgba(255, 255, 255, 0.1);
+                    }
+                    .catalog-features-heading {
+                        font-size: 0.78rem;
+                        font-weight: 700;
+                        color: var(--gray-450);
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                        letter-spacing: 0.8px;
+                    }
+                    .catalog-features-list {
+                        font-size: 0.82rem;
+                        color: var(--gray-600);
+                        padding-left: 16px;
+                        margin: 0;
+                        line-height: 1.6;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                    }
+                    body.dark-mode .catalog-features-list {
+                        color: var(--gray-300);
+                    }
+
+                    .catalog-action-col {
+                        width: 100%;
+                        margin-top: auto;
+                        padding-top: 15px;
+                    }
+                    .btn-apply-catalog {
+                        width: 100% !important;
+                        padding: 12px 24px !important;
+                        white-space: nowrap !important;
+                        margin: 0 !important;
+                        font-weight: 600;
+                        border-radius: var(--radius-md) !important;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        font-size: 0.85rem !important;
+                        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+                        transition: all 0.3s ease;
+                    }
+                    .btn-apply-catalog:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+                    }
+
+                    /* Modals & Paper Application Form Styles */
+                    .modal {
+                        position: fixed;
+                        inset: 0;
+                        background: rgba(15, 23, 42, 0.5);
+                        backdrop-filter: blur(8px);
+                        display: none;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 1100;
+                        padding: 20px;
+                    }
+                    .modal-content {
+                        background: var(--glass-bg);
+                        border: 1px solid var(--glass-border);
+                        backdrop-filter: blur(25px) saturate(180%);
+                        box-shadow: var(--panel-shadow);
+                    }
+                    body.dark-mode .modal-content {
+                        background: #1e293b;
+                        border-color: rgba(255, 255, 255, 0.08);
+                    }
+                    .lookup-container {
+                        display: flex;
+                        gap: 12px;
+                        padding: 24px;
+                        background: rgba(99, 102, 241, 0.02);
+                        border-bottom: 1px solid var(--glass-border);
+                    }
+                    .lookup-input-wrapper {
+                        position: relative;
+                        flex-grow: 1;
+                    }
+                    .lookup-input-wrapper i {
+                        position: absolute;
+                        left: 14px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: var(--gray-400);
+                        font-size: 1.1rem;
+                    }
+                    .lookup-input {
+                        width: 100%;
+                        padding: 12px 16px 12px 42px;
+                        border: 1.5px solid var(--gray-200);
+                        border-radius: var(--radius-md);
+                        font-size: 0.88rem;
+                        outline: none;
+                        transition: all 0.3s ease;
+                        box-shadow: var(--shadow-sm);
+                        box-sizing: border-box;
+                    }
+                    body.dark-mode .lookup-input {
+                        background: rgba(15, 23, 42, 0.6);
+                        border-color: rgba(255, 255, 255, 0.1);
+                        color: white;
+                    }
+                    .lookup-input:focus {
+                        border-color: var(--primary-500);
+                        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+                    }
+                    .btn-lookup {
+                        padding: 12px 24px;
+                        background: var(--primary-500);
+                        color: white;
+                        font-weight: 600;
+                        border-radius: var(--radius-md);
+                        border: none;
+                        cursor: pointer;
+                        white-space: nowrap;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                        font-size: 0.88rem;
+                        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+                        transition: all 0.3s ease;
+                    }
+                    .btn-lookup:hover {
+                        transform: translateY(-1px);
+                        box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+                    }
+
+                    .apply-paper-form {
+                        background: #ffffff;
+                        border: 1.5px solid var(--gray-200);
+                        padding: 30px;
+                        border-radius: var(--radius-sm);
+                        color: #0f172a !important;
+                        font-family: 'Times New Roman', Times, serif;
+                        font-size: 0.98rem;
+                        line-height: 1.6;
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                        box-shadow: inset 0 0 15px rgba(0,0,0,0.01), var(--shadow-sm);
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    body.dark-mode .apply-paper-form {
+                        background: #ffffff !important;
+                        border-color: #cbd5e1;
+                        color: #0f172a !important;
+                    }
+
+                    /* Modal Header */
+                    .modal-header-container {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 20px;
+                        border-bottom: 1px solid rgba(99,102,241,0.1);
+                        background: rgba(99,102,241,0.02);
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+                    .modal-title-text {
+                        font-size: 1.25rem;
+                        font-weight: 700;
+                        color: var(--gray-800);
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    body.dark-mode .modal-title-text {
+                        color: #ffffff;
+                    }
+                    .modal-close-btn {
+                        background: none;
+                        border: none;
+                        font-size: 1.5rem;
+                        color: var(--gray-400);
+                        cursor: pointer;
+                        transition: color 0.2s;
+                    }
+                    .modal-close-btn:hover {
+                        color: var(--gray-800);
+                    }
+                    body.dark-mode .modal-close-btn:hover {
+                        color: #ffffff;
+                    }
+
+                    /* Search Results container */
+                    .lookup-results-box {
+                        display: none;
+                        max-height: 200px;
+                        overflow-y: auto;
+                        padding: 15px 24px;
+                        border-bottom: 1px dashed rgba(99,102,241,0.1);
+                        box-sizing: border-box;
+                        width: 100%;
+                    }
+                    .lookup-results-title {
+                        margin: 0 0 10px;
+                        font-size: 0.85rem;
+                        color: var(--gray-500);
+                        text-transform: uppercase;
+                        font-weight: 700;
+                        letter-spacing: 0.5px;
+                        text-align: left;
+                    }
+
+                    /* Form styling inside paper form */
+                    .paper-form-watermark {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%) rotate(-30deg);
+                        font-size: 7.5rem;
+                        font-weight: 900;
+                        color: rgba(99, 102, 241, 0.03);
+                        pointer-events: none;
+                        user-select: none;
+                        font-family: 'Poppins', sans-serif;
+                        letter-spacing: 5px;
+                    }
+                    .paper-form-header {
+                        text-align: center;
+                        border-bottom: 2px double #475569;
+                        padding-bottom: 12px;
+                        margin-bottom: 20px;
+                        position: relative;
+                    }
+                    .paper-form-title {
+                        font-size: 1.35rem;
+                        font-weight: 800;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        color: #0f172a;
+                        margin: 0;
+                        font-family: 'Poppins', sans-serif;
+                    }
+                    .paper-form-subtitle {
+                        font-size: 1rem;
+                        font-weight: 700;
+                        color: #475569;
+                        margin: 4px 0 0;
+                        text-transform: uppercase;
+                        font-family: 'Poppins', sans-serif;
+                        letter-spacing: 0.5px;
+                    }
+                    .paper-form-fee-badge {
+                        position: absolute;
+                        right: 0;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background: rgba(16, 185, 129, 0.12);
+                        color: #047857;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-family: 'Poppins', sans-serif;
+                    }
+
+                    .paper-form-section-title {
+                        border-bottom: 1px solid #94a3b8;
+                        padding-bottom: 3px;
+                        margin: 0 0 10px;
+                        text-transform: uppercase;
+                        font-size: 0.85rem;
+                        letter-spacing: 0.5px;
+                        font-weight: 700;
+                        color: #475569;
+                        font-family: 'Poppins', sans-serif;
+                    }
+
+                    .paper-form-input-dotted {
+                        width: 100%;
+                        border: none;
+                        border-bottom: 1px dotted #475569;
+                        padding: 5px 8px;
+                        font-weight: 600;
+                        color: #0f172a;
+                        outline: none;
+                        background: transparent;
+                    }
+
+                    .catalog-card-container {
+                        width: 100%;
+                        height: 180px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin: 10px 0;
+                        flex-shrink: 0;
+                    }
+                    .catalog-card-wrapper {
+                        transform: scale(0.8) !important;
+                        transform-origin: center center;
+                    }
+
+                    /* General responsive breakpoints */
+                    @media (max-width: 991px) {
+                        .catalog-card-container {
+                            align-self: center !important;
+                        }
+                    }
                 </style>
             </head>
 
@@ -1769,14 +2481,10 @@
                 <main class="main-content">
                     <div class="container" style="max-width: 1200px; padding: 0;">
                         <!-- Welcome Header -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;"
-                            class="mobile-grid-1">
+                        <div class="page-title-container">
                             <div>
-                                <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">Atm Cards Control
-                                    Center</h2>
-                                <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Monitor customer
-                                    debit/credit card applications, verify system card limits, and process card
-                                    approvals.</p>
+                                <h2 class="page-title">ATM Cards Control Center</h2>
+                                <p class="page-subtitle">Monitor customer debit/credit card applications, verify system card limits, and process card approvals.</p>
                             </div>
                         </div>
 
@@ -1820,448 +2528,784 @@
                         <div class="stat-grid">
                             <div class="stat-card" style="border-left: 4px solid var(--primary-500);">
                                 <div class="sparkline-decor" style="background: var(--primary-gradient);"></div>
-                                <div class="stat-icon"
-                                    style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
+                                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
                                     <i class="bx bx-credit-card"></i>
                                 </div>
                                 <div>
-                                    <span
-                                        style="font-size: 0.8rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase;">Total
-                                        Requests</span>
-                                    <h3
-                                        style="font-size: 1.6rem; font-weight: 800; color: var(--gray-800); margin-top: 2px;">
-                                        ${cards.size()}</h3>
+                                    <span class="stat-label">Total Requests</span>
+                                    <h3 class="stat-value">${cards.size()}</h3>
                                 </div>
                             </div>
                             <div class="stat-card" style="border-left: 4px solid #fbbf24;">
-                                <div class="sparkline-decor"
-                                    style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);"></div>
+                                <div class="sparkline-decor" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);"></div>
                                 <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
                                     <i class="bx bx-time-five"></i>
                                 </div>
                                 <div>
-                                    <span
-                                        style="font-size: 0.8rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase; display: flex; align-items: center;">
+                                    <span class="stat-label" style="display: flex; align-items: center;">
                                         Pending Review <span class="pulse-dot"></span>
                                     </span>
-                                    <h3
-                                        style="font-size: 1.6rem; font-weight: 800; color: var(--gray-800); margin-top: 2px;">
-                                        ${pendingCount}</h3>
+                                    <h3 class="stat-value">${pendingCount}</h3>
                                 </div>
                             </div>
                             <div class="stat-card" style="border-left: 4px solid var(--accent-emerald);">
-                                <div class="sparkline-decor"
-                                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
+                                <div class="sparkline-decor" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
                                 <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
                                     <i class="bx bx-badge-check"></i>
                                 </div>
                                 <div>
-                                    <span
-                                        style="font-size: 0.8rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase;">Approved
-                                        Active</span>
-                                    <h3
-                                        style="font-size: 1.6rem; font-weight: 800; color: var(--gray-800); margin-top: 2px;">
-                                        ${activeCount}</h3>
+                                    <span class="stat-label">Approved Active</span>
+                                    <h3 class="stat-value">${activeCount}</h3>
                                 </div>
                             </div>
                             <div class="stat-card" style="border-left: 4px solid #ef4444;">
-                                <div class="sparkline-decor"
-                                    style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);"></div>
+                                <div class="sparkline-decor" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);"></div>
                                 <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
                                     <i class="bx bx-block"></i>
                                 </div>
                                 <div>
-                                    <span
-                                        style="font-size: 0.8rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase;">Revoked
-                                        / Closed</span>
-                                    <h3
-                                        style="font-size: 1.6rem; font-weight: 800; color: var(--gray-800); margin-top: 2px;">
-                                        ${closedCount}</h3>
+                                    <span class="stat-label">Revoked / Closed</span>
+                                    <h3 class="stat-value">${closedCount}</h3>
                                 </div>
                             </div>
                         </div>
 
                         <!-- VGB ATM Card Product Catalogue -->
-                        <div class="glass-card" style="margin-bottom: 30px;">
-                            <h3
-                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-book-open" style="color: var(--primary-500);"></i> VGB Bank Card Product
-                                Specifications & Suite
-                            </h3>
-                            <div class="catalog-grid">
+                        <div class="glass-card">
+                            <div class="card-section-header">
+                                <h3 class="card-section-title">
+                                    <i class="bx bx-book-open" style="color: var(--primary-500);"></i> VGB Bank Card Product Specifications & Suite
+                                </h3>
+                            <div class="catalog-scroll-container">
+                                <div class="catalog-grid">
 
                                 <!-- Card 1: Classic Debit -->
-                                <div class="product-card"
-                                    style="background: rgba(99, 102, 241, 0.03); border: 1.5px solid rgba(99, 102, 241, 0.1);">
-                                    <div
-                                        style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(99, 102, 241, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">
-                                        DEBIT</div>
-                                    <div>
-                                        <span
-                                            style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Classic
-                                            Tier</span>
-                                        <h4
-                                            style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">
-                                            VGB Classic Debit Card</h4>
-                                        <p
-                                            style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">
-                                            Standard transactional card linked directly to savings/checking accounts for
-                                            daily retail needs.</p>
+                                <div class="product-card product-card-bg-debit-classic">
+                                    <div class="product-card-watermark watermark-debit">DEBIT</div>
+                                    
+                                    <div class="catalog-details-col">
+                                        <span class="catalog-spec-badge spec-badge-classic">Classic Tier</span>
+                                        <h4 class="catalog-card-title">VGB Classic Debit Card</h4>
+                                        <p class="catalog-card-desc">Standard transactional card linked directly to savings/checking accounts for daily retail needs.</p>
+                                    </div>
 
-                                        <div
-                                            style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(99,102,241,0.1); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Issuance/Renewal:</span>
-                                                <strong style="color: var(--gray-800);">₹250.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(99,102,241,0.1); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Daily Limit:</span>
-                                                <strong style="color: var(--gray-800);">₹50,000.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(99,102,241,0.1); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Validity Period:</span>
-                                                <strong style="color: var(--gray-800);">4 Years</strong>
+                                    <!-- Interactive 3D Card Preview -->
+                                    <div class="catalog-card-container">
+                                        <div class="catalog-card-wrapper card-3d-wrapper">
+                                            <div class="vgb-atm-card debit visa">
+                                                <!-- Front Face -->
+                                                <div class="card-face card-front">
+                                                    <div class="card-header">
+                                                        <div class="bank-info">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                                alt="VGB Logo" class="card-bank-logo">
+                                                            <div class="bank-name">
+                                                                 <span class="bank-title">VERTEX</span>
+                                                                 <span class="bank-subtitle">GALAXY BANK</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-type-label">
+                                                            <span class="type-text">debit</span>
+                                                            <span class="card-provider-name">visa</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="chip-wifi-row">
+                                                            <svg class="card-chip-svg" viewBox="0 0 100 80"
+                                                                width="36" height="28"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect width="100" height="80" rx="10"
+                                                                    fill="url(#chipGoldValC1)" />
+                                                                <path
+                                                                    d="M 0 30 H 100 M 0 50 H 100 M 40 0 V 80 M 60 0 V 80"
+                                                                    stroke="#78350f" stroke-width="1.5" fill="none"
+                                                                    opacity="0.4" />
+                                                                <defs>
+                                                                    <linearGradient id="chipGoldValC1" x1="0%"
+                                                                        y1="0%" x2="100%" y2="100%">
+                                                                        <stop offset="0%" stop-color="#fbbf24" />
+                                                                        <stop offset="50%" stop-color="#d97706" />
+                                                                        <stop offset="100%" stop-color="#b45309" />
+                                                                    </linearGradient>
+                                                                </defs>
+                                                            </svg>
+                                                            <i class="bx bx-wifi contactless-icon"></i>
+                                                        </div>
+                                                        <div class="card-number-display">4000 1234 5678 9010</div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <div class="footer-info">
+                                                            <span class="footer-label">Card Holder</span>
+                                                            <span class="footer-value holder-name-text">CLASSIC CUSTOMER</span>
+                                                        </div>
+                                                        <div class="footer-info expiry-container">
+                                                            <span class="footer-label">Expires</span>
+                                                            <span class="footer-value">12/30</span>
+                                                        </div>
+                                                        <div class="card-logo-container">
+                                                            <div class="logo-visa">
+                                                                <span class="brand-text">VISA</span>
+                                                                <span class="brand-sub">SECURE</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Back Face -->
+                                                <div class="card-face card-back">
+                                                    <div class="magnetic-strip"></div>
+                                                    <div class="back-body">
+                                                        <div class="signature-cvv-section">
+                                                            <div class="signature-strip">
+                                                                    <span class="signature-watermark">VERTEX GALAXY BANK</span>
+                                                            </div>
+                                                            <div class="cvv-box"
+                                                                onclick="event.stopPropagation(); toggleCvv(this, '123')"
+                                                                title="Click to show CVV">
+                                                                <span class="cvv-label">CVV</span>
+                                                                <span class="cvv-value cvv-text">•••</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="back-extra-info">
+                                                            <p class="disclaimer-text">
+                                                                This card is property of Vertex Galaxy Bank.
+                                                                Subject to cardholder agreement.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="back-footer">
+                                                        <div class="back-bank-brand">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                                alt="VGB" class="back-logo-img">
+                                                            <span class="back-bank-name">VERTEX GALAXY BANK</span>
+                                                        </div>
+                                                        <div class="back-hologram">
+                                                            <div class="hologram-seal"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h5
-                                            style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">
-                                            Features & Usage:</h5>
-                                        <ul
-                                            style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px;">
+
+                                    <div class="catalog-specs-table">
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Issuance/Renewal:</span>
+                                            <strong class="catalog-spec-value">₹250.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Daily Limit:</span>
+                                            <strong class="catalog-spec-value">₹50,000.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Validity Period:</span>
+                                            <strong class="catalog-spec-value">4 Years</strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- Features & Usage -->
+                                    <div class="catalog-features-col">
+                                        <h5 class="catalog-features-heading">Features & Usage:</h5>
+                                        <ul class="catalog-features-list">
                                             <li>Global ATM Cash Withdrawals & POS usage</li>
                                             <li>Zero Liability Fraud Protection coverage</li>
                                             <li>Real-time SMS & Email transaction alerts</li>
                                         </ul>
-                                        <button type="button" onclick="openApplyModal('classic_debit')" class="btn btn-primary"
-                                            style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                    </div>
+
+                                    <!-- Apply Action Button -->
+                                    <div class="catalog-action-col">
+                                        <button type="button" onclick="openApplyModal('classic_debit')" class="btn-apply-catalog btn btn-primary">
                                             <i class="bx bx-plus-circle"></i> Apply Classic Debit
                                         </button>
                                     </div>
                                 </div>
 
                                 <!-- Card 2: Premium Debit -->
-                                <div class="product-card"
-                                    style="background: rgba(6, 182, 212, 0.03); border: 1.5px solid rgba(6, 182, 212, 0.1);">
-                                    <div
-                                        style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(6, 182, 212, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">
-                                        DEBIT</div>
-                                    <div>
-                                        <span
-                                            style="background: rgba(6, 182, 212, 0.1); color: #0891b2; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Premium
-                                            Tier</span>
-                                        <h4
-                                            style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">
-                                            VGB Premium Debit Card</h4>
-                                        <p
-                                            style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">
-                                            High-limit savings-linked card for affluent customers requesting elevated
-                                            transaction bounds.</p>
+                                <div class="product-card product-card-bg-debit-premium">
+                                    <div class="product-card-watermark watermark-debit">DEBIT</div>
+                                    
+                                    <div class="catalog-details-col">
+                                        <span class="catalog-spec-badge spec-badge-premium">Premium Tier</span>
+                                        <h4 class="catalog-card-title">VGB Premium Debit Card</h4>
+                                        <p class="catalog-card-desc">High-limit savings-linked card for affluent customers requesting elevated transaction bounds.</p>
+                                    </div>
 
-                                        <div
-                                            style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Issuance/Renewal:</span>
-                                                <strong style="color: var(--gray-800);">₹500.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Daily Limit:</span>
-                                                <strong style="color: var(--gray-800);">₹2,00,000.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Validity Period:</span>
-                                                <strong style="color: var(--gray-800);">4 Years</strong>
+                                    <!-- Interactive 3D Card Preview -->
+                                    <div class="catalog-card-container">
+                                        <div class="catalog-card-wrapper card-3d-wrapper">
+                                            <div class="vgb-atm-card debit mastercard premium-tier">
+                                                <!-- Front Face -->
+                                                <div class="card-face card-front">
+                                                    <div class="card-header">
+                                                        <div class="bank-info">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                                alt="VGB Logo" class="card-bank-logo">
+                                                            <div class="bank-name">
+                                                                <span class="bank-title">VERTEX</span>
+                                                                <span class="bank-subtitle">GALAXY BANK</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-type-label">
+                                                            <span class="type-text">debit</span>
+                                                            <span class="card-provider-name">mastercard</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="chip-wifi-row">
+                                                            <svg class="card-chip-svg" viewBox="0 0 100 80"
+                                                                width="36" height="28"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect width="100" height="80" rx="10"
+                                                                    fill="url(#chipGoldValC2)" />
+                                                                <path
+                                                                    d="M 0 30 H 100 M 0 50 H 100 M 40 0 V 80 M 60 0 V 80"
+                                                                    stroke="#78350f" stroke-width="1.5" fill="none"
+                                                                    opacity="0.4" />
+                                                                <defs>
+                                                                    <linearGradient id="chipGoldValC2" x1="0%"
+                                                                        y1="0%" x2="100%" y2="100%">
+                                                                        <stop offset="0%" stop-color="#fbbf24" />
+                                                                        <stop offset="50%" stop-color="#d97706" />
+                                                                        <stop offset="100%" stop-color="#b45309" />
+                                                                    </linearGradient>
+                                                                </defs>
+                                                            </svg>
+                                                            <i class="bx bx-wifi contactless-icon"></i>
+                                                        </div>
+                                                        <div class="card-number-display">5412 7512 3456 7890</div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <div class="footer-info">
+                                                            <span class="footer-label">Card Holder</span>
+                                                            <span class="footer-value holder-name-text">PREMIUM CUSTOMER</span>
+                                                        </div>
+                                                        <div class="footer-info expiry-container">
+                                                            <span class="footer-label">Expires</span>
+                                                            <span class="footer-value">12/30</span>
+                                                        </div>
+                                                        <div class="card-logo-container">
+                                                            <div class="logo-mastercard">
+                                                                <div class="mc-circles-wrapper">
+                                                                    <span class="mc-circle mc-red"></span>
+                                                                    <span class="mc-circle mc-orange"></span>
+                                                                </div>
+                                                                <span class="brand-text-mc">mastercard</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Back Face -->
+                                                <div class="card-face card-back">
+                                                    <div class="magnetic-strip"></div>
+                                                    <div class="back-body">
+                                                        <div class="signature-cvv-section">
+                                                            <div class="signature-strip">
+                                                                <span class="signature-watermark">VERTEX GALAXY BANK</span>
+                                                            </div>
+                                                            <div class="cvv-box" onclick="event.stopPropagation(); toggleCvv(this, '456')" title="Click to show CVV">
+                                                                <span class="cvv-label">CVV</span>
+                                                                <span class="cvv-value cvv-text">•••</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="back-extra-info">
+                                                            <p class="disclaimer-text">
+                                                                This card is property of Vertex Galaxy Bank. Subject to cardholder agreement.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="back-footer">
+                                                        <div class="back-bank-brand">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" class="back-logo-img">
+                                                            <span class="back-bank-name">VERTEX GALAXY BANK</span>
+                                                        </div>
+                                                        <div class="back-hologram">
+                                                            <div class="hologram-seal"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h5
-                                            style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">
-                                            Features & Usage:</h5>
-                                        <ul
-                                            style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px;">
+
+                                    <div class="catalog-specs-table">
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Issuance/Renewal:</span>
+                                            <strong class="catalog-spec-value">₹500.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Daily Limit:</span>
+                                            <strong class="catalog-spec-value">₹2,00,000.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Validity Period:</span>
+                                            <strong class="catalog-spec-value">4 Years</strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- Features & Usage -->
+                                    <div class="catalog-features-col">
+                                        <h5 class="catalog-features-heading">Features & Usage:</h5>
+                                        <ul class="catalog-features-list">
                                             <li>2 Free Domestic Airport Lounge Access per quarter</li>
                                             <li>Enhanced Purchase Insurance Protection</li>
                                             <li>Zero surcharge on select merchant terminal usage</li>
                                         </ul>
-                                        <button type="button" onclick="openApplyModal('premium_debit')" class="btn btn-primary"
-                                            style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                    </div>
+
+                                    <!-- Apply Action Button -->
+                                    <div class="catalog-action-col">
+                                        <button type="button" onclick="openApplyModal('premium_debit')" class="btn-apply-catalog btn btn-primary">
                                             <i class="bx bx-plus-circle"></i> Apply Premium Debit
                                         </button>
                                     </div>
                                 </div>
 
                                 <!-- Card 3: Royale Credit -->
-                                <div class="product-card"
-                                    style="background: rgba(212, 175, 55, 0.03); border: 1.5px solid rgba(212, 175, 55, 0.15);">
-                                    <div
-                                        style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(212, 175, 55, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">
-                                        CREDIT</div>
-                                    <div>
-                                        <span
-                                            style="background: rgba(212, 175, 55, 0.12); color: #b58d16; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Royale
-                                            Tier</span>
-                                        <h4
-                                            style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">
-                                            VGB Royale Credit Card</h4>
-                                        <p
-                                            style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">
-                                            General credit card providing flexible spending margins and revolving
-                                            outstanding balances.</p>
+                                <div class="product-card product-card-bg-credit-royale">
+                                    <div class="product-card-watermark watermark-credit">CREDIT</div>
+                                    
+                                    <div class="catalog-details-col">
+                                        <span class="catalog-spec-badge spec-badge-royale">Royale Tier</span>
+                                        <h4 class="catalog-card-title">VGB Royale Credit Card</h4>
+                                        <p class="catalog-card-desc">General credit card providing flexible spending margins and revolving outstanding balances.</p>
+                                    </div>
 
-                                        <div
-                                            style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Issuance/Renewal:</span>
-                                                <strong style="color: var(--gray-800);">₹500.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Credit Limit:</span>
-                                                <strong style="color: var(--gray-800);">₹50,000.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Grace Period:</span>
-                                                <strong style="color: var(--gray-800);">Grace: Up to 45 Days</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Validity Period:</span>
-                                                <strong style="color: var(--gray-800);">4 Years</strong>
+                                    <!-- Interactive 3D Card Preview -->
+                                    <div class="catalog-card-container">
+                                        <div class="catalog-card-wrapper card-3d-wrapper">
+                                            <div class="vgb-atm-card credit rupay">
+                                                <!-- Front Face -->
+                                                <div class="card-face card-front">
+                                                    <div class="card-header">
+                                                        <div class="bank-info">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                                alt="VGB Logo" class="card-bank-logo">
+                                                            <div class="bank-name">
+                                                                <span class="bank-title">VERTEX</span>
+                                                                <span class="bank-subtitle">GALAXY BANK</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-type-label">
+                                                            <span class="type-text">credit</span>
+                                                            <span class="card-provider-name">rupay</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="chip-wifi-row">
+                                                            <svg class="card-chip-svg" viewBox="0 0 100 80"
+                                                                width="36" height="28"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect width="100" height="80" rx="10"
+                                                                    fill="url(#chipGoldValC3)" />
+                                                                <path
+                                                                    d="M 0 30 H 100 M 0 50 H 100 M 40 0 V 80 M 60 0 V 80"
+                                                                    stroke="#78350f" stroke-width="1.5" fill="none"
+                                                                    opacity="0.4" />
+                                                                <defs>
+                                                                    <linearGradient id="chipGoldValC3" x1="0%"
+                                                                        y1="0%" x2="100%" y2="100%">
+                                                                        <stop offset="0%" stop-color="#fbbf24" />
+                                                                        <stop offset="50%" stop-color="#d97706" />
+                                                                        <stop offset="100%" stop-color="#b45309" />
+                                                                    </linearGradient>
+                                                                </defs>
+                                                            </svg>
+                                                            <i class="bx bx-wifi contactless-icon"></i>
+                                                        </div>
+                                                        <div class="card-number-display">3530 1111 2222 3333</div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <div class="footer-info">
+                                                            <span class="footer-label">Card Holder</span>
+                                                            <span class="footer-value holder-name-text">ROYALE CUSTOMER</span>
+                                                        </div>
+                                                        <div class="footer-info expiry-container">
+                                                            <span class="footer-label">Expires</span>
+                                                            <span class="footer-value">12/30</span>
+                                                        </div>
+                                                        <div class="card-logo-container">
+                                                            <div class="logo-rupay">
+                                                                <span class="rupay-text-main">RuPay</span>
+                                                                <span class="rupay-sub-main">GLOBAL</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Back Face -->
+                                                <div class="card-face card-back">
+                                                    <div class="magnetic-strip"></div>
+                                                    <div class="back-body">
+                                                        <div class="signature-cvv-section">
+                                                            <div class="signature-strip">
+                                                                <span class="signature-watermark">VERTEX GALAXY BANK</span>
+                                                            </div>
+                                                            <div class="cvv-box" onclick="event.stopPropagation(); toggleCvv(this, '789')" title="Click to show CVV">
+                                                                <span class="cvv-label">CVV</span>
+                                                                <span class="cvv-value cvv-text">•••</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="back-extra-info">
+                                                            <p class="disclaimer-text">
+                                                                This card is property of Vertex Galaxy Bank. Subject to cardholder agreement.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="back-footer">
+                                                        <div class="back-bank-brand">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" class="back-logo-img">
+                                                            <span class="back-bank-name">VERTEX GALAXY BANK</span>
+                                                        </div>
+                                                        <div class="back-hologram">
+                                                            <div class="hologram-seal"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h5
-                                            style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">
-                                            Features & Usage:</h5>
-                                        <ul
-                                            style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px;">
+
+                                    <div class="catalog-specs-table">
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Issuance/Renewal:</span>
+                                            <strong class="catalog-spec-value">₹500.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Credit Limit:</span>
+                                            <strong class="catalog-spec-value">₹50,000.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Grace Period:</span>
+                                            <strong class="catalog-spec-value">Up to 45 Days</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Validity Period:</span>
+                                            <strong class="catalog-spec-value">4 Years</strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- Features & Usage -->
+                                    <div class="catalog-features-col">
+                                        <h5 class="catalog-features-heading">Features & Usage:</h5>
+                                        <ul class="catalog-features-list">
                                             <li>3 Reward Points per ₹100 spent (redeemable)</li>
                                             <li>1% Fuel Surcharge Waiver at partner outlets</li>
                                             <li>Easy EMI conversion options via Mobile Portal</li>
                                         </ul>
-                                        <button type="button" onclick="openApplyModal('royale_credit')" class="btn btn-primary"
-                                            style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                    </div>
+
+                                    <!-- Apply Action Button -->
+                                    <div class="catalog-action-col">
+                                        <button type="button" onclick="openApplyModal('royale_credit')" class="btn-apply-catalog btn btn-primary">
                                             <i class="bx bx-plus-circle"></i> Apply Royale Credit
                                         </button>
                                     </div>
                                 </div>
 
                                 <!-- Card 4: Infinite Credit -->
-                                <div class="product-card"
-                                    style="background: rgba(139, 92, 246, 0.03); border: 1.5px solid rgba(139, 92, 246, 0.12);">
-                                    <div
-                                        style="position: absolute; top: -10px; right: -10px; font-size: 4rem; color: rgba(139, 92, 246, 0.05); font-weight: 800; transform: rotate(-15deg); pointer-events: none; user-select: none;">
-                                        CREDIT</div>
-                                    <div>
-                                        <span
-                                            style="background: rgba(139, 92, 246, 0.1); color: #7c3aed; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Infinite
-                                            Tier</span>
-                                        <h4
-                                            style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin: 10px 0 5px;">
-                                            VGB Infinite Credit Card</h4>
-                                        <p
-                                            style="font-size: 0.8rem; color: var(--gray-500); line-height: 1.4; margin-bottom: 15px;">
-                                            Elite premium credit offering featuring extreme credit caps and exclusive
-                                            lifestyle perks.</p>
+                                <div class="product-card product-card-bg-credit-infinite">
+                                    <div class="product-card-watermark watermark-credit">CREDIT</div>
+                                    
+                                    <div class="catalog-details-col">
+                                        <span class="catalog-spec-badge spec-badge-infinite">Infinite Tier</span>
+                                        <h4 class="catalog-card-title">VGB Infinite Credit Card</h4>
+                                        <p class="catalog-card-desc">Elite premium credit offering featuring extreme credit caps and exclusive lifestyle perks.</p>
+                                    </div>
 
-                                        <div
-                                            style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(139,92,246,0.2); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Issuance/Renewal:</span>
-                                                <strong style="color: var(--gray-800);">₹2,000.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(139,92,246,0.2); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Credit Limit:</span>
-                                                <strong style="color: var(--gray-800);">₹5,00,000.00</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(139,92,246,0.2); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Grace Period:</span>
-                                                <strong style="color: var(--gray-800);">Up to 45 Days</strong>
-                                            </div>
-                                            <div
-                                                style="display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed rgba(6,182,212,0.15); padding-bottom: 4px;">
-                                                <span style="color: var(--gray-500);">Validity Period:</span>
-                                                <strong style="color: var(--gray-800);">4 Years</strong>
+                                    <!-- Interactive 3D Card Preview -->
+                                    <div class="catalog-card-container">
+                                        <div class="catalog-card-wrapper card-3d-wrapper">
+                                            <div class="vgb-atm-card credit visa premium-tier">
+                                                <!-- Front Face -->
+                                                <div class="card-face card-front">
+                                                    <div class="card-header">
+                                                        <div class="bank-info">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                                alt="VGB Logo" class="card-bank-logo">
+                                                            <div class="bank-name">
+                                                                <span class="bank-title">VERTEX</span>
+                                                                <span class="bank-subtitle">GALAXY BANK</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-type-label">
+                                                            <span class="type-text">credit</span>
+                                                            <span class="card-provider-name">visa</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="chip-wifi-row">
+                                                            <svg class="card-chip-svg" viewBox="0 0 100 80"
+                                                                width="36" height="28"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect width="100" height="80" rx="10"
+                                                                    fill="url(#chipGoldValC4)" />
+                                                                <path
+                                                                    d="M 0 30 H 100 M 0 50 H 100 M 40 0 V 80 M 60 0 V 80"
+                                                                    stroke="#78350f" stroke-width="1.5" fill="none"
+                                                                    opacity="0.4" />
+                                                                <defs>
+                                                                    <linearGradient id="chipGoldValC4" x1="0%"
+                                                                        y1="0%" x2="100%" y2="100%">
+                                                                        <stop offset="0%" stop-color="#fbbf24" />
+                                                                        <stop offset="50%" stop-color="#d97706" />
+                                                                        <stop offset="100%" stop-color="#b45309" />
+                                                                    </linearGradient>
+                                                                </defs>
+                                                            </svg>
+                                                            <i class="bx bx-wifi contactless-icon"></i>
+                                                        </div>
+                                                        <div class="card-number-display">4111 2222 3333 4444</div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <div class="footer-info">
+                                                            <span class="footer-label">Card Holder</span>
+                                                            <span class="footer-value holder-name-text">INFINITE CUSTOMER</span>
+                                                        </div>
+                                                        <div class="footer-info expiry-container">
+                                                            <span class="footer-label">Expires</span>
+                                                            <span class="footer-value">12/30</span>
+                                                        </div>
+                                                        <div class="card-logo-container">
+                                                            <div class="logo-visa">
+                                                                <span class="brand-text">VISA</span>
+                                                                <span class="brand-sub">SECURE</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Back Face -->
+                                                <div class="card-face card-back">
+                                                    <div class="magnetic-strip"></div>
+                                                    <div class="back-body">
+                                                        <div class="signature-cvv-section">
+                                                            <div class="signature-strip">
+                                                                <span class="signature-watermark">VERTEX GALAXY BANK</span>
+                                                            </div>
+                                                            <div class="cvv-box" onclick="event.stopPropagation(); toggleCvv(this, '999')" title="Click to show CVV">
+                                                                <span class="cvv-label">CVV</span>
+                                                                <span class="cvv-value cvv-text">•••</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="back-extra-info">
+                                                            <p class="disclaimer-text">
+                                                                This card is property of Vertex Galaxy Bank. Subject to cardholder agreement.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="back-footer">
+                                                        <div class="back-bank-brand">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" class="back-logo-img">
+                                                            <span class="back-bank-name">VERTEX GALAXY BANK</span>
+                                                        </div>
+                                                        <div class="back-hologram">
+                                                            <div class="hologram-seal"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h5
-                                            style="font-size: 0.75rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">
-                                            Features & Usage:</h5>
-                                        <ul
-                                            style="font-size: 0.78rem; color: var(--gray-600); padding-left: 15px; margin: 0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px;">
+
+                                    <div class="catalog-specs-table">
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Issuance/Renewal:</span>
+                                            <strong class="catalog-spec-value">₹2,000.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Credit Limit:</span>
+                                            <strong class="catalog-spec-value">₹5,00,000.00</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Grace Period:</span>
+                                            <strong class="catalog-spec-value">Up to 45 Days</strong>
+                                        </div>
+                                        <div class="catalog-spec-row">
+                                            <span class="catalog-spec-label">Validity Period:</span>
+                                            <strong class="catalog-spec-value">4 Years</strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- Features & Usage -->
+                                    <div class="catalog-features-col">
+                                        <h5 class="catalog-features-heading">Features & Usage:</h5>
+                                        <ul class="catalog-features-list">
                                             <li>24/7 Dedicated Luxury Concierge Assistance</li>
                                             <li>Uncapped international airport lounge access</li>
                                             <li>Comprehensive Travel Insurance up to ₹1 Crore</li>
                                         </ul>
-                                        <button type="button" onclick="openApplyModal('infinite_credit')" class="btn btn-primary"
-                                            style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                                    </div>
+
+                                    <!-- Apply Action Button -->
+                                    <div class="catalog-action-col">
+                                        <button type="button" onclick="openApplyModal('infinite_credit')" class="btn-apply-catalog btn btn-primary">
                                             <i class="bx bx-plus-circle"></i> Apply Infinite Credit
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                            <!-- Table 2: All System Cards (Debit & Credit) -->
+                            <div class="glass-card">
+                                <div class="card-section-header">
+                                    <h3 class="card-section-title">
+                                        <i class="bx bx-credit-card-front" style="color: var(--primary-500);"></i> All System Issued Cards Directory
+                                    </h3>
+                                    <div class="card-section-actions">
+                                        <button onclick="openApplyModal('debit')" class="btn btn-primary">
+                                            <i class="bx bx-plus-circle"></i> Apply Debit Card
+                                        </button>
+                                        <button onclick="openApplyModal('credit')" class="btn btn-primary">
+                                            <i class="bx bx-plus-circle"></i> Apply Credit Card
                                         </button>
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
-
-
-                        <!-- Table 2: All System Cards (Debit & Credit) -->
-                        <div class="glass-card">
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-                                <h3
-                                    style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
-                                    <i class="bx bx-credit-card-front" style="color: var(--primary-500);"></i> All
-                                    System Issued Cards Directory
-                                </h3>
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                    <button onclick="openApplyModal('debit')" class="btn btn-primary"
-                                        style="display: inline-flex; align-items: center; gap: 6px;">
-                                        <i class="bx bx-plus-circle"></i> Apply Debit Card
-                                    </button>
-                                    <button onclick="openApplyModal('credit')" class="btn btn-primary"
-                                        style="display: inline-flex; align-items: center; gap: 6px;">
-                                        <i class="bx bx-plus-circle"></i> Apply Credit Card
-                                    </button>
+                                <!-- Client-side real-time filter controls -->
+                                <div class="search-filter-wrapper">
+                                    <div class="search-input-group">
+                                        <i class="bx bx-search search-icon"></i>
+                                        <input type="text" id="directorySearchInput" onkeyup="filterDirectoryTable()"
+                                            placeholder="Search by card number, holder name...">
+                                    </div>
+                                    <div class="filter-select-group">
+                                        <select id="directoryTypeFilter" onchange="filterDirectoryTable()">
+                                            <option value="">All Card Types</option>
+                                            <option value="debit">Debit Cards</option>
+                                            <option value="credit">Credit Cards</option>
+                                        </select>
+                                        <select id="directoryStatusFilter" onchange="filterDirectoryTable()">
+                                            <option value="">All Statuses</option>
+                                            <option value="active">Active</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="expired">Expired</option>
+                                            <option value="closed">Closed</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Client-side real-time filter controls -->
-                            <div class="search-filter-wrapper">
-                                <div class="search-input-group">
-                                    <i class="bx bx-search search-icon"></i>
-                                    <input type="text" id="directorySearchInput" onkeyup="filterDirectoryTable()"
-                                        placeholder="Search by card number, holder name...">
-                                </div>
-                                <div class="filter-select-group">
-                                    <select id="directoryTypeFilter" onchange="filterDirectoryTable()">
-                                        <option value="">All Card Types</option>
-                                        <option value="debit">Debit Cards</option>
-                                        <option value="credit">Credit Cards</option>
-                                    </select>
-                                    <select id="directoryStatusFilter" onchange="filterDirectoryTable()">
-                                        <option value="">All Statuses</option>
-                                        <option value="active">Active</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="expired">Expired</option>
-                                        <option value="closed">Closed</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Sr No.</th>
-                                            <th>Card Number</th>
-                                            <th>Holder Name</th>
-                                            <th>Card Type</th>
-                                            <th>Provider</th>
-                                            <th>Expiry Date</th>
-                                            <th>Status</th>
-                                            <th style="text-align: center;">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="directoryTableBody">
-                                        <c:choose>
-                                            <c:when test="${not empty cards}">
-                                                <c:forEach var="card" items="${cards}" varStatus="status">
-                                                    <fmt:formatDate var="formattedExpiryDate" value="${card.expiryDate}"
-                                                        pattern="MM/yy" />
+                                <div class="table-responsive">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Sr No.</th>
+                                                <th>Card Number</th>
+                                                <th>Holder Name</th>
+                                                <th>Card Type</th>
+                                                <th>Provider</th>
+                                                <th>Expiry Date</th>
+                                                <th>Status</th>
+                                                <th style="text-align: center;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="directoryTableBody">
+                                            <c:choose>
+                                                <c:when test="${not empty cards}">
+                                                    <c:forEach var="card" items="${cards}" varStatus="status">
+                                                        <fmt:formatDate var="formattedExpiryDate"
+                                                            value="${card.expiryDate}" pattern="MM/yy" />
+                                                        <tr>
+                                                            <td class="table-sr-no">${status.count}</td>
+                                                            <td><span class="badge-id">${card.cardNumber}</span></td>
+                                                            <td class="table-holder-name">${card.cardHolderName}</td>
+                                                            <td>
+                                                                <c:choose>
+                                                                    <c:when test="${card.cardType eq 'debit'}">
+                                                                        <c:choose>
+                                                                            <c:when
+                                                                                test="${card.cardTier eq 'premium'}">
+                                                                                <span
+                                                                                    class="badge-card-type premium-debit">Premium
+                                                                                    Debit</span>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <span
+                                                                                    class="badge-card-type classic-debit">Classic
+                                                                                    Debit</span>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <c:choose>
+                                                                            <c:when
+                                                                                test="${card.cardTier eq 'infinite'}">
+                                                                                <span
+                                                                                    class="badge-card-type infinite-credit">Infinite
+                                                                                    Credit</span>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <span
+                                                                                    class="badge-card-type royale-credit">Royale
+                                                                                    Credit</span>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </td>
+                                                            <td class="table-provider">${card.cardProvider}</td>
+                                                            <td>
+                                                                <fmt:formatDate value="${card.expiryDate}"
+                                                                    pattern="yyyy-MM-dd" />
+                                                            </td>
+                                                            <td>
+                                                                <c:choose>
+                                                                    <c:when test="${card.status eq 'active'}">
+                                                                        <span class="status-badge status-badge-active">Active</span>
+                                                                    </c:when>
+                                                                    <c:when test="${card.status eq 'pending'}">
+                                                                        <span class="status-badge status-badge-pending">Pending</span>
+                                                                    </c:when>
+                                                                    <c:when test="${card.status eq 'expired'}">
+                                                                        <span class="status-badge status-badge-expired">Expired</span>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span class="status-badge status-badge-closed">Closed</span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </td>
+                                                            <td class="table-actions-cell">
+                                                                <c:if test="${card.status eq 'pending'}">
+                                                                    <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}"
+                                                                        class="btn-action btn-action-approve">
+                                                                        <i class="bx bx-check"></i> Approve
+                                                                    </a>
+                                                                    <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
+                                                                        class="btn-action btn-action-reject"
+                                                                        onclick="return confirm('Reject and permanently close this card application?');">
+                                                                        <i class="bx bx-x"></i> Reject
+                                                                    </a>
+                                                                </c:if>
+                                                                <c:if test="${card.status eq 'active'}">
+                                                                    <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
+                                                                        class="btn-action btn-action-reject"
+                                                                        onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');">
+                                                                        <i class="bx bx-power-off"></i> Close
+                                                                    </a>
+                                                                </c:if>
+                                                                <c:if test="${card.status ne 'pending'}">
+                                                                    <a href="${pageContext.request.contextPath}/card?action=renew&cardId=${card.cardId}&csrfToken=${sessionScope.csrfToken}"
+                                                                        class="btn-action btn-action-approve"
+                                                                        onclick="return confirm('Are you sure you want to renew/reissue card #${card.cardId}?');">
+                                                                        <i class="bx bx-refresh"></i> Renew
+                                                                    </a>
+                                                                </c:if>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
                                                     <tr>
-                                                        <td style="font-weight: 600; color: var(--gray-500);">
-                                                            ${status.count}</td>
-                                                        <td><span class="badge-id">${card.cardNumber}</span></td>
-                                                        <td style="font-weight: 500;">${card.cardHolderName}</td>
-                                                        <td style="text-transform: capitalize; font-weight: 600;">
-                                                            ${card.cardType}</td>
-                                                        <td
-                                                            style="text-transform: uppercase; font-weight: 500; color: var(--gray-600);">
-                                                            ${card.cardProvider}</td>
-                                                        <td>
-                                                            <fmt:formatDate value="${card.expiryDate}"
-                                                                pattern="yyyy-MM-dd" />
-                                                        </td>
-                                                        <td>
-                                                            <c:choose>
-                                                                <c:when test="${card.status eq 'active'}">
-                                                                    <span
-                                                                        style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Active</span>
-                                                                </c:when>
-                                                                <c:when test="${card.status eq 'pending'}">
-                                                                    <span
-                                                                        style="background: rgba(245, 158, 11, 0.1); color: #fbbf24; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Pending</span>
-                                                                </c:when>
-                                                                <c:when test="${card.status eq 'expired'}">
-                                                                    <span
-                                                                        style="background: rgba(239, 68, 68, 0.1); color: #b91c1c; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Expired</span>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <span
-                                                                        style="background: rgba(156, 163, 175, 0.1); color: var(--gray-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Closed</span>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
-                                                        <td
-                                                            style="text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                                            <c:if test="${card.status eq 'pending'}">
-                                                                <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}"
-                                                                    class="btn-action btn-action-approve">
-                                                                    <i class="bx bx-check"></i> Approve
-                                                                </a>
-                                                                <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
-                                                                    class="btn-action btn-action-reject"
-                                                                    onclick="return confirm('Reject and permanently close this card application?');">
-                                                                    <i class="bx bx-x"></i> Reject
-                                                                </a>
-                                                            </c:if>
-                                                            <c:if test="${card.status eq 'active'}">
-                                                                <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
-                                                                    class="btn-action btn-action-reject"
-                                                                    onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');">
-                                                                    <i class="bx bx-power-off"></i> Close
-                                                                </a>
-                                                            </c:if>
-                                                            <c:if test="${card.status ne 'pending'}">
-                                                                <a href="${pageContext.request.contextPath}/card?action=renew&cardId=${card.cardId}&csrfToken=${sessionScope.csrfToken}"
-                                                                    class="btn-action btn-action-approve"
-                                                                    onclick="return confirm('Are you sure you want to renew/reissue card #${card.cardId}?');">
-                                                                    <i class="bx bx-refresh"></i> Renew
-                                                                </a>
-                                                            </c:if>
-                                                        </td>
+                                                        <td colspan="8"
+                                                            style="text-align: center; padding: 30px; color: var(--gray-400); font-weight: 500;">
+                                                            No ATM cards registered in database directory.</td>
                                                     </tr>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <tr>
-                                                    <td colspan="8"
-                                                        style="text-align: center; padding: 30px; color: var(--gray-400); font-weight: 500;">
-                                                        No ATM cards registered in database directory.</td>
-                                                </tr>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tbody>
-                                </table>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </main>
 
                 <!-- Footer -->
@@ -2344,6 +3388,71 @@
                                 });
                             });
                         }
+
+                        // 3D Card Hover Tilt and Gloss Sheen Effect for Catalog Cards
+                        const wrappers = document.querySelectorAll('.card-3d-wrapper');
+                        wrappers.forEach(wrapper => {
+                            const card = wrapper.querySelector('.vgb-atm-card');
+                            if (!card) return;
+
+                            const frontFace = wrapper.querySelector('.card-front');
+                            const backFace = wrapper.querySelector('.card-back');
+
+                            const shineFront = document.createElement('div');
+                            shineFront.className = 'card-shine';
+                            if (frontFace) frontFace.appendChild(shineFront);
+
+                            const shineBack = document.createElement('div');
+                            shineBack.className = 'card-shine';
+                            if (backFace) backFace.appendChild(shineBack);
+
+                            wrapper.addEventListener('mousemove', (e) => {
+                                const rect = wrapper.getBoundingClientRect();
+                                const x = e.clientX - rect.left;
+                                const y = e.clientY - rect.top;
+
+                                const px = x / rect.width;
+                                const py = y / rect.height;
+
+                                if (card.classList.contains('flipped')) {
+                                    const ry = 180 + (px - 0.5) * 25;
+                                    const rx = -(py - 0.5) * 25;
+                                    card.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+
+                                    const shineX = (1 - px) * 100;
+                                    const shineY = py * 100;
+                                    if (shineBack) {
+                                        shineBack.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                                    }
+                                } else {
+                                    const ry = (px - 0.5) * 25;
+                                    const rx = -(py - 0.5) * 25;
+                                    card.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+
+                                    const shineX = px * 100;
+                                    const shineY = py * 100;
+                                    if (shineFront) {
+                                        shineFront.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                                    }
+                                }
+                            });
+
+                            wrapper.addEventListener('mouseleave', () => {
+                                card.style.transition = 'transform 0.5s ease';
+                                if (card.classList.contains('flipped')) {
+                                    card.style.transform = 'rotateY(180deg)';
+                                } else {
+                                    card.style.transform = 'rotateY(0deg)';
+                                }
+
+                                if (shineFront) shineFront.style.background = 'none';
+                                if (shineBack) shineBack.style.background = 'none';
+
+                                setTimeout(() => {
+                                    card.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                                }, 500);
+                            });
+                        });
                     });
 
                     let selectedTier = 'classic_debit';
@@ -2471,11 +3580,11 @@
                         let type = 'debit';
                         let actualTier = 'classic';
                         let fee = '250.00';
-                        let heading = 'ATM / Debit Card Application Request Form';
-                        let subject = 'Request for ATM/Debit Card Renewal & Issuance';
-                        let detailsHeading = 'ATM/Debit Card Details';
-                        let limitText = '₹ 50,000.00 / Daily limit';
-                        
+                        let heading = 'Classic Debit Card Application Request Form';
+                        let subject = 'Request for Classic Debit Card Renewal & Issuance';
+                        let detailsHeading = 'Classic Debit Card Details';
+                        let limitText = '₹ 50,000.00 / Daily spending limit';
+
                         if (tier === 'classic_debit') {
                             type = 'debit';
                             actualTier = 'classic';
@@ -2527,39 +3636,47 @@
                             limitText = '₹ 50,000.00 / Daily spending limit';
                         }
 
-                        // Update inputs
-                        const typeRadioDebit = document.getElementById('applyCardTypeDebit');
-                        const typeRadioCredit = document.getElementById('applyCardTypeCredit');
-                        if (type === 'debit') {
-                            if (typeRadioDebit) typeRadioDebit.checked = true;
+                        // Sync checked state in radio group
+                        if (tier === 'classic_debit') {
+                            document.getElementById('applyTierClassicDebit').checked = true;
+                        } else if (tier === 'premium_debit') {
+                            document.getElementById('applyTierPremiumDebit').checked = true;
+                        } else if (tier === 'royale_credit') {
+                            document.getElementById('applyTierRoyaleCredit').checked = true;
+                        } else if (tier === 'infinite_credit') {
+                            document.getElementById('applyTierInfiniteCredit').checked = true;
+                        } else if (type === 'debit') {
+                            document.getElementById('applyTierClassicDebit').checked = true;
                         } else {
-                            if (typeRadioCredit) typeRadioCredit.checked = true;
+                            document.getElementById('applyTierRoyaleCredit').checked = true;
                         }
-                        
+
+                        // Update hidden form inputs
+                        document.getElementById('formCardType').value = type;
                         document.getElementById('formCardTier').value = actualTier;
+
                         document.getElementById('applyFeeValue').textContent = '₹ ' + fee;
                         document.getElementById('applyFormHeading').textContent = heading;
                         document.getElementById('applyFormSubject').textContent = subject;
                         document.getElementById('applyDetailsBoxHeading').textContent = detailsHeading;
                         document.getElementById('applyLimitValue').textContent = limitText;
 
-                        // Hide/show the radio options based on the selection
-                        const debitWrapper = document.getElementById('applyDebitRadioWrapper');
-                        const creditWrapper = document.getElementById('applyCreditRadioWrapper');
-                        
-                        if (tier === 'debit' || tier === 'credit' || !tier) {
-                            // If general request from header buttons, show both categories
-                            if (debitWrapper) debitWrapper.style.display = 'inline-flex';
-                            if (creditWrapper) creditWrapper.style.display = 'inline-flex';
+                        // Hide/show the radio options based on the selection category
+                        const classicDebitEl = document.getElementById('applyClassicDebitWrapper');
+                        const premiumDebitEl = document.getElementById('applyPremiumDebitWrapper');
+                        const royaleCreditEl = document.getElementById('applyRoyaleCreditWrapper');
+                        const infiniteCreditEl = document.getElementById('applyInfiniteCreditWrapper');
+
+                        if (type === 'debit') {
+                            if (classicDebitEl) classicDebitEl.style.display = 'inline-flex';
+                            if (premiumDebitEl) premiumDebitEl.style.display = 'inline-flex';
+                            if (royaleCreditEl) royaleCreditEl.style.display = 'none';
+                            if (infiniteCreditEl) infiniteCreditEl.style.display = 'none';
                         } else {
-                            // If specific catalog option clicked, hide the other category entirely
-                            if (type === 'debit') {
-                                if (creditWrapper) creditWrapper.style.display = 'none';
-                                if (debitWrapper) debitWrapper.style.display = 'inline-flex';
-                            } else {
-                                if (debitWrapper) debitWrapper.style.display = 'none';
-                                if (creditWrapper) creditWrapper.style.display = 'inline-flex';
-                            }
+                            if (classicDebitEl) classicDebitEl.style.display = 'none';
+                            if (premiumDebitEl) premiumDebitEl.style.display = 'none';
+                            if (royaleCreditEl) royaleCreditEl.style.display = 'inline-flex';
+                            if (infiniteCreditEl) infiniteCreditEl.style.display = 'inline-flex';
                         }
 
                         // Calculate expiry date: today + 4 years (MM/YYYY format)
@@ -2579,16 +3696,11 @@
                 <div id="applyModal" class="modal">
                     <div class="modal-content"
                         style="max-width: 720px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
-                        <div class="modal-header"
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
-                            <h3
-                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer ATM
-                                Card</h3>
-                            <button type="button" onclick="closeApplyModal()"
-                                style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;"
-                                onmouseover="this.style.color='var(--gray-800)'"
-                                onmouseout="this.style.color='var(--gray-400)'">&times;</button>
+                        <div class="modal-header-container">
+                            <h3 class="modal-title-text">
+                                <i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer ATM Card
+                            </h3>
+                            <button type="button" onclick="closeApplyModal()" class="modal-close-btn">&times;</button>
                         </div>
 
                         <div class="lookup-container">
@@ -2604,11 +3716,8 @@
                         </div>
 
                         <!-- Lookup Results Container -->
-                        <div id="lookupResultsContainer"
-                            style="display: none; max-height: 200px; overflow-y: auto; padding: 15px 24px; border-bottom: 1px dashed rgba(99,102,241,0.1); box-sizing: border-box; width: 100%;">
-                            <h4
-                                style="margin: 0 0 10px; font-size: 0.85rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; text-align: left;">
-                                Search Results</h4>
+                        <div id="lookupResultsContainer" class="lookup-results-box">
+                            <h4 class="lookup-results-title">Search Results</h4>
                             <div id="lookupResultsList" style="display: flex; flex-direction: column;"></div>
                         </div>
 
@@ -2619,28 +3728,19 @@
                             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" id="formAccountId" name="accountId" value="">
                             <input type="hidden" id="formAccountNumber" name="accountNumber" value="">
+                            <input type="hidden" id="formCardType" name="cardType" value="debit">
                             <input type="hidden" id="formCardTier" name="cardTier" value="classic">
 
-                            <div class="apply-paper-form"
-                                style="background: #fff; border: 1.5px solid var(--gray-200); padding: 25px 20px; border-radius: var(--radius-sm); color: #1e293b; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; line-height: 1.6; margin-top: 20px; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm); position: relative; overflow: hidden;">
+                            <div class="apply-paper-form">
                                 <!-- Watermark -->
-                                <div
-                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 7.5rem; font-weight: 900; color: rgba(99, 102, 241, 0.03); pointer-events: none; user-select: none; font-family: 'Poppins', sans-serif; letter-spacing: 5px;">
-                                    VGB</div>
+                                <div class="paper-form-watermark">VGB</div>
 
                                 <!-- Form Header -->
-                                <div
-                                    style="text-align: center; border-bottom: 2px double #475569; padding-bottom: 12px; margin-bottom: 20px; position: relative;">
-                                    <h2
-                                        style="font-size: 1.35rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin: 0; font-family: 'Poppins', sans-serif;">
-                                        Vertex Galaxy Bank</h2>
-                                    <h3 id="applyFormHeading"
-                                        style="font-size: 1rem; font-weight: 700; color: #475569; margin: 4px 0 0; text-transform: uppercase; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;">
-                                        ATM Card Application Request Form</h3>
-                                    <span
-                                        style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); font-family: 'Poppins', sans-serif;">
-                                        Issuance Fee Due: <strong id="applyFeeValue" style="font-weight: 800;">₹
-                                            250.00</strong>
+                                <div class="paper-form-header">
+                                    <h2 class="paper-form-title">Vertex Galaxy Bank</h2>
+                                    <h3 id="applyFormHeading" class="paper-form-subtitle">ATM Card Application Request Form</h3>
+                                    <span class="paper-form-fee-badge">
+                                        Issuance Fee Due: <strong id="applyFeeValue" style="font-weight: 800;">₹ 250.00</strong>
                                     </span>
                                 </div>
 
@@ -2672,17 +3772,15 @@
 
                                 <!-- Customer Information -->
                                 <div style="margin-bottom: 20px;">
-                                    <h4
-                                        style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">
-                                        Customer Information</h4>
+                                    <h4 class="paper-form-section-title">Customer Information</h4>
                                     <table style="width: 100%; border-collapse: collapse;">
                                         <tr>
                                             <td style="width: 35%; padding: 5px 0;"><strong>Account Holder
                                                     Name:</strong></td>
                                             <td style="border-bottom: 1px dotted #475569; padding: 0;">
                                                 <input type="text" id="applyCardHolderName" name="cardHolderName"
-                                                    required readonly
-                                                    style="width: 100%; border: none; padding: 5px 8px; font-weight: 600; text-transform: uppercase; font-family: monospace; font-size: 1rem; color: #0f172a; outline: none; background: transparent;">
+                                                    required readonly class="paper-form-input-dotted"
+                                                    style="font-family: monospace; font-size: 1rem; text-transform: uppercase;">
                                             </td>
                                         </tr>
                                         <tr>
@@ -2721,8 +3819,7 @@
 
                                 <!-- Card Details Box -->
                                 <div style="margin-bottom: 25px;">
-                                    <h4 id="applyDetailsBoxHeading"
-                                        style="border-bottom: 1px solid #94a3b8; padding-bottom: 3px; margin: 0 0 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 700; color: #475569; font-family: 'Poppins', sans-serif;">
+                                    <h4 id="applyDetailsBoxHeading" class="paper-form-section-title">
                                         ATM/Debit Card Details</h4>
                                     <table style="width: 100%; border-collapse: collapse;">
                                         <tr>
@@ -2744,7 +3841,8 @@
                                         </tr>
                                         <tr id="applyLimitRow">
                                             <td style="padding: 5px 0;"><strong>Card Limits:</strong></td>
-                                            <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 0.95rem; color: #0f172a;" id="applyLimitValue">
+                                            <td style="border-bottom: 1px dotted #475569; padding: 5px 8px; font-weight: 600; font-family: monospace; font-size: 0.95rem; color: #0f172a;"
+                                                id="applyLimitValue">
                                                 ₹50,000 / Day
                                             </td>
                                         </tr>
@@ -2752,20 +3850,39 @@
                                             <td style="padding: 5px 0;"><strong>Card Category:</strong></td>
                                             <td
                                                 style="padding: 5px 8px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                                                <label id="applyDebitRadioWrapper"
+                                                <!-- Debit Options -->
+                                                <label id="applyClassicDebitWrapper"
                                                     style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
-                                                    <input type="radio" id="applyCardTypeDebit" name="cardType"
-                                                        value="debit" checked
-                                                        onchange="updateApplyFormForTier('debit')"
+                                                    <input type="radio" id="applyTierClassicDebit"
+                                                        name="cardProductRadio" value="classic_debit" checked
+                                                        onchange="updateApplyFormForTier('classic_debit')"
                                                         style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
-                                                    Debit Card (Fee: ₹250)
+                                                    Classic Debit (Fee: ₹250)
                                                 </label>
-                                                <label id="applyCreditRadioWrapper"
+                                                <label id="applyPremiumDebitWrapper"
                                                     style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
-                                                    <input type="radio" id="applyCardTypeCredit" name="cardType"
-                                                        value="credit" onchange="updateApplyFormForTier('credit')"
+                                                    <input type="radio" id="applyTierPremiumDebit"
+                                                        name="cardProductRadio" value="premium_debit"
+                                                        onchange="updateApplyFormForTier('premium_debit')"
                                                         style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
-                                                    Credit Card (Fee: ₹500)
+                                                    Premium Debit (Fee: ₹500)
+                                                </label>
+                                                <!-- Credit Options -->
+                                                <label id="applyRoyaleCreditWrapper"
+                                                    style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
+                                                    <input type="radio" id="applyTierRoyaleCredit"
+                                                        name="cardProductRadio" value="royale_credit"
+                                                        onchange="updateApplyFormForTier('royale_credit')"
+                                                        style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                                    Royale Credit (Fee: ₹500)
+                                                </label>
+                                                <label id="applyInfiniteCreditWrapper"
+                                                    style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #475569;">
+                                                    <input type="radio" id="applyTierInfiniteCredit"
+                                                        name="cardProductRadio" value="infinite_credit"
+                                                        onchange="updateApplyFormForTier('infinite_credit')"
+                                                        style="width: 13px; height: 13px; margin: 0; cursor: pointer;">
+                                                    Infinite Credit (Fee: ₹2,000)
                                                 </label>
                                             </td>
                                         </tr>
