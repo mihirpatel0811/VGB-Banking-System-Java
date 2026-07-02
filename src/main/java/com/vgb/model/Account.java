@@ -71,6 +71,11 @@ public class Account implements Serializable {
     private String primaryMaritalStatus;
     private String primaryOccupation;
     private BigDecimal primaryIncome;
+    private String primaryFatherName;
+    private String primaryMotherName;
+    private String primaryNationality;
+    private String primaryAltPhone;
+    private String primaryPermAddress;
 
     // Joint Customer fields
     private String jointFirstName;
@@ -89,6 +94,11 @@ public class Account implements Serializable {
     private String jointZip;
     private String jointOccupation;
     private BigDecimal jointIncome;
+    private String jointFatherName;
+    private String jointMotherName;
+    private String jointNationality;
+    private String jointAltPhone;
+    private String jointPermAddress;
 
     // Constructors
     public Account() {}
@@ -231,6 +241,21 @@ public class Account implements Serializable {
     public BigDecimal getPrimaryIncome() { return primaryIncome; }
     public void setPrimaryIncome(BigDecimal primaryIncome) { this.primaryIncome = primaryIncome; }
 
+    public String getPrimaryFatherName() { return primaryFatherName; }
+    public void setPrimaryFatherName(String primaryFatherName) { this.primaryFatherName = primaryFatherName; }
+
+    public String getPrimaryMotherName() { return primaryMotherName; }
+    public void setPrimaryMotherName(String primaryMotherName) { this.primaryMotherName = primaryMotherName; }
+
+    public String getPrimaryNationality() { return primaryNationality; }
+    public void setPrimaryNationality(String primaryNationality) { this.primaryNationality = primaryNationality; }
+
+    public String getPrimaryAltPhone() { return primaryAltPhone; }
+    public void setPrimaryAltPhone(String primaryAltPhone) { this.primaryAltPhone = primaryAltPhone; }
+
+    public String getPrimaryPermAddress() { return primaryPermAddress; }
+    public void setPrimaryPermAddress(String primaryPermAddress) { this.primaryPermAddress = primaryPermAddress; }
+
     // Getters and Setters for Joint Customer details
     public String getJointFirstName() { return jointFirstName; }
     public void setJointFirstName(String jointFirstName) { this.jointFirstName = jointFirstName; }
@@ -279,6 +304,21 @@ public class Account implements Serializable {
 
     public BigDecimal getJointIncome() { return jointIncome; }
     public void setJointIncome(BigDecimal jointIncome) { this.jointIncome = jointIncome; }
+
+    public String getJointFatherName() { return jointFatherName; }
+    public void setJointFatherName(String jointFatherName) { this.jointFatherName = jointFatherName; }
+
+    public String getJointMotherName() { return jointMotherName; }
+    public void setJointMotherName(String jointMotherName) { this.jointMotherName = jointMotherName; }
+
+    public String getJointNationality() { return jointNationality; }
+    public void setJointNationality(String jointNationality) { this.jointNationality = jointNationality; }
+
+    public String getJointAltPhone() { return jointAltPhone; }
+    public void setJointAltPhone(String jointAltPhone) { this.jointAltPhone = jointAltPhone; }
+
+    public String getJointPermAddress() { return jointPermAddress; }
+    public void setJointPermAddress(String jointPermAddress) { this.jointPermAddress = jointPermAddress; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }

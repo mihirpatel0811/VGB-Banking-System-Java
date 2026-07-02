@@ -26,9 +26,14 @@ public class AccountDAOImpl implements AccountDAO {
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.first_name END) as primary_first_name, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.middle_name END) as primary_middle_name, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.last_name END) as primary_last_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.father_name END) as primary_father_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.mother_name END) as primary_mother_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.nationality END) as primary_nationality, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.email END) as primary_email, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.phone_no END) as primary_phone, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.alt_phone_no END) as primary_alt_phone, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.address END) as primary_address, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.perm_address END) as primary_perm_address, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.city END) as primary_city, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.state END) as primary_state, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.zip_code END) as primary_zip, " +
@@ -44,14 +49,19 @@ public class AccountDAOImpl implements AccountDAO {
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.first_name END) as joint_first_name, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.middle_name END) as joint_middle_name, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.last_name END) as joint_last_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.father_name END) as joint_father_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.mother_name END) as joint_mother_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.nationality END) as joint_nationality, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.email END) as joint_email, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.phone_no END) as joint_phone, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.alt_phone_no END) as joint_alt_phone, " +
         "MIN(CASE WHEN s.ownership_type = 'joint_holder' THEN c.dob END) as joint_dob, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.gender END) as joint_gender, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.marital_status END) as joint_marital_status, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.pan_card END) as joint_pan, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.aadhaar_card END) as joint_aadhaar, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.address END) as joint_address, " +
+        "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.perm_address END) as joint_perm_address, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.city END) as joint_city, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.state END) as joint_state, " +
         "MAX(CASE WHEN s.ownership_type = 'joint_holder' THEN c.zip_code END) as joint_zip, " +
@@ -354,7 +364,7 @@ public class AccountDAOImpl implements AccountDAO {
 
             // Update primary customer details if provided
             if (account.getPrimaryFirstName() != null) {
-                String updatePrimarySql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ? WHERE customer_id = ?";
+                String updatePrimarySql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ?, father_name = ?, mother_name = ?, nationality = ?, alt_phone_no = ? WHERE customer_id = ?";
                 try (PreparedStatement stmtPrim = conn.prepareStatement(updatePrimarySql)) {
                     stmtPrim.setString(1, account.getPrimaryFirstName());
                     stmtPrim.setString(2, account.getPrimaryMiddleName());
@@ -367,13 +377,17 @@ public class AccountDAOImpl implements AccountDAO {
                     stmtPrim.setString(9, account.getPrimaryPan());
                     stmtPrim.setString(10, account.getPrimaryAadhaar());
                     stmtPrim.setString(11, account.getPrimaryAddress());
-                    stmtPrim.setString(12, account.getPrimaryAddress());
+                    stmtPrim.setString(12, account.getPrimaryPermAddress());
                     stmtPrim.setString(13, account.getPrimaryCity());
                     stmtPrim.setString(14, account.getPrimaryState());
                     stmtPrim.setString(15, account.getPrimaryZip());
                     stmtPrim.setString(16, account.getPrimaryOccupation());
                     stmtPrim.setBigDecimal(17, account.getPrimaryIncome());
-                    stmtPrim.setLong(18, account.getCustomerId());
+                    stmtPrim.setString(18, account.getPrimaryFatherName());
+                    stmtPrim.setString(19, account.getPrimaryMotherName());
+                    stmtPrim.setString(20, account.getPrimaryNationality());
+                    stmtPrim.setString(21, account.getPrimaryAltPhone());
+                    stmtPrim.setLong(22, account.getCustomerId());
                     stmtPrim.executeUpdate();
                 }
             }
@@ -398,7 +412,7 @@ public class AccountDAOImpl implements AccountDAO {
                 if ("joint".equalsIgnoreCase(account.getHoldingType())) {
                     if (account.getJointCustomerId() != null && account.getJointCustomerId() > 0) {
                         // Update existing joint customer
-                        String updateJointSql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ? WHERE customer_id = ?";
+                        String updateJointSql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ?, father_name = ?, mother_name = ?, nationality = ?, alt_phone_no = ? WHERE customer_id = ?";
                         try (PreparedStatement stmtJnt = conn.prepareStatement(updateJointSql)) {
                             stmtJnt.setString(1, account.getJointFirstName());
                             stmtJnt.setString(2, account.getJointMiddleName());
@@ -411,13 +425,17 @@ public class AccountDAOImpl implements AccountDAO {
                             stmtJnt.setString(9, account.getJointPan());
                             stmtJnt.setString(10, account.getJointAadhaar());
                             stmtJnt.setString(11, account.getJointAddress());
-                            stmtJnt.setString(12, account.getJointAddress());
+                            stmtJnt.setString(12, account.getJointPermAddress());
                             stmtJnt.setString(13, account.getJointCity());
                             stmtJnt.setString(14, account.getJointState());
                             stmtJnt.setString(15, account.getJointZip());
                             stmtJnt.setString(16, account.getJointOccupation());
                             stmtJnt.setBigDecimal(17, account.getJointIncome());
-                            stmtJnt.setLong(18, account.getJointCustomerId());
+                            stmtJnt.setString(18, account.getJointFatherName());
+                            stmtJnt.setString(19, account.getJointMotherName());
+                            stmtJnt.setString(20, account.getJointNationality());
+                            stmtJnt.setString(21, account.getJointAltPhone());
+                            stmtJnt.setLong(22, account.getJointCustomerId());
                             stmtJnt.executeUpdate();
                         }
                     } else {
@@ -428,19 +446,19 @@ public class AccountDAOImpl implements AccountDAO {
                             stmtIns.setString(1, account.getJointFirstName());
                             stmtIns.setString(2, account.getJointMiddleName());
                             stmtIns.setString(3, account.getJointLastName());
-                            stmtIns.setString(4, account.getJointFirstName() + "'s Father");
-                            stmtIns.setString(5, account.getJointFirstName() + "'s Mother");
+                            stmtIns.setString(4, account.getJointFatherName());
+                            stmtIns.setString(5, account.getJointMotherName());
                             stmtIns.setDate(6, account.getJointDob() != null ? java.sql.Date.valueOf(account.getJointDob()) : null);
                             stmtIns.setString(7, account.getJointGender());
                             stmtIns.setString(8, account.getJointMaritalStatus());
-                            stmtIns.setString(9, "Indian");
+                            stmtIns.setString(9, account.getJointNationality());
                             stmtIns.setString(10, account.getJointEmail());
                             stmtIns.setString(11, account.getJointPan());
                             stmtIns.setString(12, account.getJointAadhaar());
                             stmtIns.setString(13, account.getJointPhone());
-                            stmtIns.setString(14, "");
+                            stmtIns.setString(14, account.getJointAltPhone());
                             stmtIns.setString(15, account.getJointAddress());
-                            stmtIns.setString(16, account.getJointAddress());
+                            stmtIns.setString(16, account.getJointPermAddress());
                             stmtIns.setString(17, account.getJointCity());
                             stmtIns.setString(18, account.getJointState());
                             stmtIns.setString(19, account.getJointZip());
@@ -1042,9 +1060,14 @@ public class AccountDAOImpl implements AccountDAO {
             account.setPrimaryFirstName(rs.getString("primary_first_name"));
             account.setPrimaryMiddleName(rs.getString("primary_middle_name"));
             account.setPrimaryLastName(rs.getString("primary_last_name"));
+            account.setPrimaryFatherName(rs.getString("primary_father_name"));
+            account.setPrimaryMotherName(rs.getString("primary_mother_name"));
+            account.setPrimaryNationality(rs.getString("primary_nationality"));
             account.setPrimaryEmail(rs.getString("primary_email"));
             account.setPrimaryPhone(rs.getString("primary_phone"));
+            account.setPrimaryAltPhone(rs.getString("primary_alt_phone"));
             account.setPrimaryAddress(rs.getString("primary_address"));
+            account.setPrimaryPermAddress(rs.getString("primary_perm_address"));
             account.setPrimaryCity(rs.getString("primary_city"));
             account.setPrimaryState(rs.getString("primary_state"));
             account.setPrimaryZip(rs.getString("primary_zip"));
@@ -1066,8 +1089,12 @@ public class AccountDAOImpl implements AccountDAO {
                 account.setJointFirstName(rs.getString("joint_first_name"));
                 account.setJointMiddleName(rs.getString("joint_middle_name"));
                 account.setJointLastName(rs.getString("joint_last_name"));
+                account.setJointFatherName(rs.getString("joint_father_name"));
+                account.setJointMotherName(rs.getString("joint_mother_name"));
+                account.setJointNationality(rs.getString("joint_nationality"));
                 account.setJointEmail(rs.getString("joint_email"));
                 account.setJointPhone(rs.getString("joint_phone"));
+                account.setJointAltPhone(rs.getString("joint_alt_phone"));
                 Date jDob = rs.getDate("joint_dob");
                 if (jDob != null) {
                     account.setJointDob(jDob.toLocalDate());
@@ -1077,6 +1104,7 @@ public class AccountDAOImpl implements AccountDAO {
                 account.setJointPan(rs.getString("joint_pan"));
                 account.setJointAadhaar(rs.getString("joint_aadhaar"));
                 account.setJointAddress(rs.getString("joint_address"));
+                account.setJointPermAddress(rs.getString("joint_perm_address"));
                 account.setJointCity(rs.getString("joint_city"));
                 account.setJointState(rs.getString("joint_state"));
                 account.setJointZip(rs.getString("joint_zip"));

@@ -37,6 +37,8 @@ public class CustomerDAOImpl implements CustomerDAO {
         "UPDATE customer SET pin = ? WHERE customer_id = ?";
     private static final String UPDATE_CUSTOMER_AVATAR = 
         "UPDATE customer SET avatar_path = ? WHERE customer_id = ?";
+    private static final String UPDATE_CUSTOMER_USERNAME = 
+        "UPDATE customer SET username = ? WHERE customer_id = ?";
     private static final String DELETE_CUSTOMER = 
         "DELETE FROM customer WHERE customer_id = ?";
     private static final String CHECK_EMAIL_EXISTS = 
@@ -352,6 +354,29 @@ public class CustomerDAOImpl implements CustomerDAO {
         } catch (SQLException e) {
             logger.error("Error updating customer avatar path", e);
             throw new Exception("Failed to update avatar path", e);
+        } finally {
+            DatabaseConfig.closeResources(null, stmt, conn);
+        }
+    }
+
+    @Override
+    public boolean updateUsername(long customerId, String newUsername) throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement(UPDATE_CUSTOMER_USERNAME);
+            stmt.setString(1, newUsername);
+            stmt.setLong(2, customerId);
+
+            int result = stmt.executeUpdate();
+            logger.info("Customer username updated: {}", customerId);
+            return result > 0;
+
+        } catch (SQLException e) {
+            logger.error("Error updating customer username", e);
+            throw new Exception("Failed to update username", e);
         } finally {
             DatabaseConfig.closeResources(null, stmt, conn);
         }

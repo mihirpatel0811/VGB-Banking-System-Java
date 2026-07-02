@@ -744,6 +744,31 @@
                                 </div>
                             </div>
                             
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;" class="mobile-grid-1">
+                                <div class="form-group">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Father's Name</label>
+                                    <input type="text" id="fatherName" value="${customer.fatherName}" required class="control-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Mother's Name</label>
+                                    <input type="text" id="motherName" value="${customer.motherName}" required class="control-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Nationality</label>
+                                    <input type="text" id="nationality" value="${customer.nationality}" required class="control-input">
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;" class="mobile-grid-1">
+                                <div class="form-group">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Alternate Phone</label>
+                                    <input type="text" id="altPhone" value="${customer.altPhoneNo}" class="control-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Permanent Address</label>
+                                    <input type="text" id="permAddress" value="${customer.permAddress}" required class="control-input">
+                                </div>
+                            </div>
+                            
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;" class="mobile-grid-1">
                                 <div class="form-group">
                                     <label class="form-label" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray-500); margin-bottom: 5px;">Aadhaar Card Number</label>
@@ -1016,6 +1041,11 @@
             params.append('city', document.getElementById('city').value);
             params.append('state', document.getElementById('state').value);
             params.append('zipCode', document.getElementById('zipCode').value);
+            params.append('fatherName', document.getElementById('fatherName').value);
+            params.append('motherName', document.getElementById('motherName').value);
+            params.append('nationality', document.getElementById('nationality').value);
+            params.append('altPhone', document.getElementById('altPhone').value);
+            params.append('permAddress', document.getElementById('permAddress').value);
             
             fetch('${pageContext.request.contextPath}/update-profile', {
                 method: 'POST',

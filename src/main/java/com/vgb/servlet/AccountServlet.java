@@ -6,10 +6,12 @@ import com.vgb.model.Customer;
 import com.vgb.model.Transaction;
 import com.vgb.service.AccountService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -24,6 +26,11 @@ import java.util.UUID;
  * AccountServlet: Handles administrative account management operations
  */
 @WebServlet(name = "AccountServlet", value = "/account")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+    maxFileSize = 1024 * 1024 * 10,      // 10MB
+    maxRequestSize = 1024 * 1024 * 50    // 50MB
+)
 public class AccountServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
 
@@ -229,6 +236,11 @@ public class AccountServlet extends BaseServlet {
             account.setPrimaryPan(getParameter(request, "pan", ""));
             account.setPrimaryAadhaar(getParameter(request, "aadhaar", ""));
             account.setPrimaryAddress(getParameter(request, "address", ""));
+            account.setPrimaryPermAddress(getParameter(request, "permAddress", ""));
+            account.setPrimaryFatherName(getParameter(request, "fatherName", ""));
+            account.setPrimaryMotherName(getParameter(request, "motherName", ""));
+            account.setPrimaryNationality(getParameter(request, "nationality", "Indian"));
+            account.setPrimaryAltPhone(getParameter(request, "altPhone", ""));
             account.setPrimaryCity(getParameter(request, "city", ""));
             account.setPrimaryState(getParameter(request, "state", ""));
             account.setPrimaryZip(getParameter(request, "zip", ""));
@@ -263,6 +275,11 @@ public class AccountServlet extends BaseServlet {
                 account.setJointPan(getParameter(request, "joint_pan", ""));
                 account.setJointAadhaar(getParameter(request, "joint_aadhaar", ""));
                 account.setJointAddress(getParameter(request, "joint_address", ""));
+                account.setJointPermAddress(getParameter(request, "joint_permAddress", ""));
+                account.setJointFatherName(getParameter(request, "joint_fatherName", ""));
+                account.setJointMotherName(getParameter(request, "joint_motherName", ""));
+                account.setJointNationality(getParameter(request, "joint_nationality", "Indian"));
+                account.setJointAltPhone(getParameter(request, "joint_altPhone", ""));
                 account.setJointCity(getParameter(request, "joint_city", ""));
                 account.setJointState(getParameter(request, "joint_state", ""));
                 account.setJointZip(getParameter(request, "joint_zip", ""));
@@ -385,15 +402,19 @@ public class AccountServlet extends BaseServlet {
                 cust.setFirstName(firstName);
                 cust.setMiddleName(getParameter(request, "partner_middleName_" + i, ""));
                 cust.setLastName(getParameter(request, "partner_lastName_" + i, ""));
+                cust.setFatherName(getParameter(request, "partner_fatherName_" + i, ""));
+                cust.setMotherName(getParameter(request, "partner_motherName_" + i, ""));
+                cust.setNationality(getParameter(request, "partner_nationality_" + i, "Indian"));
                 cust.setDob(LocalDate.parse(getParameter(request, "partner_dob_" + i, "2000-01-01")));
                 cust.setGender(getParameter(request, "partner_gender_" + i, "male"));
                 cust.setMaritalStatus(getParameter(request, "partner_maritalStatus_" + i, "single"));
                 cust.setEmail(getParameter(request, "partner_email_" + i, ""));
                 cust.setPhoneNo(getParameter(request, "partner_phone_" + i, ""));
+                cust.setAltPhoneNo(getParameter(request, "partner_altPhone_" + i, ""));
                 cust.setPanCard(getParameter(request, "partner_pan_" + i, ""));
                 cust.setAadhaarCard(getParameter(request, "partner_aadhaar_" + i, ""));
                 cust.setAddress(getParameter(request, "partner_address_" + i, ""));
-                cust.setPermAddress(getParameter(request, "partner_address_" + i, ""));
+                cust.setPermAddress(getParameter(request, "partner_permAddress_" + i, ""));
                 cust.setCity(getParameter(request, "partner_city_" + i, ""));
                 cust.setState(getParameter(request, "partner_state_" + i, ""));
                 cust.setZipCode(getParameter(request, "partner_zip_" + i, ""));
@@ -411,15 +432,19 @@ public class AccountServlet extends BaseServlet {
             primary.setFirstName(getParameter(request, "firstName", ""));
             primary.setMiddleName(getParameter(request, "middleName", ""));
             primary.setLastName(getParameter(request, "lastName", ""));
+            primary.setFatherName(getParameter(request, "fatherName", ""));
+            primary.setMotherName(getParameter(request, "motherName", ""));
+            primary.setNationality(getParameter(request, "nationality", "Indian"));
             primary.setDob(LocalDate.parse(getParameter(request, "dob", "2000-01-01")));
             primary.setGender(getParameter(request, "gender", "male"));
             primary.setMaritalStatus(getParameter(request, "maritalStatus", "single"));
             primary.setEmail(getParameter(request, "email", ""));
             primary.setPhoneNo(getParameter(request, "phone", ""));
+            primary.setAltPhoneNo(getParameter(request, "altPhone", ""));
             primary.setPanCard(getParameter(request, "pan", ""));
             primary.setAadhaarCard(getParameter(request, "aadhaar", ""));
             primary.setAddress(getParameter(request, "address", ""));
-            primary.setPermAddress(getParameter(request, "address", ""));
+            primary.setPermAddress(getParameter(request, "permAddress", ""));
             primary.setCity(getParameter(request, "city", ""));
             primary.setState(getParameter(request, "state", ""));
             primary.setZipCode(getParameter(request, "zip", ""));
@@ -429,6 +454,8 @@ public class AccountServlet extends BaseServlet {
             primary.setOccupation(getParameter(request, "occupation", "Salaried"));
             primary.setAnnualIncome(new BigDecimal(getParameter(request, "income", "300000")));
             primary.setStatus("active");
+            String primaryAvatar = processProfilePhoto(request, "primaryAvatar", "primary");
+            primary.setAvatarPath(primaryAvatar);
             customerList.add(primary);
 
             // Joint customer details
@@ -437,15 +464,19 @@ public class AccountServlet extends BaseServlet {
                 joint.setFirstName(getParameter(request, "joint_firstName", ""));
                 joint.setMiddleName(getParameter(request, "joint_middleName", ""));
                 joint.setLastName(getParameter(request, "joint_lastName", ""));
+                joint.setFatherName(getParameter(request, "joint_fatherName", ""));
+                joint.setMotherName(getParameter(request, "joint_motherName", ""));
+                joint.setNationality(getParameter(request, "joint_nationality", "Indian"));
                 joint.setDob(LocalDate.parse(getParameter(request, "joint_dob", "2000-01-01")));
                 joint.setGender(getParameter(request, "joint_gender", "male"));
                 joint.setMaritalStatus(getParameter(request, "joint_maritalStatus", "single"));
                 joint.setEmail(getParameter(request, "joint_email", ""));
                 joint.setPhoneNo(getParameter(request, "joint_phone", ""));
+                joint.setAltPhoneNo(getParameter(request, "joint_altPhone", ""));
                 joint.setPanCard(getParameter(request, "joint_pan", ""));
                 joint.setAadhaarCard(getParameter(request, "joint_aadhaar", ""));
                 joint.setAddress(getParameter(request, "joint_address", ""));
-                joint.setPermAddress(getParameter(request, "joint_address", ""));
+                joint.setPermAddress(getParameter(request, "joint_permAddress", ""));
                 joint.setCity(getParameter(request, "joint_city", ""));
                 joint.setState(getParameter(request, "joint_state", ""));
                 joint.setZipCode(getParameter(request, "joint_zip", ""));
@@ -455,6 +486,8 @@ public class AccountServlet extends BaseServlet {
                 joint.setOccupation(getParameter(request, "joint_occupation", "Salaried"));
                 joint.setAnnualIncome(new BigDecimal(getParameter(request, "joint_income", "300000")));
                 joint.setStatus("active");
+                String jointAvatar = processProfilePhoto(request, "jointAvatar", "joint");
+                joint.setAvatarPath(jointAvatar);
                 customerList.add(joint);
             }
         }
@@ -544,26 +577,26 @@ public class AccountServlet extends BaseServlet {
 
                     // Create new customer profile
                     String createCustomerSql = 
-                        "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income, avatar_path) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     
                     try (PreparedStatement custStmt = conn.prepareStatement(createCustomerSql, Statement.RETURN_GENERATED_KEYS)) {
                         custStmt.setString(1, customer.getFirstName());
                         custStmt.setString(2, customer.getMiddleName());
                         custStmt.setString(3, customer.getLastName());
-                        custStmt.setString(4, customer.getFirstName() + "'s Father");
-                        custStmt.setString(5, customer.getFirstName() + "'s Mother");
+                        custStmt.setString(4, customer.getFatherName());
+                        custStmt.setString(5, customer.getMotherName());
                         custStmt.setDate(6, java.sql.Date.valueOf(customer.getDob()));
                         custStmt.setString(7, customer.getGender());
                         custStmt.setString(8, customer.getMaritalStatus());
-                        custStmt.setString(9, "Indian");
+                        custStmt.setString(9, customer.getNationality());
                         custStmt.setString(10, customer.getEmail());
                         custStmt.setString(11, customer.getPanCard());
                         custStmt.setString(12, customer.getAadhaarCard());
                         custStmt.setString(13, customer.getPhoneNo());
-                        custStmt.setString(14, "");
+                        custStmt.setString(14, customer.getAltPhoneNo());
                         custStmt.setString(15, customer.getAddress());
-                        custStmt.setString(16, customer.getAddress());
+                        custStmt.setString(16, customer.getPermAddress());
                         custStmt.setString(17, customer.getCity());
                         custStmt.setString(18, customer.getState());
                         custStmt.setString(19, customer.getZipCode());
@@ -573,6 +606,7 @@ public class AccountServlet extends BaseServlet {
                         custStmt.setString(23, "active");
                         custStmt.setString(24, customer.getOccupation());
                         custStmt.setBigDecimal(25, customer.getAnnualIncome());
+                        custStmt.setString(26, customer.getAvatarPath());
                         
                         int affectedRows = custStmt.executeUpdate();
                         if (affectedRows == 0) {
@@ -1287,5 +1321,51 @@ public class AccountServlet extends BaseServlet {
                   .replace("\n", "\\n")
                   .replace("\r", "\\r")
                   .replace("\t", "\\t");
+    }
+
+    private String getSubmittedFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] tokens = contentDisp.split(";");
+        for (String token : tokens) {
+            if (token.trim().startsWith("filename")) {
+                return token.substring(token.indexOf("=") + 2, token.length() - 1);
+            }
+        }
+        return "default.png";
+    }
+
+    private String processProfilePhoto(HttpServletRequest request, String partName, String suffix) {
+        try {
+            Part filePart = request.getPart(partName);
+            if (filePart == null || filePart.getSize() == 0) {
+                return null;
+            }
+            String contentType = filePart.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return null;
+            }
+            String uploadPath = request.getServletContext().getRealPath("/assest/img/avatars/");
+            java.io.File uploadDir = new java.io.File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            String originalName = getSubmittedFileName(filePart);
+            originalName = new java.io.File(originalName).getName();
+            String ext = "png";
+            if (originalName.contains(".")) {
+                String potentialExt = originalName.substring(originalName.lastIndexOf(".") + 1).toLowerCase().trim();
+                if (potentialExt.matches("^[a-zA-Z0-9]+$") && 
+                    (potentialExt.equals("png") || potentialExt.equals("jpg") || potentialExt.equals("jpeg") || potentialExt.equals("gif"))) {
+                    ext = potentialExt;
+                }
+            }
+            String fileName = "avatar_" + suffix + "_" + System.currentTimeMillis() + "." + ext;
+            String filePath = uploadPath + java.io.File.separator + fileName;
+            filePart.write(filePath);
+            return "/assest/img/avatars/" + fileName;
+        } catch (Exception e) {
+            logger.error("Failed to process profile photo for " + partName, e);
+            return null;
+        }
     }
 }

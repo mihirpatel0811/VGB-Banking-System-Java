@@ -92,4 +92,9 @@ public interface CustomerDAO {
      * Update customer avatar path
      */
     boolean updateAvatarPath(long customerId, String avatarPath) throws Exception;
+
+    /**
+     * Update customer username
+     */
+    boolean updateUsername(long customerId, String newUsername) throws Exception;
 }

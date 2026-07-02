@@ -47,8 +47,17 @@ public class UpdateProfileServlet extends BaseServlet {
                 String city = getParameter(request, "city", "");
                 String state = getParameter(request, "state", "");
                 String zipCode = getParameter(request, "zipCode", "");
+                String fatherName = getParameter(request, "fatherName", "");
+                String motherName = getParameter(request, "motherName", "");
+                String nationality = getParameter(request, "nationality", "Indian");
+                String altPhoneNo = getParameter(request, "altPhone", "");
+                if (altPhoneNo.isEmpty()) {
+                    altPhoneNo = getParameter(request, "altPhoneNo", "");
+                }
+                String permAddress = getParameter(request, "permAddress", "");
 
-                if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phoneNo.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty() || zipCode.isEmpty()) {
+                if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phoneNo.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty() || zipCode.isEmpty() ||
+                    fatherName.isEmpty() || motherName.isEmpty() || nationality.isEmpty() || permAddress.isEmpty()) {
                     sendErrorResponse(response, "All fields are required.", HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
@@ -77,6 +86,11 @@ public class UpdateProfileServlet extends BaseServlet {
                 customer.setCity(city);
                 customer.setState(state);
                 customer.setZipCode(zipCode);
+                customer.setFatherName(fatherName);
+                customer.setMotherName(motherName);
+                customer.setNationality(nationality);
+                customer.setAltPhoneNo(altPhoneNo);
+                customer.setPermAddress(permAddress);
 
                 boolean result = customerDAO.update(customer);
                 if (result) {

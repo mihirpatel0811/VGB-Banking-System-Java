@@ -729,7 +729,7 @@
                     </button>
                 </form>
 
-                <!-- Form 3: Retrieve Username -->
+                <!-- Form 3: Retrieve/Change Username -->
                 <form action="${pageContext.request.contextPath}/forgot-password" method="post" id="recoverUsernameForm" style="display: none;">
                     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                     <input type="hidden" name="action" value="recoverUsername">
@@ -737,48 +737,30 @@
                     <!-- Info Alert Info Box -->
                     <div style="background: rgba(99, 102, 241, 0.05); padding: 14px; border-radius: 12px; margin-bottom: 22px; font-size: 0.825rem; color: var(--primary-600); display: flex; align-items: center; gap: 10px; border: 1px solid rgba(99, 102, 241, 0.1);">
                         <i class="bx bx-info-circle" style="font-size: 1.25rem;"></i>
-                        <span>Available for customers only. Verify your profile specs to retrieve username.</span>
+                        <span>Available for customers only. Verify your Customer ID or Email ID to change your username.</span>
                     </div>
 
-                    <!-- First Name Field -->
+                    <!-- Identifier Field -->
                     <div class="modern-form-group">
-                        <label for="firstName" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">First Name</label>
+                        <label for="customerIdOrEmail" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Customer ID or Registered Email</label>
                         <div class="modern-input-wrapper">
-                            <input type="text" id="firstName" name="firstName" required placeholder="E.g. John">
+                            <input type="text" id="customerIdOrEmail" name="customerIdOrEmail" required placeholder="Enter Customer ID or Email ID">
                             <i class="bx bx-id-card input-icon"></i>
                         </div>
                     </div>
 
-                    <!-- Last Name Field -->
-                    <div class="modern-form-group">
-                        <label for="lastName" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Last Name</label>
-                        <div class="modern-input-wrapper">
-                            <input type="text" id="lastName" name="lastName" required placeholder="E.g. Doe">
-                            <i class="bx bx-id-card input-icon"></i>
-                        </div>
-                    </div>
-
-                    <!-- Email Field -->
-                    <div class="modern-form-group">
-                        <label for="usrEmail" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Registered Email</label>
-                        <div class="modern-input-wrapper">
-                            <input type="email" id="usrEmail" name="email" required placeholder="john.doe@example.com">
-                            <i class="bx bx-envelope input-icon"></i>
-                        </div>
-                    </div>
-
-                    <!-- Phone Field -->
+                    <!-- New Username Field -->
                     <div class="modern-form-group" style="margin-bottom: 25px;">
-                        <label for="phone" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Phone Number</label>
+                        <label for="newUsername" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">New Username</label>
                         <div class="modern-input-wrapper">
-                            <input type="text" id="phone" name="phone" required placeholder="10-digit mobile number">
-                            <i class="bx bx-phone input-icon"></i>
+                            <input type="text" id="newUsername" name="newUsername" required placeholder="Enter new username">
+                            <i class="bx bx-user input-icon"></i>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-submit-premium">
-                        <span>Retrieve Username</span>
-                        <i class="bx bx-search-alt"></i>
+                        <span>Change Username</span>
+                        <i class="bx bx-save"></i>
                     </button>
                 </form>
 

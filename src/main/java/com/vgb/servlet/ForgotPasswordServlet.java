@@ -153,69 +153,57 @@ public class ForgotPasswordServlet extends BaseServlet {
                     }
                 }
             } else if ("recoverUsername".equalsIgnoreCase(action)) {
-                String firstName = getParameter(request, "firstName", "");
-                String lastName = getParameter(request, "lastName", "");
-                String email = getParameter(request, "email", "");
-                String phone = getParameter(request, "phone", "");
+                String customerIdOrEmail = getParameter(request, "customerIdOrEmail", "");
+                String newUsername = getParameter(request, "newUsername", "");
 
-                if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+                if (customerIdOrEmail.isEmpty() || newUsername.isEmpty()) {
                     request.setAttribute("error", "All fields are required.");
                     request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
                     return;
                 }
 
-                Customer customer = customerDAO.getByEmail(email);
-                if (customer == null || !customer.getFirstName().equalsIgnoreCase(firstName) || 
-                    !customer.getLastName().equalsIgnoreCase(lastName) || !customer.getPhoneNo().equals(phone)) {
+                if (newUsername.trim().length() < 4) {
+                    request.setAttribute("error", "New username must be at least 4 characters long.");
+                    request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+                    return;
+                }
+
+                Customer customer = null;
+                // Try finding by Customer ID
+                try {
+                    long id = Long.parseLong(customerIdOrEmail.trim());
+                    customer = customerDAO.getById(id);
+                } catch (NumberFormatException e) {
+                    // Ignore, fallback to email lookup
+                }
+
+                if (customer == null) {
+                    customer = customerDAO.getByEmail(customerIdOrEmail.trim());
+                }
+
+                if (customer == null) {
                     request.setAttribute("error", "No customer matching these details could be found.");
                     request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
                     return;
                 }
 
-                StringBuilder msg = new StringBuilder();
-                msg.append("Username Retrieval Successful!<br>");
-                msg.append("Customer Profile Username: <strong>").append(customer.getUsername()).append("</strong><br>");
-
-                // Retrieve linked account-level usernames
-                Connection conn = null;
-                PreparedStatement stmt = null;
-                ResultSet rs = null;
-                try {
-                    conn = DatabaseConfig.getInstance().getConnection();
-                    String sql = "SELECT a.account_number, a.account_type, a.username " +
-                                 "FROM account a " +
-                                 "JOIN account_signatory asig ON a.account_id = asig.account_id " +
-                                 "WHERE asig.customer_id = ?";
-                    stmt = conn.prepareStatement(sql);
-                    stmt.setLong(1, customer.getCustomerId());
-                    rs = stmt.executeQuery();
-                    
-                    boolean hasAccountUsernames = false;
-                    StringBuilder accMsg = new StringBuilder();
-                    while (rs.next()) {
-                        String accNum = rs.getString("account_number");
-                        String accType = rs.getString("account_type");
-                        String accUsername = rs.getString("username");
-                        if (accUsername != null && !accUsername.trim().isEmpty()) {
-                            if (!hasAccountUsernames) {
-                                accMsg.append("<br><strong>Linked Account Usernames:</strong><ul style='text-align: left; margin-top: 5px; padding-left: 20px;'>");
-                                hasAccountUsernames = true;
-                            }
-                            accMsg.append("<li>").append(accType.toUpperCase()).append(" Account (").append(accNum).append("): <strong>").append(accUsername).append("</strong></li>");
-                        }
-                    }
-                    if (hasAccountUsernames) {
-                        accMsg.append("</ul>");
-                        msg.append(accMsg.toString());
-                    }
-                } catch (Exception e) {
-                    logger.error("Error retrieving linked account usernames", e);
-                } finally {
-                    DatabaseConfig.closeResources(rs, stmt, conn);
+                // Check username uniqueness
+                Customer existing = customerDAO.getByUsername(newUsername.trim());
+                if (existing != null && existing.getCustomerId() != customer.getCustomerId()) {
+                    request.setAttribute("error", "Username '" + newUsername + "' is already taken.");
+                    request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+                    return;
                 }
 
-                request.setAttribute("success", msg.toString());
-                request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+                boolean result = customerDAO.updateUsername(customer.getCustomerId(), newUsername.trim());
+                if (result) {
+                    logger.info("Username updated successfully for Customer ID: {}", customer.getCustomerId());
+                    request.setAttribute("success", "Username changed successfully! Please login with your new username.");
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("error", "Failed to update username. Please try again.");
+                    request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+                }
             } else {
                 request.setAttribute("error", "Invalid action.");
                 request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);

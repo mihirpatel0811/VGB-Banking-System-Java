@@ -1957,7 +1957,7 @@
     <div class="modal" id="editAccountModal">
         <div class="modal-content">
             <form action="${pageContext.request.contextPath}/account?action=edit" method="POST">
-                <input type="hidden" name="csrfToken" value="${csrfToken}">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <input type="hidden" name="accountId" id="editAccountId">
 
                 <div class="modal-header">
@@ -2092,6 +2092,30 @@
                         </div>
                         <div class="form-row row-3">
                             <div class="form-group">
+                                <label>Father's Name *</label>
+                                <input type="text" name="fatherName" id="editFatherName">
+                            </div>
+                            <div class="form-group">
+                                <label>Mother's Name *</label>
+                                <input type="text" name="motherName" id="editMotherName">
+                            </div>
+                            <div class="form-group">
+                                <label>Nationality *</label>
+                                <input type="text" name="nationality" id="editNationality">
+                            </div>
+                        </div>
+                        <div class="form-row row-2">
+                            <div class="form-group">
+                                <label>Alternate Phone</label>
+                                <input type="text" name="altPhone" id="editAltPhone">
+                            </div>
+                            <div class="form-group">
+                                <label>Permanent Address *</label>
+                                <input type="text" name="permAddress" id="editPermAddress">
+                            </div>
+                        </div>
+                        <div class="form-row row-3">
+                            <div class="form-group">
                                 <label>Address *</label>
                                 <input type="text" name="address" id="editAddress">
                             </div>
@@ -2177,6 +2201,30 @@
                                 <div class="form-group">
                                     <label>Aadhaar Card *</label>
                                     <input type="text" name="joint_aadhaar" id="editJointAadhaar">
+                                </div>
+                            </div>
+                            <div class="form-row row-3">
+                                <div class="form-group">
+                                    <label>Father's Name *</label>
+                                    <input type="text" name="joint_fatherName" id="editJointFatherName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mother's Name *</label>
+                                    <input type="text" name="joint_motherName" id="editJointMotherName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nationality *</label>
+                                    <input type="text" name="joint_nationality" id="editJointNationality">
+                                </div>
+                            </div>
+                            <div class="form-row row-2">
+                                <div class="form-group">
+                                    <label>Alternate Phone</label>
+                                    <input type="text" name="joint_altPhone" id="editJointAltPhone">
+                                </div>
+                                <div class="form-group">
+                                    <label>Permanent Address *</label>
+                                    <input type="text" name="joint_permAddress" id="editJointPermAddress">
                                 </div>
                             </div>
                             <div class="form-row row-3">
@@ -2313,8 +2361,8 @@
          ========================================== -->
     <div class="modal" id="createAccountModal">
         <div class="modal-content modal-large">
-            <form action="${pageContext.request.contextPath}/account?action=create" method="POST" id="createAccountForm" onsubmit="return validateWizardFormSubmit()">
-                <input type="hidden" name="csrfToken" value="${csrfToken}">
+            <form action="${pageContext.request.contextPath}/account?action=create" method="POST" id="createAccountForm" enctype="multipart/form-data" onsubmit="return validateWizardFormSubmit()">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
 
                 <div class="modal-header">
                     <h3 style="font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px;">
@@ -2431,10 +2479,40 @@
                                     <input type="text" name="pan" id="wizPan">
                                 </div>
                                 <div class="form-group">
-                                    <label>Aadhaar Card (12 digits) *</label>
-                                    <input type="text" name="aadhaar" id="wizAadhaar">
-                                </div>
-                            </div>
+                                     <label>Aadhaar Card (12 digits) *</label>
+                                     <input type="text" name="aadhaar" id="wizAadhaar">
+                                 </div>
+                             </div>
+                             <div class="form-row row-3">
+                                 <div class="form-group">
+                                     <label>Father's Name *</label>
+                                     <input type="text" name="fatherName" id="wizFather">
+                                 </div>
+                                 <div class="form-group">
+                                     <label>Mother's Name *</label>
+                                     <input type="text" name="motherName" id="wizMother">
+                                 </div>
+                                 <div class="form-group">
+                                     <label>Nationality *</label>
+                                     <input type="text" name="nationality" id="wizNationality" value="Indian">
+                                 </div>
+                             </div>
+                             <div class="form-row row-2">
+                                 <div class="form-group">
+                                     <label>Alternate Phone</label>
+                                     <input type="text" name="altPhone" id="wizAltPhone">
+                                 </div>
+                                 <div class="form-group">
+                                     <label>Permanent Address *</label>
+                                     <input type="text" name="permAddress" id="wizPermAddress">
+                                 </div>
+                             </div>
+                             <div class="form-row row-2">
+                                 <div class="form-group">
+                                     <label>Upload Profile Photo</label>
+                                     <input type="file" name="primaryAvatar" id="wizPrimaryAvatar" accept="image/*">
+                                 </div>
+                             </div>
                             <div class="form-row row-3">
                                 <div class="form-group">
                                     <label>Address *</label>
@@ -2523,6 +2601,36 @@
                                 <div class="form-group">
                                     <label>Aadhaar Card *</label>
                                     <input type="text" name="joint_aadhaar" id="wizJointAadhaar">
+                                </div>
+                            </div>
+                            <div class="form-row row-3">
+                                <div class="form-group">
+                                    <label>Father's Name *</label>
+                                    <input type="text" name="joint_fatherName" id="wizJointFather">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mother's Name *</label>
+                                    <input type="text" name="joint_motherName" id="wizJointMother">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nationality *</label>
+                                    <input type="text" name="joint_nationality" id="wizJointNationality" value="Indian">
+                                </div>
+                            </div>
+                            <div class="form-row row-2">
+                                <div class="form-group">
+                                    <label>Alternate Phone</label>
+                                    <input type="text" name="joint_altPhone" id="wizJointAltPhone">
+                                </div>
+                                <div class="form-group">
+                                    <label>Permanent Address *</label>
+                                    <input type="text" name="joint_permAddress" id="wizJointPermAddress">
+                                </div>
+                            </div>
+                            <div class="form-row row-2">
+                                <div class="form-group">
+                                    <label>Upload Joint Holder Profile Photo</label>
+                                    <input type="file" name="jointAvatar" id="wizJointAvatar" accept="image/*">
                                 </div>
                             </div>
                             <div class="form-row row-3">
@@ -2663,19 +2771,21 @@
                                             </div>
                                         </div>
                                         <div class="form-row row-3">
-                                            <div class="form-group">
-                                                <label>Aadhaar Card *</label>
-                                                <input type="text" name="partner_aadhaar_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Partner Address *</label>
-                                                <input type="text" name="partner_address_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>City *</label>
-                                                <input type="text" name="partner_city_1">
-                                            </div>
-                                        </div>
+                                              <div class="form-group">
+                                                  <label>Aadhaar Card *</label>
+                                                  <input type="text" name="partner_aadhaar_1">
+                                              </div>
+                                         </div>
+                                         <div class="form-row row-2">
+                                              <div class="form-group">
+                                                  <label>Partner Address *</label>
+                                                  <input type="text" name="partner_address_1">
+                                              </div>
+                                              <div class="form-group">
+                                                  <label>City *</label>
+                                                  <input type="text" name="partner_city_1">
+                                              </div>
+                                         </div>
                                         <div class="form-row row-3">
                                             <div class="form-group">
                                                 <label>State *</label>
@@ -3034,9 +3144,14 @@
             primaryFirstName: "${acc.primaryFirstName}",
             primaryMiddleName: "${acc.primaryMiddleName}",
             primaryLastName: "${acc.primaryLastName}",
+            primaryFatherName: "${acc.primaryFatherName}",
+            primaryMotherName: "${acc.primaryMotherName}",
+            primaryNationality: "${acc.primaryNationality}",
             primaryEmail: "${acc.primaryEmail}",
             primaryPhone: "${acc.primaryPhone}",
+            primaryAltPhone: "${acc.primaryAltPhone}",
             primaryAddress: "${acc.primaryAddress}",
+            primaryPermAddress: "${acc.primaryPermAddress}",
             primaryCity: "${acc.primaryCity}",
             primaryState: "${acc.primaryState}",
             primaryZip: "${acc.primaryZip}",
@@ -3052,14 +3167,19 @@
             jointFirstName: "${acc.jointFirstName}",
             jointMiddleName: "${acc.jointMiddleName}",
             jointLastName: "${acc.jointLastName}",
+            jointFatherName: "${acc.jointFatherName}",
+            jointMotherName: "${acc.jointMotherName}",
+            jointNationality: "${acc.jointNationality}",
             jointEmail: "${acc.jointEmail}",
             jointPhone: "${acc.jointPhone}",
+            jointAltPhone: "${acc.jointAltPhone}",
             jointDob: "${acc.jointDob}",
             jointGender: "${acc.jointGender}",
             jointMaritalStatus: "${acc.jointMaritalStatus}",
             jointPan: "${acc.jointPan}",
             jointAadhaar: "${acc.jointAadhaar}",
             jointAddress: "${acc.jointAddress}",
+            jointPermAddress: "${acc.jointPermAddress}",
             jointCity: "${acc.jointCity}",
             jointState: "${acc.jointState}",
             jointZip: "${acc.jointZip}",
@@ -3213,8 +3333,20 @@
                                 <td style="font-weight:700; color: var(--accent-emerald);">₹ \${parseFloat(acc.primaryIncome || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
                             </tr>
                             <tr>
+                                <td style="color:var(--gray-500);">Father's Name / Mother's Name:</td>
+                                <td style="font-weight:700;">\${acc.primaryFatherName || 'N/A'} / \${acc.primaryMotherName || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:var(--gray-500);">Nationality / Alternate Phone:</td>
+                                <td style="font-weight:700;">\${acc.primaryNationality || 'Indian'} / \${acc.primaryAltPhone || 'N/A'}</td>
+                            </tr>
+                            <tr>
                                 <td style="color:var(--gray-500);">Registered Address:</td>
                                 <td style="font-weight:700;">\${acc.primaryAddress ? acc.primaryAddress + ', ' + acc.primaryCity + ', ' + acc.primaryState + ' - ' + acc.primaryZip : 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:var(--gray-500);">Permanent Address:</td>
+                                <td style="font-weight:700;">\${acc.primaryPermAddress || 'N/A'}</td>
                             </tr>
                         </table>
                     </div>
@@ -3254,8 +3386,20 @@
                                 <td style="font-weight:700; color: var(--accent-emerald);">₹ \${parseFloat(acc.jointIncome || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
                             </tr>
                             <tr>
+                                <td style="color:var(--gray-500);">Father's Name / Mother's Name:</td>
+                                <td style="font-weight:700;">\${acc.jointFatherName || 'N/A'} / \${acc.jointMotherName || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:var(--gray-500);">Nationality / Alternate Phone:</td>
+                                <td style="font-weight:700;">\${acc.jointNationality || 'Indian'} / \${acc.jointAltPhone || 'N/A'}</td>
+                            </tr>
+                            <tr>
                                 <td style="color:var(--gray-500);">Registered Address:</td>
                                 <td style="font-weight:700;">\${acc.jointAddress ? acc.jointAddress + ', ' + acc.jointCity + ', ' + acc.jointState + ' - ' + acc.jointZip : 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:var(--gray-500);">Permanent Address:</td>
+                                <td style="font-weight:700;">\${acc.jointPermAddress || 'N/A'}</td>
                             </tr>
                         </table>
                     </div>
@@ -3301,6 +3445,11 @@
                 document.getElementById('editPan').value = acc.primaryPan || '';
                 document.getElementById('editAadhaar').value = acc.primaryAadhaar || '';
                 document.getElementById('editAddress').value = acc.primaryAddress || '';
+                document.getElementById('editPermAddress').value = acc.primaryPermAddress || '';
+                document.getElementById('editFatherName').value = acc.primaryFatherName || '';
+                document.getElementById('editMotherName').value = acc.primaryMotherName || '';
+                document.getElementById('editNationality').value = acc.primaryNationality || 'Indian';
+                document.getElementById('editAltPhone').value = acc.primaryAltPhone || '';
                 document.getElementById('editCity').value = acc.primaryCity || '';
                 document.getElementById('editState').value = acc.primaryState || '';
                 document.getElementById('editZip').value = acc.primaryZip || '';
@@ -3322,6 +3471,11 @@
                     document.getElementById('editJointPan').value = acc.jointPan || '';
                     document.getElementById('editJointAadhaar').value = acc.jointAadhaar || '';
                     document.getElementById('editJointAddress').value = acc.jointAddress || '';
+                    document.getElementById('editJointPermAddress').value = acc.jointPermAddress || '';
+                    document.getElementById('editJointFatherName').value = acc.jointFatherName || '';
+                    document.getElementById('editJointMotherName').value = acc.jointMotherName || '';
+                    document.getElementById('editJointNationality').value = acc.jointNationality || 'Indian';
+                    document.getElementById('editJointAltPhone').value = acc.jointAltPhone || '';
                     document.getElementById('editJointCity').value = acc.jointCity || '';
                     document.getElementById('editJointState').value = acc.jointState || '';
                     document.getElementById('editJointZip').value = acc.jointZip || '';
@@ -3336,11 +3490,16 @@
                     document.getElementById('editJointMarital').value = 'single';
                     document.getElementById('editJointEmail').value = '';
                     document.getElementById('editJointPhone').value = '';
+                    document.getElementById('editJointAltPhone').value = '';
                     document.getElementById('editJointIncome').value = '';
                     document.getElementById('editJointOcc').value = '';
                     document.getElementById('editJointPan').value = '';
                     document.getElementById('editJointAadhaar').value = '';
                     document.getElementById('editJointAddress').value = '';
+                    document.getElementById('editJointPermAddress').value = '';
+                    document.getElementById('editJointFatherName').value = '';
+                    document.getElementById('editJointMotherName').value = '';
+                    document.getElementById('editJointNationality').value = 'Indian';
                     document.getElementById('editJointCity').value = '';
                     document.getElementById('editJointState').value = '';
                     document.getElementById('editJointZip').value = '';
@@ -3380,12 +3539,14 @@
             var primaryInputs = [
                 'editFirstName', 'editLastName', 'editDob', 'editGender',
                 'editEmail', 'editPhone', 'editPan', 'editAadhaar',
-                'editAddress', 'editCity', 'editState', 'editZip'
+                'editAddress', 'editCity', 'editState', 'editZip',
+                'editPermAddress', 'editFatherName', 'editMotherName', 'editNationality'
             ];
             var jointInputs = [
                 'editJointFirstName', 'editJointLastName', 'editJointDob', 'editJointGender',
                 'editJointEmail', 'editJointPhone', 'editJointPan', 'editJointAadhaar',
-                'editJointAddress', 'editJointCity', 'editJointState', 'editJointZip'
+                'editJointAddress', 'editJointCity', 'editJointState', 'editJointZip',
+                'editJointPermAddress', 'editJointFatherName', 'editJointMotherName', 'editJointNationality'
             ];
 
             if (accountType === 'savings') {
@@ -3737,7 +3898,7 @@
 
                 if (wizType === 'savings') {
                     // Check primary customer inputs
-                    var fields = ['wizFirst', 'wizLast', 'wizDob', 'wizEmail', 'wizPhone', 'wizPan', 'wizAadhaar', 'wizAddress', 'wizCity', 'wizState', 'wizZip'];
+                    var fields = ['wizFirst', 'wizLast', 'wizDob', 'wizEmail', 'wizPhone', 'wizPan', 'wizAadhaar', 'wizAddress', 'wizCity', 'wizState', 'wizZip', 'wizFather', 'wizMother', 'wizNationality', 'wizPermAddress'];
                     for (var i = 0; i < fields.length; i++) {
                         var inp = document.getElementById(fields[i]);
                         if (!inp.value.trim()) {
@@ -3755,7 +3916,7 @@
 
                     if (wizHold === 'joint') {
                         // Check joint inputs
-                        var jFields = ['wizJointFirst', 'wizJointLast', 'wizJointDob', 'wizJointEmail', 'wizJointPhone', 'wizJointPan', 'wizJointAadhaar', 'wizJointAddress', 'wizJointCity', 'wizJointState', 'wizJointZip'];
+                        var jFields = ['wizJointFirst', 'wizJointLast', 'wizJointDob', 'wizJointEmail', 'wizJointPhone', 'wizJointPan', 'wizJointAadhaar', 'wizJointAddress', 'wizJointCity', 'wizJointState', 'wizJointZip', 'wizJointFather', 'wizJointMother', 'wizJointNationality', 'wizJointPermAddress'];
                         for (var i = 0; i < jFields.length; i++) {
                             var inp = document.getElementById(jFields[i]);
                             if (!inp.value.trim()) {
@@ -3823,9 +3984,8 @@
 
         // Visualizer helpers removed.
         function updateChequeAmount(val) {
-            // Visualizer removed
         }
-
+        
         // Dynamic Partners Input fields
         var partnerCount = 1;
         function addNewPartnerField() {
@@ -3890,6 +4050,8 @@
                             '<label>Aadhaar Card *</label>' +
                             '<input type="text" name="partner_aadhaar_' + partnerCount + '" required>' +
                         '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
                         '<div class="form-group">' +
                             '<label>Partner Address *</label>' +
                             '<input type="text" name="partner_address_' + partnerCount + '" required>' +
@@ -3898,12 +4060,12 @@
                             '<label>City *</label>' +
                             '<input type="text" name="partner_city_' + partnerCount + '" required>' +
                         '</div>' +
-                    '</div>' +
-                    '<div class="form-row row-3">' +
                         '<div class="form-group">' +
                             '<label>State *</label>' +
                             '<input type="text" name="partner_state_' + partnerCount + '" required>' +
                         '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
                         '<div class="form-group">' +
                             '<label>Zip Code *</label>' +
                             '<input type="text" name="partner_zip_' + partnerCount + '" required>' +
