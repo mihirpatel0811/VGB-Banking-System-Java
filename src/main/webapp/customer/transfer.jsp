@@ -378,76 +378,117 @@
             margin-bottom: 20px;
             margin-top: 8px;
         }
+        /* Premium Physical Account Cards */
         .account-select-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 16px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
+            border-radius: 16px;
+            padding: 22px;
+            cursor: pointer;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 145px;
-            box-shadow: var(--shadow-sm);
+            min-height: 160px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
         }
-        body.dark-mode .account-select-card {
-            background: rgba(30, 41, 59, 0.35);
-            border-color: rgba(255, 255, 255, 0.05);
+
+        /* Default Card Theme */
+        .account-select-card.type-default {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
         }
+        /* Savings Account Theme (Deep Royal Blue/Violet Metallic) */
+        .account-select-card.type-savings {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e1b4b 100%);
+        }
+        /* Current Account Theme (Sleek Charcoal/Carbon Black) */
+        .account-select-card.type-current {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 60%, #0d1117 100%);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        /* Salary Account Theme (Teal/Emerald Green Accent) */
+        .account-select-card.type-salary {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 60%, #115e59 100%);
+        }
+        /* Beneficiary Directory Theme (Mint/Emerald Green Accent) */
+        .account-select-card.type-beneficiary {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #064e3b 100%);
+        }
+
+        /* Glossy specular shine overlay */
         .account-select-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-            transition: 0.5s;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            transition: transform 0.6s ease;
         }
         .account-select-card:hover::before {
-            left: 100%;
+            transform: translate(10%, 10%);
         }
+
+        /* Dark mode opacity adjustments to keep backgrounds vibrant */
+        body.dark-mode .account-select-card {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Hover elevation and slight scaling */
         .account-select-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-300);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.08);
-            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+            filter: brightness(1.06);
         }
-        body.dark-mode .account-select-card:hover {
-            border-color: rgba(255, 255, 255, 0.12);
-            background: rgba(30, 41, 59, 0.5);
-        }
+
+        /* Selected active state card styling */
         .account-select-card.active {
-            border-color: var(--primary-500);
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
-            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.15);
+            border: 2.5px solid #ffffff;
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.45), 0 16px 32px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px) scale(1.02);
         }
-        body.dark-mode .account-select-card.active {
-            border-color: var(--primary-400);
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
-        }
+
+        /* Active checkmark design inside card */
         .account-select-card.active::after {
             content: '✓';
             position: absolute;
             top: 14px;
             right: 14px;
-            background: var(--primary-500);
-            color: white;
-            width: 20px;
-            height: 20px;
+            background: #ffffff;
+            color: #1e3c72;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+            font-size: 0.82rem;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            z-index: 5;
         }
+
+        /* Checkmark text color matching based on card theme */
+        .account-select-card.active.type-savings::after {
+            color: #1e3c72;
+        }
+        .account-select-card.active.type-current::after {
+            color: #1a202c;
+        }
+        .account-select-card.active.type-salary::after {
+            color: #0f766e;
+        }
+        .account-select-card.active.type-beneficiary::after {
+            color: #047857;
+        }
+        .account-select-card.active.type-default::after {
+            color: #3730a3;
+        }
+
         .acc-card-top {
             display: flex;
             justify-content: space-between;
@@ -460,29 +501,32 @@
             gap: 10px;
         }
         .acc-card-chip {
-            border-radius: 3px;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
         }
         .acc-card-bank {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--gray-400);
-            letter-spacing: 0.8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9) !important;
+            letter-spacing: 1.2px;
         }
         .account-select-card.active .acc-card-bank {
-            color: var(--primary-500);
+            color: rgba(255, 255, 255, 1) !important;
         }
         .acc-card-badge {
             font-size: 0.65rem;
             font-weight: 700;
-            background: rgba(99, 102, 241, 0.08);
-            color: var(--primary-600);
-            padding: 3px 8px;
-            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.18) !important;
+            color: white !important;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
             text-transform: uppercase;
         }
         .account-select-card.active .acc-card-badge {
-            background: var(--gradient-primary);
-            color: white;
+            background: rgba(255, 255, 255, 0.28) !important;
+            border-color: rgba(255, 255, 255, 0.4);
         }
         .acc-card-body {
             margin-bottom: 10px;
@@ -490,13 +534,14 @@
         .acc-card-num {
             display: block;
             font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--gray-500);
+            font-size: 0.98rem;
+            color: rgba(255, 255, 255, 0.85) !important;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            margin-top: 15px;
         }
         .account-select-card.active .acc-card-num {
-            color: var(--gray-800);
+            color: rgba(255, 255, 255, 1) !important;
         }
         .acc-card-footer {
             display: flex;
@@ -508,18 +553,19 @@
             flex-direction: column;
         }
         .acc-bal-label {
-            font-size: 0.58rem;
+            font-size: 0.62rem;
             text-transform: uppercase;
-            color: var(--gray-400);
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-weight: 600;
+            letter-spacing: 0.8px;
         }
         .acc-bal-amount {
             display: block;
-            font-size: 1.2rem;
+            font-size: 1.35rem;
             font-weight: 800;
-            color: var(--gray-800);
+            color: white !important;
             margin-top: 2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
         }
 
         /* Realistic ATM/Credit Cards selector */
@@ -898,6 +944,117 @@
         .btn-verify-modern:active {
             transform: scale(0.96) !important;
         }
+
+        /* Search Autocomplete selects */
+        .search-select-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .search-select-input {
+            width: 100%;
+            padding: 14px 18px 14px 44px;
+            border: 1.5px solid rgba(99, 102, 241, 0.15);
+            border-radius: var(--radius-md);
+            outline: none;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--gray-800);
+            font-size: 0.95rem;
+            transition: all var(--transition-normal);
+        }
+        body.dark-mode .search-select-input {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: var(--gray-800);
+        }
+        .search-select-input:focus {
+            border-color: var(--primary-500);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(99, 102, 241, 0.05);
+        }
+        body.dark-mode .search-select-input:focus {
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+        }
+        .search-select-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.25rem;
+        }
+        .search-select-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.25rem;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+        }
+        .search-select-wrapper.active .search-select-arrow {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        .search-select-wrapper.active .search-select-icon {
+            color: var(--primary-500);
+        }
+        .search-select-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1.5px solid rgba(99, 102, 241, 0.15);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            max-height: 230px;
+            overflow-y: auto;
+            margin-top: 6px;
+            display: none;
+            animation: fadeIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body.dark-mode .search-select-results {
+            background: #1e293b;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow-xl);
+        }
+        .search-select-item {
+            padding: 12px 18px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: background 0.2s ease;
+        }
+        body.dark-mode .search-select-item {
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+        .search-select-item:hover {
+            background: rgba(99, 102, 241, 0.06);
+        }
+        .search-select-item-title {
+            font-weight: 600;
+            color: var(--gray-800);
+            font-size: 0.88rem;
+        }
+        body.dark-mode .search-select-item-title {
+            color: var(--gray-200);
+        }
+        .search-select-item-subtitle {
+            font-size: 0.78rem;
+            color: var(--gray-400);
+            font-family: monospace;
+        }
+        .search-select-empty {
+            padding: 18px;
+            color: var(--gray-400);
+            text-align: center;
+            font-size: 0.88rem;
+        }
     </style>
 </head>
 <body class="bank-home-page">
@@ -1009,9 +1166,7 @@
                 <button type="button" id="tabBtnWithdraw" onclick="showPortalTab('withdraw')" class="portal-tab-btn">
                     <i class="bx bx-down-arrow-circle"></i> Cash Withdrawal
                 </button>
-                <button type="button" id="tabBtnCardDeposit" onclick="showPortalTab('cardDeposit')" class="portal-tab-btn">
-                    <i class="bx bx-credit-card-front"></i> Card Deposit
-                </button>
+
                 <button type="button" id="tabBtnAddBeneficiary" onclick="showPortalTab('addBeneficiary')" class="portal-tab-btn">
                     <i class="bx bx-user-plus"></i> Add Beneficiary
                 </button>
@@ -1043,11 +1198,27 @@
                                 </select>
                                 <div class="account-selector-grid" id="gridTransferSource">
                                     <c:forEach items="${accounts}" var="acc" varStatus="vs">
-                                        <div class="account-select-card ${vs.first ? 'active' : ''}" data-value="${acc.accountId}">
+                                        <c:set var="cardTypeClass" value="type-default" />
+                                        <c:if test="${acc.accountType == 'Savings' or acc.accountType == 'SAVINGS' or acc.accountType == 'savings'}">
+                                            <c:set var="cardTypeClass" value="type-savings" />
+                                        </c:if>
+                                        <c:if test="${acc.accountType == 'Current' or acc.accountType == 'CURRENT' or acc.accountType == 'current'}">
+                                            <c:set var="cardTypeClass" value="type-current" />
+                                        </c:if>
+                                        <c:if test="${acc.accountType == 'Salary' or acc.accountType == 'SALARY' or acc.accountType == 'salary'}">
+                                            <c:set var="cardTypeClass" value="type-salary" />
+                                        </c:if>
+                                        <div class="account-select-card ${vs.first ? 'active' : ''} ${cardTypeClass}" data-value="${acc.accountId}">
                                             <div class="acc-card-top">
                                                 <div class="acc-chip-container">
                                                     <svg class="acc-card-chip" width="28" height="20" viewBox="0 0 32 24" fill="none">
-                                                        <rect width="32" height="24" rx="4" fill="url(#chip-gold)" />
+                                                        <defs>
+                                                            <linearGradient id="chip-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" stop-color="#ffe259"/>
+                                                                <stop offset="100%" stop-color="#ffa751"/>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <rect width="32" height="24" rx="4" fill="url(#chip-gold-grad)" />
                                                         <path d="M0 8H8V16H0V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                         <path d="M24 8H32V16H24V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                         <path d="M8 0V8H24V0H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
@@ -1102,7 +1273,14 @@
                                                             </div>
                                                             <div class="card-chip-row">
                                                                 <svg class="card-chip" width="34" height="26" viewBox="0 0 32 24" fill="none">
-                                                                    <rect width="32" height="24" rx="4" fill="url(#chip-silver)" />
+                                                                    <defs>
+                                                                        <linearGradient id="chip-silver-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                            <stop offset="0%" stop-color="#f3f4f6"/>
+                                                                            <stop offset="50%" stop-color="#d1d5db"/>
+                                                                            <stop offset="100%" stop-color="#9ca3af"/>
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <rect width="32" height="24" rx="4" fill="url(#chip-silver-grad)" />
                                                                     <path d="M0 8H8V16H0V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                                     <path d="M24 8H32V16H24V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                                     <path d="M8 0V8H24V0H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
@@ -1156,88 +1334,15 @@
                                 </div>
                             </div>
 
-                            <!-- Target Own Account Dropdown (Active by default) -->
-                            <div class="form-group" id="containerInternalTarget">
-                                <label>Select Destination Account</label>
-                                <select id="toAccountIdInternal" name="toAccountId" required style="display: none;">
-                                    <c:forEach items="${accounts}" var="acc">
-                                        <option value="${acc.accountId}">
-                                            ${acc.accountNumber} - ${acc.accountType} (Available: ₹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2" maxFractionDigits="2"/>)
-                                        </option>
-                                    </c:forEach>
-                                </select>
-                                <div class="account-selector-grid" id="gridTransferDest">
-                                    <c:forEach items="${accounts}" var="acc" varStatus="vs">
-                                        <div class="account-select-card ${vs.first ? 'active' : ''}" data-value="${acc.accountId}">
-                                            <div class="acc-card-top">
-                                                <div class="acc-chip-container">
-                                                    <svg class="acc-card-chip" width="28" height="20" viewBox="0 0 32 24" fill="none">
-                                                        <rect width="32" height="24" rx="4" fill="url(#chip-gold)" />
-                                                        <path d="M0 8H8V16H0V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M24 8H32V16H24V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M8 0V8H24V0H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M8 16V24H24V16H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M12 8V16H20V8H12Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                    </svg>
-                                                    <span class="acc-card-bank">VGB BANK</span>
-                                                </div>
-                                                <span class="acc-card-badge">${acc.accountType}</span>
-                                            </div>
-                                            <div class="acc-card-body">
-                                                <span class="acc-card-num">${acc.accountNumber}</span>
-                                            </div>
-                                            <div class="acc-card-footer">
-                                                <div class="acc-bal-group">
-                                                    <span class="acc-bal-label">Available Balance</span>
-                                                    <span class="acc-bal-amount">₹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2" maxFractionDigits="2"/></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </div>
-
-                            <!-- Target Other Customer Beneficiary Dropdown (Disabled/Hidden by default) -->
-                            <div class="form-group" id="containerExternalTarget" style="display: none;">
-                                <label>Select Saved Customer Beneficiary</label>
-                                <select id="toAccountIdExternal" class="form-control-modern" style="display: none;">
-                                    <c:forEach items="${beneficiaries}" var="ben">
-                                        <option value="${ben.nomineeName}">
-                                            ${ben.customerName} - ${ben.accountNumber} (${ben.accountType}) [IFSC: ${ben.ifscCode}]
-                                        </option>
-                                    </c:forEach>
-                                </select>
-                                <div class="account-selector-grid" id="gridTransferDestExternal">
-                                    <c:choose>
-                                        <c:when test="${not empty beneficiaries}">
-                                            <c:forEach items="${beneficiaries}" var="ben" varStatus="vs">
-                                                <div class="account-select-card ${vs.first ? 'active' : ''}" data-value="${ben.nomineeName}">
-                                                    <div class="acc-card-top">
-                                                        <div class="acc-chip-container">
-                                                            <i class="bx bx-user" style="color: var(--primary-500); font-size: 1.25rem;"></i>
-                                                            <span class="acc-card-bank">${ben.customerName}</span>
-                                                        </div>
-                                                        <span class="acc-card-badge" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">Beneficiary</span>
-                                                    </div>
-                                                    <div class="acc-card-body" style="margin-top: 10px;">
-                                                        <span class="acc-card-num">${ben.accountNumber}</span>
-                                                    </div>
-                                                    <div class="acc-card-footer" style="margin-top: 10px;">
-                                                        <div class="acc-bal-group">
-                                                            <span class="acc-bal-label">IFSC Code</span>
-                                                            <span class="acc-bal-amount" style="font-family: monospace; font-size: 0.95rem; font-weight: 600;">${ben.ifscCode}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div style="grid-column: 1 / -1; padding: 30px; text-align: center; background: rgba(99, 102, 241, 0.03); border: 1.5px dashed rgba(99, 102, 241, 0.15); border-radius: var(--radius-md); color: var(--gray-500); font-size: 0.9rem;">
-                                                <i class="bx bx-info-circle" style="font-size: 1.8rem; display: block; margin-bottom: 10px; color: var(--primary-400);"></i>
-                                                No saved beneficiaries. Register one under the <strong>Add Beneficiary</strong> tab to enable transfers.
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                            <!-- Target Account Autocomplete Selector -->
+                            <div class="form-group" id="containerTargetAccount">
+                                <label>Select Target Account</label>
+                                <div class="search-select-wrapper" id="selectTargetAccWrapper">
+                                    <input type="text" class="search-select-input" id="txtTargetAccount" placeholder="Type destination account type or number..." autocomplete="off" required>
+                                    <input type="hidden" name="toAccountId" id="hidTargetAccountId">
+                                    <i class="bx bx-search search-select-icon"></i>
+                                    <i class="bx bx-chevron-down search-select-arrow"></i>
+                                    <div class="search-select-results" id="dropdownTargetAccount"></div>
                                 </div>
                             </div>
 
@@ -1295,11 +1400,27 @@
                                 </select>
                                 <div class="account-selector-grid" id="gridWithdrawSource">
                                     <c:forEach items="${accounts}" var="acc" varStatus="vs">
-                                        <div class="account-select-card ${vs.first ? 'active' : ''}" data-value="${acc.accountId}">
+                                        <c:set var="cardTypeClass" value="type-default" />
+                                        <c:if test="${acc.accountType == 'Savings' or acc.accountType == 'SAVINGS' or acc.accountType == 'savings'}">
+                                            <c:set var="cardTypeClass" value="type-savings" />
+                                        </c:if>
+                                        <c:if test="${acc.accountType == 'Current' or acc.accountType == 'CURRENT' or acc.accountType == 'current'}">
+                                            <c:set var="cardTypeClass" value="type-current" />
+                                        </c:if>
+                                        <c:if test="${acc.accountType == 'Salary' or acc.accountType == 'SALARY' or acc.accountType == 'salary'}">
+                                            <c:set var="cardTypeClass" value="type-salary" />
+                                        </c:if>
+                                        <div class="account-select-card ${vs.first ? 'active' : ''} ${cardTypeClass}" data-value="${acc.accountId}">
                                             <div class="acc-card-top">
                                                 <div class="acc-chip-container">
                                                     <svg class="acc-card-chip" width="28" height="20" viewBox="0 0 32 24" fill="none">
-                                                        <rect width="32" height="24" rx="4" fill="url(#chip-gold)" />
+                                                        <defs>
+                                                            <linearGradient id="chip-gold-grad-withdraw" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" stop-color="#ffe259"/>
+                                                                <stop offset="100%" stop-color="#ffa751"/>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <rect width="32" height="24" rx="4" fill="url(#chip-gold-grad-withdraw)" />
                                                         <path d="M0 8H8V16H0V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                         <path d="M24 8H32V16H24V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                         <path d="M8 0V8H24V0H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
@@ -1354,7 +1475,14 @@
                                                             </div>
                                                             <div class="card-chip-row">
                                                                 <svg class="card-chip" width="34" height="26" viewBox="0 0 32 24" fill="none">
-                                                                    <rect width="32" height="24" rx="4" fill="url(#chip-silver)" />
+                                                                    <defs>
+                                                                        <linearGradient id="chip-silver-grad-withdraw" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                            <stop offset="0%" stop-color="#f3f4f6"/>
+                                                                            <stop offset="50%" stop-color="#d1d5db"/>
+                                                                            <stop offset="100%" stop-color="#9ca3af"/>
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <rect width="32" height="24" rx="4" fill="url(#chip-silver-grad-withdraw)" />
                                                                     <path d="M0 8H8V16H0V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                                     <path d="M24 8H32V16H24V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
                                                                     <path d="M8 0V8H24V0H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
@@ -1424,106 +1552,7 @@
                         </form>
                     </div>
 
-                    <!-- SECTION 2A: CARD DEPOSIT -->
-                    <div id="secCardDeposit" class="portal-form-section">
-                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
-                            <i class="bx bx-credit-card-front"></i> VGB ATM Card Deposit
-                        </h3>
-                        
-                        <form action="${pageContext.request.contextPath}/account?action=deposit" method="post">
-                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-                            <input type="hidden" name="useCard" value="true">
-                            <input type="hidden" name="redirectUrl" value="/account?action=transferPage">
 
-                            <!-- Target/Link select card -->
-                            <div class="form-group">
-                                <label>Select Card to Charge</label>
-                                <select id="depositCardId" name="cardId" required style="display: none;">
-                                    <c:forEach items="${cards}" var="card">
-                                        <c:if test="${card.status eq 'active'}">
-                                            <option value="${card.cardId}">
-                                                ${card.cardProvider.toUpperCase()} ${card.cardType.toUpperCase()} (Number: ${card.getMaskedCardNumber()})
-                                            </option>
-                                        </c:if>
-                                    </c:forEach>
-                                </select>
-                                <div class="card-selector-grid" id="gridDepositCard">
-                                    <c:forEach items="${cards}" var="card" varStatus="vs">
-                                        <c:if test="${card.status eq 'active'}">
-                                            <div class="card-select-card ${vs.first ? 'active' : ''} card-${card.cardType.toLowerCase()}" data-value="${card.cardId}">
-                                                <div class="card-top">
-                                                    <span class="card-brand-label">VGB CARD</span>
-                                                    <i class="bx bx-wifi card-contactless"></i>
-                                                </div>
-                                                <div class="card-chip-row">
-                                                    <svg class="card-chip" width="34" height="26" viewBox="0 0 32 24" fill="none">
-                                                        <rect width="32" height="24" rx="4" fill="url(#chip-silver)" />
-                                                        <path d="M0 8H8V16H0V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M24 8H32V16H24V8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M8 0V8H24V0H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M8 16V24H24V16H8Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                        <path d="M12 8V16H20V8H12Z" stroke="rgba(0,0,0,0.15)" stroke-width="0.5" />
-                                                    </svg>
-                                                </div>
-                                                <div class="card-middle">
-                                                    <span class="card-number-display">${card.getMaskedCardNumber()}</span>
-                                                </div>
-                                                <div class="card-bottom">
-                                                    <div class="card-holder-info">
-                                                        <span class="card-field-lbl">Holder</span>
-                                                        <span class="card-val">${customer.fullName.toUpperCase()}</span>
-                                                    </div>
-                                                    <div class="card-brand-network">
-                                                        <span class="card-network-name">${card.cardProvider.toUpperCase()}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </c:if>
-                                    </c:forEach>
-                                </div>
-                            </div>
-
-                            <!-- CVV -->
-                            <div class="form-group">
-                                <label for="depositCardCvv">Card Security Code (3-Digit CVV)</label>
-                                <div class="cvv-input-wrapper">
-                                    <input type="password" maxlength="3" id="depositCardCvv" name="cvv" required placeholder="•••" class="form-control-modern" style="font-family: monospace; letter-spacing: 3px; padding-right: 42px;">
-                                    <button type="button" class="btn-cvv-toggle" onclick="toggleCvvVisibility('depositCardCvv', this)">
-                                        <i class="bx bx-hide"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Deposit Amount -->
-                            <div class="form-group">
-                                <label for="depositAmount">Amount to Deposit (INR)</label>
-                                <div class="input-icon-wrapper">
-                                    <i style="font-style: normal; font-weight: 700; font-size: 1rem; top: 15px; left: 18px;">₹</i>
-                                    <input type="number" step="0.01" min="100" id="depositAmount" name="amount" required placeholder="Min. ₹100" class="form-control-modern">
-                                </div>
-                                <div class="quick-amounts">
-                                    <button type="button" class="quick-amount-chip" onclick="setQuickAmount('depositAmount', 500)">₹500</button>
-                                    <button type="button" class="quick-amount-chip" onclick="setQuickAmount('depositAmount', 1000)">₹1,000</button>
-                                    <button type="button" class="quick-amount-chip" onclick="setQuickAmount('depositAmount', 5000)">₹5,000</button>
-                                    <button type="button" class="quick-amount-chip" onclick="setQuickAmount('depositAmount', 10000)">₹10,000</button>
-                                </div>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="form-group" style="margin-bottom: 30px;">
-                                <label for="depositDescription">Transaction Description</label>
-                                <div class="input-icon-wrapper">
-                                    <i class="bx bx-note"></i>
-                                    <input type="text" id="depositDescription" name="description" placeholder="E.g., Self card deposit" class="form-control-modern">
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn-submit-premium">
-                                <span>Process Card Deposit</span>
-                                <i class="bx bx-check-double"></i>
-                            </button>
-                        </form>
-                    </div>
 
                     <!-- SECTION 3: ADD BENEFICIARY -->
                     <div id="secAddBeneficiary" class="portal-form-section">
@@ -1666,26 +1695,53 @@
         </div>
     </footer>
 
+    <!-- JSON Data Serialization Blocks -->
+    <script id="accounts-data" type="application/json">
+        [
+            <c:forEach var="acc" items="${accounts}" varStatus="status">
+                {
+                    "accountId": "${acc.accountId}",
+                    "accountNumber": "${acc.accountNumber}",
+                    "accountType": "${acc.accountType}",
+                    "balance": ${acc.balance != null ? acc.balance : 0.0},
+                    "status": "${acc.status}"
+                }${status.last ? '' : ','}
+            </c:forEach>
+        ]
+    </script>
+    <script id="beneficiaries-data" type="application/json">
+        [
+            <c:forEach var="ben" items="${beneficiaries}" varStatus="status">
+                {
+                    "nomineeName": "${ben.nomineeName}",
+                    "customerName": "<c:out value="${ben.customerName}" />",
+                    "accountNumber": "${ben.accountNumber}",
+                    "accountType": "${ben.accountType}",
+                    "ifscCode": "${ben.ifscCode}"
+                }${status.last ? '' : ','}
+            </c:forEach>
+        ]
+    </script>
+
     <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
     <script>
+        const allAccounts = JSON.parse(document.getElementById('accounts-data').textContent);
+        const allBeneficiaries = JSON.parse(document.getElementById('beneficiaries-data').textContent);
+
         function showPortalTab(tab) {
             const tabTransfer = document.getElementById('tabBtnTransfer');
             const tabWithdraw = document.getElementById('tabBtnWithdraw');
-            const tabCardDeposit = document.getElementById('tabBtnCardDeposit');
             const tabAddBeneficiary = document.getElementById('tabBtnAddBeneficiary');
             const secTransfer = document.getElementById('secTransfer');
             const secWithdraw = document.getElementById('secWithdraw');
-            const secCardDeposit = document.getElementById('secCardDeposit');
             const secAddBeneficiary = document.getElementById('secAddBeneficiary');
 
             // Reset active classes
             tabTransfer.classList.remove('active');
             tabWithdraw.classList.remove('active');
-            if (tabCardDeposit) tabCardDeposit.classList.remove('active');
             tabAddBeneficiary.classList.remove('active');
             secTransfer.classList.remove('active');
             secWithdraw.classList.remove('active');
-            if (secCardDeposit) secCardDeposit.classList.remove('active');
             secAddBeneficiary.classList.remove('active');
 
             if (tab === 'transfer') {
@@ -1694,9 +1750,6 @@
             } else if (tab === 'withdraw') {
                 tabWithdraw.classList.add('active');
                 secWithdraw.classList.add('active');
-            } else if (tab === 'cardDeposit') {
-                if (tabCardDeposit) tabCardDeposit.classList.add('active');
-                if (secCardDeposit) secCardDeposit.classList.add('active');
             } else {
                 tabAddBeneficiary.classList.add('active');
                 secAddBeneficiary.classList.add('active');
@@ -1736,47 +1789,141 @@
         }
 
         function toggleDestType(type) {
-            const internalSelect = document.getElementById('toAccountIdInternal');
-            const externalSelect = document.getElementById('toAccountIdExternal');
-            const internalContainer = document.getElementById('containerInternalTarget');
-            const externalContainer = document.getElementById('containerExternalTarget');
-
-            if (type === 'own') {
-                internalContainer.style.display = 'block';
-                internalSelect.name = 'toAccountId';
-                internalSelect.disabled = false;
-                internalSelect.required = true;
-
-                externalContainer.style.display = 'none';
-                externalSelect.removeAttribute('name');
-                externalSelect.disabled = true;
-                externalSelect.required = false;
-            } else {
-                externalContainer.style.display = 'block';
-                externalSelect.name = 'toAccountId';
-                externalSelect.disabled = false;
-                externalSelect.required = true;
-
-                internalContainer.style.display = 'none';
-                internalSelect.removeAttribute('name');
-                internalSelect.disabled = true;
-                internalSelect.required = false;
+            const input = document.getElementById('txtTargetAccount');
+            const hidden = document.getElementById('hidTargetAccountId');
+            const dropdown = document.getElementById('dropdownTargetAccount');
+            
+            if (input && hidden && dropdown) {
+                input.value = '';
+                hidden.value = '';
+                dropdown.style.display = 'none';
+                document.getElementById('selectTargetAccWrapper').classList.remove('active');
+                
+                if (type === 'own') {
+                    input.placeholder = "Type destination account type or number...";
+                } else {
+                    input.placeholder = "Type beneficiary name or account number...";
+                }
             }
         }
 
         function validateTransferForm(event) {
             const fromAcc = document.getElementById('transferSourceAccount').value;
+            const toAcc = document.getElementById('hidTargetAccountId').value;
             const destType = document.querySelector('input[name="destType"]:checked').value;
             
+            if (!toAcc) {
+                event.preventDefault();
+                alert("Please select a target account or beneficiary from the dropdown.");
+                return false;
+            }
+            
             if (destType === 'own') {
-                const toAcc = document.getElementById('toAccountIdInternal').value;
-                if (fromAcc === toAcc) {
+                if (fromAcc.toString() === toAcc.toString()) {
                     event.preventDefault();
                     alert("Self-transfer Error: Source account and destination account cannot be the same. Please select a different destination account.");
                     return false;
                 }
             }
             return true;
+        }
+
+        // Dropdown autocompletes builder for customer transfer
+        function setupAutocomplete(inputId, dropdownId, hiddenInputId, wrapperId) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            const hidden = document.getElementById(hiddenInputId);
+            const wrapper = document.getElementById(wrapperId);
+
+            if (!input || !dropdown || !hidden || !wrapper) return;
+
+            input.addEventListener('focus', () => {
+                wrapper.classList.add('active');
+                renderTargetResults(input.value);
+            });
+
+            input.addEventListener('input', (e) => {
+                renderTargetResults(e.target.value);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    wrapper.classList.remove('active');
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function renderTargetResults(query) {
+            const dropdown = document.getElementById('dropdownTargetAccount');
+            const hidden = document.getElementById('hidTargetAccountId');
+            const input = document.getElementById('txtTargetAccount');
+            const destType = document.querySelector('input[name="destType"]:checked').value;
+            
+            const q = query.toLowerCase().trim();
+            dropdown.innerHTML = '';
+            
+            let filtered = [];
+            if (destType === 'own') {
+                const sourceAccId = document.getElementById('transferSourceAccount').value;
+                filtered = allAccounts.filter(acc => {
+                    if (acc.accountId.toString() === sourceAccId.toString()) return false;
+                    const numMatch = acc.accountNumber.toLowerCase().includes(q);
+                    const typeMatch = acc.accountType.toLowerCase().includes(q);
+                    return numMatch || typeMatch;
+                });
+            } else {
+                filtered = allBeneficiaries.filter(ben => {
+                    const nameMatch = ben.customerName.toLowerCase().includes(q);
+                    const numMatch = ben.accountNumber.toLowerCase().includes(q);
+                    return nameMatch || numMatch;
+                });
+            }
+            
+            if (filtered.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'search-select-empty';
+                empty.innerText = destType === 'own' ? 'No other active accounts found' : 'No matching beneficiaries found';
+                dropdown.appendChild(empty);
+            } else {
+                filtered.forEach(itemData => {
+                    const item = document.createElement('div');
+                    item.className = 'search-select-item';
+                    
+                    const title = document.createElement('span');
+                    title.className = 'search-select-item-title';
+                    
+                    const subtitle = document.createElement('span');
+                    subtitle.className = 'search-select-item-subtitle';
+                    
+                    if (destType === 'own') {
+                        title.innerText = 'VGB BANK | ' + itemData.accountType.toUpperCase();
+                        subtitle.innerText = 'Acc: ' + itemData.accountNumber + ' | Bal: ₹' + parseFloat(itemData.balance).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                        
+                        item.addEventListener('click', () => {
+                            input.value = 'VGB BANK | ' + itemData.accountType.toUpperCase() + ' (' + itemData.accountNumber + ')';
+                            hidden.value = itemData.accountId;
+                            dropdown.style.display = 'none';
+                            document.getElementById('selectTargetAccWrapper').classList.remove('active');
+                        });
+                    } else {
+                        title.innerText = itemData.customerName + ' | BENEFICIARY';
+                        subtitle.innerText = 'Acc: ' + itemData.accountNumber + ' | IFSC: ' + itemData.ifscCode;
+                        
+                        item.addEventListener('click', () => {
+                            input.value = itemData.customerName + ' (' + itemData.accountNumber + ')';
+                            hidden.value = itemData.nomineeName;
+                            dropdown.style.display = 'none';
+                            document.getElementById('selectTargetAccWrapper').classList.remove('active');
+                        });
+                    }
+                    
+                    item.appendChild(title);
+                    item.appendChild(subtitle);
+                    dropdown.appendChild(item);
+                });
+            }
+            dropdown.style.display = 'block';
         }
 
         // Beneficiary AJAX Operations
@@ -2016,17 +2163,16 @@
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     
-                    const newSelect = doc.getElementById('toAccountIdExternal');
-                    if (newSelect) {
-                        const targetSelect = document.getElementById('toAccountIdExternal');
-                        targetSelect.innerHTML = newSelect.innerHTML;
-                    }
-                    
-                    const newGrid = doc.getElementById('gridTransferDestExternal');
-                    if (newGrid) {
-                        const targetGrid = document.getElementById('gridTransferDestExternal');
-                        targetGrid.innerHTML = newGrid.innerHTML;
-                        setupGridSelector('gridTransferDestExternal', 'toAccountIdExternal');
+                    const dataElem = doc.getElementById('beneficiaries-data');
+                    if (dataElem) {
+                        try {
+                            const updatedList = JSON.parse(dataElem.textContent);
+                            allBeneficiaries.length = 0;
+                            allBeneficiaries.push(...updatedList);
+                            console.log('Successfully refreshed beneficiary list. Total count: ' + allBeneficiaries.length);
+                        } catch (err) {
+                            console.error('Error parsing refreshed beneficiaries:', err);
+                        }
                     }
                 })
                 .catch(err => console.error('Error refreshing beneficiaries directory:', err));
@@ -2068,11 +2214,20 @@
             // Bind click selections
             setupGridSelector('gridTransferSource', 'transferSourceAccount');
             setupGridSelector('gridTransferCard', 'transferCardId');
-            setupGridSelector('gridTransferDest', 'toAccountIdInternal');
-            setupGridSelector('gridTransferDestExternal', 'toAccountIdExternal');
             setupGridSelector('gridWithdrawSource', 'withdrawSourceAccount');
             setupGridSelector('gridWithdrawCard', 'withdrawCardId');
-            setupGridSelector('gridDepositCard', 'depositCardId');
+
+            // Setup Target account autocomplete
+            setupAutocomplete('txtTargetAccount', 'dropdownTargetAccount', 'hidTargetAccountId', 'selectTargetAccWrapper');
+
+            // Reset target account selection if source account changes
+            const sourceSelect = document.getElementById('transferSourceAccount');
+            if (sourceSelect) {
+                sourceSelect.addEventListener('change', () => {
+                    const destType = document.querySelector('input[name="destType"]:checked').value;
+                    toggleDestType(destType);
+                });
+            }
         });
     </script>
 </body>

@@ -21,6 +21,11 @@ public class Account implements Serializable {
     private LocalDateTime createdAt;
     private java.time.LocalDate customerDob;
 
+    // Account Credentials
+    private String username;
+    private String password;
+    private String pin;
+
     // Banking Services options
     private boolean hasAtmCard;
     private boolean hasChequeBook;
@@ -274,6 +279,15 @@ public class Account implements Serializable {
 
     public BigDecimal getJointIncome() { return jointIncome; }
     public void setJointIncome(BigDecimal jointIncome) { this.jointIncome = jointIncome; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getPin() { return pin; }
+    public void setPin(String pin) { this.pin = pin; }
 
     @Override
     public String toString() {

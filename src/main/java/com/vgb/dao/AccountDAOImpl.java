@@ -99,7 +99,7 @@ public class AccountDAOImpl implements AccountDAO {
         "GROUP BY a.account_id " +
         "ORDER BY a.created_at DESC";
     private static final String UPDATE_ACCOUNT = 
-        "UPDATE account SET account_type = ?, ifsc_code = ?, status = ?, has_atm_card = ?, has_cheque_book = ?, has_passbook = ? WHERE account_id = ?";
+        "UPDATE account SET account_type = ?, ifsc_code = ?, status = ?, has_atm_card = ?, has_cheque_book = ?, has_passbook = ?, username = ?, password = ?, pin = ? WHERE account_id = ?";
     private static final String UPDATE_ACCOUNT_BALANCE = 
         "UPDATE account SET balance = ? WHERE account_id = ?";
     private static final String UPDATE_ACCOUNT_STATUS = 
@@ -122,7 +122,7 @@ public class AccountDAOImpl implements AccountDAO {
             conn.setAutoCommit(false); // Start Transaction
 
             // 1. Insert core account
-            String createAccountSql = "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String createAccountSql = "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook, username, password, pin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(createAccountSql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, account.getAccountType());
             stmt.setBigDecimal(2, account.getBalance());
@@ -132,6 +132,9 @@ public class AccountDAOImpl implements AccountDAO {
             stmt.setInt(6, account.isHasAtmCard() ? 1 : 0);
             stmt.setInt(7, account.isHasChequeBook() ? 1 : 0);
             stmt.setInt(8, account.isHasPassbook() ? 1 : 0);
+            stmt.setString(9, account.getUsername());
+            stmt.setString(10, account.getPassword());
+            stmt.setString(11, account.getPin());
 
             int result = stmt.executeUpdate();
             if (result == 0) {
@@ -342,7 +345,10 @@ public class AccountDAOImpl implements AccountDAO {
             stmt.setInt(4, account.isHasAtmCard() ? 1 : 0);
             stmt.setInt(5, account.isHasChequeBook() ? 1 : 0);
             stmt.setInt(6, account.isHasPassbook() ? 1 : 0);
-            stmt.setLong(7, account.getAccountId());
+            stmt.setString(7, account.getUsername());
+            stmt.setString(8, account.getPassword());
+            stmt.setString(9, account.getPin());
+            stmt.setLong(10, account.getAccountId());
 
             int result = stmt.executeUpdate();
 
@@ -976,6 +982,14 @@ public class AccountDAOImpl implements AccountDAO {
         account.setIfscCode(rs.getString("ifsc_code"));
         account.setAccountNumber(rs.getString("account_number"));
         account.setStatus(rs.getString("status"));
+        
+        try {
+            account.setUsername(rs.getString("username"));
+            account.setPassword(rs.getString("password"));
+            account.setPin(rs.getString("pin"));
+        } catch (SQLException e) {
+            // ignore
+        }
         
         // Banking Services
         account.setHasAtmCard(rs.getInt("has_atm_card") == 1);

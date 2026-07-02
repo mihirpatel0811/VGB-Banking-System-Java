@@ -5,11 +5,15 @@ import com.vgb.model.Admin;
 import com.vgb.dao.CustomerDAOImpl;
 import com.vgb.dao.AdminDAOImpl;
 import com.vgb.util.SecurityUtil;
+import com.vgb.config.DatabaseConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * ForgotPasswordServlet: Handles password, PIN, and username recovery
@@ -168,7 +172,49 @@ public class ForgotPasswordServlet extends BaseServlet {
                     return;
                 }
 
-                request.setAttribute("success", "Username Retrieval Successful! Your username is: <strong>" + customer.getUsername() + "</strong>");
+                StringBuilder msg = new StringBuilder();
+                msg.append("Username Retrieval Successful!<br>");
+                msg.append("Customer Profile Username: <strong>").append(customer.getUsername()).append("</strong><br>");
+
+                // Retrieve linked account-level usernames
+                Connection conn = null;
+                PreparedStatement stmt = null;
+                ResultSet rs = null;
+                try {
+                    conn = DatabaseConfig.getInstance().getConnection();
+                    String sql = "SELECT a.account_number, a.account_type, a.username " +
+                                 "FROM account a " +
+                                 "JOIN account_signatory asig ON a.account_id = asig.account_id " +
+                                 "WHERE asig.customer_id = ?";
+                    stmt = conn.prepareStatement(sql);
+                    stmt.setLong(1, customer.getCustomerId());
+                    rs = stmt.executeQuery();
+                    
+                    boolean hasAccountUsernames = false;
+                    StringBuilder accMsg = new StringBuilder();
+                    while (rs.next()) {
+                        String accNum = rs.getString("account_number");
+                        String accType = rs.getString("account_type");
+                        String accUsername = rs.getString("username");
+                        if (accUsername != null && !accUsername.trim().isEmpty()) {
+                            if (!hasAccountUsernames) {
+                                accMsg.append("<br><strong>Linked Account Usernames:</strong><ul style='text-align: left; margin-top: 5px; padding-left: 20px;'>");
+                                hasAccountUsernames = true;
+                            }
+                            accMsg.append("<li>").append(accType.toUpperCase()).append(" Account (").append(accNum).append("): <strong>").append(accUsername).append("</strong></li>");
+                        }
+                    }
+                    if (hasAccountUsernames) {
+                        accMsg.append("</ul>");
+                        msg.append(accMsg.toString());
+                    }
+                } catch (Exception e) {
+                    logger.error("Error retrieving linked account usernames", e);
+                } finally {
+                    DatabaseConfig.closeResources(rs, stmt, conn);
+                }
+
+                request.setAttribute("success", msg.toString());
                 request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Invalid action.");

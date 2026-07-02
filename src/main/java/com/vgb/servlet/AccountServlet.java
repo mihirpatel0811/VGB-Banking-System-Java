@@ -128,6 +128,12 @@ public class AccountServlet extends BaseServlet {
                     createAccountProcess(request, response);
                 } else if ("edit".equalsIgnoreCase(action)) {
                     updateAccountProcess(request, response);
+                } else if ("deposit".equalsIgnoreCase(action)) {
+                    processDeposit(request, response, customerId, adminId);
+                } else if ("withdraw".equalsIgnoreCase(action)) {
+                    processWithdraw(request, response, customerId, adminId);
+                } else if ("transfer".equalsIgnoreCase(action)) {
+                    processTransfer(request, response, customerId, adminId);
                 } else {
                     response.sendRedirect(request.getContextPath() + "/account?action=list");
                 }
@@ -138,13 +144,13 @@ public class AccountServlet extends BaseServlet {
                         saveBeneficiaryAction(request, response, customerId);
                         break;
                     case "transfer":
-                        processTransfer(request, response, customerId);
+                        processTransfer(request, response, customerId, null);
                         break;
                     case "withdraw":
-                        processWithdraw(request, response, customerId);
+                        processWithdraw(request, response, customerId, null);
                         break;
                     case "deposit":
-                        processDeposit(request, response, customerId);
+                        processDeposit(request, response, customerId, null);
                         break;
                     default:
                         response.sendRedirect(request.getContextPath() + "/account?action=list");
@@ -192,6 +198,19 @@ public class AccountServlet extends BaseServlet {
         account.setHasAtmCard(atmCard);
         account.setHasChequeBook(chequeBook);
         account.setHasPassbook(passbook);
+
+        String username = getParameter(request, "username", "");
+        String password = getParameter(request, "password", "");
+        String pin = getParameter(request, "pin", "");
+        if (!username.isEmpty()) {
+            account.setUsername(username);
+        }
+        if (!password.isEmpty()) {
+            account.setPassword(password);
+        }
+        if (!pin.isEmpty()) {
+            account.setPin(pin);
+        }
 
         // Read primary customer details
         String firstName = getParameter(request, "firstName", "");
@@ -600,8 +619,8 @@ public class AccountServlet extends BaseServlet {
 
             // 3. Create core Account
             String createAccountSql = 
-                "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook) " +
-                "VALUES (?, ?, 'VGB0000171', ?, 'active', ?, ?, ?)";
+                "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook, username, password, pin) " +
+                "VALUES (?, ?, 'VGB0000171', ?, 'active', ?, ?, ?, ?, ?, ?)";
             
             long accountId = 0;
             try (PreparedStatement accStmt = conn.prepareStatement(createAccountSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -611,6 +630,11 @@ public class AccountServlet extends BaseServlet {
                 accStmt.setInt(4, atmSelected ? 1 : 0);
                 accStmt.setInt(5, chequeSelected ? 1 : 0);
                 accStmt.setInt(6, passbookSelected ? 1 : 0);
+                
+                Customer primaryCust = customerList.get(0);
+                accStmt.setString(7, primaryCust.getUsername());
+                accStmt.setString(8, primaryCust.getPassword());
+                accStmt.setString(9, primaryCust.getPin());
                 
                 accStmt.executeUpdate();
                 try (ResultSet generatedKeys = accStmt.getGeneratedKeys()) {
@@ -935,11 +959,12 @@ public class AccountServlet extends BaseServlet {
         out.flush();
     }
 
-    private void processTransfer(HttpServletRequest request, HttpServletResponse response, Long customerId) throws Exception {
+    private void processTransfer(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
         HttpSession session = request.getSession();
         if (!validateCSRFToken(request)) {
             session.setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
-            response.sendRedirect(request.getContextPath() + "/account?action=transferPage");
+            String redirectUrl = getParameter(request, "redirectUrl", "/account?action=transferPage");
+            response.sendRedirect(request.getContextPath() + redirectUrl);
             return;
         }
 
@@ -949,56 +974,66 @@ public class AccountServlet extends BaseServlet {
         BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
         String description = getParameter(request, "description", "Fund Transfer");
 
-        boolean useCard = "true".equalsIgnoreCase(getParameter(request, "useCard", "false"));
+        if (adminId == null) {
+            boolean useCard = "true".equalsIgnoreCase(getParameter(request, "useCard", "false"));
 
-        if (useCard) {
-            long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
-            String cvv = getParameter(request, "cvv", "");
-            com.vgb.service.CardService cardService = new com.vgb.service.CardService();
-            com.vgb.model.Card card = cardService.getCardById(cardId);
-            if (card == null || card.getCustomerId() != customerId || !"active".equalsIgnoreCase(card.getStatus())) {
-                throw new Exception("Selected ATM card is invalid or not active.");
+            if (useCard) {
+                long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
+                String cvv = getParameter(request, "cvv", "");
+                com.vgb.service.CardService cardService = new com.vgb.service.CardService();
+                com.vgb.model.Card card = cardService.getCardById(cardId);
+                if (card == null || card.getCustomerId() != customerId || !"active".equalsIgnoreCase(card.getStatus())) {
+                    throw new Exception("Selected ATM card is invalid or not active.");
+                }
+                if (!card.getCvv().equals(cvv)) {
+                    throw new Exception("Invalid Card CVV security code.");
+                }
+                fromAccountId = card.getAccountId();
             }
-            if (!card.getCvv().equals(cvv)) {
-                throw new Exception("Invalid Card CVV security code.");
-            }
-            fromAccountId = card.getAccountId();
-        }
 
-        List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
-        boolean authorized = false;
-        for (Account acc : customerAccounts) {
-            if (acc.getAccountId() == fromAccountId) {
-                authorized = true;
-                break;
+            List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
+            boolean authorized = false;
+            for (Account acc : customerAccounts) {
+                if (acc.getAccountId() == fromAccountId) {
+                    authorized = true;
+                    break;
+                }
             }
-        }
-        if (!authorized) {
-            throw new Exception("Unauthorized source account selection.");
+            if (!authorized) {
+                throw new Exception("Unauthorized source account selection.");
+            }
         }
 
         boolean transferSuccess = false;
-        if ("own".equalsIgnoreCase(destType)) {
+        if (adminId != null) {
             long toAccountId = Long.parseLong(toAccountIdStr);
             if (fromAccountId == toAccountId) {
                 throw new Exception("Source and target accounts cannot be the same.");
             }
             transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description);
         } else {
-            if (toAccountIdStr.startsWith("ext_")) {
-                long beneficiaryId = Long.parseLong(toAccountIdStr.substring(4));
-                String[] details = accountService.getExternalBeneficiaryDetails(beneficiaryId);
-                if (details == null) {
-                    throw new Exception("Saved beneficiary details not found.");
-                }
-                transferSuccess = accountService.externalTransfer(fromAccountId, details[0], details[1], details[2], amount, description);
-            } else {
+            if ("own".equalsIgnoreCase(destType)) {
                 long toAccountId = Long.parseLong(toAccountIdStr);
-                Account targetAcc = accountService.getAccountById(toAccountId);
-                if (targetAcc == null) {
-                    throw new Exception("Recipient account not found.");
+                if (fromAccountId == toAccountId) {
+                    throw new Exception("Source and target accounts cannot be the same.");
                 }
-                transferSuccess = accountService.transfer(fromAccountId, targetAcc.getAccountId(), amount, description);
+                transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description);
+            } else {
+                if (toAccountIdStr.startsWith("ext_")) {
+                    long beneficiaryId = Long.parseLong(toAccountIdStr.substring(4));
+                    String[] details = accountService.getExternalBeneficiaryDetails(beneficiaryId);
+                    if (details == null) {
+                        throw new Exception("Saved beneficiary details not found.");
+                    }
+                    transferSuccess = accountService.externalTransfer(fromAccountId, details[0], details[1], details[2], amount, description);
+                } else {
+                    long toAccountId = Long.parseLong(toAccountIdStr);
+                    Account targetAcc = accountService.getAccountById(toAccountId);
+                    if (targetAcc == null) {
+                        throw new Exception("Recipient account not found.");
+                    }
+                    transferSuccess = accountService.transfer(fromAccountId, targetAcc.getAccountId(), amount, description);
+                }
             }
         }
 
@@ -1008,24 +1043,84 @@ public class AccountServlet extends BaseServlet {
             session.setAttribute("error", "Fund transfer operation failed.");
         }
 
-        response.sendRedirect(request.getContextPath() + "/account?action=transferPage");
+        String redirectUrl = getParameter(request, "redirectUrl", "/account?action=transferPage");
+        response.sendRedirect(request.getContextPath() + redirectUrl);
     }
 
-    private void processWithdraw(HttpServletRequest request, HttpServletResponse response, Long customerId) throws Exception {
+    private void processWithdraw(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
         HttpSession session = request.getSession();
         if (!validateCSRFToken(request)) {
             session.setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
-            response.sendRedirect(request.getContextPath() + "/account?action=transferPage");
+            String redirectUrl = getParameter(request, "redirectUrl", "/account?action=transferPage");
+            response.sendRedirect(request.getContextPath() + redirectUrl);
             return;
         }
 
-        long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        long accountId = 0;
         BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
         String description = getParameter(request, "description", "Cash Withdrawal");
 
-        boolean useCard = "true".equalsIgnoreCase(getParameter(request, "useCard", "false"));
+        if (adminId != null) {
+            accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        } else {
+            boolean useCard = "true".equalsIgnoreCase(getParameter(request, "useCard", "false"));
 
-        if (useCard) {
+            if (useCard) {
+                long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
+                String cvv = getParameter(request, "cvv", "");
+                com.vgb.service.CardService cardService = new com.vgb.service.CardService();
+                com.vgb.model.Card card = cardService.getCardById(cardId);
+                if (card == null || card.getCustomerId() != customerId || !"active".equalsIgnoreCase(card.getStatus())) {
+                    throw new Exception("Selected ATM card is invalid or not active.");
+                }
+                if (!card.getCvv().equals(cvv)) {
+                    throw new Exception("Invalid Card CVV security code.");
+                }
+                accountId = card.getAccountId();
+            } else {
+                accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+            }
+
+            List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
+            boolean authorized = false;
+            for (Account acc : customerAccounts) {
+                if (acc.getAccountId() == accountId) {
+                    authorized = true;
+                    break;
+                }
+            }
+            if (!authorized) {
+                throw new Exception("Unauthorized account selection.");
+            }
+        }
+
+        boolean success = accountService.withdraw(accountId, amount, description);
+        if (success) {
+            session.setAttribute("success", "Counter cash withdrawal of ₹" + amount.setScale(2) + " processed successfully!");
+        } else {
+            session.setAttribute("error", "Withdrawal operation failed.");
+        }
+
+        String redirectUrl = getParameter(request, "redirectUrl", "/account?action=transferPage");
+        response.sendRedirect(request.getContextPath() + redirectUrl);
+    }
+
+    private void processDeposit(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
+        HttpSession session = request.getSession();
+        if (!validateCSRFToken(request)) {
+            session.setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            String redirectUrl = getParameter(request, "redirectUrl", "/account?action=transferPage");
+            response.sendRedirect(request.getContextPath() + redirectUrl);
+            return;
+        }
+
+        long accountId = 0;
+        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        String description = getParameter(request, "description", "Deposit");
+
+        if (adminId != null) {
+            accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        } else {
             long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
             String cvv = getParameter(request, "cvv", "");
             com.vgb.service.CardService cardService = new com.vgb.service.CardService();
@@ -1039,59 +1134,15 @@ public class AccountServlet extends BaseServlet {
             accountId = card.getAccountId();
         }
 
-        List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
-        boolean authorized = false;
-        for (Account acc : customerAccounts) {
-            if (acc.getAccountId() == accountId) {
-                authorized = true;
-                break;
-            }
-        }
-        if (!authorized) {
-            throw new Exception("Unauthorized account selection.");
-        }
-
-        boolean success = accountService.withdraw(accountId, amount, description);
-        if (success) {
-            session.setAttribute("success", "Counter cash withdrawal of ₹" + amount.setScale(2) + " processed successfully!");
-        } else {
-            session.setAttribute("error", "Withdrawal operation failed.");
-        }
-
-        response.sendRedirect(request.getContextPath() + "/account?action=transferPage");
-    }
-
-    private void processDeposit(HttpServletRequest request, HttpServletResponse response, Long customerId) throws Exception {
-        HttpSession session = request.getSession();
-        if (!validateCSRFToken(request)) {
-            session.setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
-            response.sendRedirect(request.getContextPath() + "/account?action=transferPage");
-            return;
-        }
-
-        long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
-        String cvv = getParameter(request, "cvv", "");
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
-        String description = getParameter(request, "description", "Card Deposit");
-
-        com.vgb.service.CardService cardService = new com.vgb.service.CardService();
-        com.vgb.model.Card card = cardService.getCardById(cardId);
-        if (card == null || card.getCustomerId() != customerId || !"active".equalsIgnoreCase(card.getStatus())) {
-            throw new Exception("Selected ATM card is invalid or not active.");
-        }
-        if (!card.getCvv().equals(cvv)) {
-            throw new Exception("Invalid Card CVV security code.");
-        }
-
-        long accountId = card.getAccountId();
         boolean success = accountService.deposit(accountId, amount, description);
         if (success) {
-            session.setAttribute("success", "Card deposit of ₹" + amount.setScale(2) + " processed successfully!");
+            session.setAttribute("success", (adminId != null ? "Counter cash deposit" : "Card deposit") + " of ₹" + amount.setScale(2) + " processed successfully!");
         } else {
-            session.setAttribute("error", "Card deposit operation failed.");
+            session.setAttribute("error", "Deposit operation failed.");
         }
 
-        response.sendRedirect(request.getContextPath() + "/account?action=transferPage");
+        String redirectUrl = getParameter(request, "redirectUrl", "/account?action=transferPage");
+        response.sendRedirect(request.getContextPath() + redirectUrl);
     }
 
     private void getTransactionsJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {

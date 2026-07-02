@@ -88,6 +88,9 @@ CREATE TABLE account (
                          has_atm_card TINYINT(1) NOT NULL DEFAULT 0,
                          has_cheque_book TINYINT(1) NOT NULL DEFAULT 0,
                          has_passbook TINYINT(1) NOT NULL DEFAULT 1,
+                         username VARCHAR(50) NULL UNIQUE,
+                         password VARCHAR(255) NULL,
+                         pin CHAR(4) NULL,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

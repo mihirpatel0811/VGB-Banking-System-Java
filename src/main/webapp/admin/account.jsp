@@ -3833,98 +3833,97 @@
             document.getElementById('partnerCountInput').value = partnerCount;
 
             var container = document.getElementById('dynamicPartnersContainer');
-            var cardHtml = `
-                <div class="partner-card" id="partner_card_\${partnerCount}">
-                    <span class="remove-partner-btn" onclick="removePartnerField(\${partnerCount})"><i class="bx bx-trash"></i></span>
-                    <h5 style="font-size:0.85rem; font-weight:700; color:var(--primary-500); margin-bottom:15px;">Partner Profile #\${partnerCount}</h5>
-                    <div class="form-row row-3">
-                        <div class="form-group">
-                            <label>First Name *</label>
-                            <input type="text" name="partner_firstName_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Middle Name</label>
-                            <input type="text" name="partner_middleName_\${partnerCount}">
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name *</label>
-                            <input type="text" name="partner_lastName_\${partnerCount}" required>
-                        </div>
-                    </div>
-                    <div class="form-row row-3">
-                        <div class="form-group">
-                            <label>Date of Birth *</label>
-                            <input type="date" name="partner_dob_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Gender *</label>
-                            <select name="partner_gender_\${partnerCount}">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Marital Status</label>
-                            <select name="partner_maritalStatus_\${partnerCount}">
-                                <option value="single">Single</option>
-                                <option value="married">Married</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row row-3">
-                        <div class="form-group">
-                            <label>Email *</label>
-                            <input type="email" name="partner_email_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone *</label>
-                            <input type="text" name="partner_phone_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>PAN Card *</label>
-                            <input type="text" name="partner_pan_\${partnerCount}" required>
-                        </div>
-                    </div>
-                    <div class="form-row row-3">
-                        <div class="form-group">
-                            <label>Aadhaar Card *</label>
-                            <input type="text" name="partner_aadhaar_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Partner Address *</label>
-                            <input type="text" name="partner_address_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>City *</label>
-                            <input type="text" name="partner_city_\${partnerCount}" required>
-                        </div>
-                    </div>
-                    <div class="form-row row-3">
-                        <div class="form-group">
-                            <label>State *</label>
-                            <input type="text" name="partner_state_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Zip Code *</label>
-                            <input type="text" name="partner_zip_\${partnerCount}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Annual Income *</label>
-                            <input type="number" name="partner_income_\${partnerCount}" value="500000">
-                        </div>
-                    </div>
-                    <div class="form-row row-3">
-                        <div class="form-group">
-                            <label>Occupation</label>
-                            <input type="text" name="partner_occupation_\${partnerCount}" value="Business">
-                        </div>
-                    </div>
-                    <input type="hidden" name="partner_username_\${partnerCount}">
-                    <input type="hidden" name="partner_password_\${partnerCount}">
-                    <!-- Hidden PIN input -->
-                    <input type="hidden" name="partner_pin_\${partnerCount}" value="\${document.getElementById('wizPin').value}">
-                </div>
-            `;
+            var cardHtml = 
+                '<div class="partner-card" id="partner_card_' + partnerCount + '">' +
+                    '<span class="remove-partner-btn" onclick="removePartnerField(' + partnerCount + ')"><i class="bx bx-trash"></i></span>' +
+                    '<h5 style="font-size:0.85rem; font-weight:700; color:var(--primary-500); margin-bottom:15px;">Partner Profile #' + partnerCount + '</h5>' +
+                    '<div class="form-row row-3">' +
+                        '<div class="form-group">' +
+                            '<label>First Name *</label>' +
+                            '<input type="text" name="partner_firstName_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Middle Name</label>' +
+                            '<input type="text" name="partner_middleName_' + partnerCount + '">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Last Name *</label>' +
+                            '<input type="text" name="partner_lastName_' + partnerCount + '" required>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
+                        '<div class="form-group">' +
+                            '<label>Date of Birth *</label>' +
+                            '<input type="date" name="partner_dob_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Gender *</label>' +
+                            '<select name="partner_gender_' + partnerCount + '">' +
+                                '<option value="male">Male</option>' +
+                                '<option value="female">Female</option>' +
+                            '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Marital Status</label>' +
+                            '<select name="partner_maritalStatus_' + partnerCount + '">' +
+                                '<option value="single">Single</option>' +
+                                '<option value="married">Married</option>' +
+                            '</select>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
+                        '<div class="form-group">' +
+                            '<label>Email *</label>' +
+                            '<input type="email" name="partner_email_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Phone *</label>' +
+                            '<input type="text" name="partner_phone_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>PAN Card *</label>' +
+                            '<input type="text" name="partner_pan_' + partnerCount + '" required>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
+                        '<div class="form-group">' +
+                            '<label>Aadhaar Card *</label>' +
+                            '<input type="text" name="partner_aadhaar_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Partner Address *</label>' +
+                            '<input type="text" name="partner_address_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>City *</label>' +
+                            '<input type="text" name="partner_city_' + partnerCount + '" required>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
+                        '<div class="form-group">' +
+                            '<label>State *</label>' +
+                            '<input type="text" name="partner_state_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Zip Code *</label>' +
+                            '<input type="text" name="partner_zip_' + partnerCount + '" required>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>Annual Income *</label>' +
+                            '<input type="number" name="partner_income_' + partnerCount + '" value="500000">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="form-row row-3">' +
+                        '<div class="form-group">' +
+                            '<label>Occupation</label>' +
+                            '<input type="text" name="partner_occupation_' + partnerCount + '" value="Business">' +
+                        '</div>' +
+                    '</div>' +
+                    '<input type="hidden" name="partner_username_' + partnerCount + '">' +
+                    '<input type="hidden" name="partner_password_' + partnerCount + '">' +
+                    '<!-- Hidden PIN input -->' +
+                    '<input type="hidden" name="partner_pin_' + partnerCount + '" value="' + document.getElementById('wizPin').value + '">' +
+                '</div>';
 
             var tempDiv = document.createElement('div');
             tempDiv.innerHTML = cardHtml;
@@ -3961,35 +3960,33 @@
                 name = document.getElementById('wizFirst').value + " " + document.getElementById('wizLast').value;
                 var nominee = document.getElementById('wizNominee').value || "No Nominee";
 
-                detailsHtml = `
-                    <h5 style="font-weight:700; color:var(--gray-800); font-size:0.95rem; margin-bottom:12px; border-bottom:1px solid var(--gray-200); padding-bottom:5px;">Savings Account Details</h5>
-                    <table style="width:100%; font-size:0.85rem; line-height:1.7;">
-                        <tr><td style="color:var(--gray-500); width:35%;">Applicant Name:</td><td style="font-weight:700; color:var(--gray-800);">\${name.toUpperCase()}</td></tr>
-                        <tr><td style="color:var(--gray-500);">Holding Mode:</td><td style="font-weight:700; text-transform:uppercase;">\${wizHold}</td></tr>
-                        <tr><td style="color:var(--gray-500);">Nominee:</td><td style="font-weight:700;">\${nominee}</td></tr>
-                        <tr><td style="color:var(--gray-500);">ATM & Services:</td><td style="font-weight:600; color:var(--primary-500);">\${atm} | \${cheque} | \${pass}</td></tr>
-                        <tr><td style="color:var(--gray-500);">Login Username:</td><td style="font-weight:700; font-family:monospace;">\${user}</td></tr>
-                        <tr><td style="color:var(--gray-500); font-weight:700;">Initial Deposit Amount:</td><td style="font-weight:800; color:var(--accent-emerald); font-size:1rem;">₹ \${amount}</td></tr>
-                        <tr style="border-top:1px dashed var(--gray-200); padding-top:5px; margin-top:5px;"><td style="color:var(--primary-500); font-weight:700;">Auto-Generated PIN:</td><td style="font-weight:800; color:var(--primary-700); font-size:1.1rem; letter-spacing:2px; font-family:monospace;">\${pin}</td></tr>
-                    </table>
-                `;
+                detailsHtml = 
+                    '<h5 style="font-weight:700; color:var(--gray-800); font-size:0.95rem; margin-bottom:12px; border-bottom:1px solid var(--gray-200); padding-bottom:5px;">Savings Account Details</h5>' +
+                    '<table style="width:100%; font-size:0.85rem; line-height:1.7;">' +
+                        '<tr><td style="color:var(--gray-500); width:35%;">Applicant Name:</td><td style="font-weight:700; color:var(--gray-800);">' + name.toUpperCase() + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">Holding Mode:</td><td style="font-weight:700; text-transform:uppercase;">' + wizHold + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">Nominee:</td><td style="font-weight:700;">' + nominee + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">ATM & Services:</td><td style="font-weight:600; color:var(--primary-500);">' + atm + ' | ' + cheque + ' | ' + pass + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">Login Username:</td><td style="font-weight:700; font-family:monospace;">' + user + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500); font-weight:700;">Initial Deposit Amount:</td><td style="font-weight:800; color:var(--accent-emerald); font-size:1rem;">₹ ' + amount + '</td></tr>' +
+                        '<tr style="border-top:1px dashed var(--gray-200); padding-top:5px; margin-top:5px;"><td style="color:var(--primary-500); font-weight:700;">Auto-Generated PIN:</td><td style="font-weight:800; color:var(--primary-700); font-size:1.1rem; letter-spacing:2px; font-family:monospace;">' + pin + '</td></tr>' +
+                    '</table>';
                 checkText.textContent = "I confirm that I have verified the identity cards, address validation, initial deposit of ₹" + amount + ", and mandate signatures for " + name.toUpperCase() + " to open this Savings Account.";
             } else {
                 name = document.getElementById('wizBusName').value;
                 var gstin = document.getElementById('wizGstin').value;
 
-                detailsHtml = `
-                    <h5 style="font-weight:700; color:var(--gray-800); font-size:0.95rem; margin-bottom:12px; border-bottom:1px solid var(--gray-200); padding-bottom:5px;">Current Corporate Account Details</h5>
-                    <table style="width:100%; font-size:0.85rem; line-height:1.7;">
-                        <tr><td style="color:var(--gray-500); width:35%;">Business Name:</td><td style="font-weight:700; color:var(--gray-800);">\${name.toUpperCase()}</td></tr>
-                        <tr><td style="color:var(--gray-500);">GSTIN Registration:</td><td style="font-weight:700; font-family:monospace;">\${gstin}</td></tr>
-                        <tr><td style="color:var(--gray-500);">ATM & Services:</td><td style="font-weight:600; color:var(--primary-500);">\${atm} | \${cheque} | \${pass}</td></tr>
-                        <tr><td style="color:var(--gray-500);">Corporate Partners:</td><td style="font-weight:700;">\${partnerCount} registered partners</td></tr>
-                        <tr><td style="color:var(--gray-500);">Primary Login User:</td><td style="font-weight:700; font-family:monospace;">\${user}</td></tr>
-                        <tr><td style="color:var(--gray-500); font-weight:700;">Initial Corporate Deposit:</td><td style="font-weight:800; color:var(--accent-emerald); font-size:1rem;">₹ \${amount}</td></tr>
-                        <tr style="border-top:1px dashed var(--gray-200); padding-top:5px; margin-top:5px;"><td style="color:var(--primary-500); font-weight:700;">Auto-Generated PIN:</td><td style="font-weight:800; color:var(--primary-700); font-size:1.1rem; letter-spacing:2px; font-family:monospace;">\${pin}</td></tr>
-                    </table>
-                `;
+                detailsHtml = 
+                    '<h5 style="font-weight:700; color:var(--gray-800); font-size:0.95rem; margin-bottom:12px; border-bottom:1px solid var(--gray-200); padding-bottom:5px;">Current Corporate Account Details</h5>' +
+                    '<table style="width:100%; font-size:0.85rem; line-height:1.7;">' +
+                        '<tr><td style="color:var(--gray-500); width:35%;">Business Name:</td><td style="font-weight:700; color:var(--gray-800);">' + name.toUpperCase() + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">GSTIN Registration:</td><td style="font-weight:700; font-family:monospace;">' + gstin + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">ATM & Services:</td><td style="font-weight:600; color:var(--primary-500);">' + atm + ' | ' + cheque + ' | ' + pass + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">Corporate Partners:</td><td style="font-weight:700;">' + partnerCount + ' registered partners</td></tr>' +
+                        '<tr><td style="color:var(--gray-500);">Primary Login User:</td><td style="font-weight:700; font-family:monospace;">' + user + '</td></tr>' +
+                        '<tr><td style="color:var(--gray-500); font-weight:700;">Initial Corporate Deposit:</td><td style="font-weight:800; color:var(--accent-emerald); font-size:1rem;">₹ ' + amount + '</td></tr>' +
+                        '<tr style="border-top:1px dashed var(--gray-200); padding-top:5px; margin-top:5px;"><td style="color:var(--primary-500); font-weight:700;">Auto-Generated PIN:</td><td style="font-weight:800; color:var(--primary-700); font-size:1.1rem; letter-spacing:2px; font-family:monospace;">' + pin + '</td></tr>' +
+                    '</table>';
                 checkText.textContent = "I confirm that I have verified the corporate registration documents, GSTIN number, initial deposit of ₹" + amount + ", and signatures of all partners for " + name.toUpperCase() + " to open this Current Account.";
             }
 
