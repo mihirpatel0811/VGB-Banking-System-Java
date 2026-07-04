@@ -1932,6 +1932,162 @@
     </main>
 
     <!-- ==========================================
+         NEW ACCOUNT SUMMARY MODAL
+         ========================================== -->
+    <c:if test="${not empty newAccountSummary}">
+        <div class="modal" id="newAccountSummaryModal" style="display: flex;">
+            <div class="modal-content" style="max-width: 650px;">
+                <div class="modal-header" style="background: rgba(16, 185, 129, 0.05); border-bottom: 1px solid var(--gray-100);">
+                    <h3 style="font-weight: 700; color: #047857; display: flex; align-items: center; gap: 8px; margin: 0;">
+                        <i class="bx bx-check-circle" style="color: #10b981; font-size: 1.6rem;"></i> Bank Account Opened Successfully
+                    </h3>
+                    <button type="button" class="close-modal-btn" onclick="closeModal('newAccountSummaryModal')"><i class="bx bx-x"></i></button>
+                </div>
+                <div class="modal-body" style="padding: 25px;">
+                    <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px; text-align: center;" class="no-print">
+                        <span style="font-size: 0.85rem; color: #047857; font-weight: 600;">
+                            The bank account has been successfully registered in the ledger. Please note down or print the customer credentials below.
+                        </span>
+                    </div>
+                    
+                    <div class="statement-print-area">
+                        <!-- Header for print -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 10px; margin-bottom: 20px;">
+                            <div>
+                                <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--primary-500); letter-spacing: 0.5px; margin: 0; line-height: 1;">VERTEX GALAXY BANK</h2>
+                                <p style="font-size: 0.75rem; color: var(--gray-500); margin: 3px 0 0; font-weight: 500;">Account Opening Credentials Summary</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-family: monospace; font-size: 0.8rem; color: var(--gray-500); font-weight: 700;">BRANCH: RAJKOT</span>
+                            </div>
+                        </div>
+
+                        <!-- Summary Content -->
+                        <h4 style="font-weight: 700; color: var(--gray-800); border-bottom: 1.5px solid var(--gray-100); padding-bottom: 5px; margin-bottom: 12px; font-size: 0.95rem;">
+                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Core Account Information
+                        </h4>
+                        <table style="width: 100%; font-size: 0.85rem; line-height: 1.8; margin-bottom: 20px;">
+                            <tr>
+                                <td style="color: var(--gray-500); width: 35%;">Account Number:</td>
+                                <td style="font-weight: 800; font-family: monospace; color: var(--gray-800); font-size: 0.95rem;">${newAccountSummary.accountNumber}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--gray-500);">IFSC Code:</td>
+                                <td style="font-weight: 700; font-family: monospace;">${newAccountSummary.ifscCode}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--gray-500);">Account Type:</td>
+                                <td style="font-weight: 700; text-transform: uppercase;">${newAccountSummary.accountType} (${newAccountSummary.holdingType})</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--gray-500);">Initial Deposit:</td>
+                                <td style="font-weight: 800; color: var(--accent-emerald);">₹ <fmt:formatNumber value="${newAccountSummary.initialAmount}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                            </tr>
+                            <tr style="border-top: 1px dashed var(--gray-200); padding-top: 5px; margin-top: 5px;">
+                                <td style="color: var(--primary-500); font-weight: 700;">Secure ATM/Counter PIN:</td>
+                                <td style="font-weight: 800; color: var(--primary-700); font-size: 1.1rem; letter-spacing: 2px; font-family: monospace;">${newAccountSummary.pin}</td>
+                            </tr>
+                        </table>
+
+                        <h4 style="font-weight: 700; color: var(--gray-800); border-bottom: 1.5px solid var(--gray-100); padding-bottom: 5px; margin-bottom: 12px; font-size: 0.95rem;">
+                            <i class="bx bx-key" style="color: var(--primary-500);"></i> Access Credentials
+                        </h4>
+                        
+                        <c:choose>
+                            <c:when test="${newAccountSummary.accountType eq 'savings'}">
+                                <!-- Savings Account Credentials -->
+                                <table style="width: 100%; font-size: 0.85rem; line-height: 1.8; margin-bottom: 20px;">
+                                    <tr>
+                                        <td style="color: var(--gray-500); width: 35%;">Primary Holder Name:</td>
+                                        <td style="font-weight: 700; color: var(--gray-800);">${newAccountSummary.primaryName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--gray-500);">Login Username:</td>
+                                        <td style="font-weight: 700; font-family: monospace; color: var(--primary-600);">${newAccountSummary.primaryUsername}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--gray-500);">Login Password:</td>
+                                        <td style="font-weight: 700; font-family: monospace;">${newAccountSummary.primaryPassword}</td>
+                                    </tr>
+                                    
+                                    <c:if test="${newAccountSummary.holdingType eq 'joint'}">
+                                        <tr style="border-top: 1px dashed var(--gray-100); padding-top: 10px; margin-top: 10px;">
+                                            <td style="color: var(--gray-500);">Joint Holder Name:</td>
+                                            <td style="font-weight: 700; color: var(--gray-800);">${newAccountSummary.jointName}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: var(--gray-500);">Login Username:</td>
+                                            <td style="font-weight: 700; font-family: monospace; color: var(--primary-600);">${newAccountSummary.jointUsername}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: var(--gray-500);">Login Password:</td>
+                                            <td style="font-weight: 700; font-family: monospace;">${newAccountSummary.jointPassword}</td>
+                                        </tr>
+                                    </c:if>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- Current Corporate Credentials -->
+                                <table style="width: 100%; font-size: 0.85rem; line-height: 1.8; margin-bottom: 20px;">
+                                    <tr>
+                                        <td style="color: var(--gray-500); width: 35%;">Business Name:</td>
+                                        <td style="font-weight: 700; color: var(--gray-800);">${newAccountSummary.businessName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--gray-500);">GSTIN:</td>
+                                        <td style="font-weight: 700; font-family: monospace;">${newAccountSummary.gstin}</td>
+                                    </tr>
+                                </table>
+                                
+                                <div style="margin-top: 10px; margin-bottom: 20px;">
+                                    <span style="font-weight: 700; font-size: 0.8rem; color: var(--gray-600); display: block; margin-bottom: 8px;">Signatory / Partner Credentials:</span>
+                                    <c:forEach var="partner" items="${newAccountSummary.partners}">
+                                        <div style="margin-bottom: 10px; background: rgba(99, 102, 241, 0.02); border: 1.5px solid var(--gray-200); padding: 12px; border-radius: var(--radius-sm);">
+                                            <div style="font-weight: 700; font-size: 0.8rem; color: var(--gray-800); margin-bottom: 4px;">${partner.name} (${partner.role})</div>
+                                            <div style="display: flex; gap: 20px; font-size: 0.8rem;">
+                                                <span><strong>Username:</strong> <code style="font-weight:700; color:var(--primary-600);">${partner.username}</code></span>
+                                                <span><strong>Password:</strong> <code style="font-weight:700;">${partner.password}</code></span>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <h4 style="font-weight: 700; color: var(--gray-800); border-bottom: 1.5px solid var(--gray-100); padding-bottom: 5px; margin-bottom: 12px; font-size: 0.95rem;">
+                            <i class="bx bx-chip" style="color: var(--primary-500);"></i> Requested Instruments
+                        </h4>
+                        <table style="width: 100%; font-size: 0.85rem; line-height: 1.8;">
+                            <tr>
+                                <td style="color: var(--gray-500); width: 35%;">ATM Debit Card:</td>
+                                <td style="font-weight: 700;">${newAccountSummary.atmCard}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--gray-500);">Cheque Book (50 leaves):</td>
+                                <td style="font-weight: 700;">${newAccountSummary.chequeBook}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--gray-500);">Passbook Booklet:</td>
+                                <td style="font-weight: 700;">${newAccountSummary.passbook}</td>
+                            </tr>
+                        </table>
+                        
+                        <div style="margin-top: 30px; text-align: center; font-size: 0.75rem; color: var(--gray-400); border-top: 1px dashed var(--gray-300); padding-top: 15px;" class="print-only">
+                            This is a system generated secure credentials sheet. Please change your password and PIN upon first login.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer no-print">
+                    <button type="button" class="btn btn-primary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="bx bx-printer"></i> Print Summary
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('newAccountSummaryModal')">Close</button>
+                </div>
+            </div>
+        </div>
+    </c:if>
+
+    <!-- ==========================================
          VIEW ACCOUNT MODAL
          ========================================== -->
     <div class="modal" id="viewAccountModal">

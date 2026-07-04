@@ -606,6 +606,419 @@
         body.dark-mode .lookup-result-card-details span {
             color: var(--gray-300);
         }
+
+        /* Product Catalogue Styles adapted from cards.jsp */
+        .catalog-scroll-container {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 30px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .catalog-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .catalog-scroll-container::-webkit-scrollbar-track {
+            background: rgba(99, 102, 241, 0.02);
+            border-radius: 10px;
+        }
+        .catalog-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 10px;
+            transition: background 0.2s ease;
+        }
+        .catalog-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+        body.dark-mode .catalog-scroll-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        body.dark-mode .catalog-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        body.dark-mode .catalog-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .catalog-grid {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+            width: max-content;
+            align-items: stretch;
+            padding: 4px;
+        }
+        .product-card {
+            width: 320px;
+            flex-shrink: 0;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column !important;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            background: #ffffff;
+        }
+        body.dark-mode .product-card {
+            background: #1e293b;
+        }
+        .product-card-bg-debit-classic {
+            background: rgba(99, 102, 241, 0.02);
+            border: 1.5px solid rgba(99, 102, 241, 0.08);
+        }
+        body.dark-mode .product-card-bg-debit-classic {
+            background: rgba(99, 102, 241, 0.04);
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+        .product-card-bg-debit-premium {
+            background: rgba(6, 182, 212, 0.02);
+            border: 1.5px solid rgba(6, 182, 212, 0.08);
+        }
+        body.dark-mode .product-card-bg-debit-premium {
+            background: rgba(6, 182, 212, 0.04);
+            border-color: rgba(6, 182, 212, 0.15);
+        }
+        .product-card-bg-credit-infinite {
+            background: rgba(245, 158, 11, 0.02);
+            border: 1.5px solid rgba(245, 158, 11, 0.08);
+        }
+        body.dark-mode .product-card-bg-credit-infinite {
+            background: rgba(245, 158, 11, 0.04);
+            border-color: rgba(245, 158, 11, 0.15);
+        }
+        .product-card-watermark {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 5.5rem;
+            font-weight: 800;
+            transform: rotate(-15deg);
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+        }
+        .watermark-debit {
+            color: rgba(99, 102, 241, 0.025);
+        }
+        body.dark-mode .watermark-debit {
+            color: rgba(255, 255, 255, 0.015);
+        }
+        .catalog-details-col {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .catalog-spec-badge {
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+        .spec-badge-classic {
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--primary-500);
+        }
+        .catalog-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin: 0;
+        }
+        body.dark-mode .catalog-card-title {
+            color: #ffffff;
+        }
+        .catalog-card-desc {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin: 0;
+        }
+        body.dark-mode .catalog-card-desc {
+            color: var(--gray-400);
+        }
+        .catalog-specs-table {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .catalog-spec-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            border-bottom: 1px dashed rgba(99, 102, 241, 0.08);
+            padding-bottom: 5px;
+        }
+        body.dark-mode .catalog-spec-row {
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+        .catalog-spec-label {
+            color: var(--gray-500);
+        }
+        body.dark-mode .catalog-spec-label {
+            color: var(--gray-400);
+        }
+        .catalog-spec-value {
+            color: var(--gray-800);
+            font-weight: 700;
+        }
+        body.dark-mode .catalog-spec-value {
+            color: #ffffff;
+        }
+        .catalog-features-col {
+            width: 100%;
+            border-top: 1px dashed rgba(99, 102, 241, 0.12);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.dark-mode .catalog-features-col {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        .catalog-features-heading {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--gray-450);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.8px;
+        }
+        .catalog-features-list {
+            font-size: 0.82rem;
+            color: var(--gray-600);
+            padding-left: 16px;
+            margin: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        body.dark-mode .catalog-features-list {
+            color: var(--gray-300);
+        }
+        .catalog-action-col {
+            width: 100%;
+            margin-top: auto;
+            padding-top: 15px;
+        }
+        .btn-apply-catalog {
+            width: 100% !important;
+            padding: 12px 24px !important;
+            white-space: nowrap !important;
+            margin: 0 !important;
+            font-weight: 600;
+            border-radius: var(--radius-md) !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+            transition: all 0.3s ease;
+        }
+        .btn-apply-catalog:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+        }
+        .catalog-card-container {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
+
+        /* 3D Cheque Book styles */
+        .book-container {
+            perspective: 1500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            width: 100%;
+            height: 300px;
+            overflow: visible;
+        }
+        .book {
+            position: relative;
+            width: 360px;
+            height: 200px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(90px); /* Off-center when closed */
+        }
+        .book.open-state {
+            transform: translateX(0px); /* Center when book opens */
+        }
+        .book .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .book .page-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        body.dark-mode .book .page-face {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+        .book .page-face.front {
+            background: #ffffff;
+            z-index: 2;
+        }
+        .book .page-face.back {
+            background: #f8fafc;
+            transform: rotateY(180deg);
+            border-left: 2px solid #e2e8f0;
+        }
+        
+        .book .cover-front .page-face.front {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+            border-left: 10px solid #b45309; /* Gold spine */
+            box-shadow: 0 15px 35px rgba(30, 27, 75, 0.25);
+        }
+        .book .cover-back .page-face.back {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+            border-right: 10px solid #b45309; /* Gold spine */
+        }
+        
+        .book .page.flipped {
+            transform: rotateY(-180deg);
+        }
+        
+        /* Z-index layering */
+        .book .page:nth-child(1) { z-index: 5; }
+        .book .page:nth-child(2) { z-index: 4; }
+        .book .page:nth-child(3) { z-index: 3; }
+        .book .page:nth-child(4) { z-index: 2; }
+        .book .page:nth-child(5) { z-index: 1; }
+
+        .book .page.flipped:nth-child(1) { z-index: 1; }
+        .book .page.flipped:nth-child(2) { z-index: 2; }
+        .book .page.flipped:nth-child(3) { z-index: 3; }
+        .book .page.flipped:nth-child(4) { z-index: 4; }
+        .book .page.flipped:nth-child(5) { z-index: 5; }
+        
+        .book-container .btn-nav-book {
+            padding: 8px 14px;
+            background: #ffffff;
+            border: 1.5px solid var(--gray-200);
+            color: var(--gray-700);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        body.dark-mode .book-container .btn-nav-book {
+            background: rgba(15, 23, 42, 0.45);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .book-container .btn-nav-book:hover {
+            border-color: var(--primary-500);
+            color: var(--primary-500);
+        }
+
+        /* Mini 3D Cheque Book styles for catalogue */
+        .mini-book-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 140px;
+            margin: 10px 0;
+            overflow: visible;
+        }
+        .mini-book {
+            position: relative;
+            width: 200px;
+            height: 110px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(50px);
+        }
+        .mini-book.open-state {
+            transform: translateX(0px);
+        }
+        .mini-book .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .mini-book .page-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        body.dark-mode .mini-book .page-face {
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+        }
+        .mini-book .page-face.front {
+            background: #ffffff;
+            z-index: 2;
+        }
+        .mini-book .page-face.back {
+            background: #f8fafc;
+            transform: rotateY(180deg);
+            border-left: 1.5px solid #e2e8f0;
+        }
+        
+        .mini-book .page.flipped {
+            transform: rotateY(-180deg);
+        }
+        
+        /* Z-index layering */
+        .mini-book .page:nth-child(1) { z-index: 5; }
+        .mini-book .page:nth-child(2) { z-index: 4; }
+        .mini-book .page:nth-child(3) { z-index: 3; }
+        .mini-book .page:nth-child(4) { z-index: 2; }
+        .mini-book .page:nth-child(5) { z-index: 1; }
+
+        .mini-book .page.flipped:nth-child(1) { z-index: 1; }
+        .mini-book .page.flipped:nth-child(2) { z-index: 2; }
+        .mini-book .page.flipped:nth-child(3) { z-index: 3; }
+        .mini-book .page.flipped:nth-child(4) { z-index: 4; }
+        .mini-book .page.flipped:nth-child(5) { z-index: 5; }
     </style>
 </head>
 <body>
@@ -748,6 +1161,380 @@
                 </div>
             </div>
 
+            <!-- VGB Cheque Book Product Catalogue -->
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
+                        <i class="bx bx-book-open" style="color: var(--primary-500);"></i> VGB Bank Cheque Book Suite & Specifications
+                    </h3>
+                </div>
+                <div class="catalog-scroll-container">
+                    <div class="catalog-grid">
+                    
+                        <!-- Product 1: Classic Booklet -->
+                        <div class="product-card product-card-bg-debit-classic">
+                            <div class="product-card-watermark watermark-debit">CLASSIC</div>
+                            <div class="catalog-details-col">
+                                <span class="catalog-spec-badge spec-badge-classic">Classic Tier</span>
+                                <h4 class="catalog-card-title">25 Leaves Booklet</h4>
+                                <p class="catalog-card-desc">Standard cheque book booklet suitable for personal users and low transaction profiles.</p>
+                            </div>
+                            
+                            <!-- Mini 3D Cheque Book Mockup -->
+                            <div class="mini-book-container">
+                                <div class="mini-book" id="miniBook-classic">
+                                    <!-- Page 1: Front Cover -->
+                                    <div class="page" onclick="flipCatalogPage('classic', 1)">
+                                        <div class="page-face front" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; border-left: 5px solid #b45309; height: 100%; box-sizing: border-box;">
+                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 25px; height: 25px; margin-bottom: 5px;">
+                                            <h4 style="margin: 0; font-size: 0.55rem; letter-spacing: 1px;">VERTEX GALAXY BANK</h4>
+                                            <span style="font-size: 0.35rem; color: #a5b4fc; text-transform: uppercase;">CLASSIC 25 LEAVES</span>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; line-height: 1.3; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; color: var(--primary-500); font-weight: bold; font-size: 0.5rem;">Classic Booklet</h5>
+                                            <ul style="padding-left: 10px; margin: 0;">
+                                                <li>Multi-City Clearing</li>
+                                                <li>Personal use profile</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Page 2: Details -->
+                                    <div class="page" onclick="flipCatalogPage('classic', 2)">
+                                        <div class="page-face front" style="padding: 8px; font-size: 0.45rem; color: #334155; line-height: 1.4; display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-sizing: border-box;">
+                                            <div style="text-align: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px; font-weight: bold; font-size: 0.5rem;">CLASSIC ISSUANCE</div>
+                                            <table style="width: 100%; font-size: 0.4rem;">
+                                                <tr><td style="color: #64748b;">Holder:</td><td>CLASSIC HOLDER</td></tr>
+                                                <tr><td style="color: #64748b;">A/C:</td><td>17193XXXXXXX</td></tr>
+                                                <tr><td style="color: #64748b;">IFSC:</td><td>VGB0000171</td></tr>
+                                            </table>
+                                            <div style="border-top: 1px dashed #cbd5e1; font-size: 0.35rem; text-align: right; color: #94a3b8;">VGB Head Branch</div>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; font-weight: bold; font-size: 0.5rem;">Terms & Policy</h5>
+                                            <p style="margin: 0; line-height: 1.3;">Standard processing rules apply. Return penalties apply on NSF drawals.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Page 3: Ledger -->
+                                    <div class="page" onclick="flipCatalogPage('classic', 3)">
+                                        <div class="page-face front" style="padding: 6px; color: #334155; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;">
+                                            <h6 style="margin: 0 0 3px 0; font-size: 0.45rem; text-align: center; font-weight: bold; border-bottom: 1px solid #cbd5e1;">RECORD SHEET</h6>
+                                            <table style="width: 100%; font-size: 0.35rem; border-collapse: collapse; text-align: center; line-height: 1.1;">
+                                                <tr style="background: #f1f5f9;"><th style="border: 0.5px solid #cbd5e1;">Chq</th><th style="border: 0.5px solid #cbd5e1;">Date</th><th style="border: 0.5px solid #cbd5e1;">Amount</th></tr>
+                                                <tr><td style="border: 0.5px solid #cbd5e1;">100401</td><td style="border: 0.5px solid #cbd5e1;">05-Jul</td><td style="border: 0.5px solid #cbd5e1;">₹5,000</td></tr>
+                                                <tr><td style="border: 0.5px solid #cbd5e1;">100402</td><td style="border: 0.5px solid #cbd5e1;">12-Jul</td><td style="border: 0.5px solid #cbd5e1;">₹1,250</td></tr>
+                                            </table>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; font-weight: bold; font-size: 0.5rem;">Ledger Logs</h5>
+                                            <p style="margin: 0; line-height: 1.3;">Always log your issued cheques to reconcile balances.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Page 4: Cheque Leaf -->
+                                    <div class="page" onclick="flipCatalogPage('classic', 4)">
+                                        <div class="page-face front" style="padding: 6px; font-family: monospace; font-size: 0.38rem; color: #475569; display: flex; flex-direction: column; justify-content: space-between; background: rgba(99, 102, 241, 0.01); height: 100%; box-sizing: border-box;">
+                                            <div style="display: flex; justify-content: space-between; border-bottom: 0.5px solid rgba(99, 102, 241, 0.2); font-size: 0.45rem;">
+                                                <strong>VERTEX GALAXY BANK</strong>
+                                                <span>DATE: __/__/____</span>
+                                            </div>
+                                            <div>PAY: _________________________</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                                <span>A/C: 17193xxxxxxx</span>
+                                                <span style="font-family: 'Brush Script MT', cursive; font-size: 0.45rem; border-top: 0.5px solid #94a3b8; width: 45px; text-align: center;">Signatory</span>
+                                            </div>
+                                        </div>
+                                        <div class="page-face back" style="padding: 10px; font-size: 0.45rem; color: #475569; display: flex; align-items: center; justify-content: center; height: 100%; box-sizing: border-box;">
+                                            <div style="border: 0.5px dashed #cbd5e1; padding: 5px; text-align: center; width: 100%;">
+                                                <span style="font-weight: bold; display: block; font-size: 0.4rem;">ENDORSEMENTS</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Page 5: Back Cover -->
+                                    <div class="page">
+                                        <div class="page-face front" style="padding: 10px; font-size: 0.45rem; color: #64748b; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; box-sizing: border-box;">
+                                            <p style="font-weight: bold; margin: 0; font-size: 0.5rem;">VGB Classic Suite</p>
+                                        </div>
+                                        <div class="page-face back" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; display: flex; justify-content: center; align-items: center; border-right: 5px solid #b45309; height: 100%; box-sizing: border-box;">
+                                            <div style="width: 50px; height: 10px; background: repeating-linear-gradient(90deg, #000, #000 1.5px, #fff 1.5px, #fff 3px);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="catalog-specs-table">
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Upfront Fee:</span>
+                                    <strong class="catalog-spec-value">₹100.00</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Capacity Limit:</span>
+                                    <strong class="catalog-spec-value">25 Leaves</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Verification Time:</span>
+                                    <strong class="catalog-spec-value">Instant Approval</strong>
+                                </div>
+                            </div>
+
+                            <div class="catalog-features-col">
+                                <h5 class="catalog-features-heading">Features & Benefits:</h5>
+                                <ul class="catalog-features-list">
+                                    <li>Multi-City Clearing Enabled</li>
+                                    <li>CTS-2010 Compliant Layout</li>
+                                    <li>Refundable fee on rejection</li>
+                                </ul>
+                            </div>
+
+                            <div class="catalog-action-col">
+                                <button type="button" onclick="openApplyModal('25')" class="btn-apply-catalog btn btn-primary">
+                                    <i class="bx bx-plus-circle"></i> Apply Classic 25
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 2: Executive Booklet -->
+                        <div class="product-card product-card-bg-debit-premium">
+                            <div class="product-card-watermark watermark-debit" style="color: rgba(6, 182, 212, 0.025);">EXECUTIVE</div>
+                            <div class="catalog-details-col">
+                                <span class="catalog-spec-badge spec-badge-premium" style="background: rgba(6, 182, 212, 0.08); color: #0891b2;">Executive Tier</span>
+                                <h4 class="catalog-card-title">50 Leaves Booklet</h4>
+                                <p class="catalog-card-desc">Medium-tier cheque booklet matching active retail users and self-employed professionals.</p>
+                            </div>
+                            
+                            <!-- Mini 3D Cheque Book Mockup -->
+                            <div class="mini-book-container">
+                                <div class="mini-book" id="miniBook-executive">
+                                    <!-- Page 1: Front Cover -->
+                                    <div class="page" onclick="flipCatalogPage('executive', 1)">
+                                        <div class="page-face front" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; border-left: 5px solid #b45309; height: 100%; box-sizing: border-box;">
+                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 25px; height: 25px; margin-bottom: 5px;">
+                                            <h4 style="margin: 0; font-size: 0.55rem; letter-spacing: 1px;">VERTEX GALAXY BANK</h4>
+                                            <span style="font-size: 0.35rem; color: #a7f3d0; text-transform: uppercase;">EXECUTIVE 50 LEAVES</span>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; line-height: 1.3; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; color: #059669; font-weight: bold; font-size: 0.5rem;">Executive Booklet</h5>
+                                            <ul style="padding-left: 10px; margin: 0;">
+                                                <li>Premium Booklet Cover</li>
+                                                <li>Priority Processing</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Page 2: Details -->
+                                    <div class="page" onclick="flipCatalogPage('executive', 2)">
+                                        <div class="page-face front" style="padding: 8px; font-size: 0.45rem; color: #334155; line-height: 1.4; display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-sizing: border-box;">
+                                            <div style="text-align: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px; font-weight: bold; font-size: 0.5rem;">EXECUTIVE ISSUANCE</div>
+                                            <table style="width: 100%; font-size: 0.4rem;">
+                                                <tr><td style="color: #64748b;">Holder:</td><td>EXECUTIVE HOLDER</td></tr>
+                                                <tr><td style="color: #64748b;">A/C:</td><td>17193XXXXXXX</td></tr>
+                                                <tr><td style="color: #64748b;">IFSC:</td><td>VGB0000171</td></tr>
+                                            </table>
+                                            <div style="border-top: 1px dashed #cbd5e1; font-size: 0.35rem; text-align: right; color: #94a3b8;">VGB Corporate Desk</div>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; font-weight: bold; font-size: 0.5rem;">Terms & Policy</h5>
+                                            <p style="margin: 0; line-height: 1.3;">Premium clearance rates apply. Return rules under standard CTS-2010 framework.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Page 3: Ledger -->
+                                    <div class="page" onclick="flipCatalogPage('executive', 3)">
+                                        <div class="page-face front" style="padding: 6px; color: #334155; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;">
+                                            <h6 style="margin: 0 0 3px 0; font-size: 0.45rem; text-align: center; font-weight: bold; border-bottom: 1px solid #cbd5e1;">RECORD SHEET</h6>
+                                            <table style="width: 100%; font-size: 0.35rem; border-collapse: collapse; text-align: center; line-height: 1.1;">
+                                                <tr style="background: #f1f5f9;"><th style="border: 0.5px solid #cbd5e1;">Chq</th><th style="border: 0.5px solid #cbd5e1;">Date</th><th style="border: 0.5px solid #cbd5e1;">Amount</th></tr>
+                                                <tr><td style="border: 0.5px solid #cbd5e1;">100401</td><td style="border: 0.5px solid #cbd5e1;">05-Jul</td><td style="border: 0.5px solid #cbd5e1;">₹10,000</td></tr>
+                                                <tr><td style="border: 0.5px solid #cbd5e1;">100402</td><td style="border: 0.5px solid #cbd5e1;">08-Jul</td><td style="border: 0.5px solid #cbd5e1;">₹4,250</td></tr>
+                                            </table>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; font-weight: bold; font-size: 0.5rem;">Ledger Logs</h5>
+                                            <p style="margin: 0; line-height: 1.3;">Record all transactions to maintain precise accounting records.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Page 4: Cheque Leaf -->
+                                    <div class="page" onclick="flipCatalogPage('executive', 4)">
+                                        <div class="page-face front" style="padding: 6px; font-family: monospace; font-size: 0.38rem; color: #475569; display: flex; flex-direction: column; justify-content: space-between; background: rgba(6, 182, 212, 0.01); height: 100%; box-sizing: border-box; border: 0.5px solid rgba(6, 182, 212, 0.18);">
+                                            <div style="display: flex; justify-content: space-between; border-bottom: 0.5px solid rgba(6, 182, 212, 0.2); font-size: 0.45rem;">
+                                                <strong>VERTEX GALAXY BANK</strong>
+                                                <span>DATE: __/__/____</span>
+                                            </div>
+                                            <div>PAY: _________________________</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                                <span>A/C: 17193xxxxxxx</span>
+                                                <span style="font-family: 'Brush Script MT', cursive; font-size: 0.45rem; border-top: 0.5px solid #94a3b8; width: 45px; text-align: center;">Signatory</span>
+                                            </div>
+                                        </div>
+                                        <div class="page-face back" style="padding: 10px; font-size: 0.45rem; color: #475569; display: flex; align-items: center; justify-content: center; height: 100%; box-sizing: border-box;">
+                                            <div style="border: 0.5px dashed #cbd5e1; padding: 5px; text-align: center; width: 100%;">
+                                                <span style="font-weight: bold; display: block; font-size: 0.4rem;">ENDORSEMENTS</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Page 5: Back Cover -->
+                                    <div class="page">
+                                        <div class="page-face front" style="padding: 10px; font-size: 0.45rem; color: #64748b; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; box-sizing: border-box;">
+                                            <p style="font-weight: bold; margin: 0; font-size: 0.5rem;">VGB Executive Suite</p>
+                                        </div>
+                                        <div class="page-face back" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); color: white; display: flex; justify-content: center; align-items: center; border-right: 5px solid #b45309; height: 100%; box-sizing: border-box;">
+                                            <div style="width: 50px; height: 10px; background: repeating-linear-gradient(90deg, #000, #000 1.5px, #fff 1.5px, #fff 3px);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="catalog-specs-table">
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Upfront Fee:</span>
+                                    <strong class="catalog-spec-value">₹150.00</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Capacity Limit:</span>
+                                    <strong class="catalog-spec-value">50 Leaves</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Verification Time:</span>
+                                    <strong class="catalog-spec-value">Instant Approval</strong>
+                                </div>
+                            </div>
+
+                            <div class="catalog-features-col">
+                                <h5 class="catalog-features-heading">Features & Benefits:</h5>
+                                <ul class="catalog-features-list">
+                                    <li>Premium Booklet Cover</li>
+                                    <li>Priority Branch Processing</li>
+                                    <li>Free Statement Entry Log</li>
+                                </ul>
+                            </div>
+
+                            <div class="catalog-action-col">
+                                <button type="button" onclick="openApplyModal('50')" class="btn-apply-catalog btn btn-primary">
+                                    <i class="bx bx-plus-circle"></i> Apply Executive 50
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 3: Royale Booklet -->
+                        <div class="product-card product-card-bg-credit-infinite">
+                            <div class="product-card-watermark watermark-credit" style="color: rgba(245, 158, 11, 0.025);">ROYALE</div>
+                            <div class="catalog-details-col">
+                                <span class="catalog-spec-badge spec-badge-infinite" style="background: rgba(245, 158, 11, 0.08); color: #d97706;">Royale Tier</span>
+                                <h4 class="catalog-card-title">100 Leaves Booklet</h4>
+                                <p class="catalog-card-desc">Max-capacity cheque book designed for high-value business operations and enterprise-level liquidity.</p>
+                            </div>
+                            
+                            <!-- Mini 3D Cheque Book Mockup -->
+                            <div class="mini-book-container">
+                                <div class="mini-book" id="miniBook-royale">
+                                    <!-- Page 1: Front Cover -->
+                                    <div class="page" onclick="flipCatalogPage('royale', 1)">
+                                        <div class="page-face front" style="background: linear-gradient(135deg, #78350f 0%, #92400e 100%); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; border-left: 5px solid #fbbf24; height: 100%; box-sizing: border-box;">
+                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 25px; height: 25px; margin-bottom: 5px;">
+                                            <h4 style="margin: 0; font-size: 0.55rem; letter-spacing: 1px;">VERTEX GALAXY BANK</h4>
+                                            <span style="font-size: 0.35rem; color: #fde68a; text-transform: uppercase;">ROYALE 100 LEAVES</span>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; line-height: 1.3; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; color: #d97706; font-weight: bold; font-size: 0.5rem;">Royale Booklet</h5>
+                                            <ul style="padding-left: 10px; margin: 0;">
+                                                <li>Custom Signatory</li>
+                                                <li>Express Delivery</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Page 2: Details -->
+                                    <div class="page" onclick="flipCatalogPage('royale', 2)">
+                                        <div class="page-face front" style="padding: 8px; font-size: 0.45rem; color: #334155; line-height: 1.4; display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-sizing: border-box;">
+                                            <div style="text-align: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px; font-weight: bold; font-size: 0.5rem;">ROYALE ISSUANCE</div>
+                                            <table style="width: 100%; font-size: 0.4rem;">
+                                                <tr><td style="color: #64748b;">Holder:</td><td>ROYALE HOLDER</td></tr>
+                                                <tr><td style="color: #64748b;">A/C:</td><td>17193XXXXXXX</td></tr>
+                                                <tr><td style="color: #64748b;">IFSC:</td><td>VGB0000171</td></tr>
+                                            </table>
+                                            <div style="border-top: 1px dashed #cbd5e1; font-size: 0.35rem; text-align: right; color: #fbbf24;">VGB Royale Desk</div>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; font-weight: bold; font-size: 0.5rem;">Terms & Policy</h5>
+                                            <p style="margin: 0; line-height: 1.3;">Elite clearance tier enabled. Unlimited ledger tracking provided on accounts.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Page 3: Ledger -->
+                                    <div class="page" onclick="flipCatalogPage('royale', 3)">
+                                        <div class="page-face front" style="padding: 6px; color: #334155; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;">
+                                            <h6 style="margin: 0 0 3px 0; font-size: 0.45rem; text-align: center; font-weight: bold; border-bottom: 1px solid #cbd5e1;">RECORD SHEET</h6>
+                                            <table style="width: 100%; font-size: 0.35rem; border-collapse: collapse; text-align: center; line-height: 1.1;">
+                                                <tr style="background: #f1f5f9;"><th style="border: 0.5px solid #cbd5e1;">Chq</th><th style="border: 0.5px solid #cbd5e1;">Date</th><th style="border: 0.5px solid #cbd5e1;">Amount</th></tr>
+                                                <tr><td style="border: 0.5px solid #cbd5e1;">100401</td><td style="border: 0.5px solid #cbd5e1;">05-Jul</td><td style="border: 0.5px solid #cbd5e1;">₹25,000</td></tr>
+                                                <tr><td style="border: 0.5px solid #cbd5e1;">100402</td><td style="border: 0.5px solid #cbd5e1;">18-Jul</td><td style="border: 0.5px solid #cbd5e1;">₹12,400</td></tr>
+                                            </table>
+                                        </div>
+                                        <div class="page-face back" style="padding: 8px; font-size: 0.45rem; color: #475569; height: 100%; box-sizing: border-box;">
+                                            <h5 style="margin: 0 0 3px 0; font-weight: bold; font-size: 0.5rem;">Ledger Logs</h5>
+                                            <p style="margin: 0; line-height: 1.3;">Record all transactions to maintain precise accounting records.</p>
+                                        </div>
+                                    </div>
+                                    <!-- Page 4: Cheque Leaf -->
+                                    <div class="page" onclick="flipCatalogPage('royale', 4)">
+                                        <div class="page-face front" style="padding: 6px; font-family: monospace; font-size: 0.38rem; color: #475569; display: flex; flex-direction: column; justify-content: space-between; background: rgba(245, 158, 11, 0.01); height: 100%; box-sizing: border-box; border: 0.5px solid rgba(245, 158, 11, 0.18);">
+                                            <div style="display: flex; justify-content: space-between; border-bottom: 0.5px solid rgba(245, 158, 11, 0.2); font-size: 0.45rem;">
+                                                <strong>VERTEX GALAXY BANK</strong>
+                                                <span>DATE: __/__/____</span>
+                                            </div>
+                                            <div>PAY: _________________________</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                                <span>A/C: 17193xxxxxxx</span>
+                                                <span style="font-family: 'Brush Script MT', cursive; font-size: 0.45rem; border-top: 0.5px solid #94a3b8; width: 45px; text-align: center;">Signatory</span>
+                                            </div>
+                                        </div>
+                                        <div class="page-face back" style="padding: 10px; font-size: 0.45rem; color: #475569; display: flex; align-items: center; justify-content: center; height: 100%; box-sizing: border-box;">
+                                            <div style="border: 0.5px dashed #cbd5e1; padding: 5px; text-align: center; width: 100%;">
+                                                <span style="font-weight: bold; display: block; font-size: 0.4rem;">ENDORSEMENTS</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Page 5: Back Cover -->
+                                    <div class="page">
+                                        <div class="page-face front" style="padding: 10px; font-size: 0.45rem; color: #64748b; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; box-sizing: border-box;">
+                                            <p style="font-weight: bold; margin: 0; font-size: 0.5rem;">VGB Royale Suite</p>
+                                        </div>
+                                        <div class="page-face back" style="background: linear-gradient(135deg, #78350f 0%, #92400e 100%); color: white; display: flex; justify-content: center; align-items: center; border-right: 5px solid #fbbf24; height: 100%; box-sizing: border-box;">
+                                            <div style="width: 50px; height: 10px; background: repeating-linear-gradient(90deg, #000, #000 1.5px, #fff 1.5px, #fff 3px);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="catalog-specs-table">
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Upfront Fee:</span>
+                                    <strong class="catalog-spec-value">₹250.00</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Capacity Limit:</span>
+                                    <strong class="catalog-spec-value">100 Leaves</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Verification Time:</span>
+                                    <strong class="catalog-spec-value">Instant Approval</strong>
+                                </div>
+                            </div>
+
+                            <div class="catalog-features-col">
+                                <h5 class="catalog-features-heading">Features & Benefits:</h5>
+                                <ul class="catalog-features-list">
+                                    <li>Custom Signatory Watermark</li>
+                                    <li>Express Delivery Options</li>
+                                    <li>Unlimited Ledger Integrations</li>
+                                </ul>
+                            </div>
+
+                            <div class="catalog-action-col">
+                                <button type="button" onclick="openApplyModal('100')" class="btn-apply-catalog btn btn-primary">
+                                    <i class="bx bx-plus-circle"></i> Apply Royale 100
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             <!-- Global Requests Logs -->
             <div class="glass-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
@@ -810,7 +1597,8 @@
                                                  </c:choose>
                                              </td>
                                              <td style="padding: 15px; color: var(--gray-500);">
-                                                 <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" />
+                                                 <fmt:formatDate value="${req.requestedAt}" pattern="dd-MMM-yyyy hh:mm a" var="formattedReqDate" />
+                                                 ${formattedReqDate}
                                              </td>
                                              <td style="padding: 15px;">
                                                  <c:choose>
@@ -826,29 +1614,32 @@
                                                  </c:choose>
                                              </td>
                                              <td style="padding: 15px; text-align: right;">
-                                                 <c:choose>
-                                                     <c:when test="${req.status eq 'pending'}">
-                                                          <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                              <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
-                                                                 class="btn btn-primary" 
-                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
-                                                                 onclick="return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');">
-                                                                  Approve
-                                                              </a>
-                                                              <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}" 
-                                                                 class="btn btn-danger" 
-                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
-                                                                 onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">
-                                                                  Reject
-                                                              </a>
-                                                          </div>
-                                                     </c:when>
-                                                     <c:otherwise>
-                                                          <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                                              <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic;">Reviewed</span>
-                                                          </div>
-                                                     </c:otherwise>
-                                                 </c:choose>
+                                                   <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                                                       <button type="button" class="btn btn-secondary" 
+                                                               style="padding: 6px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); border: 1.5px solid var(--gray-200); background: white; color: var(--gray-700); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"
+                                                               onclick="openDetailsModal('${req.requestId}', '${req.customerName}', '${req.customerId}', '${req.accountNumber}', '${req.accountType}', '${req.leavesCount}', '${req.charges}', '${req.chargesPaid}' === 'true', '${req.status}', '${formattedReqDate}')">
+                                                           <i class="bx bx-show" style="font-size: 1rem;"></i> Details
+                                                       </button>
+                                                       <c:choose>
+                                                           <c:when test="${req.status eq 'pending'}">
+                                                               <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
+                                                                  class="btn btn-primary" 
+                                                                  style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
+                                                                  onclick="return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');">
+                                                                   Approve
+                                                               </a>
+                                                               <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}" 
+                                                                  class="btn btn-danger" 
+                                                                  style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
+                                                                  onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">
+                                                                   Reject
+                                                               </a>
+                                                           </c:when>
+                                                           <c:otherwise>
+                                                               <span style="font-size: 0.8rem; color: var(--gray-400); font-style: italic; min-width: 60px; text-align: center;">Reviewed</span>
+                                                           </c:otherwise>
+                                                       </c:choose>
+                                                   </div>
                                              </td>
                                          </tr>
                                      </c:forEach>
@@ -900,7 +1691,7 @@
             }
         }
 
-        // Interactive Cheque visualizers removed.
+        // Interactive Cheque visualizers
         document.addEventListener('DOMContentLoaded', () => {
             // Mobile menu toggle handler
             const mobileToggle = document.getElementById('mobileNavToggle');
@@ -927,12 +1718,214 @@
             }
         });
 
-          function openApplyModal() {
+          function openDetailsModal(requestId, customerName, customerId, accountNumber, accountType, leavesCount, charges, isChargesPaid, status, requestedDate) {
+              // Main Modal details table
+              document.getElementById('detailRequestId').textContent = '#' + requestId;
+              document.getElementById('detailCustomerName').textContent = customerName;
+              document.getElementById('detailCustomerId').textContent = '#CUST-' + customerId;
+              document.getElementById('detailAccountNumber').textContent = accountNumber;
+              document.getElementById('detailAccountType').textContent = accountType;
+              document.getElementById('detailCapacity').textContent = leavesCount + ' Leaves';
+              document.getElementById('detailCharges').textContent = '₹ ' + parseFloat(charges).toFixed(2);
+              document.getElementById('detailRequestedDate').textContent = requestedDate;
+
+              const chargesStatus = document.getElementById('detailChargesStatus');
+              if (isChargesPaid) {
+                  chargesStatus.innerHTML = '<span style="background: rgba(16, 185, 129, 0.12); color: #047857; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-sm);">Paid</span>';
+              } else {
+                  chargesStatus.innerHTML = '<span style="background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-sm);">Refunded / Unpaid</span>';
+              }
+
+              const statusContainer = document.getElementById('detailStatus');
+              if (status === 'approved') {
+                  statusContainer.innerHTML = '<span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>';
+              } else if (status === 'pending') {
+                  statusContainer.innerHTML = '<span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>';
+              } else {
+                  statusContainer.innerHTML = '<span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>';
+              }
+
+              // Populate 3D Book Contents
+              document.getElementById('bookCustomerName').textContent = customerName;
+              document.getElementById('bookCustomerId').textContent = '#CUST-' + customerId;
+              document.getElementById('bookAccountNumber').textContent = accountNumber;
+              document.getElementById('bookAccountType').textContent = accountType;
+              document.getElementById('bookCapacity').textContent = leavesCount + ' Leaves';
+              document.getElementById('bookIssueDate').textContent = requestedDate;
+              
+              document.querySelectorAll('.book-capacity-label').forEach(el => {
+                  el.textContent = leavesCount + ' LEAVES';
+              });
+              
+              document.getElementById('bookChequeAccNo').textContent = accountNumber;
+              document.getElementById('bookChequeSignName').textContent = customerName.toUpperCase();
+              
+              const today = new Date();
+              const dd = String(today.getDate()).padStart(2, '0');
+              const mm = String(today.getMonth() + 1).padStart(2, '0');
+              const yyyy = today.getFullYear();
+              document.getElementById('bookChequeDate').textContent = 'DATE: ' + dd + ' / ' + mm + ' / ' + yyyy;
+              
+              // Reset book state
+              resetBook();
+
+              document.getElementById('chequeBookDetailsModal').style.display = 'flex';
+          }
+
+          let flippedPages = {};
+          let currentOpenPage = 0;
+          const totalPages = 4; // 4 flippable pages
+
+          function flipPage(pageNum) {
+              const pageEl = document.querySelector(`#cheque3DBook .page:nth-child(${pageNum})`);
+              if (!pageEl) return;
+              
+              if (pageEl.classList.contains('flipped')) {
+                  pageEl.classList.remove('flipped');
+                  flippedPages[pageNum] = false;
+                  if (currentOpenPage === pageNum) {
+                      currentOpenPage--;
+                  }
+              } else {
+                  pageEl.classList.add('flipped');
+                  flippedPages[pageNum] = true;
+                  if (currentOpenPage === pageNum - 1) {
+                      currentOpenPage++;
+                  }
+              }
+              
+              updatePageZIndices();
+              adjustBookCentering();
+          }
+
+          function nextBookPage() {
+              if (currentOpenPage < totalPages) {
+                  currentOpenPage++;
+                  flipPageToState(currentOpenPage, true);
+              }
+          }
+
+          function prevBookPage() {
+              if (currentOpenPage > 0) {
+                  flipPageToState(currentOpenPage, false);
+                  currentOpenPage--;
+              }
+          }
+
+          function flipPageToState(pageNum, shouldFlip) {
+              const pageEl = document.querySelector(`#cheque3DBook .page:nth-child(${pageNum})`);
+              if (!pageEl) return;
+              
+              if (shouldFlip) {
+                  pageEl.classList.add('flipped');
+                  flippedPages[pageNum] = true;
+              } else {
+                  pageEl.classList.remove('flipped');
+                  flippedPages[pageNum] = false;
+              }
+              
+              updatePageZIndices();
+              adjustBookCentering();
+          }
+
+          function updatePageZIndices() {
+              const pages = document.querySelectorAll('#cheque3DBook .page');
+              pages.forEach((page, idx) => {
+                  const pageNum = idx + 1;
+                  if (page.classList.contains('flipped')) {
+                      page.style.zIndex = pageNum;
+                  } else {
+                      page.style.zIndex = (pages.length - pageNum) + 1;
+                  }
+              });
+          }
+
+          function adjustBookCentering() {
+              const bookEl = document.getElementById('cheque3DBook');
+              if (!bookEl) return;
+              let isAnyFlipped = Object.values(flippedPages).some(val => val === true);
+              if (isAnyFlipped) {
+                  bookEl.classList.add('open-state');
+              } else {
+                  bookEl.classList.remove('open-state');
+              }
+          }
+
+          function resetBook() {
+              currentOpenPage = 0;
+              flippedPages = {};
+              const pages = document.querySelectorAll('#cheque3DBook .page');
+              pages.forEach((page) => {
+                  page.classList.remove('flipped');
+              });
+              updatePageZIndices();
+              const bookEl = document.getElementById('cheque3DBook');
+              if (bookEl) bookEl.classList.remove('open-state');
+          }
+
+          function closeDetailsModal() {
+              document.getElementById('chequeBookDetailsModal').style.display = 'none';
+          }
+
+          let catalogFlippedPages = {
+              classic: {},
+              executive: {},
+              royale: {}
+          };
+          
+          function flipCatalogPage(bookType, pageNum) {
+              const pageEl = document.querySelector(`#miniBook-${bookType} .page:nth-child(${pageNum})`);
+              if (!pageEl) return;
+              
+              if (pageEl.classList.contains('flipped')) {
+                  pageEl.classList.remove('flipped');
+                  catalogFlippedPages[bookType][pageNum] = false;
+              } else {
+                  pageEl.classList.add('flipped');
+                  catalogFlippedPages[bookType][pageNum] = true;
+              }
+              
+              updateCatalogZIndices(bookType);
+              adjustCatalogCentering(bookType);
+          }
+          
+          function updateCatalogZIndices(bookType) {
+              const pages = document.querySelectorAll(`#miniBook-${bookType} .page`);
+              pages.forEach((page, idx) => {
+                  const pageNum = idx + 1;
+                  if (page.classList.contains('flipped')) {
+                      page.style.zIndex = pageNum;
+                  } else {
+                      page.style.zIndex = (pages.length - pageNum) + 1;
+                  }
+              });
+          }
+          
+          function adjustCatalogCentering(bookType) {
+              const bookEl = document.getElementById(`miniBook-${bookType}`);
+              if (!bookEl) return;
+              let isAnyFlipped = Object.values(catalogFlippedPages[bookType]).some(val => val === true);
+              if (isAnyFlipped) {
+                  bookEl.classList.add('open-state');
+              } else {
+                  bookEl.classList.remove('open-state');
+              }
+          }
+
+          function openApplyModal(preselectedLeaves) {
               document.getElementById('lookupAccountNumber').value = '';
               document.getElementById('lookupResultsContainer').style.display = 'none';
               document.getElementById('lookupResultsList').innerHTML = '';
               document.getElementById('applyChequeBookForm').style.display = 'none';
               document.getElementById('applyChequeBookModal').style.display = 'flex';
+
+              if (preselectedLeaves) {
+                  const selectEl = document.querySelector('select[name="leavesCount"]');
+                  if (selectEl) {
+                      selectEl.value = preselectedLeaves;
+                      updateApplyFeeAndNotice(preselectedLeaves);
+                  }
+              }
           }
 
           function closeApplyModal() {
@@ -1044,7 +2037,282 @@
           }
        </script>
 
-       <!-- Modal: Apply Cheque Book -->
+        <!-- Modal: View Cheque Book Details -->
+        <div id="chequeBookDetailsModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
+            <div class="modal-content" style="max-width: 600px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
+                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <i class="bx bx-info-circle" style="color: var(--primary-500);"></i> Cheque Book Request Details
+                    </h3>
+                    <button type="button" onclick="closeDetailsModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
+                </div>
+                <div class="modal-body" style="padding: 25px; box-sizing: border-box; width: 100%; text-align: left;">
+                    <div style="background: rgba(99, 102, 241, 0.03); border: 1.5px solid rgba(99, 102, 241, 0.1); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px;">
+                        <h5 style="margin: 0 0 10px 0; font-size: 0.95rem; font-weight: 700; color: var(--primary-500);">Request Status Summary</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                            <div>Request ID: <strong class="badge-id" id="detailRequestId">#</strong></div>
+                            <div>Status: <span id="detailStatus"></span></div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-weight: 700; color: var(--gray-800); border-bottom: 1.5px solid var(--gray-100); padding-bottom: 5px; margin-bottom: 12px; font-size: 0.95rem;">
+                        Account & Customer Details
+                    </h4>
+                    <table style="width: 100%; font-size: 0.85rem; line-height: 2.0; margin-bottom: 20px;">
+                        <tr>
+                            <td style="color: var(--gray-500); width: 35%; padding: 4px 0;">Customer Name:</td>
+                            <td style="font-weight: 700; color: var(--gray-800);" id="detailCustomerName">-</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--gray-500); padding: 4px 0;">Customer ID:</td>
+                            <td style="font-weight: 600; font-family: monospace;" id="detailCustomerId">-</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--gray-500); padding: 4px 0;">Account Number:</td>
+                            <td style="font-weight: 700; font-family: monospace; color: var(--gray-800);" id="detailAccountNumber">-</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--gray-500); padding: 4px 0;">Account Type:</td>
+                            <td style="font-weight: 600; text-transform: uppercase;" id="detailAccountType">-</td>
+                        </tr>
+                    </table>
+
+                    <h4 style="font-weight: 700; color: var(--gray-800); border-bottom: 1.5px solid var(--gray-100); padding-bottom: 5px; margin-bottom: 12px; font-size: 0.95rem;">
+                        Cheque Book Specifications
+                    </h4>
+                    <table style="width: 100%; font-size: 0.85rem; line-height: 2.0; margin-bottom: 20px;">
+                        <tr>
+                            <td style="color: var(--gray-500); width: 35%; padding: 4px 0;">Book Capacity:</td>
+                            <td style="font-weight: 700; color: var(--gray-800);" id="detailCapacity">-</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--gray-500); padding: 4px 0;">Applicable Charges:</td>
+                            <td style="font-weight: 700; color: var(--gray-800);" id="detailCharges">-</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--gray-500); padding: 4px 0;">Charges Status:</td>
+                            <td style="font-weight: 700;" id="detailChargesStatus">-</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--gray-500); padding: 4px 0;">Requested Date:</td>
+                            <td style="font-weight: 600; color: var(--gray-500);" id="detailRequestedDate">-</td>
+                        </tr>
+                    </table>
+
+                    <!-- Interactive 3D flip Cheque Book visualizer -->
+                    <div class="book-container">
+                        <div class="book" id="cheque3DBook">
+                            <!-- Page 1: Front Cover -->
+                            <div class="page cover-front" onclick="flipPage(1)">
+                                <div class="page-face front">
+                                    <div class="cover-design">
+                                        <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 40px; height: 40px; margin-bottom: 8px;">
+                                        <h3 style="margin: 0; font-size: 0.95rem; letter-spacing: 2px;">VERTEX GALAXY BANK</h3>
+                                        <p style="font-size: 0.55rem; color: #a5b4fc; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px;">Multi-City Cheque Book</p>
+                                        <div style="margin-top: 25px; font-family: monospace; font-size: 0.6rem; opacity: 0.8; letter-spacing: 1px;">CAPACITY: <span class="book-capacity-label">50 LEAVES</span></div>
+                                    </div>
+                                </div>
+                                <div class="page-face back">
+                                    <div style="padding: 15px; font-size: 0.6rem; color: #475569; line-height: 1.4;">
+                                        <h4 style="margin: 0 0 6px 0; color: var(--primary-500); font-weight: bold;">SECURITY INSTRUCTIONS</h4>
+                                        <ul style="padding-left: 12px; margin: 0; display: flex; flex-direction: column; gap: 4px;">
+                                            <li>Always keep this booklet in a safe lock.</li>
+                                            <li>Do not write signatures on blank leaves.</li>
+                                            <li>Log and reconcile drew cheques immediately.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page 2: Customer Details Page -->
+                            <div class="page customer-details-page" onclick="flipPage(2)">
+                                <div class="page-face front">
+                                    <div style="padding: 12px 15px; font-size: 0.55rem; color: #334155; line-height: 1.5; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <div style="text-align: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px; margin-bottom: 5px;">
+                                            <h4 style="margin: 0; font-weight: 700; color: #0f172a; font-size: 0.65rem;">VERTEX GALAXY BANK</h4>
+                                            <span style="font-size: 0.45rem; color: #64748b; font-family: 'Poppins', sans-serif;">CHEQUE BOOK ISSUANCE RECORD</span>
+                                        </div>
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="padding: 1px 0; color: #64748b;">Customer Name:</td>
+                                                <td style="padding: 1px 0; font-weight: 700;" id="bookCustomerName">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1px 0; color: #64748b;">Customer ID:</td>
+                                                <td style="padding: 1px 0; font-weight: 600;" id="bookCustomerId">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1px 0; color: #64748b;">Account Number:</td>
+                                                <td style="padding: 1px 0; font-weight: 700; font-family: monospace;" id="bookAccountNumber">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1px 0; color: #64748b;">Account Type:</td>
+                                                <td style="padding: 1px 0; font-weight: 600; text-transform: uppercase;" id="bookAccountType">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1px 0; color: #64748b;">Leaves Issued:</td>
+                                                <td style="padding: 1px 0; font-weight: 700;" id="bookCapacity">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 1px 0; color: #64748b;">Issue Date:</td>
+                                                <td style="padding: 1px 0; font-weight: 600;" id="bookIssueDate">-</td>
+                                            </tr>
+                                        </table>
+                                        <div style="border-top: 1px dashed #cbd5e1; padding-top: 4px; display: flex; justify-content: space-between; align-items: flex-end;">
+                                            <div>
+                                                <span style="font-size: 0.4rem; color: #94a3b8; display: block;">Branch Manager</span>
+                                                <div style="border-bottom: 1px solid #94a3b8; width: 50px; height: 10px;"></div>
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <span style="font-size: 0.4rem; color: #94a3b8; display: block;">Authorized Signatory</span>
+                                                <div style="border-bottom: 1px solid #94a3b8; width: 60px; height: 10px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-face back">
+                                    <div style="padding: 15px; font-size: 0.6rem; color: #475569; line-height: 1.4;">
+                                        <h4 style="margin: 0 0 6px 0; font-weight: bold; color: var(--primary-500);">TERMS & CONDITIONS</h4>
+                                        <p style="margin: 0;">Cheques drawn are cleared under CTS-2010 regulations. Verify sufficient funds prior to drawing to avoid penalty fee entries on account statements.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page 3: Record / Write Details Page -->
+                            <div class="page record-page" onclick="flipPage(3)">
+                                <div class="page-face front">
+                                    <div style="padding: 10px 12px; color: #334155; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <h5 style="margin: 0 0 4px 0; text-align: center; font-size: 0.6rem; font-weight: bold; letter-spacing: 0.5px; border-bottom: 1px solid #cbd5e1; padding-bottom: 2px;">CHEQUE TRANSACTION RECORD</h5>
+                                        <table style="width: 100%; font-size: 0.45rem; border-collapse: collapse; text-align: center; line-height: 1.2;">
+                                            <thead>
+                                                <tr style="background: #f1f5f9; border-bottom: 1.2px solid #cbd5e1;">
+                                                    <th style="border: 1px solid #cbd5e1; padding: 2px;">Chq No</th>
+                                                    <th style="border: 1px solid #cbd5e1; padding: 2px;">Date</th>
+                                                    <th style="border: 1px solid #cbd5e1; padding: 2px; text-align: left;">Particulars</th>
+                                                    <th style="border: 1px solid #cbd5e1; padding: 2px;">Amount</th>
+                                                    <th style="border: 1px solid #cbd5e1; padding: 2px;">Bal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; font-family: monospace;">100401</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">05-Jul</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70px;">Self / Cash</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">10,000.00</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; font-family: monospace;">100402</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">08-Jul</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70px;">Reliance Ret</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">4,250.00</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; font-family: monospace;">100403</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">12-Jul</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70px;">Rent payment</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">15,000.00</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; font-family: monospace;">100404</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">&nbsp;</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: left;">&nbsp;</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">&nbsp;</td>
+                                                    <td style="border: 1px solid #cbd5e1; padding: 2px;">-</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="page-face back">
+                                    <div style="padding: 15px; font-size: 0.6rem; color: #475569; line-height: 1.4;">
+                                        <h5 style="margin: 0 0 5px 0; font-weight: bold;">LEDGER GUIDELINES</h5>
+                                        <p style="margin: 0;">Regularly keep track of your cheques in this grid to manage accounting logs and avoid overdraft charges on standard instruments.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page 4: Cheque Leaf Page -->
+                            <div class="page cheque-leaf-page" onclick="flipPage(4)">
+                                <div class="page-face front">
+                                    <div style="padding: 8px 12px; font-family: 'Courier New', Courier, monospace; font-size: 0.5rem; color: #475569; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: rgba(99, 102, 241, 0.01);">
+                                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(99, 102, 241, 0.2); padding-bottom: 2px; font-size: 0.55rem;">
+                                            <strong style="font-family: 'Poppins', sans-serif; color: var(--gray-800);">VERTEX GALAXY BANK</strong>
+                                            <span id="bookChequeDate">DATE: DD / MM / YYYY</span>
+                                        </div>
+                                        <div style="margin-top: 4px;">
+                                            PAY: _________________________________________________ Or Bearer
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+                                            <span>RUPEES: __________________________________________</span>
+                                            <span style="border: 1px solid rgba(99, 102, 241, 0.2); padding: 1px 5px; font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 0.65rem;">₹</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px;">
+                                            <div>
+                                                <span>A/C No: <strong id="bookChequeAccNo">17193xxxxxxx</strong></span><br>
+                                                <span>IFSC Code: <strong>VGB0000171</strong></span>
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <span style="font-size: 0.55rem; font-style: italic; font-family: 'Brush Script MT', cursive, sans-serif; display: block;" id="bookChequeSignName">-</span>
+                                                <span style="border-top: 1px solid #94a3b8; display: inline-block; width: 80px; text-align: center; font-size: 0.45rem; font-family: 'Poppins', sans-serif;">Signatory</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-face back">
+                                    <div style="padding: 15px; font-size: 0.6rem; color: #475569; display: flex; align-items: center; justify-content: center; height: 100%; box-sizing: border-box;">
+                                        <div style="border: 1px dashed #cbd5e1; padding: 10px; text-align: center; width: 100%;">
+                                            <span style="font-weight: bold; display: block; margin-bottom: 3px; font-size: 0.55rem;">ENDORSEMENTS</span>
+                                            <p style="margin: 0; font-size: 0.45rem; color: #94a3b8;">Endorse here for transfers or collections</p>
+                                            <div style="border-bottom: 1px solid #cbd5e1; width: 80%; margin: 8px auto 0;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page 5: Back Cover -->
+                            <div class="page cover-back">
+                                <div class="page-face front">
+                                    <div style="padding: 15px; font-size: 0.55rem; color: #64748b; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; box-sizing: border-box;">
+                                        <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" style="width: 26px; height: 26px; margin: 0 auto 5px;">
+                                        <p style="font-weight: bold; margin: 0 0 3px 0; font-size: 0.6rem;">VERTEX GALAXY BANK</p>
+                                        <p style="margin: 0;">Vertex Galaxy Bank Service Desk 24/7</p>
+                                    </div>
+                                </div>
+                                <div class="page-face back">
+                                    <div class="cover-design" style="background: #1e1b4b; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; height: 100%; box-sizing: border-box; text-align: center; color: white;">
+                                        <div style="font-family: monospace; font-size: 0.45rem; color: #cbd5e1; margin-top: 5px;">Vertex Galaxy Bank Ltd.</div>
+                                        <div style="margin-bottom: 5px;">
+                                            <div style="background: white; padding: 2px; display: inline-block; border-radius: 2px;">
+                                                <div style="width: 80px; height: 12px; background: repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 4px);"></div>
+                                            </div>
+                                            <span style="display: block; font-size: 0.4rem; font-family: monospace; color: #94a3b8; margin-top: 1px;">VGB-CB-50-2026</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3D Book Navigation controls -->
+                        <div style="display: flex; gap: 15px; margin-top: 15px; z-index: 100;">
+                            <button type="button" class="btn-nav-book" onclick="prevBookPage()">
+                                <i class="bx bx-chevron-left"></i> Previous Page
+                            </button>
+                            <button type="button" class="btn-nav-book" onclick="nextBookPage()">
+                                Next Page <i class="bx bx-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding: 15px 20px; border-top: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeDetailsModal()" class="btn btn-secondary" style="padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid var(--gray-200); background: white; color: var(--gray-700);">Close View</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Apply Cheque Book -->
        <div id="applyChequeBookModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
            <div class="modal-content" style="max-width: 720px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">

@@ -31,7 +31,7 @@ public abstract class BaseServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session == null) return false;
         String sessionToken = (String) session.getAttribute(AppConstants.CSRF_TOKEN_SESSION);
-        String requestToken = request.getParameter("csrfToken");
+        String requestToken = getParameter(request, "csrfToken", null);
         if (requestToken == null) {
             requestToken = request.getHeader("X-CSRF-Token");
         }
@@ -40,6 +40,22 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected String getParameter(HttpServletRequest request, String name, String defaultValue) {
         String value = request.getParameter(name);
+        if (value == null) {
+            String contentType = request.getContentType();
+            if (contentType != null && contentType.toLowerCase().startsWith("multipart/form-data")) {
+                try {
+                    jakarta.servlet.http.Part part = request.getPart(name);
+                    if (part != null && (part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty())) {
+                        try (java.io.BufferedReader reader = new java.io.BufferedReader(
+                                new java.io.InputStreamReader(part.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
+                            value = reader.lines().collect(java.util.stream.Collectors.joining("\n"));
+                        }
+                    }
+                } catch (Exception e) {
+                    // Ignore exception if request.getPart fails
+                }
+            }
+        }
         return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
 

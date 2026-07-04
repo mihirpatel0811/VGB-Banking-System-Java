@@ -59,6 +59,10 @@ public class AccountServlet extends BaseServlet {
             request.setAttribute("success", session.getAttribute("success"));
             session.removeAttribute("success");
         }
+        if (session.getAttribute("newAccountSummary") != null) {
+            request.setAttribute("newAccountSummary", session.getAttribute("newAccountSummary"));
+            session.removeAttribute("newAccountSummary");
+        }
 
         try {
             if (adminId != null) {
@@ -809,6 +813,47 @@ public class AccountServlet extends BaseServlet {
                     pbStmt.executeUpdate();
                 }
             }
+
+            // Populate new account credentials summary
+            Customer primaryCust = customerList.get(0);
+            java.util.Map<String, Object> summary = new java.util.LinkedHashMap<>();
+            summary.put("accountNumber", accountNumber);
+            summary.put("accountType", accountType);
+            summary.put("initialAmount", initialAmount);
+            summary.put("ifscCode", "VGB0000171");
+            summary.put("holdingType", holdingType);
+            summary.put("pin", primaryCust.getPin());
+            summary.put("primaryName", (primaryCust.getFirstName() + " " + (primaryCust.getMiddleName() != null && !primaryCust.getMiddleName().isEmpty() ? primaryCust.getMiddleName() + " " : "") + primaryCust.getLastName()).toUpperCase());
+            summary.put("primaryUsername", primaryCust.getUsername());
+            summary.put("primaryPassword", primaryCust.getPassword());
+
+            if ("savings".equalsIgnoreCase(accountType) && "joint".equalsIgnoreCase(holdingType) && customerList.size() > 1) {
+                Customer jointCust = customerList.get(1);
+                summary.put("jointName", (jointCust.getFirstName() + " " + (jointCust.getMiddleName() != null && !jointCust.getMiddleName().isEmpty() ? jointCust.getMiddleName() + " " : "") + jointCust.getLastName()).toUpperCase());
+                summary.put("jointUsername", jointCust.getUsername());
+                summary.put("jointPassword", jointCust.getPassword());
+            } else if ("current".equalsIgnoreCase(accountType)) {
+                summary.put("businessName", businessName.toUpperCase());
+                summary.put("gstin", gstin);
+                
+                List<java.util.Map<String, String>> partnersList = new ArrayList<>();
+                for (int i = 0; i < customerList.size(); i++) {
+                    Customer partner = customerList.get(i);
+                    java.util.Map<String, String> pMap = new java.util.LinkedHashMap<>();
+                    pMap.put("name", (partner.getFirstName() + " " + (partner.getMiddleName() != null && !partner.getMiddleName().isEmpty() ? partner.getMiddleName() + " " : "") + partner.getLastName()).toUpperCase());
+                    pMap.put("username", partner.getUsername());
+                    pMap.put("password", partner.getPassword());
+                    pMap.put("role", i == 0 ? "Primary Signatory" : "Partner Signatory");
+                    partnersList.add(pMap);
+                }
+                summary.put("partners", partnersList);
+            }
+
+            summary.put("atmCard", atmSelected ? "ENABLED (" + cardProvider.toUpperCase() + ")" : "DISABLED");
+            summary.put("chequeBook", chequeSelected ? "ENABLED" : "DISABLED");
+            summary.put("passbook", passbookSelected ? "ENABLED" : "DISABLED");
+
+            request.getSession().setAttribute("newAccountSummary", summary);
 
             conn.commit(); // Success! Commit transaction.
             request.getSession().setAttribute("success", "Bank Account opening process finished successfully! Account Number: " + accountNumber);
