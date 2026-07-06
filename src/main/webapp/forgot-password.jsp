@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Reset Credentials</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
+    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -496,7 +496,7 @@
 
     <header class="header scrolled">
         <a href="${pageContext.request.contextPath}/index.jsp" class="logo" aria-label="Vertex Galaxy Bank home" style="display: flex; align-items: center; text-decoration: none;">
-            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
         </a>
         <nav class="navbar" aria-label="Main navigation">
             <a href="${pageContext.request.contextPath}/index.jsp#home"><i class="bx bx-home"></i> Home</a>
@@ -529,7 +529,7 @@
                         <div class="card-glare"></div>
                         <div class="bank-card-top">
                             <div class="bank-card-logo-container">
-                                <img src="${pageContext.request.contextPath}/assest/images/image.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
+                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
                                 <span class="bank-name-text">Vertex Galaxy Bank</span>
                             </div>
                             <svg class="bank-card-chip" viewBox="0 0 100 80" width="45" height="36" xmlns="http://www.w3.org/2000/svg">

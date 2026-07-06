@@ -14,7 +14,7 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>VGB | My Cards</title>
-                    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
+                    <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
                     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap"
                         rel="stylesheet">
                     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -1538,7 +1538,7 @@
                             </button>
                             <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo"
                                 style="display: flex; align-items: center; text-decoration: none;">
-                                <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo"
+                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo"
                                     style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
                             </a>
                         </div>
@@ -1675,7 +1675,7 @@
                                                             <!-- Header -->
                                                             <div class="card-header">
                                                                 <div class="bank-info">
-                                                                    <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" class="card-bank-logo">
+                                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" class="card-bank-logo">
                                                                     <div class="bank-name">
                                                                         <span class="bank-title">VERTEX</span>
                                                                         <span class="bank-subtitle">GALAXY BANK</span>
@@ -1775,7 +1775,7 @@
                                                             </div>
                                                             <div class="back-footer">
                                                                 <div class="back-bank-brand">
-                                                                    <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo" class="back-logo-img">
+                                                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" class="back-logo-img">
                                                                     <span class="back-bank-name">VERTEX GALAXY BANK</span>
                                                                 </div>
                                                                 <div class="back-hologram">

@@ -8,7 +8,7 @@
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>VGB | Manage ATM Cards</title>
-                <link rel="icon" href="${pageContext.request.contextPath}/assest/images/image.png" type="image/png">
+                <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
                 <link
                     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap"
                     rel="stylesheet">
@@ -2413,13 +2413,13 @@
                         </button>
                         <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo"
                             style="display: flex; align-items: center; text-decoration: none;">
-                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB Logo"
+                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo"
                                 style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
                         </a>
                     </div>
                     <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/image.png"
+                            <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/logo.png"
                                 alt="Admin Profile Avatar"
                                 style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             <script>
@@ -2597,7 +2597,7 @@
                                                 <div class="card-face card-front">
                                                     <div class="card-header">
                                                         <div class="bank-info">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
                                                                 alt="VGB Logo" class="card-bank-logo">
                                                             <div class="bank-name">
                                                                  <span class="bank-title">VERTEX</span>
@@ -2674,7 +2674,7 @@
                                                     </div>
                                                     <div class="back-footer">
                                                         <div class="back-bank-brand">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
                                                                 alt="VGB" class="back-logo-img">
                                                             <span class="back-bank-name">VERTEX GALAXY BANK</span>
                                                         </div>
@@ -2738,7 +2738,7 @@
                                                 <div class="card-face card-front">
                                                     <div class="card-header">
                                                         <div class="bank-info">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
                                                                 alt="VGB Logo" class="card-bank-logo">
                                                             <div class="bank-name">
                                                                 <span class="bank-title">VERTEX</span>
@@ -2815,7 +2815,7 @@
                                                     </div>
                                                     <div class="back-footer">
                                                         <div class="back-bank-brand">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" class="back-logo-img">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" class="back-logo-img">
                                                             <span class="back-bank-name">VERTEX GALAXY BANK</span>
                                                         </div>
                                                         <div class="back-hologram">
@@ -2878,7 +2878,7 @@
                                                 <div class="card-face card-front">
                                                     <div class="card-header">
                                                         <div class="bank-info">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
                                                                 alt="VGB Logo" class="card-bank-logo">
                                                             <div class="bank-name">
                                                                 <span class="bank-title">VERTEX</span>
@@ -2952,7 +2952,7 @@
                                                     </div>
                                                     <div class="back-footer">
                                                         <div class="back-bank-brand">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" class="back-logo-img">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" class="back-logo-img">
                                                             <span class="back-bank-name">VERTEX GALAXY BANK</span>
                                                         </div>
                                                         <div class="back-hologram">
@@ -3019,7 +3019,7 @@
                                                 <div class="card-face card-front">
                                                     <div class="card-header">
                                                         <div class="bank-info">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png"
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png"
                                                                 alt="VGB Logo" class="card-bank-logo">
                                                             <div class="bank-name">
                                                                 <span class="bank-title">VERTEX</span>
@@ -3093,7 +3093,7 @@
                                                     </div>
                                                     <div class="back-footer">
                                                         <div class="back-bank-brand">
-                                                            <img src="${pageContext.request.contextPath}/assest/images/image.png" alt="VGB" class="back-logo-img">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB" class="back-logo-img">
                                                             <span class="back-bank-name">VERTEX GALAXY BANK</span>
                                                         </div>
                                                         <div class="back-hologram">
