@@ -253,7 +253,7 @@ public class AccountServlet extends BaseServlet {
             account.setPrimaryIncome(incomeStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(incomeStr));
         }
 
-        if ("savings".equalsIgnoreCase(account.getAccountType())) {
+        if (!"current".equalsIgnoreCase(account.getAccountType())) {
             String nomineeName = getParameter(request, "nomineeName", "");
             String holdingType = getParameter(request, "holdingType", "single");
             String dailyLimitStr = getParameter(request, "dailyWithdrawalLimit", "50000.00");
@@ -384,7 +384,20 @@ public class AccountServlet extends BaseServlet {
         BigDecimal initialAmount = new BigDecimal(getParameter(request, "initialAmount", "0"));
 
         // Validate Minimum Balances
-        BigDecimal minRequired = "current".equalsIgnoreCase(accountType) ? new BigDecimal("5000") : new BigDecimal("1000");
+        BigDecimal minRequired;
+        if ("current".equalsIgnoreCase(accountType)) {
+            minRequired = new BigDecimal("5000");
+        } else if ("student".equalsIgnoreCase(accountType)) {
+            minRequired = new BigDecimal("500");
+        } else if ("salary".equalsIgnoreCase(accountType)) {
+            minRequired = new BigDecimal("0");
+        } else if ("fd".equalsIgnoreCase(accountType)) {
+            minRequired = new BigDecimal("10000");
+        } else if ("rd".equalsIgnoreCase(accountType)) {
+            minRequired = new BigDecimal("1000");
+        } else {
+            minRequired = new BigDecimal("1000"); // savings
+        }
         if (initialAmount.compareTo(minRequired) < 0) {
             request.getSession().setAttribute("error", "Initial amount paid must be at least ₹" + minRequired + ".");
             response.sendRedirect(request.getContextPath() + "/account?action=list");
@@ -696,7 +709,7 @@ public class AccountServlet extends BaseServlet {
             }
 
             // 5. Create Account detail subclass record
-            if ("savings".equalsIgnoreCase(accountType)) {
+            if (!"current".equalsIgnoreCase(accountType)) {
                 String createSavingsSql = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement savStmt = conn.prepareStatement(createSavingsSql)) {
                     savStmt.setLong(1, accountId);

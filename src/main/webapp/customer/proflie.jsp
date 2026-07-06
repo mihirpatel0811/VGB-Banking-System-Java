@@ -235,7 +235,7 @@
 
         /* Profile banner/cover matching admin style */
         .profile-cover {
-            background-image: url('../assest/images/cover-image.png');
+            background-image: url('${pageContext.request.contextPath}/assest/images/cover page image.png');
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-position: center;
@@ -527,7 +527,7 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/customer-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 50px; height: 50px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">

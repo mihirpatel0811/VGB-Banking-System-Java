@@ -1135,7 +1135,7 @@
         <header class="header">
             <a href="#home" class="logo" aria-label="Vertex Galaxy Bank Home"
                 style="display: flex; align-items: center; text-decoration: none;">
-            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 50px; height: 50px; flex-shrink: 0; object-fit: contain;">
             </a>
 
             <nav class="navbar" aria-label="Main navigation">

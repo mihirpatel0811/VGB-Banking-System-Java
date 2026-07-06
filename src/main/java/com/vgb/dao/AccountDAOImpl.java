@@ -194,7 +194,7 @@ public class AccountDAOImpl implements AccountDAO {
             }
 
             // 3. Insert subclass specific detail tables
-            if ("savings".equalsIgnoreCase(account.getAccountType())) {
+            if (!"current".equalsIgnoreCase(account.getAccountType())) {
                 String createSavingsSql = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmtSav = conn.prepareStatement(createSavingsSql)) {
                     stmtSav.setLong(1, accountId);
@@ -393,7 +393,7 @@ public class AccountDAOImpl implements AccountDAO {
             }
 
             // Update sub-table depending on account type
-            if ("savings".equalsIgnoreCase(account.getAccountType())) {
+            if (!"current".equalsIgnoreCase(account.getAccountType())) {
                 String updateSavingsSql = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, ?, ?, ?) " +
                                           "ON DUPLICATE KEY UPDATE nominee_name = ?, holding_type = ?, daily_withdrawal_limit = ?";
                 try (PreparedStatement stmtSav = conn.prepareStatement(updateSavingsSql)) {

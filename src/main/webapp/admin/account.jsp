@@ -20,6 +20,240 @@
             --panel-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
         }
 
+        /* A4 Portrait Form Styling & Layout */
+        .a4-container {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1e293b;
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .a4-section-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-md);
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .a4-section-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .a4-section-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--primary-600);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--primary-100);
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Office Use Only Table Styling */
+        .office-use-box {
+            border: 2px dashed #94a3b8;
+            border-radius: var(--radius-md);
+            padding: 15px;
+            background: #f8fafc;
+            margin-bottom: 25px;
+        }
+
+        .office-use-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .office-use-item {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .office-use-item label {
+            display: block;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .office-use-item span {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #334155;
+            font-family: monospace;
+        }
+
+        /* Form Controls Styling */
+        .a4-form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .a4-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .a4-form-group label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .a4-form-group input,
+        .a4-form-group select,
+        .a4-form-group textarea {
+            padding: 10px 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: #1e293b;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .a4-form-group input:focus,
+        .a4-form-group select:focus,
+        .a4-form-group textarea:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Radio & Checkbox Groups */
+        .a4-radio-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            height: 38px;
+        }
+
+        .a4-radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        /* Photo/KYC Upload Styling */
+        .a4-photo-upload {
+            width: 120px;
+            height: 140px;
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            background: #f8fafc;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .a4-photo-upload:hover {
+            border-color: var(--primary-500);
+        }
+
+        .a4-photo-upload i {
+            font-size: 2rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .a4-photo-upload span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #64748b;
+            text-align: center;
+            padding: 0 8px;
+        }
+
+        .a4-photo-upload input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Print Media Overrides */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .sidebar, .header, .footer, .no-print, .modal-header, .modal-footer {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+            .modal {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                background: none !important;
+                backdrop-filter: none !important;
+                padding: 0 !important;
+                display: block !important;
+                z-index: 99999 !important;
+            }
+            .modal-content {
+                max-width: 100% !important;
+                max-height: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                background: white !important;
+            }
+            .a4-container {
+                box-shadow: none !important;
+                padding: 0 !important;
+                border: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+            .a4-section-card {
+                box-shadow: none !important;
+                border: 1px solid #94a3b8 !important;
+                page-break-inside: avoid !important;
+            }
+            select {
+                appearance: none !important;
+                background: transparent !important;
+                border: 1px solid #94a3b8 !important;
+            }
+        }
+
+
         body {
             background-color: #f6f8fc !important;
             color: var(--gray-700) !important;
@@ -1713,7 +1947,7 @@
                 <i class="bx bx-menu"></i>
             </button>
             <a href="${pageContext.request.contextPath}/admin-dashboard" class="logo" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 38px; height: 38px; flex-shrink: 0; object-fit: contain;">
+                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 50px; height: 50px; flex-shrink: 0; object-fit: contain;">
             </a>
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
@@ -1825,17 +2059,76 @@
                     </div>
                 </div>
             </div>
+            </div>
+            
+            <!-- Collapsible Required Documents Guide -->
+            <div class="glass-card no-print" style="margin-bottom: 30px; padding: 20px 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleDocsGuide()">
+                    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
+                        <i class="bx bx-file" style="color: var(--primary-500); font-size: 1.25rem;"></i>
+                        KYC & Required Documents Guide for Account Opening
+                    </h4>
+                    <i class="bx bx-chevron-down" id="docsGuideArrow" style="font-size: 1.5rem; color: var(--gray-500); transition: transform 0.3s ease;"></i>
+                </div>
+                
+                <div id="docsGuideContent" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);">
+                    <hr style="border: none; border-top: 1px solid var(--gray-100); margin: 15px 0;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;" class="mobile-grid-1">
+                        <!-- Savings Accounts -->
+                        <div style="background: rgba(99, 102, 241, 0.02); padding: 18px; border-radius: var(--radius-md); border: 1.5px solid var(--glass-border);">
+                            <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--primary-600); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                <i class="bx bx-user" style="font-size: 1.1rem;"></i> Retail Savings Account (Single & Joint)
+                            </h5>
+                            <ul style="font-size: 0.8rem; color: var(--gray-600); padding-left: 20px; margin: 0; line-height: 1.7;">
+                                <li><strong>Proof of Identity (POI):</strong> Aadhaar Card, PAN Card, Voter ID, Passport, or Driving License.</li>
+                                <li><strong>Proof of Address (POA):</strong> Aadhaar Card, Utility Bills (Electricity, Water, Gas) not older than 2 months, or Rent Agreement.</li>
+                                <li><strong>Photographs:</strong> 1 recent passport-size photograph (uploaded dynamically in the wizard).</li>
+                                <li><strong>Nominee KYC:</strong> Basic ID details and nominee relationship declaration (required for Savings Single).</li>
+                                <li><strong>Joint Signatory Documents:</strong> Full POI, POA, and photos for *both* account holders (required for Savings Joint).</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Current Accounts -->
+                        <div style="background: rgba(16, 185, 129, 0.02); padding: 18px; border-radius: var(--radius-md); border: 1.5px solid rgba(16, 185, 129, 0.1);">
+                            <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--accent-emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                <i class="bx bx-briefcase" style="font-size: 1.1rem;"></i> Commercial Current / Entity Account
+                            </h5>
+                            <ul style="font-size: 0.8rem; color: var(--gray-600); padding-left: 20px; margin: 0; line-height: 1.7;">
+                                <li><strong>Business Registration:</strong> Certificate of Incorporation, Partnership Deed, or Shops & Establishment Certificate.</li>
+                                <li><strong>Tax Registration:</strong> GSTIN Certificate (minimum 15 characters) and Entity Permanent Account Number (PAN Card).</li>
+                                <li><strong>Signatories & Partners KYC:</strong> Aadhaar Card, PAN Card, and photos for all active partners or signing authorities.</li>
+                                <li><strong>Board Resolution / Mandate:</strong> Letter of Authority authorizing account operation and specifying signing power.</li>
+                                <li><strong>Business Location Proof:</strong> Registered office rent/lease deed or corporate utility bill under entity's legal name.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Customer List Table Card -->
             <div class="glass-card">
-                <div class="search-container no-print">
-                    <div class="search-box">
-                        <i class="bx bx-search"></i>
-                        <input type="text" id="accountSearchInput" placeholder="Search customer ID, account number, or name..." onkeyup="filterAccountsTable()">
+                <div class="search-container no-print" style="display: flex; gap: 15px; align-items: center; margin-bottom: 25px; flex-wrap: wrap;">
+                    <div class="search-box" style="flex: 2; min-width: 280px; position: relative;">
+                        <i class="bx bx-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 1.2rem;"></i>
+                        <input type="text" id="accountSearchInput" placeholder="Search customer ID, account number, or name..." onkeyup="filterAccountsTable()" style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; background: var(--white); color: var(--gray-800); transition: all var(--transition-normal);">
                     </div>
-                    <button class="btn btn-primary" onclick="openWizardModal()" style="display: inline-flex; align-items: center; gap: 8px;">
-                        <i class="bx bx-plus-circle" style="font-size: 1.1rem;"></i>
-                        <span>Create New Account</span>
+                    <div style="flex: 1; min-width: 160px;">
+                        <select id="accountTypeFilter" onchange="filterAccountsTable()" class="form-group" style="padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: var(--white); color: var(--gray-700); width: 100%; outline: none; transition: border-color 0.2s; font-size: 0.85rem; font-weight: 500; height: 48px;">
+                            <option value="">All Account Types</option>
+                            <option value="savings">Savings Account</option>
+                            <option value="current">Current Account</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 160px;">
+                        <select id="accountStatusFilter" onchange="filterAccountsTable()" class="form-group" style="padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: var(--white); color: var(--gray-700); width: 100%; outline: none; transition: border-color 0.2s; font-size: 0.85rem; font-weight: 500; height: 48px;">
+                            <option value="">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="openWizardModal()" style="display: inline-flex; align-items: center; gap: 8px; height: 48px; border-radius: var(--radius-md); padding: 0 20px;">
+                        <i class="bx bx-plus-circle" style="font-size: 1.15rem;"></i>
+                        <span style="font-weight: 600;">Create New Account</span>
                     </button>
                 </div>
 
@@ -1858,7 +2151,7 @@
                             <c:choose>
                                 <c:when test="${not empty accounts}">
                                     <c:forEach var="acc" items="${accounts}" varStatus="status">
-                                        <tr class="account-row-data">
+                                        <tr class="account-row-data" data-account-type="${acc.accountType}" data-account-status="${acc.status}">
                                             <td style="font-weight: 600; color: var(--gray-500);">${status.index + 1}</td>
                                             <td><span class="badge-id td-cust-id">#CUST-${acc.customerId}</span></td>
                                             <td style="font-weight: 600; color: var(--gray-800);" class="td-cust-name">${acc.customerName}</td>
@@ -2517,604 +2810,703 @@
          ========================================== -->
     <div class="modal" id="createAccountModal">
         <div class="modal-content modal-large">
-            <form action="${pageContext.request.contextPath}/account?action=create" method="POST" id="createAccountForm" enctype="multipart/form-data" onsubmit="return validateWizardFormSubmit()">
+            <form action="${pageContext.request.contextPath}/account?action=create&csrfToken=${sessionScope.csrfToken}" method="POST" id="createAccountForm" enctype="multipart/form-data" onsubmit="return validateA4FormSubmit()">
                 <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
 
-                <div class="modal-header">
-                    <h3 style="font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px;">
-                        <i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Open Bank Ledger Account
-                    </h3>
-                    <button type="button" class="close-modal-btn" onclick="closeModal('createAccountModal')"><i class="bx bx-x"></i></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Progress Bar -->
-                    <div class="step-progress-bar">
-                        <div class="step-progress-line-wrapper">
-                            <div class="step-progress-line-bg"></div>
-                            <div class="step-indicator-line" id="stepLine"></div>
+                <div class="a4-container">
+                    
+                    <!-- OFFICE USE ONLY SECTION -->
+                    <div class="office-use-box no-print">
+                        <h5 style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                            <i class="bx bx-lock" style="font-size: 0.9rem;"></i> For Office Use Only
+                        </h5>
+                        <div class="office-use-grid">
+                            <div class="office-use-item"><label>Customer ID</label><span>Auto-Gen</span></div>
+                            <div class="office-use-item"><label>CIF Number</label><span>Auto-Gen</span></div>
+                            <div class="office-use-item"><label>Account No.</label><span>Auto-Gen</span></div>
+                            <div class="office-use-item"><label>Application ID</label><span>VGB-2026-T</span></div>
+                            <div class="office-use-item"><label>Branch Name</label><span>Galaxy Main</span></div>
+                            <div class="office-use-item"><label>Branch Code</label><span>VGB001</span></div>
+                            <div class="office-use-item"><label>IFSC Code</label><span>VGBB0000001</span></div>
+                            <div class="office-use-item"><label>App Date</label><span id="officeAppDate">-</span></div>
                         </div>
-                        <div class="step-node active" id="node1"><span class="step-node-label">Type</span></div>
-                        <div class="step-node" id="node2"><span class="step-node-label">Holders</span></div>
-                        <div class="step-node" id="node3"><span class="step-node-label">Nominee</span></div>
-                        <div class="step-node" id="node4"><span class="step-node-label">Assets</span></div>
-                        <div class="step-node" id="node5"><span class="step-node-label">Auth</span></div>
-                        <div class="step-node" id="node6"><span class="step-node-label">Deposit</span></div>
-                        <div class="step-node" id="node7"><span class="step-node-label">Review</span></div>
                     </div>
 
-                    <!-- STEP 1: Select Type -->
-                    <div class="wizard-step active" id="step1">
-                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px;">Choose Account Model Category</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                            <div style="border: 2px solid var(--primary-300); border-radius: var(--radius-md); padding: 25px; cursor: pointer; text-align: center; background: rgba(99,102,241,0.03); transition: all 0.3s;" id="optSavingsSingle" onclick="selectAccountCategory('savings_single')">
-                                <i class="bx bx-user" style="font-size: 2.5rem; color: var(--primary-500);"></i>
-                                <h5 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-top: 10px;">Savings Single</h5>
-                                <p style="font-size: 0.78rem; color: var(--gray-500); margin-top: 5px;">Retail individual deposits with passbook features.</p>
-                            </div>
-                            <div style="border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); padding: 25px; cursor: pointer; text-align: center; background: white; transition: all 0.3s;" id="optSavingsJoint" onclick="selectAccountCategory('savings_joint')">
-                                <i class="bx bx-group" style="font-size: 2.5rem; color: var(--secondary-500);"></i>
-                                <h5 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-top: 10px;">Savings Joint</h5>
-                                <p style="font-size: 0.78rem; color: var(--gray-500); margin-top: 5px;">Joint account support for dual holders (max 2).</p>
-                            </div>
-                            <div style="border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); padding: 25px; cursor: pointer; text-align: center; background: white; transition: all 0.3s;" id="optCurrent" onclick="selectAccountCategory('current')">
-                                <i class="bx bx-briefcase" style="font-size: 2.5rem; color: var(--accent-emerald);"></i>
-                                <h5 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-top: 10px;">Current Corporate</h5>
-                                <p style="font-size: 0.78rem; color: var(--gray-500); margin-top: 5px;">Trade accounts for businesses, merchants, and entities.</p>
-                            </div>
+                    <!-- PREMIUM HEADER -->
+                    <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px double #e2e8f0; padding-bottom: 25px; position: relative;">
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 12px;">
+                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 50px; height: 50px; object-fit: contain;">
+                            <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-600); letter-spacing: 2px; margin: 0;">VERTEX GALAXY BANK</h2>
                         </div>
-
-                        <!-- Hidden form variables to post -->
-                        <input type="hidden" name="accountType" id="wizAccountType" value="savings">
-                        <input type="hidden" name="holdingType" id="wizHoldingType" value="single">
+                        <h3 style="font-size: 1.15rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 5px 0;">Account Opening Application Form</h3>
+                        <p style="font-size: 0.85rem; font-weight: 600; color: #64748b; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 1px;">For Individual Customers</p>
+                        <span style="font-size: 0.72rem; font-style: italic; color: var(--primary-500); font-weight: 700; letter-spacing: 0.5px;">"Your Future. Your Trust. Your Bank."</span>
                     </div>
 
-                    <!-- STEP 2: Holders details -->
-                    <div class="wizard-step" id="step2">
-                        <!-- Container for savings single customer -->
-                        <div id="wizSavingsSingleFields" style="display:block;">
-                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1.5px solid var(--gray-100); padding-bottom: 8px;">
-                                <i class="bx bx-id-card"></i> Customer Personal Details
-                            </h4>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>First Name *</label>
-                                    <input type="text" name="firstName" id="wizFirst">
-                                </div>
-                                <div class="form-group">
-                                    <label>Middle Name</label>
-                                    <input type="text" name="middleName" id="wizMiddle">
-                                </div>
-                                <div class="form-group">
-                                    <label>Last Name *</label>
-                                    <input type="text" name="lastName" id="wizLast">
+                    <!-- SECTION A – ACCOUNT INFORMATION -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-info-circle"></i> Section A – Account Information
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Branch *</label>
+                                <input type="text" name="branch" value="Galaxy Main" readonly style="background: #f1f5f9;">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Branch Code</label>
+                                <input type="text" name="branchCode" value="VGB001" readonly style="background: #f1f5f9;">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>IFSC Code</label>
+                                <input type="text" name="ifscCode" value="VGBB0000001" readonly style="background: #f1f5f9;">
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Account Type *</label>
+                                <select name="accountType" id="a4AccountType" onchange="handleAccountTypeChange()" required>
+                                    <option value="savings">Savings Account</option>
+                                    <option value="current">Current Account</option>
+                                    <option value="salary">Salary Account</option>
+                                    <option value="student">Student Account</option>
+                                    <option value="fd">Fixed Deposit (FD)</option>
+                                    <option value="rd">Recurring Deposit (RD)</option>
+                                </select>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Currency</label>
+                                <input type="text" name="currency" value="INR (₹)" readonly style="background: #f1f5f9;">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Initial Deposit Amount (₹) *</label>
+                                <input type="number" step="0.01" name="initialAmount" id="a4InitialAmount" value="1000.00" onkeyup="validateA4InitialAmount()">
+                                <small style="color: var(--primary-500); font-weight: 700; font-size: 0.72rem; margin-top: 4px;" id="a4MinDepositNote">Minimum initial amount required is ₹1,000.00.</small>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Customer Type *</label>
+                                <select name="holdingType" id="a4HoldingType" onchange="handleHoldingTypeChange()" required>
+                                    <option value="single">Individual (Single)</option>
+                                    <option value="joint">Joint Account Holder</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="a4-form-row" style="margin-top: 15px; border-top: 1px dashed #e2e8f0; padding-top: 15px;">
+                            <div class="a4-form-group">
+                                <label>Internet Banking Requested?</label>
+                                <div class="a4-radio-group">
+                                    <label class="a4-radio-label"><input type="radio" name="internetBanking" value="yes" checked> Yes</label>
+                                    <label class="a4-radio-label"><input type="radio" name="internetBanking" value="no"> No</label>
                                 </div>
                             </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Date of Birth *</label>
-                                    <input type="date" name="dob" id="wizDob">
-                                </div>
-                                <div class="form-group">
-                                    <label>Gender *</label>
-                                    <select name="gender" id="wizGender">
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Marital Status</label>
-                                    <select name="maritalStatus" id="wizMarital">
-                                        <option value="single">Single</option>
-                                        <option value="married">Married</option>
-                                        <option value="divorced">Divorced</option>
-                                    </select>
+                            <div class="a4-form-group">
+                                <label>Mobile Banking Requested?</label>
+                                <div class="a4-radio-group">
+                                    <label class="a4-radio-label"><input type="radio" name="mobileBanking" value="yes" checked> Yes</label>
+                                    <label class="a4-radio-label"><input type="radio" name="mobileBanking" value="no"> No</label>
                                 </div>
                             </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Email *</label>
-                                    <input type="email" name="email" id="wizEmail">
-                                </div>
-                                <div class="form-group">
-                                    <label>Phone *</label>
-                                    <input type="text" name="phone" id="wizPhone">
-                                </div>
-                                <div class="form-group">
-                                    <label>Annual Income (₹)</label>
-                                    <input type="number" name="income" id="wizIncome" value="300000">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Occupation</label>
-                                    <input type="text" name="occupation" id="wizOcc" value="Salaried">
-                                </div>
-                                <div class="form-group">
-                                    <label>PAN Number *</label>
-                                    <input type="text" name="pan" id="wizPan">
-                                </div>
-                                <div class="form-group">
-                                     <label>Aadhaar Card (12 digits) *</label>
-                                     <input type="text" name="aadhaar" id="wizAadhaar">
-                                 </div>
-                             </div>
-                             <div class="form-row row-3">
-                                 <div class="form-group">
-                                     <label>Father's Name *</label>
-                                     <input type="text" name="fatherName" id="wizFather">
-                                 </div>
-                                 <div class="form-group">
-                                     <label>Mother's Name *</label>
-                                     <input type="text" name="motherName" id="wizMother">
-                                 </div>
-                                 <div class="form-group">
-                                     <label>Nationality *</label>
-                                     <input type="text" name="nationality" id="wizNationality" value="Indian">
-                                 </div>
-                             </div>
-                             <div class="form-row row-2">
-                                 <div class="form-group">
-                                     <label>Alternate Phone</label>
-                                     <input type="text" name="altPhone" id="wizAltPhone">
-                                 </div>
-                                 <div class="form-group">
-                                     <label>Permanent Address *</label>
-                                     <input type="text" name="permAddress" id="wizPermAddress">
-                                 </div>
-                             </div>
-                             <div class="form-row row-2">
-                                 <div class="form-group">
-                                     <label>Upload Profile Photo</label>
-                                     <input type="file" name="primaryAvatar" id="wizPrimaryAvatar" accept="image/*">
-                                 </div>
-                             </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Address *</label>
-                                    <input type="text" name="address" id="wizAddress">
-                                </div>
-                                <div class="form-group">
-                                    <label>City *</label>
-                                    <input type="text" name="city" id="wizCity">
-                                </div>
-                                <div class="form-group">
-                                    <label>State *</label>
-                                    <input type="text" name="state" id="wizState">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Zip Code *</label>
-                                    <input type="text" name="zip" id="wizZip">
+                            <div class="a4-form-group">
+                                <label>SMS Alerts Requested?</label>
+                                <div class="a4-radio-group">
+                                    <label class="a4-radio-label"><input type="radio" name="smsAlerts" value="yes" checked> Yes</label>
+                                    <label class="a4-radio-label"><input type="radio" name="smsAlerts" value="no"> No</label>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Container for savings joint customer -->
-                        <div id="wizSavingsJointFields" style="display:none;">
-                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1.5px solid var(--gray-100); padding-bottom: 8px;">
-                                <i class="bx bx-group"></i> Second Customer Details (Joint Holder)
-                            </h4>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>First Name *</label>
-                                    <input type="text" name="joint_firstName" id="wizJointFirst">
-                                </div>
-                                <div class="form-group">
-                                    <label>Middle Name</label>
-                                    <input type="text" name="joint_middleName" id="wizJointMiddle">
-                                </div>
-                                <div class="form-group">
-                                    <label>Last Name *</label>
-                                    <input type="text" name="joint_lastName" id="wizJointLast">
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>ATM / Debit Card Requested?</label>
+                                <div class="a4-radio-group">
+                                    <label class="a4-radio-label"><input type="radio" name="atmCard" value="yes" checked> Yes</label>
+                                    <label class="a4-radio-label"><input type="radio" name="atmCard" value="no"> No</label>
                                 </div>
                             </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Date of Birth *</label>
-                                    <input type="date" name="joint_dob" id="wizJointDob">
-                                </div>
-                                <div class="form-group">
-                                    <label>Gender *</label>
-                                    <select name="joint_gender" id="wizJointGender">
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Marital Status</label>
-                                    <select name="joint_maritalStatus" id="wizJointMarital">
-                                        <option value="single">Single</option>
-                                        <option value="married">Married</option>
-                                    </select>
+                            <div class="a4-form-group">
+                                <label>Cheque Book Requested?</label>
+                                <div class="a4-radio-group">
+                                    <label class="a4-radio-label"><input type="radio" name="chequeBook" value="yes" checked> Yes</label>
+                                    <label class="a4-radio-label"><input type="radio" name="chequeBook" value="no"> No</label>
                                 </div>
                             </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Email *</label>
-                                    <input type="email" name="joint_email" id="wizJointEmail">
-                                </div>
-                                <div class="form-group">
-                                    <label>Phone *</label>
-                                    <input type="text" name="joint_phone" id="wizJointPhone">
-                                </div>
-                                <div class="form-group">
-                                    <label>Annual Income (₹)</label>
-                                    <input type="number" name="joint_income" id="wizJointIncome" value="300000">
+                            <div class="a4-form-group">
+                                <label>Offline Passbook Booklet?</label>
+                                <div class="a4-radio-group">
+                                    <label class="a4-radio-label"><input type="radio" name="passbook" value="yes" checked> Yes</label>
+                                    <label class="a4-radio-label"><input type="radio" name="passbook" value="no"> No</label>
                                 </div>
                             </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Occupation</label>
-                                    <input type="text" name="joint_occupation" id="wizJointOcc" value="Salaried">
-                                </div>
-                                <div class="form-group">
-                                    <label>PAN Number *</label>
-                                    <input type="text" name="joint_pan" id="wizJointPan">
-                                </div>
-                                <div class="form-group">
-                                    <label>Aadhaar Card *</label>
-                                    <input type="text" name="joint_aadhaar" id="wizJointAadhaar">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Father's Name *</label>
-                                    <input type="text" name="joint_fatherName" id="wizJointFather">
-                                </div>
-                                <div class="form-group">
-                                    <label>Mother's Name *</label>
-                                    <input type="text" name="joint_motherName" id="wizJointMother">
-                                </div>
-                                <div class="form-group">
-                                    <label>Nationality *</label>
-                                    <input type="text" name="joint_nationality" id="wizJointNationality" value="Indian">
-                                </div>
-                            </div>
-                            <div class="form-row row-2">
-                                <div class="form-group">
-                                    <label>Alternate Phone</label>
-                                    <input type="text" name="joint_altPhone" id="wizJointAltPhone">
-                                </div>
-                                <div class="form-group">
-                                    <label>Permanent Address *</label>
-                                    <input type="text" name="joint_permAddress" id="wizJointPermAddress">
-                                </div>
-                            </div>
-                            <div class="form-row row-2">
-                                <div class="form-group">
-                                    <label>Upload Joint Holder Profile Photo</label>
-                                    <input type="file" name="jointAvatar" id="wizJointAvatar" accept="image/*">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Address *</label>
-                                    <input type="text" name="joint_address" id="wizJointAddress">
-                                </div>
-                                <div class="form-group">
-                                    <label>City *</label>
-                                    <input type="text" name="joint_city" id="wizJointCity">
-                                </div>
-                                <div class="form-group">
-                                    <label>State *</label>
-                                    <input type="text" name="joint_state" id="wizJointState">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Zip Code *</label>
-                                    <input type="text" name="joint_zip" id="wizJointZip">
-                                </div>
-                            </div>
-                            <input type="hidden" name="joint_username" id="wizJointUser">
-                            <input type="hidden" name="joint_password" id="wizJointPass">
-                            <input type="hidden" name="joint_pin" id="wizJointPin" value="">
                         </div>
+                    </div>
 
-                        <!-- Container for corporate accounts -->
-                        <div id="wizCurrentFields" style="display:none;">
-                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1.5px solid var(--gray-100); padding-bottom: 8px;">
-                                <i class="bx bx-buildings"></i> Company Credentials
-                            </h4>
-                            <div class="form-row row-2">
-                                <div class="form-group">
-                                    <label>Business Name *</label>
-                                    <input type="text" name="businessName" id="wizBusName">
+                    <!-- SECTION B – PERSONAL DETAILS -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-user"></i> Section B – Personal Details
+                        </div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start;" class="mobile-grid-1">
+                            <div style="flex-grow: 1;">
+                                <div class="a4-form-row">
+                                    <div class="a4-form-group">
+                                        <label>First Name *</label>
+                                        <input type="text" name="firstName" id="a4First" required>
+                                    </div>
+                                    <div class="a4-form-group">
+                                        <label>Middle Name</label>
+                                        <input type="text" name="middleName" id="a4Middle">
+                                    </div>
+                                    <div class="a4-form-group">
+                                        <label>Last Name *</label>
+                                        <input type="text" name="lastName" id="a4Last" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>GSTIN (15 characters) *</label>
-                                    <input type="text" name="gstin" id="wizGstin" placeholder="e.g. 24AAAAB1234C1Z9">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Company Category</label>
-                                    <select name="companyCategory" id="wizBusCat">
-                                        <option value="Sole Proprietorship">Sole Proprietorship</option>
-                                        <option value="Partnership">Partnership Firm</option>
-                                        <option value="Private Limited">Private Limited</option>
-                                        <option value="Public Limited">Public Limited</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Company PAN *</label>
-                                    <input type="text" name="companyPan" id="wizBusPan">
-                                </div>
-                                <div class="form-group">
-                                    <label>Company Aadhaar (Entity) *</label>
-                                    <input type="text" name="companyAadhaar" id="wizBusAadh">
-                                </div>
-                            </div>
-                            <div class="form-row row-3">
-                                <div class="form-group">
-                                    <label>Company Phone *</label>
-                                    <input type="text" name="companyPhone" id="wizBusPhone">
-                                </div>
-                                <div class="form-group">
-                                    <label>Company Email *</label>
-                                    <input type="email" name="companyEmail" id="wizBusEmail">
-                                </div>
-                                <div class="form-group">
-                                    <label>Corporate Address *</label>
-                                    <input type="text" name="companyAddress" id="wizBusAddr">
-                                </div>
-                            </div>
-
-                            <!-- Partners dynamically added -->
-                            <div style="margin-top: 30px;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1.5px solid var(--gray-100); padding-bottom:8px;">
-                                    <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--gray-800);">
-                                        <i class="bx bx-group"></i> Corporate Partners
-                                    </h4>
-                                    <button type="button" class="btn btn-secondary" onclick="addNewPartnerField()" style="padding: 6px 12px; font-size:0.75rem; border-color:var(--primary-500); color:var(--primary-500);">
-                                        <i class="bx bx-plus"></i> Add Partner Profile
-                                    </button>
-                                </div>
-                                <input type="hidden" name="partnerCount" id="partnerCountInput" value="1">
-                                <div id="dynamicPartnersContainer">
-                                    <!-- Partner 1 fields -->
-                                    <div class="partner-card" id="partner_card_1">
-                                        <h5 style="font-size:0.85rem; font-weight:700; color:var(--primary-500); margin-bottom:15px;">Partner Profile #1 (Primary signatory)</h5>
-                                        <div class="form-row row-3">
-                                            <div class="form-group">
-                                                <label>First Name *</label>
-                                                <input type="text" name="partner_firstName_1" id="p1_first">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Middle Name</label>
-                                                <input type="text" name="partner_middleName_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Last Name *</label>
-                                                <input type="text" name="partner_lastName_1" id="p1_last">
-                                            </div>
-                                        </div>
-                                        <div class="form-row row-3">
-                                            <div class="form-group">
-                                                <label>Date of Birth *</label>
-                                                <input type="date" name="partner_dob_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Gender *</label>
-                                                <select name="partner_gender_1">
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Marital Status</label>
-                                                <select name="partner_maritalStatus_1">
-                                                    <option value="single">Single</option>
-                                                    <option value="married">Married</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-row row-3">
-                                            <div class="form-group">
-                                                <label>Email *</label>
-                                                <input type="email" name="partner_email_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Phone *</label>
-                                                <input type="text" name="partner_phone_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>PAN Card *</label>
-                                                <input type="text" name="partner_pan_1">
-                                            </div>
-                                        </div>
-                                        <div class="form-row row-3">
-                                              <div class="form-group">
-                                                  <label>Aadhaar Card *</label>
-                                                  <input type="text" name="partner_aadhaar_1">
-                                              </div>
-                                         </div>
-                                         <div class="form-row row-2">
-                                              <div class="form-group">
-                                                  <label>Partner Address *</label>
-                                                  <input type="text" name="partner_address_1">
-                                              </div>
-                                              <div class="form-group">
-                                                  <label>City *</label>
-                                                  <input type="text" name="partner_city_1">
-                                              </div>
-                                         </div>
-                                        <div class="form-row row-3">
-                                            <div class="form-group">
-                                                <label>State *</label>
-                                                <input type="text" name="partner_state_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Zip Code *</label>
-                                                <input type="text" name="partner_zip_1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Annual Income *</label>
-                                                <input type="number" name="partner_income_1" value="500000">
-                                            </div>
-                                        </div>
-                                        <div class="form-row row-3">
-                                            <div class="form-group">
-                                                <label>Occupation</label>
-                                                <input type="text" name="partner_occupation_1" value="Business">
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="partner_username_1" id="p1_user">
-                                        <input type="hidden" name="partner_password_1" id="p1_pass">
-                                        <!-- PIN auto-generated -->
-                                        <input type="hidden" name="partner_pin_1" id="p1_pin" value="">
+                                <div class="a4-form-row">
+                                    <div class="a4-form-group">
+                                        <label>Father's Name *</label>
+                                        <input type="text" name="fatherName" id="a4Father" required>
+                                    </div>
+                                    <div class="a4-form-group">
+                                        <label>Mother's Name *</label>
+                                        <input type="text" name="motherName" id="a4Mother" required>
                                     </div>
                                 </div>
                             </div>
+                            <div class="a4-photo-upload no-print">
+                                <i class="bx bx-camera"></i>
+                                <span>Upload Photo *</span>
+                                <input type="file" name="primaryAvatar" accept="image/*">
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- STEP 3: Nominee Details (Savings only) -->
-                    <div class="wizard-step" id="step3">
-                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 5px;">Nominee Person Details (Optional)</h4>
-                        <p style="font-size: 0.82rem; color: var(--gray-500); margin-bottom: 25px;">Add nominee details for account security and inheritance purposes.</p>
-
-                        <div style="background: rgba(99, 102, 241, 0.02); padding: 30px; border-radius: var(--radius-md); border: 1.5px solid var(--glass-border); margin-bottom: 30px;">
-                            <div class="form-group">
-                                <label style="display:block; font-size:0.85rem; font-weight:600; color:var(--gray-600); margin-bottom:8px;">Nominee Full Name</label>
-                                <input type="text" name="nomineeName" id="wizNominee" placeholder="Legal full name of Nominee">
-                                <small style="display:block; color:var(--gray-500); font-size:0.75rem; margin-top:5px;">This field is optional. You can leave it blank if no nominee is registered at this time.</small>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Date of Birth *</label>
+                                <input type="date" name="dob" id="a4Dob" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Gender *</label>
+                                <select name="gender" id="a4Gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Marital Status</label>
+                                <select name="maritalStatus" id="a4Marital">
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="divorced">Divorced</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Nationality *</label>
+                                <input type="text" name="nationality" value="Indian" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Occupation *</label>
+                                <input type="text" name="occupation" placeholder="e.g. Salaried, Self-Employed" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Annual Income (₹) *</label>
+                                <input type="number" name="income" value="300000" required>
                             </div>
                         </div>
                     </div>
 
-                    <!-- STEP 4: Assets selection (ATM, Cheque, Passbook) -->
-                    <div class="wizard-step" id="step4">
-                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 5px;">Select Banking Services & Instruments</h4>
-                        <p style="font-size: 0.82rem; color: var(--gray-500); margin-bottom: 25px;">Activate offline transacting items for the new account.</p>
-
-                        <div class="form-row row-3" style="background: rgba(99, 102, 241, 0.02); padding: 20px; border-radius: var(--radius-md); border: 1.5px solid var(--glass-border); margin-bottom:30px;">
-                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;">
-                                <input type="checkbox" name="atmCard" id="wizAtmCard" value="on"> ATM Debit Card
-                            </label>
-                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;">
-                                <input type="checkbox" name="chequeBook" id="wizChequeBook" value="on"> Cheque Book Request
-                            </label>
-                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;" id="wizPassbookLabel">
-                                <input type="checkbox" name="passbook" id="wizPassbook" value="on" checked> Offline Passbook Booklet
-                            </label>
+                    <!-- SECTION C – CONTACT INFORMATION -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-phone"></i> Section C – Contact Information
                         </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Mobile Number *</label>
+                                <input type="tel" name="phone" id="a4Phone" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Alternate Number</label>
+                                <input type="tel" name="altPhone">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Email Address *</label>
+                                <input type="email" name="email" id="a4Email" required>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Emergency Contact Name *</label>
+                                <input type="text" name="emergencyContact" placeholder="Full name of contact" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Emergency Contact Phone *</label>
+                                <input type="tel" name="emergencyPhone" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Relationship *</label>
+                                <input type="text" name="emergencyRelationship" placeholder="e.g. Spouse, Parent" required>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- Visualizers -->
-                        <div class="visualizer-preview-grid">
-
-                            <!-- ATM Card Configuration -->
-                            <div class="visualizer-container" id="wizCardVisualizer" style="display:none; padding: 25px; flex-direction: column; justify-content: flex-start; align-items: flex-start; min-height: auto;">
-                                <div style="font-size:0.75rem; font-weight:700; color:var(--gray-500); text-transform:uppercase; margin-bottom: 15px;">ATM Card Configuration</div>
-                                <div class="form-group" style="width: 100%; margin-bottom: 0;">
-                                    <label style="font-size:0.85rem; font-weight:600; color:var(--gray-600); display: block; margin-bottom: 8px;">Select Card Network Provider</label>
-                                    <select name="cardProvider" id="wizCardProvider" style="width: 100%; padding:10px; border:1.5px solid var(--gray-200); border-radius:var(--radius-md); font-size:0.9rem; background: white;">
-                                        <option value="visa">Visa Classic</option>
-                                        <option value="mastercard">Mastercard Royale</option>
-                                        <option value="rupay">RuPay Platinum</option>
-                                    </select>
+                    <!-- SECTION D – ADDRESS INFORMATION -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-map"></i> Section D – Address Information
+                        </div>
+                        
+                        <!-- Current Address Card -->
+                        <div style="background: #f8fafc; padding: 15px; border-radius: var(--radius-sm); border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                            <h5 style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 12px;">Current Residential Address</h5>
+                            <div class="a4-form-row">
+                                <div class="a4-form-group" style="grid-column: span 2;">
+                                    <label>Address Line 1 *</label>
+                                    <input type="text" name="address" id="a4Address" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>Address Line 2</label>
+                                    <input type="text" name="address2">
                                 </div>
                             </div>
+                            <div class="a4-form-row">
+                                <div class="a4-form-group">
+                                    <label>City *</label>
+                                    <input type="text" name="city" id="a4City" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>District *</label>
+                                    <input type="text" name="district" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>State *</label>
+                                    <input type="text" name="state" id="a4State" required>
+                                </div>
+                            </div>
+                            <div class="a4-form-row">
+                                <div class="a4-form-group">
+                                    <label>Country *</label>
+                                    <input type="text" name="country" value="India" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>PIN Code *</label>
+                                    <input type="text" name="zip" id="a4Zip" required>
+                                </div>
+                            </div>
+                        </div>
 
-
+                        <!-- Permanent Address Card -->
+                        <div style="background: #f8fafc; padding: 15px; border-radius: var(--radius-sm); border: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h5 style="font-size: 0.85rem; font-weight: 700; color: #334155;">Permanent Address</h5>
+                                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--primary-600); cursor: pointer;" class="no-print">
+                                    <input type="checkbox" id="a4SameAddress" onchange="syncPermanentAddress(this.checked)"> Same as Current Address
+                                </label>
+                            </div>
+                            <div class="a4-form-row">
+                                <div class="a4-form-group" style="grid-column: span 2;">
+                                    <label>Address Line 1 *</label>
+                                    <input type="text" name="permAddress" id="a4PermAddress" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>Address Line 2</label>
+                                    <input type="text" name="permAddress2" id="a4PermAddress2">
+                                </div>
+                            </div>
+                            <div class="a4-form-row">
+                                <div class="a4-form-group">
+                                    <label>City *</label>
+                                    <input type="text" name="permCity" id="a4PermCity" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>District *</label>
+                                    <input type="text" name="permDistrict" id="a4PermDistrict" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>State *</label>
+                                    <input type="text" name="permState" id="a4PermState" required>
+                                </div>
+                            </div>
+                            <div class="a4-form-row">
+                                <div class="a4-form-group">
+                                    <label>Country *</label>
+                                    <input type="text" name="permCountry" id="a4PermCountry" value="India" required>
+                                </div>
+                                <div class="a4-form-group">
+                                    <label>PIN Code *</label>
+                                    <input type="text" name="permZip" id="a4PermZip" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- STEP 5: Login / Authorization -->
-                    <div class="wizard-step" id="step5">
-                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px;">
-                            <i class="bx bx-key"></i> Customer Account Authorization
-                        </h4>
-
-                        <!-- Primary account user / Corporate admin login -->
-                        <div class="form-row row-2">
-                            <div class="form-group">
-                                <label id="lblWizUsername">Customer Login Username *</label>
-                                <input type="text" name="username" id="wizUsername">
+                    <!-- SECTION E – KYC DETAILS -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-check-shield"></i> Section E – KYC Verification Details
+                        </div>
+                        <p style="font-size: 0.72rem; color: #64748b; margin-top: -10px; margin-bottom: 15px;">Please provide legal documentation details. Attach copies of verification documents beside each field.</p>
+                        
+                        <div class="a4-form-row" style="align-items: center;">
+                            <div class="a4-form-group" style="flex: 2;">
+                                <label>Aadhaar Card Number * (12 Digits)</label>
+                                <input type="text" name="aadhaar" id="a4Aadhaar" placeholder="Enter Aadhaar Number" required>
                             </div>
-                            <div class="form-group">
-                                <label id="lblWizPassword">Customer Login Password *</label>
-                                <input type="password" name="password" id="wizPassword">
+                            <div class="a4-form-group" style="flex: 1;" class="no-print">
+                                <label>Aadhaar Proof Card</label>
+                                <input type="file" name="aadhaarFile">
                             </div>
                         </div>
 
-                        <!-- Joint account user login (visible only for joint accounts) -->
-                        <div class="form-row row-2" id="wizJointAuthRow" style="margin-top:20px; display:none;">
-                            <div class="form-group">
-                                <label>Joint Holder Login Username *</label>
-                                <input type="text" id="wizJointUserDisplay" readonly style="background:rgba(99,102,241,0.01); color:var(--gray-700);">
+                        <div class="a4-form-row" style="align-items: center; margin-top: 10px;">
+                            <div class="a4-form-group" style="flex: 2;">
+                                <label>PAN Card Number * (10 Alpha-Numeric)</label>
+                                <input type="text" name="pan" id="a4Pan" placeholder="Enter PAN Number" required>
                             </div>
-                            <div class="form-group">
-                                <label>Joint Holder Login Password *</label>
-                                <input type="text" id="wizJointPassDisplay" readonly style="background:rgba(99,102,241,0.01); color:var(--gray-700);">
-                            </div>
-                        </div>
-
-                        <!-- Corporate partners login details (visible only for corporate accounts) -->
-                        <div id="wizPartnersAuthSection" style="margin-top:20px; display:none;">
-                            <h5 style="font-size:0.9rem; font-weight:700; color:var(--primary-500); margin-bottom:12px; border-bottom:1.5px solid var(--gray-100); padding-bottom:5px;">Partner Login Credentials</h5>
-                            <div id="wizPartnersAuthContainer">
-                                <!-- Populated dynamically by JS -->
+                            <div class="a4-form-group" style="flex: 1;" class="no-print">
+                                <label>PAN Card Proof</label>
+                                <input type="file" name="panFile">
                             </div>
                         </div>
 
-                        <!-- Read only auto-generated PIN box -->
-                        <div class="form-row row-2" style="margin-top:20px;">
-                            <div class="form-group">
-                                <label style="color:var(--primary-500); font-weight:700;">Secure Signatory PIN (Auto-Generated) *</label>
-                                <input type="text" name="pin" id="wizPin" readonly style="border:1.5px solid var(--primary-300); background:rgba(99,102,241,0.03); font-weight:800; font-family:monospace; font-size:1.15rem; color:var(--primary-700); text-align:center; letter-spacing:4px;">
-                                <small style="display:block; color:var(--gray-500); font-size:0.75rem; margin-top:5px;">This 4-digit PIN is generated randomly for account card and counter operations.</small>
+                        <div class="a4-form-row" style="align-items: center; margin-top: 10px;">
+                            <div class="a4-form-group" style="flex: 2;">
+                                <label>Passport Number (Optional)</label>
+                                <input type="text" name="passportNo" placeholder="Passport Number">
+                            </div>
+                            <div class="a4-form-group" style="flex: 1;" class="no-print">
+                                <label>Passport Copy</label>
+                                <input type="file" name="passportFile">
+                            </div>
+                        </div>
+
+                        <div class="a4-form-row" style="align-items: center; margin-top: 10px;">
+                            <div class="a4-form-group" style="flex: 2;">
+                                <label>Driving License No. (Optional)</label>
+                                <input type="text" name="dlNo" placeholder="DL Number">
+                            </div>
+                            <div class="a4-form-group" style="flex: 1;" class="no-print">
+                                <label>Driving License Copy</label>
+                                <input type="file" name="dlFile">
+                            </div>
+                        </div>
+
+                        <div class="a4-form-row" style="align-items: center; margin-top: 10px;">
+                            <div class="a4-form-group" style="flex: 2;">
+                                <label>Voter Identity Card (Optional)</label>
+                                <input type="text" name="voterNo" placeholder="Voter Card ID">
+                            </div>
+                            <div class="a4-form-group" style="flex: 1;" class="no-print">
+                                <label>Voter ID Card Copy</label>
+                                <input type="file" name="voterFile">
                             </div>
                         </div>
                     </div>
 
-                    <!-- STEP 6: Initial Deposit Payment -->
-                    <div class="wizard-step" id="step6">
-                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 25px;">
-                            <i class="bx bx-wallet"></i> Initial Account Deposit
-                        </h4>
-                        <div class="form-row row-2">
-                            <div class="form-group">
-                                <label style="font-weight:700;">Initial Account Opening Deposit (₹) *</label>
-                                <input type="number" step="0.01" name="initialAmount" id="wizDeposit" value="1000.00" onkeyup="updateChequeAmount(this.value)" style="font-weight:700; font-size:1.1rem; color:var(--gray-800);">
-                                <small style="display:block; color:var(--gray-500); font-size:0.75rem; margin-top:5px;" id="wizMinDepositNote">Minimum initial amount required is ₹1,000.00.</small>
+                    <!-- SECTION F – LOGIN CREDENTIALS -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-key"></i> Section F – E-Banking Login Credentials
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Banking Username *</label>
+                                <input type="text" name="username" id="a4Username" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Account Password *</label>
+                                <input type="password" name="password" id="a4Password" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Confirm Password *</label>
+                                <input type="password" id="a4ConfirmPassword" required>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>4-Digit Secure PIN *</label>
+                                <input type="password" name="pin" id="a4Pin" maxlength="4" placeholder="••••" required style="font-family: monospace; text-align: center; font-size: 1.1rem; letter-spacing: 4px;">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Security Question *</label>
+                                <select name="securityQuestion">
+                                    <option value="pet">What was the name of your first pet?</option>
+                                    <option value="city">In which city were you born?</option>
+                                    <option value="school">What was the name of your primary school?</option>
+                                </select>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Security Answer *</label>
+                                <input type="text" name="securityAnswer" required>
                             </div>
                         </div>
                     </div>
 
-                    <!-- STEP 7: Summary -->
-                    <div class="wizard-step" id="step7">
-                        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 5px;">Verify Opened Account Summary</h4>
-                        <p style="font-size: 0.82rem; color: var(--gray-500); margin-bottom: 25px;">Please confirm all profiles and deposits are entered accurately.</p>
-
-                        <div style="background:var(--gray-50); border:1.5px solid var(--gray-200); border-radius:var(--radius-md); padding:25px;" id="wizSummaryCard">
-                            <!-- Populated dynamically by JS -->
+                    <!-- SECTION G – NOMINEE DETAILS -->
+                    <div class="a4-section-card" id="a4NomineeSection">
+                        <div class="a4-section-title">
+                            <i class="bx bx-user-voice"></i> Section G – Nominee Details
                         </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Nominee Name *</label>
+                                <input type="text" name="nomineeName" id="a4NomineeName" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Relationship to Holder *</label>
+                                <input type="text" name="nomineeRelationship" id="a4NomineeRel" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Date of Birth *</label>
+                                <input type="date" name="nomineeDob" id="a4NomineeDob" required>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Mobile Number *</label>
+                                <input type="tel" name="nomineePhone" id="a4NomineePhone" required>
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Aadhaar Card No. *</label>
+                                <input type="text" name="nomineeAadhaar" id="a4NomineeAadh" required>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group" style="grid-column: span 3;">
+                                <label>Address *</label>
+                                <input type="text" name="nomineeAddress" id="a4NomineeAddr" required>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- Mandatory Check Mandate Button -->
-                        <div style="margin-top: 30px; background: rgba(16, 185, 129, 0.05); border: 1.5px dashed var(--accent-emerald); border-radius: var(--radius-md); padding: 20px;">
-                            <label style="display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-weight: 600; font-size: 0.85rem; color: var(--gray-700);">
-                                <input type="checkbox" id="wizMandateCheckbox" onchange="toggleWizardMandateState(this.checked)" style="margin-top: 4px; width: 16px; height: 16px; flex-shrink: 0;">
-                                <span id="mandateLabelText">Mandate confirmation statement here</span>
+                    <!-- SECTION H – JOINT ACCOUNT HOLDER -->
+                    <div class="a4-section-card" id="a4JointHolderSection" style="display: none;">
+                        <div class="a4-section-title">
+                            <i class="bx bx-group"></i> Section H – Joint Account Holder Details
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Full Name *</label>
+                                <input type="text" name="joint_firstName" id="a4JointName">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Relationship to Primary *</label>
+                                <input type="text" name="joint_relationship" id="a4JointRel">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Mobile Number *</label>
+                                <input type="tel" name="joint_phone" id="a4JointPhone">
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Email Address *</label>
+                                <input type="email" name="joint_email" id="a4JointEmail">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Aadhaar Number *</label>
+                                <input type="text" name="joint_aadhaar" id="a4JointAadh">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>PAN Card Number *</label>
+                                <input type="text" name="joint_pan" id="a4JointPan">
+                            </div>
+                        </div>
+                        <div class="a4-form-row" style="margin-top: 15px; border-top: 1.5px dashed #e2e8f0; padding-top: 15px;">
+                            <div class="a4-form-group">
+                                <label>Upload Joint Holder Photograph</label>
+                                <input type="file" name="jointAvatar">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Joint Holder Signature Proof</label>
+                                <input type="file" name="jointSignatureFile">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION I – SAVINGS ACCOUNT DETAILS -->
+                    <div class="a4-section-card" id="a4SavingsDetailsCard">
+                        <div class="a4-section-title">
+                            <i class="bx bx-percentage"></i> Section I – Savings Account Terms
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>Interest Rate (p.a.)</label>
+                                <input type="text" value="4.00 %" readonly style="background: #f1f5f9; font-weight: 700;">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Minimum Balance Requirement</label>
+                                <input type="text" value="₹ 1,000.00" readonly style="background: #f1f5f9; font-weight: 700;">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Interest Calculation Frequency</label>
+                                <input type="text" value="Quarterly Accrual" readonly style="background: #f1f5f9; font-weight: 700;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION J – CURRENT ACCOUNT DETAILS -->
+                    <div class="a4-section-card" id="a4CurrentDetailsCard" style="display: none;">
+                        <div class="a4-section-title">
+                            <i class="bx bx-briefcase-alt-2"></i> Section J – Current Account Terms & Entity Details
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group" style="grid-column: span 2;">
+                                <label>Business Legal Name *</label>
+                                <input type="text" name="businessName" id="a4BusName" placeholder="Enter Business Legal Name">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Business Type / Constitution *</label>
+                                <select name="companyCategory" id="a4BusCategory">
+                                    <option value="proprietorship">Sole Proprietorship</option>
+                                    <option value="partnership">Partnership Firm</option>
+                                    <option value="private_limited">Private Limited Company</option>
+                                    <option value="public_limited">Public Limited Company</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="a4-form-row">
+                            <div class="a4-form-group">
+                                <label>GST Registration Number * (15 Characters)</label>
+                                <input type="text" name="gstin" id="a4BusGst" placeholder="Enter 15-digit GSTIN">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Business Registration / Incorporation No. *</label>
+                                <input type="text" name="businessRegNo" id="a4BusRegNo" placeholder="Enter Incorporation Certificate Number">
+                            </div>
+                            <div class="a4-form-group">
+                                <label>Minimum Balance Requirement</label>
+                                <input type="text" value="₹ 5,000.00" readonly style="background: #f1f5f9; font-weight: 700;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION K – DOCUMENT CHECKLIST -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-checkbox-checked"></i> Section K – Attached Document Checklist
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <label style="display: flex; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                <input type="checkbox" name="checklist_photo" checked> Passport Size Photograph
+                            </label>
+                            <label style="display: flex; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                <input type="checkbox" name="checklist_aadhaar" checked> Aadhaar Card (Copy)
+                            </label>
+                            <label style="display: flex; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                <input type="checkbox" name="checklist_pan" checked> PAN Card (Copy)
+                            </label>
+                            <label style="display: flex; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                <input type="checkbox" name="checklist_address" checked> Residential Address Proof
+                            </label>
+                            <label style="display: flex; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                <input type="checkbox" name="checklist_income"> Income Proof / Salary Slips
+                            </label>
+                            <label style="display: flex; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">
+                                <input type="checkbox" name="checklist_signature" checked> Signature Verification Proof
+                            </label>
+                            <label style="display: none; gap: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600;" id="a4ChecklistBusLabel">
+                                <input type="checkbox" name="checklist_business"> Business Registration Certificate
                             </label>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="wizPrevBtn" onclick="navigateWizardStep(-1)">Back</button>
-                    <button type="button" class="btn btn-primary" id="wizNextBtn" onclick="navigateWizardStep(1)">Next Step</button>
-                    <button type="submit" class="btn btn-success" style="display:none;" id="wizSubmitBtn" disabled>Open Account</button>
+
+                    <!-- SECTION L – DECLARATION -->
+                    <div class="a4-section-card">
+                        <div class="a4-section-title">
+                            <i class="bx bx-check-square"></i> Section L – Declaration & Agreement
+                        </div>
+                        <p style="font-size: 0.82rem; line-height: 1.6; text-align: justify; color: #475569; margin: 0 0 25px 0;">
+                            I/We hereby declare that all details, certificates, and address validations provided above are true, complete, and correct to the best of my/our knowledge. I/We understand and agree that any false, misleading, or incorrect statement will result in the immediate closure of this bank ledger account. I/We declare that I/we have read, understood, and agreed to be bound by the Terms and Conditions of Vertex Galaxy Bank governing ledger operations, minimum balances, charge regimes, and online transactions.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px;" class="mobile-grid-1">
+                            <div>
+                                <div class="a4-form-row">
+                                    <div class="a4-form-group">
+                                        <label>Place *</label>
+                                        <input type="text" name="place" id="a4Place" value="Galaxy City" required>
+                                    </div>
+                                    <div class="a4-form-group">
+                                        <label>Date *</label>
+                                        <input type="date" name="applicationDate" id="a4AppDate" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; border-left: 1.5px dashed #cbd5e1; padding-left: 20px;">
+                                <div style="width: 100%; border-bottom: 1.5px solid #1e293b; height: 50px;"></div>
+                                <span style="font-size: 0.72rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-top: 8px;">Applicant Signature</span>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; margin-top: 40px; border-top: 1.5px dashed #e2e8f0; padding-top: 25px;" class="mobile-grid-1">
+                            <div style="display: flex; flex-direction: column; justify-content: flex-end;">
+                                <div style="width: 80%; border-bottom: 1px solid #94a3b8; height: 35px;"></div>
+                                <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 6px;">Bank Verifying Official Signature</span>
+                            </div>
+                            <div style="border: 1px solid #cbd5e1; border-radius: var(--radius-sm); height: 110px; display: flex; align-items: center; justify-content: center; background: #fafafa; border-style: dotted;">
+                                <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Galaxy Branch Stamp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SYSTEM GENERATED INFORMATION -->
+                    <div style="border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 15px; margin-bottom: 25px; background: #fafafa;">
+                        <h6 style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin: 0 0 10px 0;">System Generated Information (Database Sync)</h6>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.72rem; line-height: 1.8;">
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="color: #64748b; font-weight: 600; width: 25%;">Customer ID:</td>
+                                <td style="font-weight: 700; color: #1e293b;">[PENDING AUTO-GENERATION]</td>
+                                <td style="color: #64748b; font-weight: 600; width: 25%;">CIF Number:</td>
+                                <td style="font-weight: 700; color: #1e293b;">[PENDING AUTO-GENERATION]</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="color: #64748b; font-weight: 600;">Account Number:</td>
+                                <td style="font-weight: 700; color: #1e293b;">[PENDING AUTO-GENERATION]</td>
+                                <td style="color: #64748b; font-weight: 600;">Account Status:</td>
+                                <td style="font-weight: 700; color: #10b981; text-transform: uppercase;">ACTIVE</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="color: #64748b; font-weight: 600;">KYC Status:</td>
+                                <td style="font-weight: 700; color: #3b82f6; text-transform: uppercase;">VERIFIED & APPROVED</td>
+                                <td style="color: #64748b; font-weight: 600;">ATM Card Number:</td>
+                                <td style="font-weight: 700; color: #1e293b;">[AUTO-GENERATED UPON APPROVAL]</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #64748b; font-weight: 600;">Passbook Booklet Number:</td>
+                                <td style="font-weight: 700; color: #1e293b;">[AUTO-GENERATED ON PRINT]</td>
+                                <td style="color: #64748b; font-weight: 600;">Created Date:</td>
+                                <td style="font-weight: 700; color: #1e293b;" id="systemCreatedDate">-</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- FIVE ACTION BUTTONS (FOOTER) -->
+                    <div style="display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap; margin-top: 30px;" class="no-print">
+                        <button type="submit" class="btn btn-success" style="background: #10b981; color: white; border: none; font-weight: 700; padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; cursor: pointer; flex-grow: 1; transition: background 0.2s;">
+                            <i class="bx bx-check-circle"></i> Submit Application
+                        </button>
+                        <button type="button" onclick="saveA4FormDraft()" class="btn btn-primary" style="background: #3b82f6; color: white; border: none; font-weight: 700; padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; cursor: pointer; flex-grow: 1; transition: background 0.2s;">
+                            <i class="bx bx-save"></i> Save as Draft
+                        </button>
+                        <button type="button" onclick="window.print()" class="btn" style="background: #8b5cf6; color: white; border: none; font-weight: 700; padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; cursor: pointer; flex-grow: 1; transition: background 0.2s;">
+                            <i class="bx bx-printer"></i> Print Application
+                        </button>
+                        <button type="button" onclick="resetA4Form()" class="btn" style="background: #f97316; color: white; border: none; font-weight: 700; padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; cursor: pointer; flex-grow: 1; transition: background 0.2s;">
+                            <i class="bx bx-refresh"></i> Reset
+                        </button>
+                        <button type="button" onclick="closeModal('createAccountModal')" class="btn" style="background: #ef4444; color: white; border: none; font-weight: 700; padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; cursor: pointer; flex-grow: 1; transition: background 0.2s;">
+                            <i class="bx bx-x"></i> Cancel
+                        </button>
+                    </div>
+
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ==========================================
-         ACCOUNT STATEMENT LEDGER MODAL
-         ========================================== -->
     <!-- ==========================================
          ACCOUNT STATEMENT LEDGER MODAL
          ========================================== -->
@@ -3365,16 +3757,30 @@
 
         // Live table search filtering
         function filterAccountsTable() {
-            var input = document.getElementById('accountSearchInput');
-            var filter = input.value.toLowerCase().trim();
+            var searchInput = document.getElementById('accountSearchInput');
+            var searchVal = searchInput.value.toLowerCase().trim();
+            
+            var typeSelect = document.getElementById('accountTypeFilter');
+            var typeVal = typeSelect ? typeSelect.value.toLowerCase() : "";
+            
+            var statusSelect = document.getElementById('accountStatusFilter');
+            var statusVal = statusSelect ? statusSelect.value.toLowerCase() : "";
+
             var rows = document.querySelectorAll('.account-row-data');
 
             rows.forEach(function (row) {
                 var custId = row.querySelector('.td-cust-id').textContent.toLowerCase();
                 var custName = row.querySelector('.td-cust-name').textContent.toLowerCase();
                 var accNum = row.querySelector('.td-acc-num').textContent.toLowerCase();
+                
+                var rowType = row.getAttribute('data-account-type') ? row.getAttribute('data-account-type').toLowerCase() : "";
+                var rowStatus = row.getAttribute('data-account-status') ? row.getAttribute('data-account-status').toLowerCase() : "";
 
-                if (custId.includes(filter) || custName.includes(filter) || accNum.includes(filter)) {
+                var matchesSearch = custId.includes(searchVal) || custName.includes(searchVal) || accNum.includes(searchVal);
+                var matchesType = typeVal === "" || rowType === typeVal;
+                var matchesStatus = statusVal === "" || rowStatus === statusVal;
+
+                if (matchesSearch && matchesType && matchesStatus) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -3754,387 +4160,237 @@
             }
         }
 
-        // WIZARD WIDE STEP MANAGEMENT
+        // ==========================================
+        // PREMIUM A4 OPEN ACCOUNT APPLICATION HANDLERS
+        // ==========================================
         function openWizardModal() {
-            currentWizardStep = 1;
-            updateWizardStepUI();
-
-            // Clean/Reset some forms
-            document.getElementById('createAccountForm').reset();
-            document.getElementById('partnerCountInput').value = "1";
-            document.getElementById('wizDeposit').value = "1000.00";
-
-            // Clear extra partners
-            var container = document.getElementById('dynamicPartnersContainer');
-            var card1 = document.getElementById('partner_card_1');
-            container.innerHTML = '';
-            container.appendChild(card1);
-
-            selectAccountCategory('savings_single');
-            openModal('createAccountModal');
-        }
-
-        function selectAccountCategory(cat) {
-            var opt1 = document.getElementById('optSavingsSingle');
-            var opt2 = document.getElementById('optSavingsJoint');
-            var opt3 = document.getElementById('optCurrent');
-
-            opt1.style.borderColor = 'var(--gray-200)'; opt1.style.background = 'white';
-            opt2.style.borderColor = 'var(--gray-200)'; opt2.style.background = 'white';
-            opt3.style.borderColor = 'var(--gray-200)'; opt3.style.background = 'white';
-
-            var wizType = document.getElementById('wizAccountType');
-            var wizHold = document.getElementById('wizHoldingType');
-            var depositInput = document.getElementById('wizDeposit');
-            var minDepositNote = document.getElementById('wizMinDepositNote');
-
-            if (cat === 'savings_single') {
-                opt1.style.borderColor = 'var(--primary-500)'; opt1.style.background = 'rgba(99,102,241,0.03)';
-                wizType.value = 'savings';
-                wizHold.value = 'single';
-                depositInput.value = "1000.00";
-                minDepositNote.textContent = "Minimum initial amount required is ₹1,000.00.";
-            } else if (cat === 'savings_joint') {
-                opt2.style.borderColor = 'var(--secondary-500)'; opt2.style.background = 'rgba(236,72,153,0.03)';
-                wizType.value = 'savings';
-                wizHold.value = 'joint';
-                depositInput.value = "1000.00";
-                minDepositNote.textContent = "Minimum initial amount required is ₹1,000.00.";
-            } else {
-                opt3.style.borderColor = 'var(--accent-emerald)'; opt3.style.background = 'rgba(16,185,129,0.03)';
-                wizType.value = 'current';
-                wizHold.value = 'single';
-                depositInput.value = "5000.00";
-                minDepositNote.textContent = "Minimum initial amount required is ₹5,000.00.";
-            }
-            updateChequeAmount(depositInput.value);
-        }
-
-        function updateWizardStepUI() {
-            // Hide all steps
-            for (var i = 1; i <= 7; i++) {
-                document.getElementById('step' + i).classList.remove('active');
-                document.getElementById('node' + i).classList.remove('active', 'completed');
-                document.getElementById('node' + i).style.display = ''; // reset display
-            }
-
-            var wizType = document.getElementById('wizAccountType').value;
-            var wizHold = document.getElementById('wizHoldingType').value;
-            if (wizType === 'current') {
-                // Current has no step 3 (Nominee)
-                document.getElementById('node3').style.display = 'none';
-            }
-
-            // Toggle step 2 container sub-fields visibility
-            var singleFields = document.getElementById('wizSavingsSingleFields');
-            var jointFields = document.getElementById('wizSavingsJointFields');
-            var currentFields = document.getElementById('wizCurrentFields');
-
-            if (wizType === 'savings') {
-                if (singleFields) singleFields.style.display = 'block';
-                if (jointFields) jointFields.style.display = (wizHold === 'joint') ? 'block' : 'none';
-                if (currentFields) currentFields.style.display = 'none';
-            } else if (wizType === 'current') {
-                if (singleFields) singleFields.style.display = 'none';
-                if (jointFields) jointFields.style.display = 'none';
-                if (currentFields) currentFields.style.display = 'block';
-            }
-
-            // Set node states
-            for (var i = 1; i <= 7; i++) {
-                var node = document.getElementById('node' + i);
-                if (i < currentWizardStep) {
-                    node.classList.add('completed');
-                } else if (i === currentWizardStep) {
-                    node.classList.add('active');
-                }
-            }
-
-            // Set active step visibility
-            document.getElementById('step' + currentWizardStep).classList.add('active');
-
-            // Set line indicator width
-            var activeNodesCount = 0;
-            var totalVisibleNodes = 0;
-            for (var i = 1; i <= 7; i++) {
-                var n = document.getElementById('node' + i);
-                if (n.style.display !== 'none') {
-                    totalVisibleNodes++;
-                    if (i <= currentWizardStep) {
-                        activeNodesCount++;
-                    }
-                }
-            }
-            var linePct = ((activeNodesCount - 1) / (totalVisibleNodes - 1)) * 100;
-            document.getElementById('stepLine').style.width = linePct + '%';
-
-            // Set buttons state
-            var prevBtn = document.getElementById('wizPrevBtn');
-            var nextBtn = document.getElementById('wizNextBtn');
-            var submitBtn = document.getElementById('wizSubmitBtn');
-
-            prevBtn.style.display = currentWizardStep === 1 ? 'none' : '';
-            nextBtn.style.display = currentWizardStep === 7 ? 'none' : '';
-            submitBtn.style.display = currentWizardStep === 7 ? '' : 'none';
-
-            if (currentWizardStep === 4) {
-                var passbookLabel = document.getElementById('wizPassbookLabel');
-                if (wizType === 'current') {
-                    // Passbook not available for current accounts
-                    document.getElementById('wizPassbook').checked = false;
-                    passbookLabel.style.display = 'none';
-                } else {
-                    passbookLabel.style.display = '';
-                }
-            }
-
-            if (currentWizardStep === 5) {
-                // Generate secure random values
-                if (!document.getElementById('wizPin').value) {
-                    var randPin = Math.floor(1000 + Math.random() * 9000);
-                    document.getElementById('wizPin').value = randPin;
-                    document.getElementById('p1_pin').value = randPin;
-                    
-                    // Generate random login username & passwords
-                    var wizHold = document.getElementById('wizHoldingType').value;
-                    var randNum = Math.floor(100 + Math.random() * 900);
-                    
-                    if (wizType === 'savings') {
-                        var first = document.getElementById('wizFirst').value.toLowerCase().replace(/[^a-z]/g, '');
-                        var last = document.getElementById('wizLast').value.toLowerCase().replace(/[^a-z]/g, '');
-                        document.getElementById('wizUsername').value = (first + last).substring(0, 8) + randNum;
-                        document.getElementById('wizPassword').value = "VgbPass" + randPin;
-                        
-                        if (wizHold === 'joint') {
-                            var jfirst = document.getElementById('wizJointFirst').value.toLowerCase().replace(/[^a-z]/g, '');
-                            var jlast = document.getElementById('wizJointLast').value.toLowerCase().replace(/[^a-z]/g, '');
-                            document.getElementById('wizJointUser').value = (jfirst + jlast).substring(0, 8) + randNum;
-                            document.getElementById('wizJointPass').value = "VgbPass" + (randPin + 1);
-                            document.getElementById('wizJointPin').value = randPin;
-                        }
-                    } else {
-                        var bus = document.getElementById('wizBusName').value.toLowerCase().replace(/[^a-z]/g, '');
-                        document.getElementById('wizUsername').value = bus.substring(0, 8) + randNum;
-                        document.getElementById('wizPassword').value = "VgbCorp" + randPin;
-                        document.getElementById('p1_pin').value = randPin;
-                        
-                        // Auto-generate credentials for Corporate Partner 1
-                        var p1First = document.getElementById('p1_first').value.toLowerCase().replace(/[^a-z]/g, '');
-                        var p1Last = document.getElementById('p1_last').value.toLowerCase().replace(/[^a-z]/g, '');
-                        document.getElementById('p1_user').value = (p1First + p1Last).substring(0, 8) + randNum;
-                        document.getElementById('p1_pass').value = "VgbPass" + (randPin + 1);
-
-                        // Auto-generate credentials for any additional dynamic partners
-                        for (var p = 2; p <= partnerCount; p++) {
-                            var fInput = document.querySelector('input[name="partner_firstName_' + p + '"]');
-                            var lInput = document.querySelector('input[name="partner_lastName_' + p + '"]');
-                            var uInput = document.querySelector('input[name="partner_username_' + p + '"]');
-                            var pInput = document.querySelector('input[name="partner_password_' + p + '"]');
-                            
-                            if (fInput && lInput && uInput && pInput) {
-                                var pFirst = fInput.value.toLowerCase().replace(/[^a-z]/g, '');
-                                var pLast = lInput.value.toLowerCase().replace(/[^a-z]/g, '');
-                                uInput.value = (pFirst + pLast).substring(0, 8) + (randNum + p - 1);
-                                pInput.value = "VgbPass" + (randPin + p);
-                            }
-                        }
-                    }
-                }
+            try {
+                // Set Date
+                var today = new Date().toISOString().split('T')[0];
+                var a4AppDate = document.getElementById('a4AppDate');
+                if (a4AppDate) a4AppDate.value = today;
                 
-                // Show/hide joint auth display fields and sync values
-                var wizHold = document.getElementById('wizHoldingType').value;
-                var wizJointAuthRow = document.getElementById('wizJointAuthRow');
-                if (wizJointAuthRow) {
-                    if (wizType === 'savings' && wizHold === 'joint') {
-                        wizJointAuthRow.style.display = 'flex';
-                        var userVal = document.getElementById('wizJointUser').value;
-                        var passVal = document.getElementById('wizJointPass').value;
-                        document.getElementById('wizJointUserDisplay').value = userVal;
-                        document.getElementById('wizJointPassDisplay').value = passVal;
-                    } else {
-                        wizJointAuthRow.style.display = 'none';
-                    }
-                }
-
-                // Show/hide corporate partners auth display fields and sync values
-                var wizPartnersAuthSection = document.getElementById('wizPartnersAuthSection');
-                var wizPartnersAuthContainer = document.getElementById('wizPartnersAuthContainer');
-                if (wizPartnersAuthSection && wizPartnersAuthContainer) {
-                    if (wizType === 'current') {
-                        wizPartnersAuthSection.style.display = 'block';
-                        var html = '';
-                        
-                        // Partner 1
-                        var p1First = document.getElementById('p1_first').value;
-                        var p1Last = document.getElementById('p1_last').value;
-                        var p1User = document.getElementById('p1_user').value;
-                        var p1Pass = document.getElementById('p1_pass').value;
-                        html += `
-                            <div style="margin-bottom:15px; background:rgba(99,102,241,0.01); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--gray-100);">
-                                <div style="font-weight:700; font-size:0.8rem; color:var(--gray-800); margin-bottom:5px;">\${p1First} \${p1Last} (Partner #1)</div>
-                                <div style="display:flex; gap:15px; font-size:0.8rem;">
-                                    <span><strong>Username:</strong> \${p1User}</span>
-                                    <span><strong>Password:</strong> \${p1Pass}</span>
-                                </div>
-                            </div>
-                        `;
-                        
-                        // Dynamic partners
-                        for (var p = 2; p <= partnerCount; p++) {
-                            var fInput = document.querySelector('input[name="partner_firstName_' + p + '"]');
-                            var lInput = document.querySelector('input[name="partner_lastName_' + p + '"]');
-                            var uInput = document.querySelector('input[name="partner_username_' + p + '"]');
-                            var pInput = document.querySelector('input[name="partner_password_' + p + '"]');
-                            
-                            if (fInput && lInput && uInput && pInput) {
-                                html += `
-                                    <div style="margin-bottom:15px; background:rgba(99,102,241,0.01); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--gray-100);">
-                                        <div style="font-weight:700; font-size:0.8rem; color:var(--gray-800); margin-bottom:5px;">\${fInput.value} \${lInput.value} (Partner #\${p})</div>
-                                        <div style="display:flex; gap:15px; font-size:0.8rem;">
-                                            <span><strong>Username:</strong> \${uInput.value}</span>
-                                            <span><strong>Password:</strong> \${pInput.value}</span>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-                        }
-                        wizPartnersAuthContainer.innerHTML = html;
-                    } else {
-                        wizPartnersAuthSection.style.display = 'none';
-                    }
-                }
-            }
-
-            if (currentWizardStep === 7) {
-                // Bind all names inside cheque and passbook review
-                var wizHold = document.getElementById('wizHoldingType').value;
-                if (wizType === 'savings') {
-                    var first = document.getElementById('wizFirst').value;
-                    var last = document.getElementById('wizLast').value;
-                    var name = first + " " + last;
-                    document.getElementById('wizCardHolderName').textContent = name.toUpperCase();
-                    document.getElementById('wizChequeSign').textContent = name;
-                    document.getElementById('pbWizName').textContent = name.toUpperCase();
-                } else {
-                    var bus = document.getElementById('wizBusName').value;
-                    var first = document.getElementById('p1_first').value;
-                    var last = document.getElementById('p1_last').value;
-                    document.getElementById('wizCardHolderName').textContent = bus.substring(0, 19).toUpperCase();
-                    document.getElementById('wizChequeSign').textContent = first + " " + last;
-                }
+                var officeAppDate = document.getElementById('officeAppDate');
+                if (officeAppDate) officeAppDate.textContent = today;
                 
-                // Build final summary card
-                buildSummaryScreen();
+                var systemCreatedDate = document.getElementById('systemCreatedDate');
+                if (systemCreatedDate) systemCreatedDate.textContent = today;
+
+                // Generate secure random PIN
+                var randPin = Math.floor(1000 + Math.random() * 9000);
+                var a4Pin = document.getElementById('a4Pin');
+                if (a4Pin) a4Pin.value = randPin;
+
+                // Generate random username & password
+                var randNum = Math.floor(100 + Math.random() * 900);
+                var a4Username = document.getElementById('a4Username');
+                if (a4Username) a4Username.value = "vgbUser" + randNum;
+                
+                var a4Password = document.getElementById('a4Password');
+                if (a4Password) a4Password.value = "VgbPass" + randPin;
+                
+                var a4ConfirmPassword = document.getElementById('a4ConfirmPassword');
+                if (a4ConfirmPassword) a4ConfirmPassword.value = "VgbPass" + randPin;
+
+                handleAccountTypeChange();
+                handleHoldingTypeChange();
+                
+                // Try loading draft
+                loadA4FormDraft();
+
+                openModal('createAccountModal');
+            } catch (err) {
+                console.error("Error in openWizardModal:", err);
+                alert("Error initializing Create Account modal: " + err.message);
             }
         }
 
-        function navigateWizardStep(val) {
-            var target = currentWizardStep + val;
-            var wizType = document.getElementById('wizAccountType').value;
+        // Handle Account Type Change logic
+        function handleAccountTypeChange() {
+            try {
+                var typeElem = document.getElementById('a4AccountType');
+                if (!typeElem) return;
+                var type = typeElem.value;
+                var minAmt = 1000;
+                var noteText = "Minimum initial amount required is ₹1,000.00.";
 
-            if (val > 0) {
-                // Validate before proceeding to next step
-                if (!validateWizardStep(currentWizardStep)) return;
-            }
-
-            if (wizType === 'current' && target === 3) {
-                // Skip nominee step for current accounts
-                currentWizardStep = val > 0 ? 4 : 2;
-            } else {
-                currentWizardStep = target;
-            }
-
-            updateWizardStepUI();
-        }
-
-        function validateWizardStep(step) {
-            if (step === 2) {
-                var wizType = document.getElementById('wizAccountType').value;
-                var wizHold = document.getElementById('wizHoldingType').value;
-
-                if (wizType === 'savings') {
-                    // Check primary customer inputs
-                    var fields = ['wizFirst', 'wizLast', 'wizDob', 'wizEmail', 'wizPhone', 'wizPan', 'wizAadhaar', 'wizAddress', 'wizCity', 'wizState', 'wizZip', 'wizFather', 'wizMother', 'wizNationality', 'wizPermAddress'];
-                    for (var i = 0; i < fields.length; i++) {
-                        var inp = document.getElementById(fields[i]);
-                        if (!inp.value.trim()) {
-                            alert("Please fill in all primary customer details.");
-                            inp.focus();
-                            return false;
-                        }
-                    }
-                    // Aadhaar validation
-                    var aadh = document.getElementById('wizAadhaar').value.trim();
-                    if (aadh.length !== 12 || isNaN(aadh)) {
-                        alert("Aadhaar Card number must be exactly 12 numeric digits.");
-                        return false;
-                    }
-
-                    if (wizHold === 'joint') {
-                        // Check joint inputs
-                        var jFields = ['wizJointFirst', 'wizJointLast', 'wizJointDob', 'wizJointEmail', 'wizJointPhone', 'wizJointPan', 'wizJointAadhaar', 'wizJointAddress', 'wizJointCity', 'wizJointState', 'wizJointZip', 'wizJointFather', 'wizJointMother', 'wizJointNationality', 'wizJointPermAddress'];
-                        for (var i = 0; i < jFields.length; i++) {
-                            var inp = document.getElementById(jFields[i]);
-                            if (!inp.value.trim()) {
-                                alert("Please fill in all second joint holder details.");
-                                inp.focus();
-                                return false;
-                            }
-                        }
-                        var jaadh = document.getElementById('wizJointAadhaar').value.trim();
-                        if (jaadh.length !== 12 || isNaN(jaadh)) {
-                            alert("Joint holder Aadhaar Card number must be exactly 12 numeric digits.");
-                            return false;
-                        }
-                    }
+                if (type === 'current') {
+                    minAmt = 5000;
+                    noteText = "Minimum initial amount required is ₹5,000.00.";
+                    var savCard = document.getElementById('a4SavingsDetailsCard');
+                    if (savCard) savCard.style.display = 'none';
+                    var curCard = document.getElementById('a4CurrentDetailsCard');
+                    if (curCard) curCard.style.display = 'block';
+                    var chkBus = document.getElementById('a4ChecklistBusLabel');
+                    if (chkBus) chkBus.style.display = 'flex';
+                    var nomSec = document.getElementById('a4NomineeSection');
+                    if (nomSec) nomSec.style.display = 'none';
+                    
+                    // Remove required attribute from Nominee details
+                    setRequired('a4NomineeName', false);
+                    setRequired('a4NomineeRel', false);
+                    setRequired('a4NomineeDob', false);
+                    setRequired('a4NomineePhone', false);
+                    setRequired('a4NomineeAadh', false);
+                    setRequired('a4NomineeAddr', false);
+                    
+                    // Current business inputs are required
+                    setRequired('a4BusName', true);
+                    setRequired('a4BusGst', true);
+                    setRequired('a4BusRegNo', true);
                 } else {
-                    // Check corporate inputs
-                    var cFields = ['wizBusName', 'wizGstin', 'wizBusPan', 'wizBusAadh', 'wizBusPhone', 'wizBusEmail', 'wizBusAddr'];
-                    for (var i = 0; i < cFields.length; i++) {
-                        var inp = document.getElementById(cFields[i]);
-                        if (!inp.value.trim()) {
-                            alert("Please fill in all corporate company details.");
-                            inp.focus();
-                            return false;
-                        }
+                    if (type === 'student') {
+                        minAmt = 500;
+                        noteText = "Minimum initial amount required is ₹500.00.";
+                    } else if (type === 'salary') {
+                        minAmt = 0;
+                        noteText = "Initial deposit is ₹0.00 (Zero Balance).";
+                    } else if (type === 'fd') {
+                        minAmt = 10000;
+                        noteText = "Minimum Fixed Deposit amount is ₹10,000.00.";
+                    } else if (type === 'rd') {
+                        minAmt = 1000;
+                        noteText = "Minimum monthly RD installment is ₹1,000.00.";
                     }
-                    var gstin = document.getElementById('wizGstin').value.trim();
-                    if (gstin.length !== 15) {
-                        alert("GSTIN must be exactly 15 characters long.");
-                        return false;
-                    }
-                    // Validate partner 1
-                    var p1Fields = ['p1_first', 'p1_last'];
-                    for (var i = 0; i < p1Fields.length; i++) {
-                        var inp = document.getElementById(p1Fields[i]);
-                        if (!inp.value.trim()) {
-                            alert("Please fill in partner #1 legal name details.");
-                            inp.focus();
-                            return false;
-                        }
-                    }
-                }
-            } else if (step === 5) {
-                var user = document.getElementById('wizUsername').value.trim();
-                var pass = document.getElementById('wizPassword').value.trim();
+                    var savCard = document.getElementById('a4SavingsDetailsCard');
+                    if (savCard) savCard.style.display = 'block';
+                    var curCard = document.getElementById('a4CurrentDetailsCard');
+                    if (curCard) curCard.style.display = 'none';
+                    var chkBus = document.getElementById('a4ChecklistBusLabel');
+                    if (chkBus) chkBus.style.display = 'none';
+                    var nomSec = document.getElementById('a4NomineeSection');
+                    if (nomSec) nomSec.style.display = 'block';
+                    
+                    // Savings nominee details are required
+                    setRequired('a4NomineeName', true);
+                    setRequired('a4NomineeRel', true);
+                    setRequired('a4NomineeDob', true);
+                    setRequired('a4NomineePhone', true);
+                    setRequired('a4NomineeAadh', true);
+                    setRequired('a4NomineeAddr', true);
 
-                if (user.length < 4) {
-                    alert("Signatory username must be at least 4 characters.");
-                    return false;
+                    // Current business inputs are not required
+                    setRequired('a4BusName', false);
+                    setRequired('a4BusGst', false);
+                    setRequired('a4BusRegNo', false);
                 }
-                if (pass.length < 6) {
-                    alert("Signatory password must be at least 6 characters.");
-                    return false;
-                }
-            } else if (step === 6) {
-                var dep = parseFloat(document.getElementById('wizDeposit').value);
-                var wizType = document.getElementById('wizAccountType').value;
-                var minReq = wizType === 'current' ? 5000.00 : 1000.00;
-                if (isNaN(dep) || dep < minReq) {
-                    alert("Validation failed: Initial amount paid must be at least ₹" + minReq.toFixed(2));
-                    return false;
+
+                var initAmtInput = document.getElementById('a4InitialAmount');
+                if (initAmtInput) initAmtInput.value = minAmt.toFixed(2);
+                var minDepNote = document.getElementById('a4MinDepositNote');
+                if (minDepNote) minDepNote.textContent = noteText;
+            } catch (err) {
+                console.error("Error in handleAccountTypeChange:", err);
+            }
+        }
+
+        // Helper to toggle required attribute
+        function setRequired(id, isReq) {
+            var elem = document.getElementById(id);
+            if (elem) {
+                if (isReq) {
+                    elem.setAttribute('required', 'required');
+                } else {
+                    elem.removeAttribute('required');
                 }
             }
+        }
+
+        // Handle Holding Type Change
+        function handleHoldingTypeChange() {
+            try {
+                var holdTypeElem = document.getElementById('a4HoldingType');
+                if (!holdTypeElem) return;
+                var holdType = holdTypeElem.value;
+                var jointSec = document.getElementById('a4JointHolderSection');
+                if (holdType === 'joint') {
+                    if (jointSec) jointSec.style.display = 'block';
+                    setRequired('a4JointName', true);
+                    setRequired('a4JointRel', true);
+                    setRequired('a4JointPhone', true);
+                    setRequired('a4JointEmail', true);
+                    setRequired('a4JointAadh', true);
+                    setRequired('a4JointPan', true);
+                } else {
+                    if (jointSec) jointSec.style.display = 'none';
+                    setRequired('a4JointName', false);
+                    setRequired('a4JointRel', false);
+                    setRequired('a4JointPhone', false);
+                    setRequired('a4JointEmail', false);
+                    setRequired('a4JointAadh', false);
+                    setRequired('a4JointPan', false);
+                }
+            } catch (err) {
+                console.error("Error in handleHoldingTypeChange:", err);
+            }
+        }
+
+        // Address synchronization check
+        function syncPermanentAddress(checked) {
+            if (checked) {
+                document.getElementById('a4PermAddress').value = document.getElementById('a4Address').value;
+                document.getElementById('a4PermCity').value = document.getElementById('a4City').value;
+                document.getElementById('a4PermState').value = document.getElementById('a4State').value;
+                document.getElementById('a4PermZip').value = document.getElementById('a4Zip').value;
+                
+                document.getElementById('a4PermAddress').readOnly = true;
+                document.getElementById('a4PermCity').readOnly = true;
+                document.getElementById('a4PermState').readOnly = true;
+                document.getElementById('a4PermZip').readOnly = true;
+            } else {
+                document.getElementById('a4PermAddress').readOnly = false;
+                document.getElementById('a4PermCity').readOnly = false;
+                document.getElementById('a4PermState').readOnly = false;
+                document.getElementById('a4PermZip').readOnly = false;
+                
+                document.getElementById('a4PermAddress').value = '';
+                document.getElementById('a4PermCity').value = '';
+                document.getElementById('a4PermState').value = '';
+                document.getElementById('a4PermZip').value = '';
+            }
+        }
+
+        // Client-side validation on Submit
+        function validateA4FormSubmit() {
+            var pass = document.getElementById('a4Password').value;
+            var confirmPass = document.getElementById('a4ConfirmPassword').value;
+            if (pass !== confirmPass) {
+                alert("Passwords do not match!");
+                return false;
+            }
+
+            var pin = document.getElementById('a4Pin').value;
+            if (pin.length !== 4 || isNaN(pin)) {
+                alert("Transaction PIN must be exactly 4 numeric digits.");
+                return false;
+            }
+
+            var aadhaar = document.getElementById('a4Aadhaar').value.trim();
+            if (aadhaar.length !== 12 || isNaN(aadhaar)) {
+                alert("Aadhaar Number must be exactly 12 numeric digits.");
+                return false;
+            }
+
+            var pan = document.getElementById('a4Pan').value.trim();
+            if (pan.length !== 10) {
+                alert("PAN Card Number must be exactly 10 characters.");
+                return false;
+            }
+
+            var type = document.getElementById('a4AccountType').value;
+            var initialAmt = parseFloat(document.getElementById('a4InitialAmount').value);
+            var minAmt = 1000;
+            if (type === 'current') minAmt = 5000;
+            else if (type === 'student') minAmt = 500;
+            else if (type === 'salary') minAmt = 0;
+            else if (type === 'fd') minAmt = 10000;
+            else if (type === 'rd') minAmt = 1000;
+
+            if (isNaN(initialAmt) || initialAmt < minAmt) {
+                alert("Initial deposit must be at least ₹" + minAmt.toFixed(2));
+                return false;
+            }
+
             return true;
         }
 
@@ -4240,7 +4496,7 @@
                     '<input type="hidden" name="partner_username_' + partnerCount + '">' +
                     '<input type="hidden" name="partner_password_' + partnerCount + '">' +
                     '<!-- Hidden PIN input -->' +
-                    '<input type="hidden" name="partner_pin_' + partnerCount + '" value="' + document.getElementById('wizPin').value + '">' +
+                    '<input type="hidden" name="partner_pin_' + partnerCount + '" value="' + document.getElementById('a4Pin').value + '">' +
                 '</div>';
 
             var tempDiv = document.createElement('div');
@@ -4257,82 +4513,80 @@
             }
         }
 
-        // Build review screen summary content
-        function buildSummaryScreen() {
-            var wizType = document.getElementById('wizAccountType').value;
-            var wizHold = document.getElementById('wizHoldingType').value;
-            var name = "";
-            var detailsHtml = "";
+        function validateA4InitialAmount() {
+            var type = document.getElementById('a4AccountType').value;
+            var initialAmt = parseFloat(document.getElementById('a4InitialAmount').value);
+            var minAmt = 1000;
+            if (type === 'current') minAmt = 5000;
+            else if (type === 'student') minAmt = 500;
+            else if (type === 'salary') minAmt = 0;
+            else if (type === 'fd') minAmt = 10000;
+            else if (type === 'rd') minAmt = 1000;
 
-            var atm = document.getElementById('wizAtmCard').checked ? '✓ ATM Card Active (' + document.getElementById('wizCardProvider').value.toUpperCase() + ')' : '✗ No Card';
-            var cheque = document.getElementById('wizChequeBook').checked ? '✓ Cheque Book Active' : '✗ No Cheque Book';
-            var pass = document.getElementById('wizPassbook').checked ? '✓ Passbook Booklet' : '✗ No Passbook';
-
-            var user = document.getElementById('wizUsername').value;
-            var pin = document.getElementById('wizPin').value;
-            var amount = parseFloat(document.getElementById('wizDeposit').value).toFixed(2);
-
-            var checkText = document.getElementById('mandateLabelText');
-
-            if (wizType === 'savings') {
-                name = document.getElementById('wizFirst').value + " " + document.getElementById('wizLast').value;
-                var nominee = document.getElementById('wizNominee').value || "No Nominee";
-
-                detailsHtml = 
-                    '<h5 style="font-weight:700; color:var(--gray-800); font-size:0.95rem; margin-bottom:12px; border-bottom:1px solid var(--gray-200); padding-bottom:5px;">Savings Account Details</h5>' +
-                    '<table style="width:100%; font-size:0.85rem; line-height:1.7;">' +
-                        '<tr><td style="color:var(--gray-500); width:35%;">Applicant Name:</td><td style="font-weight:700; color:var(--gray-800);">' + name.toUpperCase() + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">Holding Mode:</td><td style="font-weight:700; text-transform:uppercase;">' + wizHold + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">Nominee:</td><td style="font-weight:700;">' + nominee + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">ATM & Services:</td><td style="font-weight:600; color:var(--primary-500);">' + atm + ' | ' + cheque + ' | ' + pass + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">Login Username:</td><td style="font-weight:700; font-family:monospace;">' + user + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500); font-weight:700;">Initial Deposit Amount:</td><td style="font-weight:800; color:var(--accent-emerald); font-size:1rem;">₹ ' + amount + '</td></tr>' +
-                        '<tr style="border-top:1px dashed var(--gray-200); padding-top:5px; margin-top:5px;"><td style="color:var(--primary-500); font-weight:700;">Auto-Generated PIN:</td><td style="font-weight:800; color:var(--primary-700); font-size:1.1rem; letter-spacing:2px; font-family:monospace;">' + pin + '</td></tr>' +
-                    '</table>';
-                checkText.textContent = "I confirm that I have verified the identity cards, address validation, initial deposit of ₹" + amount + ", and mandate signatures for " + name.toUpperCase() + " to open this Savings Account.";
+            var note = document.getElementById('a4MinDepositNote');
+            if (isNaN(initialAmt) || initialAmt < minAmt) {
+                note.style.color = '#ef4444'; // Red for validation error
             } else {
-                name = document.getElementById('wizBusName').value;
-                var gstin = document.getElementById('wizGstin').value;
-
-                detailsHtml = 
-                    '<h5 style="font-weight:700; color:var(--gray-800); font-size:0.95rem; margin-bottom:12px; border-bottom:1px solid var(--gray-200); padding-bottom:5px;">Current Corporate Account Details</h5>' +
-                    '<table style="width:100%; font-size:0.85rem; line-height:1.7;">' +
-                        '<tr><td style="color:var(--gray-500); width:35%;">Business Name:</td><td style="font-weight:700; color:var(--gray-800);">' + name.toUpperCase() + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">GSTIN Registration:</td><td style="font-weight:700; font-family:monospace;">' + gstin + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">ATM & Services:</td><td style="font-weight:600; color:var(--primary-500);">' + atm + ' | ' + cheque + ' | ' + pass + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">Corporate Partners:</td><td style="font-weight:700;">' + partnerCount + ' registered partners</td></tr>' +
-                        '<tr><td style="color:var(--gray-500);">Primary Login User:</td><td style="font-weight:700; font-family:monospace;">' + user + '</td></tr>' +
-                        '<tr><td style="color:var(--gray-500); font-weight:700;">Initial Corporate Deposit:</td><td style="font-weight:800; color:var(--accent-emerald); font-size:1rem;">₹ ' + amount + '</td></tr>' +
-                        '<tr style="border-top:1px dashed var(--gray-200); padding-top:5px; margin-top:5px;"><td style="color:var(--primary-500); font-weight:700;">Auto-Generated PIN:</td><td style="font-weight:800; color:var(--primary-700); font-size:1.1rem; letter-spacing:2px; font-family:monospace;">' + pin + '</td></tr>' +
-                    '</table>';
-                checkText.textContent = "I confirm that I have verified the corporate registration documents, GSTIN number, initial deposit of ₹" + amount + ", and signatures of all partners for " + name.toUpperCase() + " to open this Current Account.";
+                note.style.color = 'var(--primary-500)'; // Default green/theme
             }
-
-            document.getElementById('wizSummaryCard').innerHTML = detailsHtml;
-            document.getElementById('wizMandateCheckbox').checked = false;
-            document.getElementById('wizSubmitBtn').disabled = true;
         }
 
-        function toggleWizardMandateState(checked) {
-            document.getElementById('wizSubmitBtn').disabled = !checked;
+        // Save Form Draft to LocalStorage
+        function saveA4FormDraft() {
+            try {
+                var form = document.getElementById('createAccountForm');
+                if (!form) return;
+                var formData = {};
+                var inputs = form.querySelectorAll('input:not([type="file"]), select, textarea');
+                inputs.forEach(function(inp) {
+                    if (inp.name) {
+                        formData[inp.name] = inp.value;
+                    }
+                });
+                localStorage.setItem('vgb_a4_form_draft', JSON.stringify(formData));
+                alert("Draft saved to browser storage successfully!");
+            } catch (err) {
+                console.error("Error saving draft:", err);
+            }
         }
 
-        function validateWizardFormSubmit() {
-            var dep = parseFloat(document.getElementById('wizDeposit').value);
-            var wizType = document.getElementById('wizAccountType').value;
-            var minReq = wizType === 'current' ? 5000.00 : 1000.00;
-
-            if (dep < minReq) {
-                alert("Deposit must meet minimum requirement!");
-                return false;
+        // Load Form Draft from LocalStorage
+        function loadA4FormDraft() {
+            try {
+                var draft = localStorage.getItem('vgb_a4_form_draft');
+                if (draft) {
+                    var formData = JSON.parse(draft);
+                    var form = document.getElementById('createAccountForm');
+                    if (!form) return;
+                    for (var key in formData) {
+                        try {
+                            var inp = form.querySelector('[name="' + key + '"]');
+                            if (inp) {
+                                inp.value = formData[key];
+                            }
+                        } catch (selectorErr) {
+                            // Ignore any query selector compile errors for safe lookup
+                        }
+                    }
+                    // Trigger manual change to refresh view
+                    handleAccountTypeChange();
+                    handleHoldingTypeChange();
+                }
+            } catch(e) {
+                console.error("Error loading draft", e);
             }
+        }
 
-            var mandate = document.getElementById('wizMandateCheckbox').checked;
-            if (!mandate) {
-                alert("You must verify the mandate checkbox before submitting!");
-                return false;
+        // Reset A4 Form
+        function resetA4Form() {
+            try {
+                var form = document.getElementById('createAccountForm');
+                if (form) form.reset();
+                localStorage.removeItem('vgb_a4_form_draft');
+                openWizardModal();
+            } catch (err) {
+                console.error("Error resetting form:", err);
             }
-            return true;
         }
 
         // ==========================================
@@ -4532,6 +4786,19 @@
             str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
             str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
             return str.trim();
+        }
+
+        // Toggle required documents guide panel
+        function toggleDocsGuide() {
+            var content = document.getElementById('docsGuideContent');
+            var arrow = document.getElementById('docsGuideArrow');
+            if (content.style.maxHeight === '0px' || !content.style.maxHeight) {
+                content.style.maxHeight = '1000px';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.maxHeight = '0px';
+                arrow.style.transform = 'rotate(0deg)';
+            }
         }
 
         // Mobile sidebar toggle handler

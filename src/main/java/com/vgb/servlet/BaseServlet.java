@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,31 +31,61 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected boolean validateCSRFToken(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session == null) return false;
+        if (session == null) {
+            logger.warn("validateCSRFToken failed: No active session");
+            return false;
+        }
         String sessionToken = (String) session.getAttribute(AppConstants.CSRF_TOKEN_SESSION);
         String requestToken = getParameter(request, "csrfToken", null);
+        logger.info("validateCSRFToken check: sessionToken='{}', getParameter(csrfToken)='{}'", sessionToken, requestToken);
         if (requestToken == null) {
             requestToken = request.getHeader("X-CSRF-Token");
+            logger.info("validateCSRFToken check: header X-CSRF-Token='{}'", requestToken);
         }
-        return sessionToken != null && sessionToken.equals(requestToken);
+        boolean isValid = sessionToken != null && sessionToken.equals(requestToken);
+        if (!isValid) {
+            logger.warn("validateCSRFToken failed: sessionToken='{}', requestToken='{}'", sessionToken, requestToken);
+        }
+        return isValid;
     }
 
+    private static final String MULTIPART_PARAMS_ATTR = "vgb.multipart.parameters";
+
     protected String getParameter(HttpServletRequest request, String name, String defaultValue) {
-        String value = request.getParameter(name);
-        if (value == null) {
-            String contentType = request.getContentType();
-            if (contentType != null && contentType.toLowerCase().startsWith("multipart/form-data")) {
+        String value = null;
+        String contentType = request.getContentType();
+        
+        if (contentType != null && contentType.toLowerCase().startsWith("multipart/form-data")) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> cachedParams = (Map<String, String>) request.getAttribute(MULTIPART_PARAMS_ATTR);
+            if (cachedParams == null) {
+                cachedParams = new HashMap<>();
                 try {
-                    jakarta.servlet.http.Part part = request.getPart(name);
-                    if (part != null && (part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty())) {
-                        try (java.io.BufferedReader reader = new java.io.BufferedReader(
-                                new java.io.InputStreamReader(part.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
-                            value = reader.lines().collect(java.util.stream.Collectors.joining("\n"));
+                    java.util.Collection<jakarta.servlet.http.Part> parts = request.getParts();
+                    for (jakarta.servlet.http.Part part : parts) {
+                        String fieldName = part.getName();
+                        String submittedFileName = part.getSubmittedFileName();
+                        if (submittedFileName == null || submittedFileName.trim().isEmpty()) {
+                            try (java.io.BufferedReader reader = new java.io.BufferedReader(
+                                    new java.io.InputStreamReader(part.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
+                                String fieldValue = reader.lines().collect(java.util.stream.Collectors.joining("\n"));
+                                cachedParams.put(fieldName, fieldValue);
+                            }
                         }
                     }
+                    logger.info("Successfully parsed and cached multipart parameters: " + cachedParams.keySet());
                 } catch (Exception e) {
-                    // Ignore exception if request.getPart fails
+                    logger.error("Error parsing multipart parameters", e);
                 }
+                request.setAttribute(MULTIPART_PARAMS_ATTR, cachedParams);
+            }
+            value = cachedParams.get(name);
+        }
+        
+        if (value == null) {
+            value = request.getParameter(name);
+            if (value != null) {
+                logger.info("getParameter: '{}' found via request.getParameter: value='{}'", name, value);
             }
         }
         return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
