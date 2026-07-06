@@ -796,6 +796,57 @@
                         flex-grow: 1;
                     }
 
+                    .loan-product-card .docs-list-container {
+                        text-align: left;
+                        margin-top: 12px;
+                        border-top: 1px dashed rgba(99, 102, 241, 0.15);
+                        padding-top: 10px;
+                        margin-bottom: 15px;
+                    }
+                    body.dark-mode .loan-product-card .docs-list-container {
+                        border-top-color: rgba(255, 255, 255, 0.1);
+                    }
+                    .loan-product-card .docs-list-title {
+                        font-size: 0.72rem;
+                        color: var(--gray-500);
+                        display: block;
+                        margin-bottom: 6px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        font-weight: 700;
+                    }
+                    body.dark-mode .loan-product-card .docs-list-title {
+                        color: var(--gray-400);
+                    }
+                    .loan-product-card .docs-list {
+                        list-style: none;
+                        padding-left: 0;
+                        margin: 0;
+                        font-size: 0.72rem;
+                        color: var(--gray-600);
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+                    }
+                    body.dark-mode .loan-product-card .docs-list {
+                        color: var(--gray-300);
+                    }
+                    .loan-product-card .docs-list li {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 6px;
+                        line-height: 1.3;
+                    }
+                    .loan-product-card .docs-list li i {
+                        color: var(--primary-500);
+                        font-size: 0.95rem;
+                        margin-top: 1px;
+                        flex-shrink: 0;
+                    }
+                    body.dark-mode .loan-product-card .docs-list li i {
+                        color: var(--primary-400);
+                    }
+
                     .loan-product-card .rate-badge {
                         font-size: 1.25rem;
                         font-weight: 800;
@@ -860,6 +911,172 @@
                             width: 100% !important;
                             max-width: 100% !important;
                         }
+                    }
+
+                    .stat-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                        gap: 20px;
+                        margin-bottom: 30px;
+                    }
+
+                    .stat-card {
+                        background: var(--glass-bg) !important;
+                        backdrop-filter: blur(25px) saturate(180%);
+                        -webkit-backdrop-filter: blur(25px) saturate(180%);
+                        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+                        border-radius: var(--radius-lg);
+                        padding: 20px;
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                        box-shadow: var(--panel-shadow), inset 0 0 2px 1px rgba(255, 255, 255, 0.7);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+                    
+                    body.dark-mode .stat-card {
+                        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+                        box-shadow: var(--panel-shadow);
+                    }
+
+                    .stat-card:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
+                    }
+
+                    body.dark-mode .stat-card:hover {
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    }
+
+                    .stat-icon {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.5rem;
+                        flex-shrink: 0;
+                    }
+
+                    .badge-pending {
+                        background: rgba(245, 158, 11, 0.12);
+                        color: var(--accent-amber);
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .badge-approved {
+                        background: rgba(16, 185, 129, 0.12);
+                        color: var(--accent-emerald);
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .badge-rejected {
+                        background: rgba(239, 68, 68, 0.12);
+                        color: #ef4444;
+                        padding: 4px 10px;
+                        border-radius: var(--radius-sm);
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+
+                    /* --- SEARCH AND FILTER SYSTEM --- */
+                    .search-filter-wrapper {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 20px;
+                        margin-bottom: 20px;
+                        flex-wrap: wrap;
+                    }
+
+                    .search-input-group {
+                        position: relative;
+                        flex-grow: 1;
+                        max-width: 400px;
+                        min-width: 250px;
+                    }
+
+                    .search-input-group .search-icon {
+                        position: absolute;
+                        left: 14px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        font-size: 1.2rem;
+                        color: var(--gray-400);
+                        pointer-events: none;
+                    }
+
+                    .search-input-group input {
+                        width: 100%;
+                        padding: 10px 15px 10px 42px;
+                        border: 1.5px solid var(--gray-200);
+                        border-radius: var(--radius-md);
+                        background: white;
+                        font-size: 0.85rem;
+                        outline: none;
+                        color: var(--gray-800);
+                        transition: all 0.3s ease;
+                        box-shadow: var(--shadow-sm);
+                    }
+
+                    body.dark-mode .search-input-group input {
+                        background: rgba(15, 23, 42, 0.45);
+                        border-color: rgba(255, 255, 255, 0.1);
+                        color: var(--white);
+                    }
+
+                    .search-input-group input:focus {
+                        border-color: var(--primary-500);
+                        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+                    }
+
+                    .filter-select-group {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        flex-wrap: wrap;
+                    }
+
+                    .filter-select-group select {
+                        padding: 10px 15px;
+                        border: 1.5px solid var(--gray-200);
+                        border-radius: var(--radius-md);
+                        background: white;
+                        font-size: 0.85rem;
+                        outline: none;
+                        color: var(--gray-700);
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                        min-width: 150px;
+                        box-shadow: var(--shadow-sm);
+                    }
+
+                    body.dark-mode .filter-select-group select {
+                        background: rgba(15, 23, 42, 0.45);
+                        border-color: rgba(255, 255, 255, 0.1);
+                        color: var(--white);
+                    }
+
+                    .filter-select-group select:focus {
+                        border-color: var(--primary-500);
+                        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
                     }
 
                     /* Segmented Toggles for Create vs Update Mode */
@@ -1199,737 +1416,310 @@
                             <c:remove var="success" scope="session" />
                         </c:if>
 
-                        <!-- Loan & Customer Search Filter -->
-                        <div class="glass-card no-print"
-                            style="padding: 15px 25px; margin-bottom: 25px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(99, 102, 241, 0.15);">
-                            <div style="position: relative; flex: 1;">
-                                <input type="text" id="loanSearchInput" onkeyup="filterLoanTables()"
-                                    placeholder="Search loans by customer name, account number, phone number, or loan category..."
-                                    style="width: 100%; padding: 12px 15px 12px 45px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem; background: white; transition: all var(--transition-normal); box-shadow: var(--shadow-sm);">
-                                <i class="bx bx-search"
-                                    style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 1.35rem;"></i>
+                        <!-- Dynamic Statistics Calculation -->
+                        <c:set var="pendingCount" value="0" />
+                        <c:set var="approvedCount" value="0" />
+                        <c:set var="closedCount" value="0" />
+                        <c:forEach var="loan" items="${loans}">
+                            <c:if test="${loan.status == 'pending_approval'}">
+                                <c:set var="pendingCount" value="${pendingCount + 1}" />
+                            </c:if>
+                            <c:if test="${loan.status == 'approved' or loan.status == 'disbursed' or loan.status == 'active'}">
+                                <c:set var="approvedCount" value="${approvedCount + 1}" />
+                            </c:if>
+                            <c:if test="${loan.status == 'closed' or loan.status == 'rejected' or loan.status == 'defaulted'}">
+                                <c:set var="closedCount" value="${closedCount + 1}" />
+                            </c:if>
+                        </c:forEach>
+
+                        <!-- Dynamic Statistics Cards Grid -->
+                        <div class="stat-grid no-print">
+                            <div class="stat-card" style="border-left: 5px solid var(--primary-500);">
+                                <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
+                                    <i class="bx bx-book-open"></i>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Total Applications</span>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${loans.size()}</h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="border-left: 5px solid #fbbf24;">
+                                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
+                                    <i class="bx bx-time"></i>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Pending Review</span>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${pendingCount}</h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="border-left: 5px solid var(--accent-emerald);">
+                                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                                    <i class="bx bx-check-double"></i>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Active Loans</span>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${approvedCount}</h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="border-left: 5px solid #ef4444;">
+                                <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                                    <i class="bx bx-x-circle"></i>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 500; text-transform: uppercase;">Closed / Rejected</span>
+                                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800); margin-top: 2px;">${closedCount}</h3>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Interactive Tab buttons (no-print) -->
-                        <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;" class="no-print">
-                            <button type="button" class="tab-btn active" onclick="switchTab('pending')" id="tab-pending"
-                                style="padding: 12px 20px; font-family: var(--font-family); font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-time-five" style="font-size: 1.1rem;"></i>
-                                <span>Pending Applications</span>
-                                <span id="badge-pending"
-                                    style="background: var(--primary-500); color: white; border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; font-weight: 700;">0</span>
-                            </button>
-                            <button type="button" class="tab-btn" onclick="switchTab('approved')" id="tab-approved"
-                                style="padding: 12px 20px; font-family: var(--font-family); font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-check-double" style="font-size: 1.1rem;"></i>
-                                <span>Approved &amp; Active</span>
-                                <span id="badge-approved"
-                                    style="background: var(--accent-emerald); color: white; border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; font-weight: 700;">0</span>
-                            </button>
-                            <button type="button" class="tab-btn" onclick="switchTab('closed')" id="tab-closed"
-                                style="padding: 12px 20px; font-family: var(--font-family); font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-archive" style="font-size: 1.1rem;"></i>
-                                <span>Closed &amp; History</span>
-                                <span id="badge-closed"
-                                    style="background: var(--gray-500); color: white; border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; font-weight: 700;">0</span>
-                            </button>
-                            <button type="button" class="tab-btn" onclick="switchTab('apply')" id="tab-apply"
-                                style="padding: 12px 20px; font-family: var(--font-family); font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-plus-circle" style="font-size: 1.1rem;"></i>
-                                <span>Apply New Loan</span>
-                            </button>
-
-                        </div>
-
-                        <!-- Tab Content 1: Pending Applications -->
-                        <div class="glass-card loan-tab-content no-print" id="content-pending">
-                            <h3
-                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
-                                <i class="bx bx-time-five"></i> Pending Loan Applications
+                        <!-- Loan Product Catalogue (Always Visible) -->
+                        <div class="glass-card no-print" style="padding: 25px; border-radius: var(--radius-md); margin-bottom: 25px;">
+                            <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i class="bx bx-gift" style="color: var(--primary-500);"></i>
+                                <span>Select a Premium Loan Solution</span>
                             </h3>
-                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                                    <thead>
-                                        <tr
-                                            style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                            <th style="padding: 12px 15px; width: 80px;">Sr. No.</th>
-                                            <th style="padding: 12px 15px;">Customer Name</th>
-                                            <th style="padding: 12px 15px;">Category</th>
-                                            <th style="padding: 12px 15px;">Principal</th>
-                                            <th style="padding: 12px 15px;">Interest Rate</th>
-                                            <th style="padding: 12px 15px;">Term Length</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Status</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Ledger</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:set var="pendingCount" value="0" />
-                                        <c:forEach var="loan" items="${loans}">
-                                            <c:if test="${loan.status == 'pending_approval'}">
-                                                <c:set var="pendingCount" value="${pendingCount + 1}" />
-                                                <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);"
-                                                    data-customer-id="${loan.customerId}"
-                                                    data-loan-category="${loan.loanType}"
-                                                    data-customer-name="${customerNames[loan.customerId]}"
-                                                    data-customer-phone="${customerPhones[loan.customerId]}">
-                                                    <td style="padding: 15px;"><span
-                                                            class="badge-id">#${pendingCount}</span></td>
-                                                    <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-900);">
-                                                        ${customerNames[loan.customerId]}</td>
-                                                    <td
-                                                        style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                        ${loan.loanType}</td>
-                                                    <td style="padding: 15px; font-weight: 600;">₹
-                                                        <fmt:formatNumber value="${loan.principalAmount}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px;">${loan.interestRate}% P.A.</td>
-                                                    <td style="padding: 15px;">${loan.termMonths} Months</td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <span
-                                                            style="background: rgba(245, 158, 11, 0.1); color: var(--accent-amber); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Pending</span>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <a href="${pageContext.request.contextPath}/loan?action=statement&id=${loan.loanId}"
-                                                            class="btn btn-secondary"
-                                                            style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-cyan); color: var(--accent-cyan);"><i
-                                                                class="bx bx-file"></i> Statement</a>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <div style="display: flex; gap: 8px; justify-content: center;">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
-                                                                data-form-details="<c:out value="
-                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
-                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
-                                                            var(--primary-500);"><i class="bx bx-show"></i>
-                                                            View</button>
-                                                            <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}"
-                                                                class="btn btn-secondary"
-                                                                style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald);"><i
-                                                                    class="bx bx-check"></i> Approve</a>
-                                                            <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}"
-                                                                class="btn btn-secondary"
-                                                                style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444;"><i
-                                                                    class="bx bx-x"></i> Reject</a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                        <c:if test="${pendingCount == 0}">
-                                            <tr>
-                                                <td colspan="9"
-                                                    style="text-align: center; padding: 30px; color: var(--gray-400);">
-                                                    No pending loan applications registered.</td>
-                                            </tr>
-                                        </c:if>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Tab Content 2: Approved & Active -->
-                        <div class="glass-card loan-tab-content no-print" id="content-approved" style="display: none;">
-                            <h3
-                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
-                                <i class="bx bx-check-double"></i> Approved and Active Loans
-                            </h3>
-                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                                    <thead>
-                                        <tr
-                                            style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                            <th style="padding: 12px 15px; width: 80px;">Sr. No.</th>
-                                            <th style="padding: 12px 15px;">Customer Name</th>
-                                            <th style="padding: 12px 15px;">Category</th>
-                                            <th style="padding: 12px 15px;">Principal</th>
-                                            <th style="padding: 12px 15px;">Remaining Balance</th>
-                                            <th style="padding: 12px 15px; text-align: right;">Monthly EMI</th>
-                                            <th style="padding: 12px 15px;">Maturity Date</th>
-                                            <th style="padding: 12px 15px;">Term Length</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Status</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Ledger</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:set var="approvedCount" value="0" />
-                                        <c:forEach var="loan" items="${loans}">
-                                            <c:if
-                                                test="${loan.status == 'approved' or loan.status == 'disbursed' or loan.status == 'active'}">
-                                                <c:set var="approvedCount" value="${approvedCount + 1}" />
-                                                <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);"
-                                                    data-customer-id="${loan.customerId}"
-                                                    data-loan-category="${loan.loanType}"
-                                                    data-customer-name="${customerNames[loan.customerId]}"
-                                                    data-customer-phone="${customerPhones[loan.customerId]}">
-                                                    <td style="padding: 15px;"><span
-                                                            class="badge-id">#${approvedCount}</span></td>
-                                                    <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-900);">
-                                                        ${customerNames[loan.customerId]}</td>
-                                                    <td
-                                                        style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                        ${loan.loanType}</td>
-                                                    <td style="padding: 15px; font-weight: 600;">₹
-                                                        <fmt:formatNumber value="${loan.principalAmount}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px; font-weight: 600; color: #ef4444;">₹
-                                                        <fmt:formatNumber value="${loan.remainingBalance}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px; font-weight: 600; text-align: right;">₹
-                                                        <fmt:formatNumber value="${loan.monthlyEMI}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px;">
-                                                        <c:choose>
-                                                            <c:when test="${not empty loan.endDate}">
-                                                                ${loan.endDate}
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span
-                                                                    style="color: var(--gray-400); font-style: italic;">Pending
-                                                                    Approval</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td style="padding: 15px;">${loan.termMonths} Months</td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <c:choose>
-                                                            <c:when test="${loan.status == 'approved'}">
-                                                                <span
-                                                                    style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Approved</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span
-                                                                    style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Active</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <a href="${pageContext.request.contextPath}/loan?action=statement&id=${loan.loanId}"
-                                                            class="btn btn-secondary"
-                                                            style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-cyan); color: var(--accent-cyan);"><i
-                                                                class="bx bx-file"></i> Statement</a>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <div style="display: flex; gap: 8px; justify-content: center;">
-                                                            <c:if test="${loan.status == 'approved'}">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openDisburseModal('${loan.loanId}', '${loan.customerId}', '${loan.principalAmount}')"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i
-                                                                        class="bx bx-wallet"></i> Disburse</button>
-                                                            </c:if>
-                                                            <c:if
-                                                                test="${loan.status == 'active' or loan.status == 'disbursed'}">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openRepayModal('${loan.loanId}', '${loan.customerId}', '${loan.remainingBalance}')"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-amber); color: var(--accent-amber);"><i
-                                                                        class="bx bx-wallet-alt"></i> Repay</button>
-                                                            </c:if>
-                                                            <button type="button" class="btn btn-secondary"
-                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
-                                                                data-form-details="<c:out value="
-                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
-                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
-                                                            var(--primary-500);"><i class="bx bx-show"></i>
-                                                            View</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                        <c:if test="${approvedCount == 0}">
-                                            <tr>
-                                                <td colspan="11"
-                                                    style="text-align: center; padding: 30px; color: var(--gray-400);">
-                                                    No approved or active loans found.</td>
-                                            </tr>
-                                        </c:if>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Tab Content 3: Closed & History -->
-                        <div class="glass-card loan-tab-content no-print" id="content-closed" style="display: none;">
-                            <h3
-                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
-                                <i class="bx bx-archive"></i> Closed &amp; Archived Loans
-                            </h3>
-                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                                    <thead>
-                                        <tr
-                                            style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                            <th style="padding: 12px 15px; width: 80px;">Sr. No.</th>
-                                            <th style="padding: 12px 15px;">Customer Name</th>
-                                            <th style="padding: 12px 15px;">Category</th>
-                                            <th style="padding: 12px 15px;">Principal Amount</th>
-                                            <th style="padding: 12px 15px;">Remaining Balance</th>
-                                            <th style="padding: 12px 15px;">Term Length</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Status</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Ledger</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:set var="closedCount" value="0" />
-                                        <c:forEach var="loan" items="${loans}">
-                                            <c:if
-                                                test="${loan.status == 'closed' or loan.status == 'rejected' or loan.status == 'defaulted'}">
-                                                <c:set var="closedCount" value="${closedCount + 1}" />
-                                                <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);"
-                                                    data-customer-id="${loan.customerId}"
-                                                    data-loan-category="${loan.loanType}"
-                                                    data-customer-name="${customerNames[loan.customerId]}"
-                                                    data-customer-phone="${customerPhones[loan.customerId]}">
-                                                    <td style="padding: 15px;"><span
-                                                            class="badge-id">#${closedCount}</span></td>
-                                                    <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-900);">
-                                                        ${customerNames[loan.customerId]}</td>
-                                                    <td
-                                                        style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                        ${loan.loanType}</td>
-                                                    <td style="padding: 15px; font-weight: 600;">₹
-                                                        <fmt:formatNumber value="${loan.principalAmount}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px; font-weight: 600;">₹
-                                                        <fmt:formatNumber value="${loan.remainingBalance}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px;">${loan.termMonths} Months</td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <c:choose>
-                                                            <c:when test="${loan.status == 'closed'}">
-                                                                <span
-                                                                    style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Closed</span>
-                                                            </c:when>
-                                                            <c:when test="${loan.status == 'rejected'}">
-                                                                <span
-                                                                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Rejected</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span
-                                                                    style="background: rgba(239, 68, 68, 0.2); color: #b91c1c; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${loan.status}</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <a href="${pageContext.request.contextPath}/loan?action=statement&id=${loan.loanId}"
-                                                            class="btn btn-secondary"
-                                                            style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-cyan); color: var(--accent-cyan);"><i
-                                                                class="bx bx-file"></i> Statement</a>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <div style="display: flex; gap: 8px; justify-content: center;">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
-                                                                data-form-details="<c:out value="
-                                                                ${loan.formDetails}" />" style="padding: 6px 12px;
-                                                            font-size: 0.75rem; border-color: var(--primary-500); color:
-                                                            var(--primary-500);"><i class="bx bx-show"></i>
-                                                            View</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                        <c:if test="${closedCount == 0}">
-                                            <tr>
-                                                <td colspan="9"
-                                                    style="text-align: center; padding: 30px; color: var(--gray-400);">
-                                                    No closed or archived loans found.</td>
-                                            </tr>
-                                        </c:if>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Tab Content 4: Apply New Loan -->
-                        <div class="loan-tab-content no-print" id="content-apply" style="display: none;">
-
-                            <!-- Mode 1: Create New Loan Container -->
-                            <div id="apply-new-mode-container">
-                                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-bottom: 35px;"
-                                    class="mobile-grid-1">
-                                    <!-- EMI Calculator -->
-                                    <div class="glass-card" style="margin-bottom: 0;">
-                                        <h3
-                                            style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 10px;">
-                                            <i class="bx bx-calculator"></i> VGB Premium EMI Calculator
-                                        </h3>
-
-                                        <div class="form-group" style="margin-bottom: 15px;">
-                                            <label for="calcAmount"
-                                                style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Principal
-                                                Amount (₹)</label>
-                                            <input type="number" id="calcAmount" value="500000" min="50000"
-                                                max="50000000" oninput="calculateEMI()"
-                                                style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;">
-                                        </div>
-
-                                        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px;"
-                                            class="mobile-grid-1">
-                                            <div class="form-group">
-                                                <label for="calcRate"
-                                                    style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Annual
-                                                    Interest Rate (%)</label>
-                                                <select id="calcRate" onchange="calculateEMI()"
-                                                    style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;">
-                                                    <option id="opt-calc-home" value="7.50" selected>Home Secure Loan
-                                                        (7.50%)</option>
-                                                    <option id="opt-calc-vehicle" value="8.50">Vehicle Purchase Loan
-                                                        (8.50%)</option>
-                                                    <option id="opt-calc-education" value="6.50">Higher Education Loan
-                                                        (6.50%)</option>
-                                                    <option id="opt-calc-personal" value="12.00">Personal Cash Loan
-                                                        (12.00%)</option>
-                                                    <option id="opt-calc-business" value="10.50">Business Capital Loan
-                                                        (10.50%)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="displayCalcTermVal"
-                                                    style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Tenure
-                                                    Duration</label>
-                                                <div style="display: flex; gap: 10px;">
-                                                    <input type="number" id="displayCalcTermVal" value="10" min="1"
-                                                        max="30" required
-                                                        style="flex-grow: 1; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none;"
-                                                        oninput="syncCalcTerm()">
-                                                    <select id="calcTermUnit"
-                                                        style="width: 100px; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); background: white; outline: none;"
-                                                        onchange="syncCalcTerm()">
-                                                        <option value="years" selected>Years</option>
-                                                        <option value="months">Months</option>
-                                                    </select>
-                                                </div>
-                                                <input type="hidden" id="calcTerm" value="120">
-                                            </div>
-                                        </div>
-                                        <div
-                                            style="background: var(--gradient-secondary); padding: 20px; border-radius: var(--radius-md); color: white; text-align: center; margin-top: 25px; box-shadow: var(--shadow-sm);">
-                                            <span
-                                                style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Estimated
-                                                Monthly Payment</span>
-                                            <strong
-                                                style="font-size: 2.2rem; font-weight: 800; display: block; margin-top: 5px;"
-                                                id="emiResult">₹ 5,935.09</strong>
-                                            <span
-                                                style="font-size: 0.75rem; opacity: 0.85; display: block; margin-top: 3px;">Subject
-                                                to terms &amp; final physical document verification.</span>
+                            <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px;">Choose a specialized loan product based on your financial goals. Click **Apply Now** to open the formal application form.</p>
+                            
+                            <div class="loans-category-grid">
+                                <!-- Personal Loan -->
+                                <div class="loan-product-card" id="card-personal" onclick="showAdminLoanDetails('personal', 12.00, 1500000)">
+                                    <div>
+                                        <h4>Personal Cash Loan</h4>
+                                        <p>Unsecured personal financing for instant cash requirements, medical expenses, or emergency funds.</p>
+                                        <div class="docs-list-container">
+                                            <span class="docs-list-title">Required Documents:</span>
+                                            <ul class="docs-list">
+                                                <li><i class="bx bx-file"></i><span>PAN Card & Aadhaar Card</span></li>
+                                                <li><i class="bx bx-file"></i><span>Last 3 months salary slips</span></li>
+                                                <li><i class="bx bx-file"></i><span>6 months bank statements</span></li>
+                                            </ul>
                                         </div>
                                     </div>
-
-                                    <!-- Promotional Info Column -->
-                                    <div class="glass-card"
-                                        style="display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%); margin-bottom: 0;">
-                                        <div>
-                                            <h3
-                                                style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 15px;">
-                                                <i class="bx bx-star" style="color: #eab308;"></i> Why VGB Premium
-                                                Lending?
-                                            </h3>
-                                            <p
-                                                style="font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 20px;">
-                                                Vertex Galaxy Bank offers custom-tailored credit solutions featuring
-                                                highly competitive fixed interest rates, flexible tenure options up to
-                                                30 years, and instant digital credit assessment.
-                                            </p>
-                                            <div style="display: flex; flex-direction: column; gap: 12px;">
-                                                <div
-                                                    style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                                    <i class="bx bx-check-double"
-                                                        style="color: var(--primary-500); font-size: 1.2rem;"></i>
-                                                    <span>Zero hidden charges &amp; fully transparent terms</span>
-                                                </div>
-                                                <div
-                                                    style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                                    <i class="bx bx-check-double"
-                                                        style="color: var(--primary-500); font-size: 1.2rem;"></i>
-                                                    <span>Flexible EMI repayments auto-debited securely</span>
-                                                </div>
-                                                <div
-                                                    style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--gray-700);">
-                                                    <i class="bx bx-check-double"
-                                                        style="color: var(--primary-500); font-size: 1.2rem;"></i>
-                                                    <span>Direct administrative verification with instant updates</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            style="border-top: 1px solid rgba(99, 102, 241, 0.1); padding-top: 15px; margin-top: 20px; font-size: 0.85rem; color: var(--gray-500); font-style: italic;">
-                                            Please select one of the loan products below to fill in the formal
-                                            application form for the customer.
+                                    <div>
+                                        <div class="rate-badge" id="badge-rate-personal">12.00% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
+                                        <div id="badge-max-personal" style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 15,00,000</div>
+                                        <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                            <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); openAdminLoanForm('personal', getSpecValue('personal', 'rate'), getSpecValue('personal', 'max'))" style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                            <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('personal')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Select Loan Product Grid -->
-                                <div style="margin-bottom: 20px;">
-                                    <h3
-                                        style="font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
-                                        <i class="bx bx-gift" style="color: var(--primary-500);"></i>
-                                        <span>Select a Premium Loan Solution</span>
-                                    </h3>
-                                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px;">Choose a
-                                        specialized loan product based on your financial goals. Click **Apply Now** to
-                                        open the formal application form.</p>
-                                    <div class="loans-category-grid">
-                                        <!-- Personal Loan -->
-                                        <div class="loan-product-card" id="card-personal"
-                                            onclick="showAdminLoanDetails('personal', 12.00, 1500000)">
-                                            <div>
-                                                <h4>Personal Cash Loan</h4>
-                                                <p>Unsecured personal financing for instant cash requirements, medical
-                                                    expenses, or emergency funds.</p>
-                                            </div>
-                                            <div>
-                                                <div class="rate-badge" id="badge-rate-personal">12.00% <span
-                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
-                                                </div>
-                                                <div id="badge-max-personal"
-                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
-                                                    Max: ₹ 15,00,000</div>
-                                                <div
-                                                    style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="event.stopPropagation(); openAdminLoanForm('personal', getSpecValue('personal', 'rate'), getSpecValue('personal', 'max'))"
-                                                        style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
-                                                        Now</button>
-                                                    <button type="button" class="edit-specs-btn"
-                                                        onclick="event.stopPropagation(); openEditSpecsModal('personal')"
-                                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
-                                                        title="Edit Interest Rate and Max Limit"><i class="bx bx-cog"
-                                                            style="font-size: 1.15rem; vertical-align: middle;"></i></button>
-                                                </div>
-                                            </div>
+                                <!-- Home Loan -->
+                                <div class="loan-product-card" id="card-home" onclick="showAdminLoanDetails('home', 7.50, 50000000)">
+                                    <div>
+                                        <h4>Home Secure Loan</h4>
+                                        <p>Realize your dream home with low rates, customized repayment timelines, and easy paper processing.</p>
+                                        <div class="docs-list-container">
+                                            <span class="docs-list-title">Required Documents:</span>
+                                            <ul class="docs-list">
+                                                <li><i class="bx bx-file"></i><span>PAN Card & Aadhaar Card</span></li>
+                                                <li><i class="bx bx-file"></i><span>Property agreement & builder NOC</span></li>
+                                                <li><i class="bx bx-file"></i><span>3 years filed ITR papers</span></li>
+                                                <li><i class="bx bx-file"></i><span>Last 6 months statements</span></li>
+                                            </ul>
                                         </div>
-
-                                        <!-- Home Loan -->
-                                        <div class="loan-product-card" id="card-home"
-                                            onclick="showAdminLoanDetails('home', 7.50, 50000000)">
-                                            <div>
-                                                <h4>Home Secure Loan</h4>
-                                                <p>Realize your dream home with low rates, customized repayment
-                                                    timelines, and easy paper processing.</p>
-                                            </div>
-                                            <div>
-                                                <div class="rate-badge" id="badge-rate-home">7.50% <span
-                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
-                                                </div>
-                                                <div id="badge-max-home"
-                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
-                                                    Max: ₹ 5,00,00,000</div>
-                                                <div
-                                                    style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="event.stopPropagation(); openAdminLoanForm('home', getSpecValue('home', 'rate'), getSpecValue('home', 'max'))"
-                                                        style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
-                                                        Now</button>
-                                                    <button type="button" class="edit-specs-btn"
-                                                        onclick="event.stopPropagation(); openEditSpecsModal('home')"
-                                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
-                                                        title="Edit Interest Rate and Max Limit"><i class="bx bx-cog"
-                                                            style="font-size: 1.15rem; vertical-align: middle;"></i></button>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div>
+                                        <div class="rate-badge" id="badge-rate-home">7.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
+                                        <div id="badge-max-home" style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 5,00,00,000</div>
+                                        <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                            <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); openAdminLoanForm('home', getSpecValue('home', 'rate'), getSpecValue('home', 'max'))" style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                            <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('home')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <!-- Vehicle Loan -->
-                                        <div class="loan-product-card" id="card-vehicle"
-                                            onclick="showAdminLoanDetails('vehicle', 8.50, 5000000)">
-                                            <div>
-                                                <h4>Vehicle Purchase Loan</h4>
-                                                <p>Drive your dream car or vehicle home with instant disbursals, high
-                                                    limits, and flexible tenure plans.</p>
-                                            </div>
-                                            <div>
-                                                <div class="rate-badge" id="badge-rate-vehicle">8.50% <span
-                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
-                                                </div>
-                                                <div id="badge-max-vehicle"
-                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
-                                                    Max: ₹ 50,00,000</div>
-                                                <div
-                                                    style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="event.stopPropagation(); openAdminLoanForm('vehicle', getSpecValue('vehicle', 'rate'), getSpecValue('vehicle', 'max'))"
-                                                        style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
-                                                        Now</button>
-                                                    <button type="button" class="edit-specs-btn"
-                                                        onclick="event.stopPropagation(); openEditSpecsModal('vehicle')"
-                                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
-                                                        title="Edit Interest Rate and Max Limit"><i class="bx bx-cog"
-                                                            style="font-size: 1.15rem; vertical-align: middle;"></i></button>
-                                                </div>
-                                            </div>
+                                <!-- Vehicle Loan -->
+                                <div class="loan-product-card" id="card-vehicle" onclick="showAdminLoanDetails('vehicle', 8.50, 5000000)">
+                                    <div>
+                                        <h4>Vehicle Purchase Loan</h4>
+                                        <p>Drive your dream car or vehicle home with instant disbursals, high limits, and flexible tenure plans.</p>
+                                        <div class="docs-list-container">
+                                            <span class="docs-list-title">Required Documents:</span>
+                                            <ul class="docs-list">
+                                                <li><i class="bx bx-file"></i><span>PAN Card & Aadhaar Card</span></li>
+                                                <li><i class="bx bx-file"></i><span>Vehicle proforma invoice</span></li>
+                                                <li><i class="bx bx-file"></i><span>3 months salary / income proofs</span></li>
+                                                <li><i class="bx bx-file"></i><span>6 months active statements</span></li>
+                                            </ul>
                                         </div>
-
-                                        <!-- Education Loan -->
-                                        <div class="loan-product-card" id="card-education"
-                                            onclick="showAdminLoanDetails('education', 6.50, 4000000)">
-                                            <div>
-                                                <h4>Higher Education Loan</h4>
-                                                <p>Fund premium global academic pursuits, covering university fees,
-                                                    travel, and accommodation costs.</p>
-                                            </div>
-                                            <div>
-                                                <div class="rate-badge" id="badge-rate-education">6.50% <span
-                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
-                                                </div>
-                                                <div id="badge-max-education"
-                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
-                                                    Max: ₹ 40,00,000</div>
-                                                <div
-                                                    style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="event.stopPropagation(); openAdminLoanForm('education', getSpecValue('education', 'rate'), getSpecValue('education', 'max'))"
-                                                        style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
-                                                        Now</button>
-                                                    <button type="button" class="edit-specs-btn"
-                                                        onclick="event.stopPropagation(); openEditSpecsModal('education')"
-                                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
-                                                        title="Edit Interest Rate and Max Limit"><i class="bx bx-cog"
-                                                            style="font-size: 1.15rem; vertical-align: middle;"></i></button>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div>
+                                        <div class="rate-badge" id="badge-rate-vehicle">8.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
+                                        <div id="badge-max-vehicle" style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 50,00,000</div>
+                                        <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                            <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); openAdminLoanForm('vehicle', getSpecValue('vehicle', 'rate'), getSpecValue('vehicle', 'max'))" style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                            <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('vehicle')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <!-- Business Loan -->
-                                        <div class="loan-product-card" id="card-business"
-                                            onclick="showAdminLoanDetails('business', 10.50, 10000000)">
-                                            <div>
-                                                <h4>Business Capital Loan</h4>
-                                                <p>Power your business venture, purchase heavy equipment, expand
-                                                    infrastructure, or boost cashflow.</p>
-                                            </div>
-                                            <div>
-                                                <div class="rate-badge" id="badge-rate-business">10.50% <span
-                                                        style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span>
-                                                </div>
-                                                <div id="badge-max-business"
-                                                    style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">
-                                                    Max: ₹ 1,00,00,000</div>
-                                                <div
-                                                    style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="event.stopPropagation(); openAdminLoanForm('business', getSpecValue('business', 'rate'), getSpecValue('business', 'max'))"
-                                                        style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply
-                                                        Now</button>
-                                                    <button type="button" class="edit-specs-btn"
-                                                        onclick="event.stopPropagation(); openEditSpecsModal('business')"
-                                                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
-                                                        title="Edit Interest Rate and Max Limit"><i class="bx bx-cog"
-                                                            style="font-size: 1.15rem; vertical-align: middle;"></i></button>
-                                                </div>
-                                            </div>
+                                <!-- Education Loan -->
+                                <div class="loan-product-card" id="card-education" onclick="showAdminLoanDetails('education', 6.50, 4000000)">
+                                    <div>
+                                        <h4>Higher Education Loan</h4>
+                                        <p>Fund premium global academic pursuits, covering university fees, travel, and accommodation costs.</p>
+                                        <div class="docs-list-container">
+                                            <span class="docs-list-title">Required Documents:</span>
+                                            <ul class="docs-list">
+                                                <li><i class="bx bx-file"></i><span>Admission letter & fee structure</span></li>
+                                                <li><i class="bx bx-file"></i><span>Academic sheets (10th/12th/Grad)</span></li>
+                                                <li><i class="bx bx-file"></i><span>KYC of applicant & co-borrower</span></li>
+                                                <li><i class="bx bx-file"></i><span>Income proof of co-borrower</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="rate-badge" id="badge-rate-education">6.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
+                                        <div id="badge-max-education" style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 40,00,000</div>
+                                        <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                            <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); openAdminLoanForm('education', getSpecValue('education', 'rate'), getSpecValue('education', 'max'))" style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                            <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('education')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Business Loan -->
+                                <div class="loan-product-card" id="card-business" onclick="showAdminLoanDetails('business', 10.50, 10000000)">
+                                    <div>
+                                        <h4>Business Capital Loan</h4>
+                                        <p>Power your business venture, purchase heavy equipment, expand infrastructure, or boost cashflow.</p>
+                                        <div class="docs-list-container">
+                                            <span class="docs-list-title">Required Documents:</span>
+                                            <ul class="docs-list">
+                                                <li><i class="bx bx-file"></i><span>Business PAN & GST certificate</span></li>
+                                                <li><i class="bx bx-file"></i><span>2 years audited financials</span></li>
+                                                <li><i class="bx bx-file"></i><span>1 year primary checking statements</span></li>
+                                                <li><i class="bx bx-file"></i><span>KYC of directors/partners</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="rate-badge" id="badge-rate-business">10.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
+                                        <div id="badge-max-business" style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 12px; font-weight: 600;">Max: ₹ 1,00,00,000</div>
+                                        <div style="display: flex; gap: 8px; align-items: center; width: 100%; margin-top: auto;">
+                                            <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); openAdminLoanForm('business', getSpecValue('business', 'rate'), getSpecValue('business', 'max'))" style="flex-grow: 1; padding: 8px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); border: none;">Apply Now</button>
+                                            <button type="button" class="edit-specs-btn" onclick="event.stopPropagation(); openEditSpecsModal('business')" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); border: none; border-radius: var(--radius-md); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" title="Edit Interest Rate and Max Limit"><i class="bx bx-cog" style="font-size: 1.15rem; vertical-align: middle;"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Mode 2: Update Existing Loan Container -->
-                        <div id="update-existing-mode-container" style="display: none;">
-                            <div class="glass-card" style="padding: 25px; border-radius: var(--radius-md);">
-                                <h3
-                                    style="font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-                                    <i class="bx bx-list-ul" style="color: var(--primary-500);"></i>
-                                    <span>Select a Loan Portfolio to Update</span>
+                        <!-- System Loan Portfolios Ledger (Unified Table Ledger) -->
+                        <div class="glass-card no-print">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
+                                    <i class="bx bx-task" style="color: var(--primary-500);"></i> Executive Loan Portfolio Ledger
                                 </h3>
-                                <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px;">
-                                    Choose a customer's active, approved, or pending loan portfolio below to edit
-                                    details.
-                                </p>
-                                <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                                        <thead>
-                                            <tr
-                                                style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                                <th style="padding: 12px 15px; width: 120px;">Loan ID</th>
-                                                <th style="padding: 12px 15px;">Customer Name</th>
-                                                <th style="padding: 12px 15px;">Loan Category</th>
-                                                <th style="padding: 12px 15px;">Principal</th>
-                                                <th style="padding: 12px 15px;">Term Length</th>
-                                                <th style="padding: 12px 15px; text-align: center;">Status</th>
-                                                <th style="padding: 12px 15px; text-align: center;">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="loan" items="${loans}">
-                                                <tr
-                                                    style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700);">
-                                                    <td style="padding: 15px;"><span
-                                                            class="badge-id">#LN-${loan.loanId}</span></td>
-                                                    <td
-                                                        style="padding: 15px; font-weight: 600; color: var(--gray-900);">
-                                                        ${customerNames[loan.customerId]}</td>
-                                                    <td
-                                                        style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                        ${loan.loanType}</td>
-                                                    <td style="padding: 15px; font-weight: 600;">₹
-                                                        <fmt:formatNumber value="${loan.principalAmount}"
-                                                            minFractionDigits="2" maxFractionDigits="2" />
-                                                    </td>
-                                                    <td style="padding: 15px;">${loan.termMonths} Months</td>
-                                                    <td style="padding: 15px; text-align: center;">
+                                <button onclick="openAdminLoanForm('personal', getSpecValue('personal', 'rate'), getSpecValue('personal', 'max'))" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="bx bx-plus-circle"></i> Apply New Loan
+                                </button>
+                            </div>
+
+                            <!-- Search and Status Filters -->
+                            <div class="search-filter-wrapper">
+                                <div class="search-input-group">
+                                    <i class="bx bx-search search-icon"></i>
+                                    <input type="text" id="directorySearchInput" onkeyup="filterDirectoryTable()" placeholder="Search by borrower name, phone, account or category...">
+                                </div>
+                                <div class="filter-select-group">
+                                    <select id="directoryStatusFilter" onchange="filterDirectoryTable()">
+                                        <option value="">All Statuses</option>
+                                        <option value="pending">Pending Approval</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="active">Active / Disbursed</option>
+                                        <option value="closed">Closed / Archived</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Table Element -->
+                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
+                                <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                                    <thead>
+                                        <tr style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
+                                            <th style="padding: 12px 15px; width: 110px;">Loan ID</th>
+                                            <th style="padding: 12px 15px;">Borrower Name</th>
+                                            <th style="padding: 12px 15px;">Loan Category</th>
+                                            <th style="padding: 12px 15px;">Principal</th>
+                                            <th style="padding: 12px 15px;">Remaining Balance</th>
+                                            <th style="padding: 12px 15px;">Monthly EMI</th>
+                                            <th style="padding: 12px 15px;">Term Length</th>
+                                            <th style="padding: 12px 15px; text-align: center;">Status</th>
+                                            <th style="padding: 12px 15px; text-align: center;">Ledger</th>
+                                            <th style="padding: 12px 15px; text-align: right;">Action Control</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="directoryTableBody">
+                                        <c:forEach var="loan" items="${loans}">
+                                            <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700); vertical-align: middle;"
+                                                data-customer-id="${loan.customerId}"
+                                                data-loan-category="${loan.loanType}"
+                                                data-customer-name="${customerNames[loan.customerId]}"
+                                                data-customer-phone="${customerPhones[loan.customerId]}">
+                                                <td style="padding: 15px;"><span class="badge-id">#LN-${loan.loanId}</span></td>
+                                                <td style="padding: 15px; font-weight: 600; color: var(--gray-900);">${customerNames[loan.customerId]}</td>
+                                                <td style="padding: 15px; text-transform: capitalize; font-weight: 600;">${loan.loanType}</td>
+                                                <td style="padding: 15px; font-weight: 600;">₹<fmt:formatNumber value="${loan.principalAmount}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                                <td style="padding: 15px; font-weight: 600; color: #ef4444;">₹<fmt:formatNumber value="${loan.remainingBalance}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                                <td style="padding: 15px; font-weight: 600; font-family: monospace;">₹<fmt:formatNumber value="${loan.monthlyEMI}" minFractionDigits="2" maxFractionDigits="2" /></td>
+                                                <td style="padding: 15px;">${loan.termMonths} Months</td>
+                                                <td style="padding: 15px; text-align: center;">
+                                                    <c:choose>
+                                                        <c:when test="${loan.status == 'pending_approval'}">
+                                                            <span class="badge-pending"><i class="bx bxs-time" style="vertical-align: middle; margin-right: 3px;"></i> Pending</span>
+                                                        </c:when>
+                                                        <c:when test="${loan.status == 'approved'}">
+                                                            <span class="badge-approved" style="background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald);"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Approved</span>
+                                                        </c:when>
+                                                        <c:when test="${loan.status == 'disbursed' or loan.status == 'active'}">
+                                                            <span class="badge-approved"><i class="bx bxs-check-circle" style="vertical-align: middle; margin-right: 3px;"></i> Active</span>
+                                                        </c:when>
+                                                        <c:when test="${loan.status == 'rejected'}">
+                                                            <span class="badge-rejected"><i class="bx bxs-x-circle" style="vertical-align: middle; margin-right: 3px;"></i> Rejected</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge-rejected" style="background: rgba(156, 163, 175, 0.12); color: var(--gray-500);">${loan.status}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td style="padding: 15px; text-align: center;">
+                                                    <a href="${pageContext.request.contextPath}/loan?action=statement&id=${loan.loanId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-cyan); color: var(--accent-cyan); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;"><i class="bx bx-file"></i> Statement</a>
+                                                </td>
+                                                <td style="padding: 15px; text-align: right;">
+                                                    <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+                                                        <button type="button" class="btn btn-secondary" onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i class="bx bx-show"></i> View</button>
                                                         <c:choose>
                                                             <c:when test="${loan.status == 'pending_approval'}">
-                                                                <span
-                                                                    style="background: rgba(245, 158, 11, 0.1); color: var(--accent-amber); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Pending</span>
+                                                                <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald); text-decoration: none;" onclick="return confirm('Are you sure you want to approve this loan application?');"><i class="bx bx-check"></i> Approve</a>
+                                                                <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; text-decoration: none;" onclick="return confirm('Are you sure you want to reject this loan application?');"><i class="bx bx-x"></i> Reject</a>
+                                                                <button type="button" class="btn btn-secondary" onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); display: inline-flex; align-items: center; gap: 4px;"><i class="bx bx-edit"></i> Edit</button>
                                                             </c:when>
                                                             <c:when test="${loan.status == 'approved'}">
-                                                                <span
-                                                                    style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Approved</span>
+                                                                <button type="button" class="btn btn-secondary" onclick="openDisburseModal('${loan.loanId}', '${loan.customerId}', '${loan.principalAmount}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i class="bx bx-wallet"></i> Disburse</button>
+                                                                <button type="button" class="btn btn-secondary" onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); display: inline-flex; align-items: center; gap: 4px;"><i class="bx bx-edit"></i> Edit</button>
                                                             </c:when>
-                                                            <c:when
-                                                                test="${loan.status == 'active' or loan.status == 'disbursed'}">
-                                                                <span
-                                                                    style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Active</span>
+                                                            <c:when test="${loan.status == 'active' or loan.status == 'disbursed'}">
+                                                                <button type="button" class="btn btn-secondary" onclick="openRepayModal('${loan.loanId}', '${loan.customerId}', '${loan.remainingBalance}')" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-amber); color: var(--accent-amber);"><i class="bx bx-wallet-alt"></i> Repay</button>
+                                                                <button type="button" class="btn btn-secondary" onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); display: inline-flex; align-items: center; gap: 4px;"><i class="bx bx-edit"></i> Edit</button>
                                                             </c:when>
-                                                            <c:otherwise>
-                                                                <span
-                                                                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${loan.status}</span>
-                                                            </c:otherwise>
                                                         </c:choose>
-                                                    </td>
-                                                    <td style="padding: 15px; text-align: center;">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
-                                                            data-form-details="<c:out value=" ${loan.formDetails}" />"
-                                                        style="padding: 6px 12px;
-                                                        font-size: 0.75rem; border-color: var(--primary-500); color:
-                                                        var(--primary-500); display: inline-flex; align-items:
-                                                        center; gap: 4px;">
-                                                        <i class="bx bx-edit"></i>
-                                                        <span>Update Details</span>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                            <c:if test="${empty loans}">
-                                                <tr>
-                                                    <td colspan="7"
-                                                        style="text-align: center; padding: 30px; color: var(--gray-400);">
-                                                        No loans registered in the system.</td>
-                                                </tr>
-                                            </c:if>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        <c:if test="${loans.size() == 0}">
+                                            <tr class="empty-row">
+                                                <td colspan="10" style="text-align: center; padding: 40px; color: var(--gray-400);"><i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No loan portfolios found in the system.</td>
+                                            </tr>
+                                        </c:if>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
+                        </div>                      </div>
                     </div>
 
 
@@ -3397,29 +3187,29 @@
                         }
                     }
 
-                    // Initialize state, badges, and default tabs on page load
+                    // Initialize state, badges, and default directory filters on page load
                     document.addEventListener("DOMContentLoaded", function () {
-                        // Populate dynamic counter badges
-                        const badgePending = document.getElementById('badge-pending');
-                        const badgeApproved = document.getElementById('badge-approved');
-                        const badgeClosed = document.getElementById('badge-closed');
-                        if (badgePending) badgePending.textContent = "${pendingCount}";
-                        if (badgeApproved) badgeApproved.textContent = "${approvedCount}";
-                        if (badgeClosed) badgeClosed.textContent = "${closedCount}";
-
-                        // Auto switch to appropriate active tab or default to pending
+                        // Set initial filter from statement loan status if redirecting
                         const loanStatus = document.body.getAttribute('data-statement-loan-status');
                         if (loanStatus && loanStatus.trim() !== '') {
-                            if (loanStatus === 'pending_approval') {
-                                switchTab('pending');
-                            } else if (loanStatus === 'approved' || loanStatus === 'disbursed' || loanStatus === 'active') {
-                                switchTab('approved');
-                            } else {
-                                switchTab('closed');
+                            const filterSelect = document.getElementById('directoryStatusFilter');
+                            if (filterSelect) {
+                                if (loanStatus === 'pending_approval') {
+                                    filterSelect.value = 'pending';
+                                } else if (loanStatus === 'approved') {
+                                    filterSelect.value = 'approved';
+                                } else if (loanStatus === 'disbursed' || loanStatus === 'active') {
+                                    filterSelect.value = 'active';
+                                } else if (loanStatus === 'closed') {
+                                    filterSelect.value = 'closed';
+                                } else if (loanStatus === 'rejected') {
+                                    filterSelect.value = 'rejected';
+                                }
                             }
-                        } else {
-                            switchTab('pending');
                         }
+                        
+                        // Initial filter application
+                        filterDirectoryTable();
 
                         // Generate full localized date inside statement
                         let d = new Date();
@@ -3428,8 +3218,6 @@
                         if (dateEl) {
                             dateEl.textContent = d.toLocaleDateString('en-US', options);
                         }
-
-
 
                         // Mobile menu drawer toggle handler with outside click collapse
                         const mobileToggle = document.getElementById('mobileNavToggle');
@@ -3481,54 +3269,73 @@
                         </c:forEach>
                     </c:if>
 
-                    // Live Client-side Loan Tables Filter
-                    function filterLoanTables() {
-                        const query = document.getElementById('loanSearchInput').value.toLowerCase().trim();
-                        const tableIds = ['content-pending', 'content-approved', 'content-closed'];
+                    // Live Client-side Unified Directory Table Filter
+                    function filterDirectoryTable() {
+                        const searchVal = document.getElementById('directorySearchInput').value.toLowerCase().trim();
+                        const statusVal = document.getElementById('directoryStatusFilter').value.toLowerCase();
+                        
+                        const table = document.getElementById('directoryTableBody');
+                        if (!table) return;
+                        const rows = table.getElementsByTagName('tr');
+                        
+                        let visibleCount = 0;
+                        let fallbackRow = table.querySelector('tr.empty-row');
+                        if (!fallbackRow) {
+                            fallbackRow = document.createElement('tr');
+                            fallbackRow.className = 'empty-row';
+                            fallbackRow.innerHTML = `<td colspan="10" style="text-align: center; padding: 40px; color: var(--gray-400);"><i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No records match your search query or filter.</td>`;
+                            table.appendChild(fallbackRow);
+                        }
 
-                        tableIds.forEach(id => {
-                            const tbody = document.querySelector('#' + id + ' tbody');
-                            if (!tbody) return;
-
-                            const rows = tbody.querySelectorAll('tr[data-customer-id]');
-                            if (rows.length === 0) return;
-
-                            let fallbackRow = tbody.querySelector('tr.empty-row');
-                            if (!fallbackRow) {
-                                fallbackRow = document.createElement('tr');
-                                fallbackRow.className = 'empty-row';
-                                const headerCols = tbody.closest('table').querySelectorAll('thead th').length;
-                                fallbackRow.innerHTML = `<td colspan="${headerCols}" style="text-align: center; padding: 40px; color: var(--gray-400);"><i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> No records match your search query.</td>`;
-                                tbody.appendChild(fallbackRow);
+                        for (let i = 0; i < rows.length; i++) {
+                            const row = rows[i];
+                            if (row.classList.contains('empty-row')) continue;
+                            if (row.cells.length < 10) continue;
+                            
+                            const custId = row.getAttribute('data-customer-id') || '';
+                            const customerName = (row.getAttribute('data-customer-name') || '').toLowerCase();
+                            const customerPhone = (row.getAttribute('data-customer-phone') || '').toLowerCase();
+                            const loanCategory = (row.getAttribute('data-loan-category') || '').toLowerCase();
+                            const accNo = custId ? (customerAccountsMap[custId] || '').toLowerCase() : '';
+                            
+                            // Retrieve status text
+                            const statusCell = row.cells[7];
+                            const statusText = statusCell ? statusCell.textContent.trim().toLowerCase() : '';
+                            
+                            const matchesSearch = customerName.includes(searchVal) || 
+                                                 customerPhone.includes(searchVal) || 
+                                                 loanCategory.includes(searchVal) || 
+                                                 accNo.includes(searchVal) || 
+                                                 row.cells[0].textContent.toLowerCase().includes(searchVal);
+                            
+                            let matchesStatus = false;
+                            if (statusVal === '') {
+                                matchesStatus = true;
+                            } else if (statusVal === 'pending') {
+                                matchesStatus = statusText.includes('pending');
+                            } else if (statusVal === 'approved') {
+                                matchesStatus = statusText === 'approved';
+                            } else if (statusVal === 'active') {
+                                matchesStatus = statusText.includes('active') || statusText.includes('disbursed');
+                            } else if (statusVal === 'closed') {
+                                matchesStatus = statusText.includes('closed');
+                            } else if (statusVal === 'rejected') {
+                                matchesStatus = statusText.includes('rejected');
                             }
-
-                            let visibleCount = 0;
-                            rows.forEach(row => {
-                                const custId = row.getAttribute('data-customer-id') || '';
-                                const name = (row.getAttribute('data-customer-name') || '').toLowerCase();
-                                const phone = (row.getAttribute('data-customer-phone') || '').toLowerCase();
-                                const loanCat = (row.getAttribute('data-loan-category') || '').toLowerCase();
-                                const accNo = custId ? (customerAccountsMap[custId] || '').toLowerCase() : '';
-
-                                const textMatch = name.includes(query) ||
-                                    phone.includes(query) ||
-                                    loanCat.includes(query) ||
-                                    accNo.includes(query);
-
-                                if (textMatch) {
-                                    row.style.display = '';
-                                    visibleCount++;
-                                } else {
-                                    row.style.display = 'none';
-                                }
-                            });
-
-                            if (visibleCount === 0) {
-                                fallbackRow.style.display = '';
+                            
+                            if (matchesSearch && matchesStatus) {
+                                row.style.display = '';
+                                visibleCount++;
                             } else {
-                                fallbackRow.style.display = 'none';
+                                row.style.display = 'none';
                             }
-                        });
+                        }
+                        
+                        if (visibleCount === 0) {
+                            fallbackRow.style.display = '';
+                        } else {
+                            fallbackRow.style.display = 'none';
+                        }
                     }
 
                     // Premium EMI Calculator & Trigger handlers

@@ -1298,9 +1298,225 @@
             color: var(--white);
         }
 
-        .filter-select-group select:focus {
-            border-color: var(--primary-500);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        /* Product Catalogue Styles adapted from cards.jsp / chequebook.jsp */
+        .catalog-scroll-container {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 30px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .catalog-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .catalog-scroll-container::-webkit-scrollbar-track {
+            background: rgba(99, 102, 241, 0.02);
+            border-radius: 10px;
+        }
+        .catalog-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 10px;
+            transition: background 0.2s ease;
+        }
+        .catalog-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+        body.dark-mode .catalog-scroll-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        body.dark-mode .catalog-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        body.dark-mode .catalog-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .catalog-grid {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+            width: max-content;
+            align-items: stretch;
+            padding: 4px;
+        }
+        .product-card {
+            width: 320px;
+            flex-shrink: 0;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column !important;
+            gap: 16px;
+            position: relative;
+            overflow: visible;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            background: #ffffff;
+        }
+        body.dark-mode .product-card {
+            background: #1e293b;
+        }
+        .product-card-bg-debit-classic {
+            background: rgba(99, 102, 241, 0.02);
+            border: 1.5px solid rgba(99, 102, 241, 0.08);
+        }
+        body.dark-mode .product-card-bg-debit-classic {
+            background: rgba(99, 102, 241, 0.04);
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+        .product-card-bg-debit-premium {
+            background: rgba(6, 182, 212, 0.02);
+            border: 1.5px solid rgba(6, 182, 212, 0.08);
+        }
+        body.dark-mode .product-card-bg-debit-premium {
+            background: rgba(6, 182, 212, 0.04);
+            border-color: rgba(6, 182, 212, 0.15);
+        }
+        .product-card-bg-credit-infinite {
+            background: rgba(245, 158, 11, 0.02);
+            border: 1.5px solid rgba(245, 158, 11, 0.08);
+        }
+        body.dark-mode .product-card-bg-credit-infinite {
+            background: rgba(245, 158, 11, 0.04);
+            border-color: rgba(245, 158, 11, 0.15);
+        }
+        .product-card-watermark {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 5.5rem;
+            font-weight: 800;
+            transform: rotate(-15deg);
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+        }
+        .watermark-debit {
+            color: rgba(99, 102, 241, 0.025);
+        }
+        body.dark-mode .watermark-debit {
+            color: rgba(255, 255, 255, 0.015);
+        }
+        .catalog-details-col {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .catalog-spec-badge {
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+        .spec-badge-classic {
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--primary-500);
+        }
+        .catalog-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin: 0;
+        }
+        body.dark-mode .catalog-card-title {
+            color: #ffffff;
+        }
+        .catalog-card-desc {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin: 0;
+        }
+        body.dark-mode .catalog-card-desc {
+            color: var(--gray-400);
+        }
+        .catalog-specs-table {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .catalog-spec-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            border-bottom: 1px dashed rgba(99, 102, 241, 0.08);
+            padding-bottom: 5px;
+        }
+        body.dark-mode .catalog-spec-row {
+            border-bottom-color: rgba(255, 255, 255, 0.05);
+        }
+        .catalog-spec-label {
+            color: var(--gray-500);
+        }
+        body.dark-mode .catalog-spec-label {
+            color: var(--gray-400);
+        }
+        .catalog-spec-value {
+            color: var(--gray-800);
+            font-weight: 700;
+        }
+        body.dark-mode .catalog-spec-value {
+            color: #ffffff;
+        }
+        .catalog-features-col {
+            width: 100%;
+            border-top: 1px dashed rgba(99, 102, 241, 0.12);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.dark-mode .catalog-features-col {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        .catalog-features-heading {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--gray-450);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.8px;
+        }
+        .catalog-features-list {
+            font-size: 0.82rem;
+            color: var(--gray-600);
+            padding-left: 16px;
+            margin: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        body.dark-mode .catalog-features-list {
+            color: var(--gray-300);
+        }
+        .catalog-action-col {
+            width: 100%;
+            margin-top: auto;
+            padding-top: 15px;
+        }
+        .btn-apply-catalog {
+            width: 100% !important;
+            padding: 12px 24px !important;
+            white-space: nowrap !important;
+            margin: 0 !important;
+            font-weight: 600;
+            border-radius: var(--radius-md) !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+            transition: all 0.3s ease;
+        }
+        .btn-apply-catalog:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
         }
     </style>
 </head>
@@ -1449,6 +1665,99 @@
                 </div>
             </div>
 
+            <!-- VGB Passbook Product Catalogue -->
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;">
+                        <i class="bx bx-book-open" style="color: var(--primary-500);"></i> VGB Bank Passbook Suite & Specifications
+                    </h3>
+                </div>
+                <div class="catalog-scroll-container">
+                    <div class="catalog-grid">
+                    
+                        <!-- Product 1: New Cover Passbook -->
+                        <div class="product-card product-card-bg-debit-classic">
+                            <div class="product-card-watermark watermark-debit">NEW</div>
+                            <div class="catalog-details-col">
+                                <span class="catalog-spec-badge spec-badge-classic">New Cover</span>
+                                <h4 class="catalog-card-title">Standard Booklet</h4>
+                                <p class="catalog-card-desc">Brand new passbook booklet with premium binding, custom holograph logo, and metallic cover.</p>
+                            </div>
+
+                            <div class="catalog-specs-table">
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Upfront Fee:</span>
+                                    <strong class="catalog-spec-value">₹150.00</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Capacity Limit:</span>
+                                    <strong class="catalog-spec-value">40 Pages</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Verification Time:</span>
+                                    <strong class="catalog-spec-value">Instant Issuance</strong>
+                                </div>
+                            </div>
+
+                            <div class="catalog-features-col">
+                                <h5 class="catalog-features-heading">Features & Benefits:</h5>
+                                <ul class="catalog-features-list">
+                                    <li>Metallic Embossed Outer Cover</li>
+                                    <li>High-Density Security Watermark</li>
+                                    <li>Initial Account Ledger Setup</li>
+                                </ul>
+                            </div>
+
+                            <div class="catalog-action-col">
+                                <button type="button" onclick="openApplyModal('apply')" class="btn-apply-catalog btn btn-primary">
+                                    <i class="bx bx-plus-circle"></i> Apply New Cover
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 2: Renewal Booklet -->
+                        <div class="product-card product-card-bg-debit-premium">
+                            <div class="product-card-watermark watermark-debit" style="color: rgba(6, 182, 212, 0.025);">RENEW</div>
+                            <div class="catalog-details-col">
+                                <span class="catalog-spec-badge spec-badge-premium" style="background: rgba(6, 182, 212, 0.08); color: #0891b2;">Renewal</span>
+                                <h4 class="catalog-card-title">Renewal Extension</h4>
+                                <p class="catalog-card-desc">Renewal or page extension booklet for accounts with filled or damaged passbooks.</p>
+                            </div>
+
+                            <div class="catalog-specs-table">
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Upfront Fee:</span>
+                                    <strong class="catalog-spec-value">₹100.00</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Capacity Limit:</span>
+                                    <strong class="catalog-spec-value">40 Pages</strong>
+                                </div>
+                                <div class="catalog-spec-row">
+                                    <span class="catalog-spec-label">Verification Time:</span>
+                                    <strong class="catalog-spec-value">Instant Sync</strong>
+                                </div>
+                            </div>
+
+                            <div class="catalog-features-col">
+                                <h5 class="catalog-features-heading">Features & Benefits:</h5>
+                                <ul class="catalog-features-list">
+                                    <li>Priority Branch Printing & Sync</li>
+                                    <li>Low-cost replacement booklet</li>
+                                    <li>Extended transaction logging</li>
+                                </ul>
+                            </div>
+
+                            <div class="catalog-action-col">
+                                <button type="button" onclick="openApplyModal('renew')" class="btn-apply-catalog btn btn-primary" style="background: var(--gradient-primary); border: none;">
+                                    <i class="bx bx-refresh"></i> Apply Renewal
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <!-- Table of all requests -->
             <div class="glass-card">
@@ -1674,12 +1983,20 @@
             }
         });
 
-        function openApplyModal() {
+        function openApplyModal(preselectedAction) {
             document.getElementById('lookupAccountNumber').value = '';
             document.getElementById('lookupResultsContainer').style.display = 'none';
             document.getElementById('lookupResultsList').innerHTML = '';
             document.getElementById('passbookForm').style.display = 'none';
             document.getElementById('applyPassbookModal').style.display = 'flex';
+
+            if (preselectedAction) {
+                const selectEl = document.querySelector('select[name="actionType"]');
+                if (selectEl) {
+                    selectEl.value = preselectedAction;
+                    updateApplyFeeAndNotice(preselectedAction);
+                }
+            }
         }
 
         function closeApplyModal() {

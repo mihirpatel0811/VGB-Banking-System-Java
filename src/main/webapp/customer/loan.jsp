@@ -354,6 +354,57 @@
             flex-grow: 1;
         }
 
+        .loan-product-card .docs-list-container {
+            text-align: left;
+            margin-top: 12px;
+            border-top: 1px dashed rgba(99, 102, 241, 0.15);
+            padding-top: 10px;
+            margin-bottom: 15px;
+        }
+        body.dark-mode .loan-product-card .docs-list-container {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        .loan-product-card .docs-list-title {
+            font-size: 0.72rem;
+            color: var(--gray-500);
+            display: block;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        body.dark-mode .loan-product-card .docs-list-title {
+            color: var(--gray-400);
+        }
+        .loan-product-card .docs-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            font-size: 0.72rem;
+            color: var(--gray-600);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        body.dark-mode .loan-product-card .docs-list {
+            color: var(--gray-300);
+        }
+        .loan-product-card .docs-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.3;
+        }
+        .loan-product-card .docs-list li i {
+            color: var(--primary-500);
+            font-size: 0.95rem;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+        body.dark-mode .loan-product-card .docs-list li i {
+            color: var(--primary-400);
+        }
+
         .loan-product-card .rate-badge {
             font-size: 1.35rem;
             font-weight: 800;
@@ -798,6 +849,14 @@
                         <div>
                             <h4>Personal Cash Loan</h4>
                             <p>Unsecured personal financing for instant cash requirements, medical expenses, or emergency funds.</p>
+                            <div class="docs-list-container">
+                                <span class="docs-list-title">Required Documents:</span>
+                                <ul class="docs-list">
+                                    <li><i class="bx bx-file"></i><span>PAN Card & Aadhaar Card</span></li>
+                                    <li><i class="bx bx-file"></i><span>Last 3 months salary slips</span></li>
+                                    <li><i class="bx bx-file"></i><span>6 months bank statements</span></li>
+                                </ul>
+                            </div>
                         </div>
                         <div>
                             <div class="rate-badge">12.00% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
@@ -811,6 +870,15 @@
                         <div>
                             <h4>Home Secure Loan</h4>
                             <p>Realize your dream home with low rates, customized repayment timelines, and easy paper processing.</p>
+                            <div class="docs-list-container">
+                                <span class="docs-list-title">Required Documents:</span>
+                                <ul class="docs-list">
+                                    <li><i class="bx bx-file"></i><span>PAN Card & Aadhaar Card</span></li>
+                                    <li><i class="bx bx-file"></i><span>Property agreement & builder NOC</span></li>
+                                    <li><i class="bx bx-file"></i><span>3 years filed ITR papers</span></li>
+                                    <li><i class="bx bx-file"></i><span>Last 6 months statements</span></li>
+                                </ul>
+                            </div>
                         </div>
                         <div>
                             <div class="rate-badge">7.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
@@ -824,6 +892,15 @@
                         <div>
                             <h4>Vehicle Purchase Loan</h4>
                             <p>Drive your dream car or vehicle home with instant disbursals, high limits, and flexible tenure plans.</p>
+                            <div class="docs-list-container">
+                                <span class="docs-list-title">Required Documents:</span>
+                                <ul class="docs-list">
+                                    <li><i class="bx bx-file"></i><span>PAN Card & Aadhaar Card</span></li>
+                                    <li><i class="bx bx-file"></i><span>Vehicle proforma invoice</span></li>
+                                    <li><i class="bx bx-file"></i><span>3 months salary / income proofs</span></li>
+                                    <li><i class="bx bx-file"></i><span>6 months active statements</span></li>
+                                </ul>
+                            </div>
                         </div>
                         <div>
                             <div class="rate-badge">8.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
@@ -837,6 +914,15 @@
                         <div>
                             <h4>Higher Education Loan</h4>
                             <p>Fund premium global academic pursuits, covering university fees, travel, and accommodation costs.</p>
+                            <div class="docs-list-container">
+                                <span class="docs-list-title">Required Documents:</span>
+                                <ul class="docs-list">
+                                    <li><i class="bx bx-file"></i><span>Admission letter & fee structure</span></li>
+                                    <li><i class="bx bx-file"></i><span>Academic sheets (10th/12th/Grad)</span></li>
+                                    <li><i class="bx bx-file"></i><span>KYC of applicant & co-borrower</span></li>
+                                    <li><i class="bx bx-file"></i><span>Income proof of co-borrower</span></li>
+                                </ul>
+                            </div>
                         </div>
                         <div>
                             <div class="rate-badge">6.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
@@ -850,6 +936,15 @@
                         <div>
                             <h4>Business Capital Loan</h4>
                             <p>Power your business venture, purchase heavy machinery, expand infrastructure, or boost working capital.</p>
+                            <div class="docs-list-container">
+                                <span class="docs-list-title">Required Documents:</span>
+                                <ul class="docs-list">
+                                    <li><i class="bx bx-file"></i><span>Business PAN & GST certificate</span></li>
+                                    <li><i class="bx bx-file"></i><span>2 years audited financials</span></li>
+                                    <li><i class="bx bx-file"></i><span>1 year primary checking statements</span></li>
+                                    <li><i class="bx bx-file"></i><span>KYC of directors/partners</span></li>
+                                </ul>
+                            </div>
                         </div>
                         <div>
                             <div class="rate-badge">10.50% <span style="font-size: 0.75rem; color: var(--gray-400); font-weight: 500;">P.A.</span></div>
