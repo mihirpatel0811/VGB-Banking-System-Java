@@ -50,6 +50,30 @@ public class DatabaseConfig {
             }
             rs.close();
 
+            // 1b. Upgrade customer table for Minor, Student, Salary, and RM details
+            rs = metaData.getColumns(null, null, "customer", "guardian_name");
+            if (!rs.next()) {
+                logger.info("Upgrading schema: Adding guardian, student, salary, and relationship manager columns to customer table");
+                stmt.execute("ALTER TABLE customer ADD COLUMN guardian_name VARCHAR(100) NULL AFTER voter_id_copy_path");
+                stmt.execute("ALTER TABLE customer ADD COLUMN guardian_relationship VARCHAR(50) NULL AFTER guardian_name");
+                stmt.execute("ALTER TABLE customer ADD COLUMN guardian_phone VARCHAR(20) NULL AFTER guardian_relationship");
+                stmt.execute("ALTER TABLE customer ADD COLUMN guardian_aadhaar VARCHAR(12) NULL AFTER guardian_phone");
+                stmt.execute("ALTER TABLE customer ADD COLUMN guardian_pan VARCHAR(10) NULL AFTER guardian_aadhaar");
+                stmt.execute("ALTER TABLE customer ADD COLUMN guardian_signature_path VARCHAR(255) NULL AFTER guardian_pan");
+                stmt.execute("ALTER TABLE customer ADD COLUMN birth_certificate_path VARCHAR(255) NULL AFTER guardian_signature_path");
+                stmt.execute("ALTER TABLE customer ADD COLUMN school_college_name VARCHAR(150) NULL AFTER birth_certificate_path");
+                stmt.execute("ALTER TABLE customer ADD COLUMN student_id VARCHAR(50) NULL AFTER school_college_name");
+                stmt.execute("ALTER TABLE customer ADD COLUMN course VARCHAR(100) NULL AFTER student_id");
+                stmt.execute("ALTER TABLE customer ADD COLUMN admission_number VARCHAR(50) NULL AFTER course");
+                stmt.execute("ALTER TABLE customer ADD COLUMN company_name VARCHAR(150) NULL AFTER admission_number");
+                stmt.execute("ALTER TABLE customer ADD COLUMN employer_name VARCHAR(100) NULL AFTER company_name");
+                stmt.execute("ALTER TABLE customer ADD COLUMN employee_id VARCHAR(50) NULL AFTER employer_name");
+                stmt.execute("ALTER TABLE customer ADD COLUMN salary_frequency VARCHAR(50) NULL AFTER employee_id");
+                stmt.execute("ALTER TABLE customer ADD COLUMN relationship_manager VARCHAR(100) NULL AFTER salary_frequency");
+                logger.info("Customer table minor/student/salary schema upgraded successfully!");
+            }
+            rs.close();
+
             // 2. Upgrade account table if needed (has_atm_card, has_cheque_book,
             // has_passbook)
             rs = metaData.getColumns(null, null, "account", "has_atm_card");
@@ -64,6 +88,25 @@ public class DatabaseConfig {
                 logger.info("Account services schema upgraded successfully!");
             } else {
                 logger.debug("Schema verification: account services columns are present.");
+            }
+            rs.close();
+
+            // 2b. Upgrade account table for FD/RD, pension, and generated CBS values
+            rs = metaData.getColumns(null, null, "account", "fd_rd_tenure_months");
+            if (!rs.next()) {
+                logger.info("Upgrading schema: Adding FD/RD settings and CBS identifiers to account table");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_tenure_months INT NULL AFTER pin");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_interest_rate DECIMAL(5, 2) NULL AFTER fd_rd_tenure_months");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_maturity_amount DECIMAL(15, 4) NULL AFTER fd_rd_interest_rate");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_maturity_date DATE NULL AFTER fd_rd_maturity_amount");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_payout_option VARCHAR(50) NULL AFTER fd_rd_maturity_date");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_auto_renewal TINYINT(1) NOT NULL DEFAULT 0 AFTER fd_rd_payout_option");
+                stmt.execute("ALTER TABLE account ADD COLUMN fd_rd_auto_debit TINYINT(1) NOT NULL DEFAULT 0 AFTER fd_rd_auto_renewal");
+                stmt.execute("ALTER TABLE account ADD COLUMN application_ref_no VARCHAR(50) NULL UNIQUE AFTER fd_rd_auto_debit");
+                stmt.execute("ALTER TABLE account ADD COLUMN passbook_number VARCHAR(50) NULL UNIQUE AFTER application_ref_no");
+                stmt.execute("ALTER TABLE account ADD COLUMN atm_card_number VARCHAR(19) NULL UNIQUE AFTER passbook_number");
+                stmt.execute("ALTER TABLE account ADD COLUMN is_pension_account TINYINT(1) NOT NULL DEFAULT 0 AFTER atm_card_number");
+                logger.info("Account table FD/RD and CBS fields schema upgraded successfully!");
             }
             rs.close();
 

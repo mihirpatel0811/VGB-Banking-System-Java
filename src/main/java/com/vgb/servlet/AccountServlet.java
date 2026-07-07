@@ -251,6 +251,24 @@ public class AccountServlet extends BaseServlet {
             account.setPrimaryOccupation(getParameter(request, "occupation", "Salaried"));
             String incomeStr = getParameter(request, "income", "300000");
             account.setPrimaryIncome(incomeStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(incomeStr));
+            
+            // Sub-type specialized fields
+            account.setPrimaryGuardianName(getParameter(request, "guardianName", ""));
+            account.setPrimaryGuardianRelationship(getParameter(request, "guardianRelationship", ""));
+            account.setPrimaryGuardianPhone(getParameter(request, "guardianPhone", ""));
+            account.setPrimaryGuardianAadhaar(getParameter(request, "guardianAadhaar", ""));
+            account.setPrimaryGuardianPan(getParameter(request, "guardianPan", ""));
+            
+            account.setPrimarySchoolCollegeName(getParameter(request, "schoolCollegeName", ""));
+            account.setPrimaryStudentId(getParameter(request, "studentId", ""));
+            account.setPrimaryCourse(getParameter(request, "course", ""));
+            account.setPrimaryAdmissionNumber(getParameter(request, "admissionNumber", ""));
+            
+            account.setPrimaryCompanyName(getParameter(request, "companyName", ""));
+            account.setPrimaryEmployerName(getParameter(request, "employerName", ""));
+            account.setPrimaryEmployeeId(getParameter(request, "employeeId", ""));
+            account.setPrimarySalaryFrequency(getParameter(request, "salaryFrequency", ""));
+            account.setPrimaryRelationshipManager(getParameter(request, "relationshipManager", ""));
         }
 
         if (!"current".equalsIgnoreCase(account.getAccountType())) {
@@ -313,6 +331,36 @@ public class AccountServlet extends BaseServlet {
             account.setCompanyPan(companyPan);
             account.setCompanyAadhaar(companyAadhaar);
         }
+
+        // FD/RD term deposit specific parameters
+        String tenureStr = getParameter(request, "fdRdTenure", "");
+        if (!tenureStr.isEmpty()) {
+            account.setFdRdTenureMonths(Integer.parseInt(tenureStr));
+        } else {
+            account.setFdRdTenureMonths(null);
+        }
+        String rateStr = getParameter(request, "fdRdInterestRate", "");
+        if (!rateStr.isEmpty()) {
+            account.setFdRdInterestRate(new BigDecimal(rateStr));
+        } else {
+            account.setFdRdInterestRate(null);
+        }
+        String matAmtStr = getParameter(request, "fdRdMaturityAmount", "");
+        if (!matAmtStr.isEmpty()) {
+            account.setFdRdMaturityAmount(new BigDecimal(matAmtStr));
+        } else {
+            account.setFdRdMaturityAmount(null);
+        }
+        String matDateStr = getParameter(request, "fdRdMaturityDate", "");
+        if (!matDateStr.isEmpty()) {
+            account.setFdRdMaturityDate(LocalDate.parse(matDateStr));
+        } else {
+            account.setFdRdMaturityDate(null);
+        }
+        account.setFdRdPayoutOption(getParameter(request, "fdRdPayoutOption", ""));
+        account.setFdRdAutoRenewal("on".equalsIgnoreCase(request.getParameter("fdAutoRenewal")) || "true".equalsIgnoreCase(request.getParameter("fdAutoRenewal")));
+        account.setFdRdAutoDebit("on".equalsIgnoreCase(request.getParameter("rdAutoDebit")) || "true".equalsIgnoreCase(request.getParameter("rdAutoDebit")));
+        account.setPensionAccount("on".equalsIgnoreCase(request.getParameter("isPension")) || "true".equalsIgnoreCase(request.getParameter("isPension")));
 
         if (accountDAO.update(account)) {
             request.getSession().setAttribute("success", "Account details updated successfully.");
@@ -379,7 +427,7 @@ public class AccountServlet extends BaseServlet {
             return;
         }
 
-        String accountType = getParameter(request, "accountType", "savings"); // savings, current
+        String accountType = getParameter(request, "accountType", "savings"); // savings, current, salary, student, fd, rd
         String holdingType = getParameter(request, "holdingType", "single"); // single, joint
         BigDecimal initialAmount = new BigDecimal(getParameter(request, "initialAmount", "0"));
 
@@ -403,6 +451,40 @@ public class AccountServlet extends BaseServlet {
             response.sendRedirect(request.getContextPath() + "/account?action=list");
             return;
         }
+
+        // FD / RD specific parameters
+        Integer fdRdTenureMonths = null;
+        String tenureStr = getParameter(request, "fdRdTenureMonths", "");
+        if (tenureStr.isEmpty()) tenureStr = getParameter(request, "fdTenure", "");
+        if (tenureStr.isEmpty()) tenureStr = getParameter(request, "rdTenure", "");
+        if (!tenureStr.isEmpty()) {
+            fdRdTenureMonths = Integer.parseInt(tenureStr);
+        }
+
+        BigDecimal fdRdInterestRate = null;
+        String rateStr = getParameter(request, "fdRdInterestRate", "");
+        if (!rateStr.isEmpty()) {
+            fdRdInterestRate = new BigDecimal(rateStr);
+        }
+
+        BigDecimal fdRdMaturityAmount = null;
+        String matAmtStr = getParameter(request, "fdRdMaturityAmount", "");
+        if (!matAmtStr.isEmpty()) {
+            fdRdMaturityAmount = new BigDecimal(matAmtStr);
+        }
+
+        LocalDate fdRdMaturityDate = null;
+        String matDateStr = getParameter(request, "fdRdMaturityDate", "");
+        if (!matDateStr.isEmpty()) {
+            fdRdMaturityDate = LocalDate.parse(matDateStr);
+        }
+
+        String fdRdPayoutOption = getParameter(request, "fdRdPayoutOption", null);
+        if (fdRdPayoutOption == null) fdRdPayoutOption = getParameter(request, "fdPayoutOption", null);
+
+        boolean fdRdAutoRenewal = "on".equalsIgnoreCase(request.getParameter("fdAutoRenewal")) || "true".equalsIgnoreCase(request.getParameter("fdAutoRenewal"));
+        boolean fdRdAutoDebit = "on".equalsIgnoreCase(request.getParameter("rdAutoDebit")) || "true".equalsIgnoreCase(request.getParameter("rdAutoDebit"));
+        boolean isPensionAccount = "on".equalsIgnoreCase(request.getParameter("isPension")) || "true".equalsIgnoreCase(request.getParameter("isPension"));
 
         // Build list of customers (signatories) to create or fetch
         List<Customer> customerList = new ArrayList<>();
@@ -441,10 +523,19 @@ public class AccountServlet extends BaseServlet {
                 cust.setOccupation(getParameter(request, "partner_occupation_" + i, "Business"));
                 cust.setAnnualIncome(new BigDecimal(getParameter(request, "partner_income_" + i, "500000")));
                 cust.setStatus("active");
+                
+                // standard documents
+                cust.setAadhaarProofPath(processUploadedFile(request, "partner_aadhaarCopy_" + i, "aadhaar"));
+                cust.setPanProofPath(processUploadedFile(request, "partner_panCopy_" + i, "pan"));
+                cust.setPassportCopyPath(processUploadedFile(request, "partner_passportCopy_" + i, "passport"));
+                cust.setDrivingLicenseCopyPath(processUploadedFile(request, "partner_dlCopy_" + i, "dl"));
+                cust.setVoterIdCopyPath(processUploadedFile(request, "partner_voterIdCopy_" + i, "voter_id"));
+                cust.setAvatarPath(processProfilePhoto(request, "partner_avatar_" + i, "partner"));
+                
                 customerList.add(cust);
             }
         } else {
-            // SAVINGS ACCOUNT - Primary customer details
+            // NON-CORPORATE ACCOUNTS - Primary customer details
             Customer primary = new Customer();
             primary.setFirstName(getParameter(request, "firstName", ""));
             primary.setMiddleName(getParameter(request, "middleName", ""));
@@ -471,8 +562,41 @@ public class AccountServlet extends BaseServlet {
             primary.setOccupation(getParameter(request, "occupation", "Salaried"));
             primary.setAnnualIncome(new BigDecimal(getParameter(request, "income", "300000")));
             primary.setStatus("active");
-            String primaryAvatar = processProfilePhoto(request, "primaryAvatar", "primary");
-            primary.setAvatarPath(primaryAvatar);
+
+            // Profile photo & files
+            primary.setAvatarPath(processProfilePhoto(request, "primaryAvatar", "primary"));
+            primary.setAadhaarProofPath(processUploadedFile(request, "aadhaarCopy", "aadhaar"));
+            primary.setPanProofPath(processUploadedFile(request, "panCopy", "pan"));
+            primary.setPassportCopyPath(processUploadedFile(request, "passportCopy", "passport"));
+            primary.setDrivingLicenseCopyPath(processUploadedFile(request, "dlCopy", "dl"));
+            primary.setVoterIdCopyPath(processUploadedFile(request, "voterIdCopy", "voter_id"));
+
+            // Guardian details (Minors)
+            primary.setGuardianName(getParameter(request, "guardianName", null));
+            primary.setGuardianRelationship(getParameter(request, "guardianRelationship", null));
+            primary.setGuardianPhone(getParameter(request, "guardianPhone", null));
+            primary.setGuardianAadhaar(getParameter(request, "guardianAadhaar", null));
+            primary.setGuardianPan(getParameter(request, "guardianPan", null));
+            primary.setGuardianSignaturePath(processUploadedFile(request, "guardianSignatureCopy", "guardian_sig"));
+            primary.setBirthCertificatePath(processUploadedFile(request, "birthCertificateCopy", "birth_cert"));
+
+            // Student details
+            primary.setSchoolCollegeName(getParameter(request, "schoolCollegeName", null));
+            primary.setStudentId(getParameter(request, "studentId", null));
+            primary.setCourse(getParameter(request, "course", null));
+            primary.setAdmissionNumber(getParameter(request, "admissionNumber", null));
+            processUploadedFile(request, "studentIdCopy", "student_id");
+            processUploadedFile(request, "bonafideCopy", "bonafide");
+
+            // Salary details
+            primary.setCompanyName(getParameter(request, "companyName", null));
+            primary.setEmployerName(getParameter(request, "employerName", null));
+            primary.setEmployeeId(getParameter(request, "employeeId", null));
+            primary.setSalaryFrequency(getParameter(request, "salaryFrequency", null));
+
+            // Senior Relationship Manager
+            primary.setRelationshipManager(getParameter(request, "relationshipManager", null));
+
             customerList.add(primary);
 
             // Joint customer details
@@ -503,8 +627,10 @@ public class AccountServlet extends BaseServlet {
                 joint.setOccupation(getParameter(request, "joint_occupation", "Salaried"));
                 joint.setAnnualIncome(new BigDecimal(getParameter(request, "joint_income", "300000")));
                 joint.setStatus("active");
-                String jointAvatar = processProfilePhoto(request, "jointAvatar", "joint");
-                joint.setAvatarPath(jointAvatar);
+                joint.setAvatarPath(processProfilePhoto(request, "jointAvatar", "joint"));
+                
+                joint.setAadhaarProofPath(processUploadedFile(request, "joint_aadhaarCopy", "joint_aadhaar"));
+                joint.setPanProofPath(processUploadedFile(request, "joint_panCopy", "joint_pan"));
                 customerList.add(joint);
             }
         }
@@ -517,12 +643,12 @@ public class AccountServlet extends BaseServlet {
         }
 
         // Banking services flags
-        boolean atmSelected = "on".equalsIgnoreCase(request.getParameter("atmCard"));
+        boolean atmSelected = "on".equalsIgnoreCase(request.getParameter("atmCard")) || "true".equalsIgnoreCase(request.getParameter("atmCard"));
         String cardProvider = getParameter(request, "cardProvider", "visa").toLowerCase();
-        boolean chequeSelected = "on".equalsIgnoreCase(request.getParameter("chequeBook"));
-        boolean passbookSelected = "savings".equalsIgnoreCase(accountType) || "on".equalsIgnoreCase(request.getParameter("passbook"));
+        boolean chequeSelected = "on".equalsIgnoreCase(request.getParameter("chequeBook")) || "true".equalsIgnoreCase(request.getParameter("chequeBook"));
+        boolean passbookSelected = !"current".equalsIgnoreCase(accountType) || "on".equalsIgnoreCase(request.getParameter("passbook")) || "true".equalsIgnoreCase(request.getParameter("passbook"));
 
-        // Nominee details (savings only)
+        // Nominee details (savings / salary / student / fd / rd)
         String nomineeName = getParameter(request, "nomineeName", "No Nominee");
 
         // Company Details (current only)
@@ -534,6 +660,9 @@ public class AccountServlet extends BaseServlet {
         String companyAddress = getParameter(request, "companyAddress", "");
         String companyPan = getParameter(request, "companyPan", "");
         String companyAadhaar = getParameter(request, "companyAadhaar", "");
+        processUploadedFile(request, "gstCertCopy", "gst_cert");
+        processUploadedFile(request, "businessRegCopy", "business_reg");
+        processUploadedFile(request, "businessProofCopy", "business_proof");
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -547,7 +676,7 @@ public class AccountServlet extends BaseServlet {
 
             // 1. Create or retrieve each customer profile
             for (Customer customer : customerList) {
-                // Check if customer already exists by Aadhaar, Email, or Phone to prevent constraint failures
+                // Check if customer already exists
                 String checkSql = "SELECT customer_id FROM customer WHERE aadhaar_card = ? OR email = ? OR phone_no = ?";
                 long existingId = 0;
                 try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
@@ -565,13 +694,12 @@ public class AccountServlet extends BaseServlet {
                     customerIds.add(existingId);
                     logger.info("Using existing customer ID: {}", existingId);
                 } else {
-                    // Validate credentials before creating new customer profile
+                    // Validate credentials
                     String username = customer.getUsername();
                     if (username == null || username.trim().length() < 4) {
                         throw new Exception("Validation failed: Username for '" + customer.getFirstName() + "' must be at least 4 characters long.");
                     }
                     
-                    // Query username existence using transaction connection
                     String checkUserSql = "SELECT COUNT(*) FROM customer WHERE username = ?";
                     try (PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSql)) {
                         checkUserStmt.setString(1, username);
@@ -592,10 +720,14 @@ public class AccountServlet extends BaseServlet {
                         throw new Exception("Validation failed: Secure PIN for '" + customer.getFirstName() + "' must be exactly 4 numeric digits.");
                     }
 
-                    // Create new customer profile
+                    // Create customer SQL
                     String createCustomerSql = 
-                        "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income, avatar_path) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income, avatar_path, " +
+                        "guardian_name, guardian_relationship, guardian_phone, guardian_aadhaar, guardian_pan, guardian_signature_path, birth_certificate_path, " +
+                        "school_college_name, student_id, course, admission_number, " +
+                        "company_name, employer_name, employee_id, salary_frequency, " +
+                        "relationship_manager, aadhaar_proof_path, pan_proof_path, passport_copy_path, driving_license_copy_path, voter_id_copy_path) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     
                     try (PreparedStatement custStmt = conn.prepareStatement(createCustomerSql, Statement.RETURN_GENERATED_KEYS)) {
                         custStmt.setString(1, customer.getFirstName());
@@ -625,6 +757,31 @@ public class AccountServlet extends BaseServlet {
                         custStmt.setBigDecimal(25, customer.getAnnualIncome());
                         custStmt.setString(26, customer.getAvatarPath());
                         
+                        custStmt.setString(27, customer.getGuardianName());
+                        custStmt.setString(28, customer.getGuardianRelationship());
+                        custStmt.setString(29, customer.getGuardianPhone());
+                        custStmt.setString(30, customer.getGuardianAadhaar());
+                        custStmt.setString(31, customer.getGuardianPan());
+                        custStmt.setString(32, customer.getGuardianSignaturePath());
+                        custStmt.setString(33, customer.getBirthCertificatePath());
+                        
+                        custStmt.setString(34, customer.getSchoolCollegeName());
+                        custStmt.setString(35, customer.getStudentId());
+                        custStmt.setString(36, customer.getCourse());
+                        custStmt.setString(37, customer.getAdmissionNumber());
+                        
+                        custStmt.setString(38, customer.getCompanyName());
+                        custStmt.setString(39, customer.getEmployerName());
+                        custStmt.setString(40, customer.getEmployeeId());
+                        custStmt.setString(41, customer.getSalaryFrequency());
+                        custStmt.setString(42, customer.getRelationshipManager());
+                        
+                        custStmt.setString(43, customer.getAadhaarProofPath());
+                        custStmt.setString(44, customer.getPanProofPath());
+                        custStmt.setString(45, customer.getPassportCopyPath());
+                        custStmt.setString(46, customer.getDrivingLicenseCopyPath());
+                        custStmt.setString(47, customer.getVoterIdCopyPath());
+                        
                         int affectedRows = custStmt.executeUpdate();
                         if (affectedRows == 0) {
                             throw new SQLException("Failed to create customer profile: no rows affected.");
@@ -643,20 +800,26 @@ public class AccountServlet extends BaseServlet {
                 }
             }
 
-            // 2. Generate unique Account Number starting with Rajkot branch code prefix
+            // 2. Generate unique Account Number & CBS numbers
             String accountNumber = "";
             Random rand = new Random();
             boolean accountNumUnique = false;
             while (!accountNumUnique) {
-                // Generate a random 12-digit account number starting with "17193" (Rajkot Branch code)
                 StringBuilder sb = new StringBuilder("17193");
-                sb.append("savings".equalsIgnoreCase(accountType) ? "1" : "2"); // 1 for Savings, 2 for Current
+                String typeDigit = "1";
+                if ("savings".equalsIgnoreCase(accountType)) typeDigit = "1";
+                else if ("current".equalsIgnoreCase(accountType)) typeDigit = "2";
+                else if ("salary".equalsIgnoreCase(accountType)) typeDigit = "3";
+                else if ("student".equalsIgnoreCase(accountType)) typeDigit = "4";
+                else if ("fd".equalsIgnoreCase(accountType)) typeDigit = "5";
+                else if ("rd".equalsIgnoreCase(accountType)) typeDigit = "6";
+                
+                sb.append(typeDigit);
                 for (int i = 0; i < 6; i++) {
                     sb.append(rand.nextInt(10));
                 }
                 accountNumber = sb.toString();
 
-                // Check uniqueness in database
                 String checkAccSql = "SELECT COUNT(*) FROM account WHERE account_number = ?";
                 try (PreparedStatement checkAccStmt = conn.prepareStatement(checkAccSql)) {
                     checkAccStmt.setString(1, accountNumber);
@@ -668,10 +831,30 @@ public class AccountServlet extends BaseServlet {
                 }
             }
 
+            String applicationRefNo = "VGB-APP-" + String.format("%06d", rand.nextInt(1000000));
+            String passbookNumber = "PB-" + String.format("%08d", rand.nextInt(100000000));
+            String generatedAtmCardNumber = null;
+            if (atmSelected) {
+                String prefix = "4";
+                if ("mastercard".equalsIgnoreCase(cardProvider)) {
+                    prefix = "5";
+                } else if ("rupay".equalsIgnoreCase(cardProvider)) {
+                    prefix = "6";
+                }
+                StringBuilder cardSb = new StringBuilder(prefix);
+                for (int i = 0; i < 15; i++) {
+                    cardSb.append(rand.nextInt(10));
+                }
+                String rawCardNum = cardSb.toString();
+                generatedAtmCardNumber = rawCardNum.substring(0, 4) + " " + rawCardNum.substring(4, 8) + " " + rawCardNum.substring(8, 12) + " " + rawCardNum.substring(12, 16);
+            }
+
             // 3. Create core Account
             String createAccountSql = 
-                "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook, username, password, pin) " +
-                "VALUES (?, ?, 'VGB0000171', ?, 'active', ?, ?, ?, ?, ?, ?)";
+                "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook, username, password, pin, " +
+                "fd_rd_tenure_months, fd_rd_interest_rate, fd_rd_maturity_amount, fd_rd_maturity_date, fd_rd_payout_option, fd_rd_auto_renewal, fd_rd_auto_debit, " +
+                "application_ref_no, passbook_number, atm_card_number, is_pension_account) " +
+                "VALUES (?, ?, 'VGB0000171', ?, 'active', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             long accountId = 0;
             try (PreparedStatement accStmt = conn.prepareStatement(createAccountSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -686,6 +869,38 @@ public class AccountServlet extends BaseServlet {
                 accStmt.setString(7, primaryCust.getUsername());
                 accStmt.setString(8, primaryCust.getPassword());
                 accStmt.setString(9, primaryCust.getPin());
+                
+                if (fdRdTenureMonths != null) {
+                    accStmt.setInt(10, fdRdTenureMonths);
+                } else {
+                    accStmt.setNull(10, Types.INTEGER);
+                }
+                
+                if (fdRdInterestRate != null) {
+                    accStmt.setBigDecimal(11, fdRdInterestRate);
+                } else {
+                    accStmt.setNull(11, Types.DECIMAL);
+                }
+                
+                if (fdRdMaturityAmount != null) {
+                    accStmt.setBigDecimal(12, fdRdMaturityAmount);
+                } else {
+                    accStmt.setNull(12, Types.DECIMAL);
+                }
+                
+                if (fdRdMaturityDate != null) {
+                    accStmt.setDate(13, java.sql.Date.valueOf(fdRdMaturityDate));
+                } else {
+                    accStmt.setNull(13, Types.DATE);
+                }
+                
+                accStmt.setString(14, fdRdPayoutOption);
+                accStmt.setInt(15, fdRdAutoRenewal ? 1 : 0);
+                accStmt.setInt(16, fdRdAutoDebit ? 1 : 0);
+                accStmt.setString(17, applicationRefNo);
+                accStmt.setString(18, passbookNumber);
+                accStmt.setString(19, generatedAtmCardNumber);
+                accStmt.setInt(20, isPensionAccount ? 1 : 0);
                 
                 accStmt.executeUpdate();
                 try (ResultSet generatedKeys = accStmt.getGeneratedKeys()) {
@@ -726,7 +941,7 @@ public class AccountServlet extends BaseServlet {
                     currStmt.setLong(1, accountId);
                     currStmt.setString(2, businessName.isEmpty() ? "Unnamed Business" : businessName);
                     currStmt.setString(3, gstin.isEmpty() ? "GST" + UUID.randomUUID().toString().substring(0, 12).toUpperCase() : gstin);
-                    currStmt.setBigDecimal(4, new BigDecimal("100000.00")); // standard overdraft limit
+                    currStmt.setBigDecimal(4, new BigDecimal("100000.00"));
                     currStmt.setString(5, companyCategory);
                     currStmt.setString(6, companyPhone);
                     currStmt.setString(7, companyEmail);
@@ -750,36 +965,6 @@ public class AccountServlet extends BaseServlet {
 
             // 7. Handle ATM Card service request creation
             if (atmSelected) {
-                // Generate unique card number
-                String cardNumber = "";
-                boolean cardNumUnique = false;
-                while (!cardNumUnique) {
-                    String prefix = "4"; // default Visa
-                    if ("mastercard".equalsIgnoreCase(cardProvider)) {
-                        prefix = "5";
-                    } else if ("rupay".equalsIgnoreCase(cardProvider)) {
-                        prefix = "6";
-                    }
-                    
-                    StringBuilder cardSb = new StringBuilder(prefix);
-                    for (int i = 0; i < 15; i++) {
-                        cardSb.append(rand.nextInt(10));
-                    }
-                    String rawCardNum = cardSb.toString();
-                    cardNumber = rawCardNum.substring(0, 4) + " " + rawCardNum.substring(4, 8) + " " + rawCardNum.substring(8, 12) + " " + rawCardNum.substring(12, 16);
-
-                    // Check card number uniqueness in DB
-                    String checkCardSql = "SELECT COUNT(*) FROM card WHERE card_number = ?";
-                    try (PreparedStatement checkCardStmt = conn.prepareStatement(checkCardSql)) {
-                        checkCardStmt.setString(1, cardNumber);
-                        try (ResultSet checkCardRs = checkCardStmt.executeQuery()) {
-                            if (checkCardRs.next() && checkCardRs.getInt(1) == 0) {
-                                cardNumUnique = true;
-                            }
-                        }
-                    }
-                }
-
                 String cardHolderName = "savings".equalsIgnoreCase(accountType) ? 
                     (customerList.get(0).getFirstName() + " " + customerList.get(0).getLastName()).toUpperCase() :
                     businessName.toUpperCase();
@@ -793,8 +978,8 @@ public class AccountServlet extends BaseServlet {
                 
                 try (PreparedStatement cardStmt = conn.prepareStatement(createCardSql)) {
                     cardStmt.setLong(1, accountId);
-                    cardStmt.setLong(2, customerIds.get(0)); // primary owner gets the card
-                    cardStmt.setString(3, cardNumber);
+                    cardStmt.setLong(2, customerIds.get(0));
+                    cardStmt.setString(3, generatedAtmCardNumber);
                     cardStmt.setString(4, cardProvider);
                     cardStmt.setString(5, cardHolderName);
                     cardStmt.setString(6, cvv);
@@ -815,7 +1000,7 @@ public class AccountServlet extends BaseServlet {
                 }
             }
 
-            // 9. Handle Passbook booklet request creation (default/compulsory for savings, optional for current)
+            // 9. Handle Passbook booklet request creation
             if (passbookSelected) {
                 String createPassbookSql = 
                     "INSERT INTO passbook_request (account_id, customer_id, request_type, status, charges, is_charges_paid) " +
@@ -830,6 +1015,8 @@ public class AccountServlet extends BaseServlet {
             // Populate new account credentials summary
             Customer primaryCust = customerList.get(0);
             java.util.Map<String, Object> summary = new java.util.LinkedHashMap<>();
+            summary.put("customerId", customerIds.get(0));
+            summary.put("cifNumber", "CIF" + customerIds.get(0));
             summary.put("accountNumber", accountNumber);
             summary.put("accountType", accountType);
             summary.put("initialAmount", initialAmount);
@@ -839,8 +1026,14 @@ public class AccountServlet extends BaseServlet {
             summary.put("primaryName", (primaryCust.getFirstName() + " " + (primaryCust.getMiddleName() != null && !primaryCust.getMiddleName().isEmpty() ? primaryCust.getMiddleName() + " " : "") + primaryCust.getLastName()).toUpperCase());
             summary.put("primaryUsername", primaryCust.getUsername());
             summary.put("primaryPassword", primaryCust.getPassword());
+            summary.put("applicationRefNo", applicationRefNo);
+            summary.put("passbookNumber", passbookNumber);
+            summary.put("atmCardNumber", generatedAtmCardNumber != null ? generatedAtmCardNumber : "N/A");
+            summary.put("accountOpeningDate", LocalDate.now().toString());
+            summary.put("accountStatus", "Active");
+            summary.put("kycStatus", "Verified & Approved");
 
-            if ("savings".equalsIgnoreCase(accountType) && "joint".equalsIgnoreCase(holdingType) && customerList.size() > 1) {
+            if (!"current".equalsIgnoreCase(accountType) && "joint".equalsIgnoreCase(holdingType) && customerList.size() > 1) {
                 Customer jointCust = customerList.get(1);
                 summary.put("jointName", (jointCust.getFirstName() + " " + (jointCust.getMiddleName() != null && !jointCust.getMiddleName().isEmpty() ? jointCust.getMiddleName() + " " : "") + jointCust.getLastName()).toUpperCase());
                 summary.put("jointUsername", jointCust.getUsername());
@@ -1423,6 +1616,36 @@ public class AccountServlet extends BaseServlet {
             return "/assest/img/avatars/" + fileName;
         } catch (Exception e) {
             logger.error("Failed to process profile photo for " + partName, e);
+            return null;
+        }
+    }
+
+    private String processUploadedFile(HttpServletRequest request, String partName, String prefix) {
+        try {
+            Part filePart = request.getPart(partName);
+            if (filePart == null || filePart.getSize() == 0) {
+                return null;
+            }
+            String uploadPath = request.getServletContext().getRealPath("/assest/docs/");
+            java.io.File uploadDir = new java.io.File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            String originalName = getSubmittedFileName(filePart);
+            originalName = new java.io.File(originalName).getName();
+            String ext = "png";
+            if (originalName.contains(".")) {
+                String potentialExt = originalName.substring(originalName.lastIndexOf(".") + 1).toLowerCase().trim();
+                if (potentialExt.matches("^[a-zA-Z0-9]+$")) {
+                    ext = potentialExt;
+                }
+            }
+            String fileName = prefix + "_" + System.currentTimeMillis() + "." + ext;
+            String filePath = uploadPath + java.io.File.separator + fileName;
+            filePart.write(filePath);
+            return "/assest/docs/" + fileName;
+        } catch (Exception e) {
+            logger.error("Failed to process uploaded file for " + partName, e);
             return null;
         }
     }

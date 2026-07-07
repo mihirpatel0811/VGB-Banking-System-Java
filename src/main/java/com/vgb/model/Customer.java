@@ -38,6 +38,37 @@ public class Customer implements Serializable {
     private java.math.BigDecimal annualIncome;
     private LocalDateTime createdAt;
 
+    // Minor Guardian details
+    private String guardianName;
+    private String guardianRelationship;
+    private String guardianPhone;
+    private String guardianAadhaar;
+    private String guardianPan;
+    private String guardianSignaturePath;
+    private String birthCertificatePath;
+
+    // Student details
+    private String schoolCollegeName;
+    private String studentId;
+    private String course;
+    private String admissionNumber;
+
+    // Salary details
+    private String companyName;
+    private String employerName;
+    private String employeeId;
+    private String salaryFrequency;
+
+    // Senior RM details
+    private String relationshipManager;
+
+    // Standard KYC proof paths
+    private String aadhaarProofPath;
+    private String panProofPath;
+    private String passportCopyPath;
+    private String drivingLicenseCopyPath;
+    private String voterIdCopyPath;
+
     // Constructors
     public Customer() {}
 
@@ -135,6 +166,74 @@ public class Customer implements Serializable {
 
     public java.math.BigDecimal getAnnualIncome() { return annualIncome; }
     public void setAnnualIncome(java.math.BigDecimal annualIncome) { this.annualIncome = annualIncome; }
+
+    // Getters and Setters for Guardian Details
+    public String getGuardianName() { return guardianName; }
+    public void setGuardianName(String guardianName) { this.guardianName = guardianName; }
+
+    public String getGuardianRelationship() { return guardianRelationship; }
+    public void setGuardianRelationship(String guardianRelationship) { this.guardianRelationship = guardianRelationship; }
+
+    public String getGuardianPhone() { return guardianPhone; }
+    public void setGuardianPhone(String guardianPhone) { this.guardianPhone = guardianPhone; }
+
+    public String getGuardianAadhaar() { return guardianAadhaar; }
+    public void setGuardianAadhaar(String guardianAadhaar) { this.guardianAadhaar = guardianAadhaar; }
+
+    public String getGuardianPan() { return guardianPan; }
+    public void setGuardianPan(String guardianPan) { this.guardianPan = guardianPan; }
+
+    public String getGuardianSignaturePath() { return guardianSignaturePath; }
+    public void setGuardianSignaturePath(String guardianSignaturePath) { this.guardianSignaturePath = guardianSignaturePath; }
+
+    public String getBirthCertificatePath() { return birthCertificatePath; }
+    public void setBirthCertificatePath(String birthCertificatePath) { this.birthCertificatePath = birthCertificatePath; }
+
+    // Getters and Setters for Student Details
+    public String getSchoolCollegeName() { return schoolCollegeName; }
+    public void setSchoolCollegeName(String schoolCollegeName) { this.schoolCollegeName = schoolCollegeName; }
+
+    public String getStudentId() { return studentId; }
+    public void setStudentId(String studentId) { this.studentId = studentId; }
+
+    public String getCourse() { return course; }
+    public void setCourse(String course) { this.course = course; }
+
+    public String getAdmissionNumber() { return admissionNumber; }
+    public void setAdmissionNumber(String admissionNumber) { this.admissionNumber = admissionNumber; }
+
+    // Getters and Setters for Salary Details
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+
+    public String getEmployerName() { return employerName; }
+    public void setEmployerName(String employerName) { this.employerName = employerName; }
+
+    public String getEmployeeId() { return employeeId; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
+
+    public String getSalaryFrequency() { return salaryFrequency; }
+    public void setSalaryFrequency(String salaryFrequency) { this.salaryFrequency = salaryFrequency; }
+
+    // Getters and Setters for Senior RM details
+    public String getRelationshipManager() { return relationshipManager; }
+    public void setRelationshipManager(String relationshipManager) { this.relationshipManager = relationshipManager; }
+
+    // Getters and Setters for Standard KYC proof paths
+    public String getAadhaarProofPath() { return aadhaarProofPath; }
+    public void setAadhaarProofPath(String aadhaarProofPath) { this.aadhaarProofPath = aadhaarProofPath; }
+
+    public String getPanProofPath() { return panProofPath; }
+    public void setPanProofPath(String panProofPath) { this.panProofPath = panProofPath; }
+
+    public String getPassportCopyPath() { return passportCopyPath; }
+    public void setPassportCopyPath(String passportCopyPath) { this.passportCopyPath = passportCopyPath; }
+
+    public String getDrivingLicenseCopyPath() { return drivingLicenseCopyPath; }
+    public void setDrivingLicenseCopyPath(String drivingLicenseCopyPath) { this.drivingLicenseCopyPath = drivingLicenseCopyPath; }
+
+    public String getVoterIdCopyPath() { return voterIdCopyPath; }
+    public void setVoterIdCopyPath(String voterIdCopyPath) { this.voterIdCopyPath = voterIdCopyPath; }
 
     @Override
     public String toString() {

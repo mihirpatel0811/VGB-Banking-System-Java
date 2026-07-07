@@ -83,6 +83,26 @@ CREATE TABLE customer (
                           passport_copy_path VARCHAR(255) NULL,
                           driving_license_copy_path VARCHAR(255) NULL,
                           voter_id_copy_path VARCHAR(255) NULL,
+                          -- Minor Guardian details
+                          guardian_name VARCHAR(100) NULL,
+                          guardian_relationship VARCHAR(50) NULL,
+                          guardian_phone VARCHAR(20) NULL,
+                          guardian_aadhaar VARCHAR(12) NULL,
+                          guardian_pan VARCHAR(10) NULL,
+                          guardian_signature_path VARCHAR(255) NULL,
+                          birth_certificate_path VARCHAR(255) NULL,
+                          -- Student details
+                          school_college_name VARCHAR(150) NULL,
+                          student_id VARCHAR(50) NULL,
+                          course VARCHAR(100) NULL,
+                          admission_number VARCHAR(50) NULL,
+                          -- Salary details
+                          company_name VARCHAR(150) NULL,
+                          employer_name VARCHAR(100) NULL,
+                          employee_id VARCHAR(50) NULL,
+                          salary_frequency VARCHAR(50) NULL,
+                          -- Senior RM details
+                          relationship_manager VARCHAR(100) NULL,
                           username VARCHAR(50) NOT NULL UNIQUE,
                           pin CHAR(4) NOT NULL, -- Preserves leading zeros safely (e.g., '0432')
                           password VARCHAR(255) NOT NULL, -- Plain text string allowed for development
@@ -112,6 +132,19 @@ CREATE TABLE account (
                          username VARCHAR(50) NULL UNIQUE,
                          password VARCHAR(255) NULL,
                          pin CHAR(4) NULL,
+                         -- FD / RD specific settings
+                         fd_rd_tenure_months INT NULL,
+                         fd_rd_interest_rate DECIMAL(5, 2) NULL,
+                         fd_rd_maturity_amount DECIMAL(15, 4) NULL,
+                         fd_rd_maturity_date DATE NULL,
+                         fd_rd_payout_option VARCHAR(50) NULL,
+                         fd_rd_auto_renewal TINYINT(1) NOT NULL DEFAULT 0,
+                         fd_rd_auto_debit TINYINT(1) NOT NULL DEFAULT 0,
+                         -- Core Banking generated identifiers
+                         application_ref_no VARCHAR(50) NULL UNIQUE,
+                         passbook_number VARCHAR(50) NULL UNIQUE,
+                         atm_card_number VARCHAR(19) NULL UNIQUE,
+                         is_pension_account TINYINT(1) NOT NULL DEFAULT 0,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

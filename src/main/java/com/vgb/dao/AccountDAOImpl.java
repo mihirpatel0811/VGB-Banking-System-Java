@@ -43,6 +43,23 @@ public class AccountDAOImpl implements AccountDAO {
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.marital_status END) as primary_marital_status, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.occupation END) as primary_occupation, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.annual_income END) as primary_income, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.guardian_name END) as primary_guardian_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.guardian_relationship END) as primary_guardian_relationship, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.guardian_phone END) as primary_guardian_phone, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.guardian_aadhaar END) as primary_guardian_aadhaar, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.guardian_pan END) as primary_guardian_pan, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.guardian_signature_path END) as primary_guardian_signature_path, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.birth_certificate_path END) as primary_birth_certificate_path, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.school_college_name END) as primary_school_college_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.student_id END) as primary_student_id, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.course END) as primary_course, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.admission_number END) as primary_admission_number, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.company_name END) as primary_company_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.employer_name END) as primary_employer_name, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.employee_id END) as primary_employee_id, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.salary_frequency END) as primary_salary_frequency, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.relationship_manager END) as primary_relationship_manager, " +
+        
         
         // Joint Customer fields
         "COALESCE(MIN(CASE WHEN s.ownership_type = 'joint_holder' THEN s.customer_id END), 0) as joint_customer_id, " +
@@ -109,7 +126,9 @@ public class AccountDAOImpl implements AccountDAO {
         "GROUP BY a.account_id " +
         "ORDER BY a.created_at DESC";
     private static final String UPDATE_ACCOUNT = 
-        "UPDATE account SET account_type = ?, ifsc_code = ?, status = ?, has_atm_card = ?, has_cheque_book = ?, has_passbook = ?, username = ?, password = ?, pin = ? WHERE account_id = ?";
+        "UPDATE account SET account_type = ?, ifsc_code = ?, status = ?, has_atm_card = ?, has_cheque_book = ?, has_passbook = ?, username = ?, password = ?, pin = ?, " +
+        "fd_rd_tenure_months = ?, fd_rd_interest_rate = ?, fd_rd_maturity_amount = ?, fd_rd_maturity_date = ?, fd_rd_payout_option = ?, fd_rd_auto_renewal = ?, fd_rd_auto_debit = ?, is_pension_account = ? " +
+        "WHERE account_id = ?";
     private static final String UPDATE_ACCOUNT_BALANCE = 
         "UPDATE account SET balance = ? WHERE account_id = ?";
     private static final String UPDATE_ACCOUNT_STATUS = 
@@ -358,13 +377,31 @@ public class AccountDAOImpl implements AccountDAO {
             stmt.setString(7, account.getUsername());
             stmt.setString(8, account.getPassword());
             stmt.setString(9, account.getPin());
-            stmt.setLong(10, account.getAccountId());
+            
+            if (account.getFdRdTenureMonths() != null) {
+                stmt.setInt(10, account.getFdRdTenureMonths());
+            } else {
+                stmt.setNull(10, java.sql.Types.INTEGER);
+            }
+            stmt.setBigDecimal(11, account.getFdRdInterestRate());
+            stmt.setBigDecimal(12, account.getFdRdMaturityAmount());
+            stmt.setDate(13, account.getFdRdMaturityDate() != null ? java.sql.Date.valueOf(account.getFdRdMaturityDate()) : null);
+            stmt.setString(14, account.getFdRdPayoutOption());
+            stmt.setInt(15, account.isFdRdAutoRenewal() ? 1 : 0);
+            stmt.setInt(16, account.isFdRdAutoDebit() ? 1 : 0);
+            stmt.setInt(17, account.isPensionAccount() ? 1 : 0);
+            
+            stmt.setLong(18, account.getAccountId());
 
             int result = stmt.executeUpdate();
 
             // Update primary customer details if provided
             if (account.getPrimaryFirstName() != null) {
-                String updatePrimarySql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ?, father_name = ?, mother_name = ?, nationality = ?, alt_phone_no = ? WHERE customer_id = ?";
+                String updatePrimarySql = "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, dob = ?, gender = ?, marital_status = ?, email = ?, phone_no = ?, pan_card = ?, aadhaar_card = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ?, father_name = ?, mother_name = ?, nationality = ?, alt_phone_no = ?, " +
+                                          "guardian_name = ?, guardian_relationship = ?, guardian_phone = ?, guardian_aadhaar = ?, guardian_pan = ?, " +
+                                          "school_college_name = ?, student_id = ?, course = ?, admission_number = ?, " +
+                                          "company_name = ?, employer_name = ?, employee_id = ?, salary_frequency = ?, relationship_manager = ? " +
+                                          "WHERE customer_id = ?";
                 try (PreparedStatement stmtPrim = conn.prepareStatement(updatePrimarySql)) {
                     stmtPrim.setString(1, account.getPrimaryFirstName());
                     stmtPrim.setString(2, account.getPrimaryMiddleName());
@@ -387,7 +424,23 @@ public class AccountDAOImpl implements AccountDAO {
                     stmtPrim.setString(19, account.getPrimaryMotherName());
                     stmtPrim.setString(20, account.getPrimaryNationality());
                     stmtPrim.setString(21, account.getPrimaryAltPhone());
-                    stmtPrim.setLong(22, account.getCustomerId());
+                    
+                    stmtPrim.setString(22, account.getPrimaryGuardianName());
+                    stmtPrim.setString(23, account.getPrimaryGuardianRelationship());
+                    stmtPrim.setString(24, account.getPrimaryGuardianPhone());
+                    stmtPrim.setString(25, account.getPrimaryGuardianAadhaar());
+                    stmtPrim.setString(26, account.getPrimaryGuardianPan());
+                    stmtPrim.setString(27, account.getPrimarySchoolCollegeName());
+                    stmtPrim.setString(28, account.getPrimaryStudentId());
+                    stmtPrim.setString(29, account.getPrimaryCourse());
+                    stmtPrim.setString(30, account.getPrimaryAdmissionNumber());
+                    stmtPrim.setString(31, account.getPrimaryCompanyName());
+                    stmtPrim.setString(32, account.getPrimaryEmployerName());
+                    stmtPrim.setString(33, account.getPrimaryEmployeeId());
+                    stmtPrim.setString(34, account.getPrimarySalaryFrequency());
+                    stmtPrim.setString(35, account.getPrimaryRelationshipManager());
+                    
+                    stmtPrim.setLong(36, account.getCustomerId());
                     stmtPrim.executeUpdate();
                 }
             }
@@ -1013,6 +1066,25 @@ public class AccountDAOImpl implements AccountDAO {
         account.setHasAtmCard(rs.getInt("has_atm_card") == 1);
         account.setHasChequeBook(rs.getInt("has_cheque_book") == 1);
         account.setHasPassbook(rs.getInt("has_passbook") == 1);
+
+        try {
+            account.setFdRdTenureMonths(rs.getObject("fd_rd_tenure_months") != null ? rs.getInt("fd_rd_tenure_months") : null);
+            account.setFdRdInterestRate(rs.getBigDecimal("fd_rd_interest_rate"));
+            account.setFdRdMaturityAmount(rs.getBigDecimal("fd_rd_maturity_amount"));
+            Date fdRdMaturityDate = rs.getDate("fd_rd_maturity_date");
+            if (fdRdMaturityDate != null) {
+                account.setFdRdMaturityDate(fdRdMaturityDate.toLocalDate());
+            }
+            account.setFdRdPayoutOption(rs.getString("fd_rd_payout_option"));
+            account.setFdRdAutoRenewal(rs.getInt("fd_rd_auto_renewal") == 1);
+            account.setFdRdAutoDebit(rs.getInt("fd_rd_auto_debit") == 1);
+            account.setApplicationRefNo(rs.getString("application_ref_no"));
+            account.setPassbookNumber(rs.getString("passbook_number"));
+            account.setAtmCardNumber(rs.getString("atm_card_number"));
+            account.setPensionAccount(rs.getInt("is_pension_account") == 1);
+        } catch (SQLException e) {
+            // ignore
+        }
         
         try {
             String custName = rs.getString("customer_name");
@@ -1077,6 +1149,20 @@ public class AccountDAOImpl implements AccountDAO {
             account.setPrimaryMaritalStatus(rs.getString("primary_marital_status"));
             account.setPrimaryOccupation(rs.getString("primary_occupation"));
             account.setPrimaryIncome(rs.getBigDecimal("primary_income"));
+            account.setPrimaryGuardianName(rs.getString("primary_guardian_name"));
+            account.setPrimaryGuardianRelationship(rs.getString("primary_guardian_relationship"));
+            account.setPrimaryGuardianPhone(rs.getString("primary_guardian_phone"));
+            account.setPrimaryGuardianAadhaar(rs.getString("primary_guardian_aadhaar"));
+            account.setPrimaryGuardianPan(rs.getString("primary_guardian_pan"));
+            account.setPrimarySchoolCollegeName(rs.getString("primary_school_college_name"));
+            account.setPrimaryStudentId(rs.getString("primary_student_id"));
+            account.setPrimaryCourse(rs.getString("primary_course"));
+            account.setPrimaryAdmissionNumber(rs.getString("primary_admission_number"));
+            account.setPrimaryCompanyName(rs.getString("primary_company_name"));
+            account.setPrimaryEmployerName(rs.getString("primary_employer_name"));
+            account.setPrimaryEmployeeId(rs.getString("primary_employee_id"));
+            account.setPrimarySalaryFrequency(rs.getString("primary_salary_frequency"));
+            account.setPrimaryRelationshipManager(rs.getString("primary_relationship_manager"));
         } catch (SQLException e) {
             // ignore
         }

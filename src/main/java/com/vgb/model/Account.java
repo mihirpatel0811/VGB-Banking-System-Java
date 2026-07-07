@@ -55,6 +55,21 @@ public class Account implements Serializable {
     private String companyPan;
     private String companyAadhaar;
 
+    // FD / RD specific settings
+    private Integer fdRdTenureMonths;
+    private BigDecimal fdRdInterestRate;
+    private BigDecimal fdRdMaturityAmount;
+    private java.time.LocalDate fdRdMaturityDate;
+    private String fdRdPayoutOption;
+    private boolean fdRdAutoRenewal;
+    private boolean fdRdAutoDebit;
+
+    // Core Banking generated identifiers
+    private String applicationRefNo;
+    private String passbookNumber;
+    private String atmCardNumber;
+    private boolean isPensionAccount;
+
     // Primary Customer fields
     private String primaryFirstName;
     private String primaryMiddleName;
@@ -76,6 +91,28 @@ public class Account implements Serializable {
     private String primaryNationality;
     private String primaryAltPhone;
     private String primaryPermAddress;
+
+    // Guardian details
+    private String primaryGuardianName;
+    private String primaryGuardianRelationship;
+    private String primaryGuardianPhone;
+    private String primaryGuardianAadhaar;
+    private String primaryGuardianPan;
+
+    // Student details
+    private String primarySchoolCollegeName;
+    private String primaryStudentId;
+    private String primaryCourse;
+    private String primaryAdmissionNumber;
+
+    // Salary details
+    private String primaryCompanyName;
+    private String primaryEmployerName;
+    private String primaryEmployeeId;
+    private String primarySalaryFrequency;
+
+    // Senior RM details
+    private String primaryRelationshipManager;
 
     // Joint Customer fields
     private String jointFirstName;
@@ -328,6 +365,83 @@ public class Account implements Serializable {
 
     public String getPin() { return pin; }
     public void setPin(String pin) { this.pin = pin; }
+
+    // Getters and Setters for FD/RD specific settings
+    public Integer getFdRdTenureMonths() { return fdRdTenureMonths; }
+    public void setFdRdTenureMonths(Integer fdRdTenureMonths) { this.fdRdTenureMonths = fdRdTenureMonths; }
+
+    public BigDecimal getFdRdInterestRate() { return fdRdInterestRate; }
+    public void setFdRdInterestRate(BigDecimal fdRdInterestRate) { this.fdRdInterestRate = fdRdInterestRate; }
+
+    public BigDecimal getFdRdMaturityAmount() { return fdRdMaturityAmount; }
+    public void setFdRdMaturityAmount(BigDecimal fdRdMaturityAmount) { this.fdRdMaturityAmount = fdRdMaturityAmount; }
+
+    public java.time.LocalDate getFdRdMaturityDate() { return fdRdMaturityDate; }
+    public void setFdRdMaturityDate(java.time.LocalDate fdRdMaturityDate) { this.fdRdMaturityDate = fdRdMaturityDate; }
+
+    public String getFdRdPayoutOption() { return fdRdPayoutOption; }
+    public void setFdRdPayoutOption(String fdRdPayoutOption) { this.fdRdPayoutOption = fdRdPayoutOption; }
+
+    public boolean isFdRdAutoRenewal() { return fdRdAutoRenewal; }
+    public void setFdRdAutoRenewal(boolean fdRdAutoRenewal) { this.fdRdAutoRenewal = fdRdAutoRenewal; }
+
+    public boolean isFdRdAutoDebit() { return fdRdAutoDebit; }
+    public void setFdRdAutoDebit(boolean fdRdAutoDebit) { this.fdRdAutoDebit = fdRdAutoDebit; }
+
+    // Getters and Setters for CBS identifiers
+    public String getApplicationRefNo() { return applicationRefNo; }
+    public void setApplicationRefNo(String applicationRefNo) { this.applicationRefNo = applicationRefNo; }
+
+    public String getPassbookNumber() { return passbookNumber; }
+    public void setPassbookNumber(String passbookNumber) { this.passbookNumber = passbookNumber; }
+
+    public String getAtmCardNumber() { return atmCardNumber; }
+    public void setAtmCardNumber(String atmCardNumber) { this.atmCardNumber = atmCardNumber; }
+
+    public boolean isPensionAccount() { return isPensionAccount; }
+    public void setPensionAccount(boolean pensionAccount) { this.isPensionAccount = pensionAccount; }
+
+    public String getPrimaryGuardianName() { return primaryGuardianName; }
+    public void setPrimaryGuardianName(String primaryGuardianName) { this.primaryGuardianName = primaryGuardianName; }
+
+    public String getPrimaryGuardianRelationship() { return primaryGuardianRelationship; }
+    public void setPrimaryGuardianRelationship(String primaryGuardianRelationship) { this.primaryGuardianRelationship = primaryGuardianRelationship; }
+
+    public String getPrimaryGuardianPhone() { return primaryGuardianPhone; }
+    public void setPrimaryGuardianPhone(String primaryGuardianPhone) { this.primaryGuardianPhone = primaryGuardianPhone; }
+
+    public String getPrimaryGuardianAadhaar() { return primaryGuardianAadhaar; }
+    public void setPrimaryGuardianAadhaar(String primaryGuardianAadhaar) { this.primaryGuardianAadhaar = primaryGuardianAadhaar; }
+
+    public String getPrimaryGuardianPan() { return primaryGuardianPan; }
+    public void setPrimaryGuardianPan(String primaryGuardianPan) { this.primaryGuardianPan = primaryGuardianPan; }
+
+    public String getPrimarySchoolCollegeName() { return primarySchoolCollegeName; }
+    public void setPrimarySchoolCollegeName(String primarySchoolCollegeName) { this.primarySchoolCollegeName = primarySchoolCollegeName; }
+
+    public String getPrimaryStudentId() { return primaryStudentId; }
+    public void setPrimaryStudentId(String primaryStudentId) { this.primaryStudentId = primaryStudentId; }
+
+    public String getPrimaryCourse() { return primaryCourse; }
+    public void setPrimaryCourse(String primaryCourse) { this.primaryCourse = primaryCourse; }
+
+    public String getPrimaryAdmissionNumber() { return primaryAdmissionNumber; }
+    public void setPrimaryAdmissionNumber(String primaryAdmissionNumber) { this.primaryAdmissionNumber = primaryAdmissionNumber; }
+
+    public String getPrimaryCompanyName() { return primaryCompanyName; }
+    public void setPrimaryCompanyName(String primaryCompanyName) { this.primaryCompanyName = primaryCompanyName; }
+
+    public String getPrimaryEmployerName() { return primaryEmployerName; }
+    public void setPrimaryEmployerName(String primaryEmployerName) { this.primaryEmployerName = primaryEmployerName; }
+
+    public String getPrimaryEmployeeId() { return primaryEmployeeId; }
+    public void setPrimaryEmployeeId(String primaryEmployeeId) { this.primaryEmployeeId = primaryEmployeeId; }
+
+    public String getPrimarySalaryFrequency() { return primarySalaryFrequency; }
+    public void setPrimarySalaryFrequency(String primarySalaryFrequency) { this.primarySalaryFrequency = primarySalaryFrequency; }
+
+    public String getPrimaryRelationshipManager() { return primaryRelationshipManager; }
+    public void setPrimaryRelationshipManager(String primaryRelationshipManager) { this.primaryRelationshipManager = primaryRelationshipManager; }
 
     @Override
     public String toString() {

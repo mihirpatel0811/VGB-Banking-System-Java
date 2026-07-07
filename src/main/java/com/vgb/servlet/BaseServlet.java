@@ -82,7 +82,7 @@ public abstract class BaseServlet extends HttpServlet {
             value = cachedParams.get(name);
         }
         
-        if (value == null) {
+        if (value == null || value.trim().isEmpty()) {
             value = request.getParameter(name);
             if (value != null) {
                 logger.info("getParameter: '{}' found via request.getParameter: value='{}'", name, value);

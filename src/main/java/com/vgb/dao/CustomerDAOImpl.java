@@ -567,6 +567,32 @@ public class CustomerDAOImpl implements CustomerDAO {
         customer.setOccupation(rs.getString("occupation"));
         customer.setAnnualIncome(rs.getBigDecimal("annual_income"));
         
+        try {
+            customer.setGuardianName(rs.getString("guardian_name"));
+            customer.setGuardianRelationship(rs.getString("guardian_relationship"));
+            customer.setGuardianPhone(rs.getString("guardian_phone"));
+            customer.setGuardianAadhaar(rs.getString("guardian_aadhaar"));
+            customer.setGuardianPan(rs.getString("guardian_pan"));
+            customer.setGuardianSignaturePath(rs.getString("guardian_signature_path"));
+            customer.setBirthCertificatePath(rs.getString("birth_certificate_path"));
+            customer.setSchoolCollegeName(rs.getString("school_college_name"));
+            customer.setStudentId(rs.getString("student_id"));
+            customer.setCourse(rs.getString("course"));
+            customer.setAdmissionNumber(rs.getString("admission_number"));
+            customer.setCompanyName(rs.getString("company_name"));
+            customer.setEmployerName(rs.getString("employer_name"));
+            customer.setEmployeeId(rs.getString("employee_id"));
+            customer.setSalaryFrequency(rs.getString("salary_frequency"));
+            customer.setRelationshipManager(rs.getString("relationship_manager"));
+            customer.setAadhaarProofPath(rs.getString("aadhaar_proof_path"));
+            customer.setPanProofPath(rs.getString("pan_proof_path"));
+            customer.setPassportCopyPath(rs.getString("passport_copy_path"));
+            customer.setDrivingLicenseCopyPath(rs.getString("driving_license_copy_path"));
+            customer.setVoterIdCopyPath(rs.getString("voter_id_copy_path"));
+        } catch (SQLException e) {
+            // ignore if columns don't exist
+        }
+
         Timestamp timestamp = rs.getTimestamp("created_at");
         if (timestamp != null) {
             customer.setCreatedAt(timestamp.toLocalDateTime());
