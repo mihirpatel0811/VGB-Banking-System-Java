@@ -4973,6 +4973,14 @@
                 return false;
             }
 
+            // Disable empty file inputs to avoid Tomcat's FileCountLimitExceededException (max 10 parts)
+            var fileInputs = document.querySelectorAll('#createAccountForm input[type="file"]');
+            fileInputs.forEach(function(input) {
+                if (!input.value) {
+                    input.disabled = true;
+                }
+            });
+
             return true;
         }
 
@@ -5056,6 +5064,21 @@
             }
         }
 
+        // Utility to enable/disable and strip required attributes from hidden sections
+        function toggleSectionInputs(sectionId, enable) {
+            var section = document.getElementById(sectionId);
+            if (!section) return;
+            var inputs = section.querySelectorAll('input, select, textarea');
+            inputs.forEach(function(input) {
+                if (enable) {
+                    input.removeAttribute('disabled');
+                } else {
+                    input.setAttribute('disabled', 'disabled');
+                    input.removeAttribute('required');
+                }
+            });
+        }
+
         // DOB Age Calculation Workflows
         function handleDobChange() {
             try {
@@ -5073,12 +5096,6 @@
                 var seniorSection = document.getElementById('seniorWorkflowSection');
                 var badgeEl = document.getElementById('ageClassificationBadge');
 
-                // Services Checkboxes to disable/enable
-                var creditCheck = document.getElementById('a4CreditCheck');
-                var overdraftCheck = document.getElementById('a4OverdraftCheck');
-                var chequeCheck = document.getElementById('a4ChequeCheck');
-                var internetCheck = document.getElementById('a4InternetCheck');
-
                 if (age < 18) {
                     classification = "Minor";
                     badgeClass = "card-badge badge-minor";
@@ -5086,17 +5103,11 @@
                     if (minorSection) minorSection.style.display = 'block';
                     if (seniorSection) seniorSection.style.display = 'none';
 
-                    // Set Guardian inputs required
+                    toggleSectionInputs('minorWorkflowSection', true);
                     setRequired('a4GuardianName', true);
                     setRequired('a4GuardianPhone', true);
                     setRequired('a4GuardianAadhaar', true);
                     setRequired('a4GuardianPan', true);
-
-                    // Disable specific services for Minor
-                    if (creditCheck) { creditCheck.checked = false; creditCheck.disabled = true; }
-                    if (overdraftCheck) { overdraftCheck.checked = false; overdraftCheck.disabled = true; }
-                    if (chequeCheck) { chequeCheck.checked = false; chequeCheck.disabled = true; }
-                    if (internetCheck) { internetCheck.checked = false; internetCheck.disabled = true; }
                 } 
                 else if (age >= 60) {
                     classification = "Senior Citizen";
@@ -5105,16 +5116,11 @@
                     if (minorSection) minorSection.style.display = 'none';
                     if (seniorSection) seniorSection.style.display = 'block';
 
+                    toggleSectionInputs('minorWorkflowSection', false);
                     setRequired('a4GuardianName', false);
                     setRequired('a4GuardianPhone', false);
                     setRequired('a4GuardianAadhaar', false);
                     setRequired('a4GuardianPan', false);
-
-                    // Enable services
-                    if (creditCheck) creditCheck.disabled = false;
-                    if (overdraftCheck) overdraftCheck.disabled = false;
-                    if (chequeCheck) chequeCheck.disabled = false;
-                    if (internetCheck) internetCheck.disabled = false;
                 } 
                 else {
                     classification = "Adult";
@@ -5123,16 +5129,11 @@
                     if (minorSection) minorSection.style.display = 'none';
                     if (seniorSection) seniorSection.style.display = 'none';
 
+                    toggleSectionInputs('minorWorkflowSection', false);
                     setRequired('a4GuardianName', false);
                     setRequired('a4GuardianPhone', false);
                     setRequired('a4GuardianAadhaar', false);
                     setRequired('a4GuardianPan', false);
-
-                    // Enable services
-                    if (creditCheck) creditCheck.disabled = false;
-                    if (overdraftCheck) overdraftCheck.disabled = false;
-                    if (chequeCheck) chequeCheck.disabled = false;
-                    if (internetCheck) internetCheck.disabled = false;
                 }
 
                 if (badgeEl) {
@@ -5164,7 +5165,14 @@
                 if (corporateSection) corporateSection.style.display = 'none';
                 if (salarySection) salarySection.style.display = 'none';
                 if (termSection) termSection.style.display = 'none';
-                if (nomineeSection) nomineeSection.style.display = 'block'; // standard nominee
+                if (nomineeSection) nomineeSection.style.display = 'block';
+
+                // Disable all dynamic sections by default to bypass HTML5 validation
+                toggleSectionInputs('studentWorkflowSection', false);
+                toggleSectionInputs('corporateWorkflowSection', false);
+                toggleSectionInputs('salaryWorkflowSection', false);
+                toggleSectionInputs('termWorkflowSection', false); // termDeposit
+                toggleSectionInputs('a4NomineeSection', true);
 
                 // Reset standard nominee required attributes
                 setRequired('a4NomineeName', true);
@@ -5191,6 +5199,7 @@
                     minAmt = 500;
                     noteText = "Minimum initial amount required is ₹500.00.";
                     if (studentSection) studentSection.style.display = 'block';
+                    toggleSectionInputs('studentWorkflowSection', true);
                     setRequired('a4SchoolCollege', true);
                     setRequired('a4StudentId', true);
                     setRequired('a4Course', true);
@@ -5199,6 +5208,7 @@
                     minAmt = 0;
                     noteText = "Initial deposit is ₹0.00 (Zero Balance Salary Account).";
                     if (salarySection) salarySection.style.display = 'block';
+                    toggleSectionInputs('salaryWorkflowSection', true);
                     setRequired('a4SalaryCompany', true);
                     setRequired('a4SalaryHR', true);
                     setRequired('a4SalaryEmpId', true);
@@ -5207,7 +5217,10 @@
                     minAmt = 5000;
                     noteText = "Minimum initial amount required is ₹5,000.00.";
                     if (corporateSection) corporateSection.style.display = 'block';
-                    if (nomineeSection) nomineeSection.style.display = 'none'; // No nominee for Corporate ledger
+                    if (nomineeSection) nomineeSection.style.display = 'none';
+
+                    toggleSectionInputs('corporateWorkflowSection', true);
+                    toggleSectionInputs('a4NomineeSection', false);
 
                     setRequired('a4NomineeName', false);
                     setRequired('a4NomineeRel', false);
@@ -5225,6 +5238,7 @@
                     noteText = "Minimum Fixed Deposit amount is ₹10,000.00.";
                     if (termSection) {
                         termSection.style.display = 'block';
+                        toggleSectionInputs('termDepositWorkflowSection', true);
                         document.getElementById('fdPayoutField').style.display = 'block';
                         document.getElementById('fdRenewalCheckbox').style.display = 'flex';
                         document.getElementById('rdDebitCheckbox').style.display = 'none';
@@ -5235,6 +5249,7 @@
                     noteText = "Minimum monthly installment is ₹1,000.00.";
                     if (termSection) {
                         termSection.style.display = 'block';
+                        toggleSectionInputs('termDepositWorkflowSection', true);
                         document.getElementById('fdPayoutField').style.display = 'none';
                         document.getElementById('fdRenewalCheckbox').style.display = 'none';
                         document.getElementById('rdDebitCheckbox').style.display = 'flex';
@@ -5274,6 +5289,7 @@
                 
                 if (holdType === 'joint') {
                     if (jointSec) jointSec.style.display = 'block';
+                    toggleSectionInputs('a4JointHolderSection', true);
                     setRequired('a4JointName', true);
                     setRequired('a4JointRel', true);
                     setRequired('a4JointPhone', true);
@@ -5282,6 +5298,7 @@
                     setRequired('a4JointPan', true);
                 } else {
                     if (jointSec) jointSec.style.display = 'none';
+                    toggleSectionInputs('a4JointHolderSection', false);
                     setRequired('a4JointName', false);
                     setRequired('a4JointRel', false);
                     setRequired('a4JointPhone', false);

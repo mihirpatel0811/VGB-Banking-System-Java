@@ -52,9 +52,12 @@ public abstract class BaseServlet extends HttpServlet {
     private static final String MULTIPART_PARAMS_ATTR = "vgb.multipart.parameters";
 
     protected String getParameter(HttpServletRequest request, String name, String defaultValue) {
-        String value = null;
+        String value = request.getParameter(name);
+        if (value != null && !value.trim().isEmpty()) {
+            return value.trim();
+        }
+
         String contentType = request.getContentType();
-        
         if (contentType != null && contentType.toLowerCase().startsWith("multipart/form-data")) {
             @SuppressWarnings("unchecked")
             Map<String, String> cachedParams = (Map<String, String>) request.getAttribute(MULTIPART_PARAMS_ATTR);
@@ -67,7 +70,7 @@ public abstract class BaseServlet extends HttpServlet {
                         String submittedFileName = part.getSubmittedFileName();
                         if (submittedFileName == null || submittedFileName.trim().isEmpty()) {
                             try (java.io.BufferedReader reader = new java.io.BufferedReader(
-                                    new java.io.InputStreamReader(part.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
+                                     new java.io.InputStreamReader(part.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
                                 String fieldValue = reader.lines().collect(java.util.stream.Collectors.joining("\n"));
                                 cachedParams.put(fieldName, fieldValue);
                             }
@@ -80,13 +83,6 @@ public abstract class BaseServlet extends HttpServlet {
                 request.setAttribute(MULTIPART_PARAMS_ATTR, cachedParams);
             }
             value = cachedParams.get(name);
-        }
-        
-        if (value == null || value.trim().isEmpty()) {
-            value = request.getParameter(name);
-            if (value != null) {
-                logger.info("getParameter: '{}' found via request.getParameter: value='{}'", name, value);
-            }
         }
         return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
