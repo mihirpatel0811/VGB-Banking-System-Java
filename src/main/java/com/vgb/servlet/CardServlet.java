@@ -115,6 +115,11 @@ public class CardServlet extends BaseServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
             return;
         }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
 
         long cardId = Long.parseLong(getParameter(request, "id", "0"));
         if (cardService.approveCard(cardId)) {
@@ -128,6 +133,11 @@ public class CardServlet extends BaseServlet {
     private void closeCard(HttpServletRequest request, HttpServletResponse response, Long customerId, Integer adminId) throws Exception {
         if (customerId == null && adminId == null) {
             redirectToLogin(request, response);
+            return;
+        }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/card");
             return;
         }
 

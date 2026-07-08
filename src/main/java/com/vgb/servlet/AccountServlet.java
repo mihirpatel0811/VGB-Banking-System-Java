@@ -36,6 +36,7 @@ public class AccountServlet extends BaseServlet {
 
     private AccountService accountService = new AccountService();
     private com.vgb.dao.AccountDAOImpl accountDAO = new com.vgb.dao.AccountDAOImpl();
+    private com.vgb.dao.TransactionDAOImpl transactionDAO = new com.vgb.dao.TransactionDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -79,6 +80,15 @@ public class AccountServlet extends BaseServlet {
                         break;
                     case "getTransactionsJson":
                         getTransactionsJsonAction(request, response);
+                        break;
+                    case "getChequeBooksJson":
+                        getChequeBooksJsonAction(request, response);
+                        break;
+                    case "getUnusedChequesJson":
+                        getUnusedChequesJsonAction(request, response);
+                        break;
+                    case "getFilteredTransactionsJson":
+                        getFilteredTransactionsJsonAction(request, response);
                         break;
                     case "list":
                     default:
@@ -1291,18 +1301,54 @@ public class AccountServlet extends BaseServlet {
 
         boolean transferSuccess = false;
         if (adminId != null) {
-            long toAccountId = Long.parseLong(toAccountIdStr);
-            if (fromAccountId == toAccountId) {
-                throw new Exception("Source and target accounts cannot be the same.");
+            String transferType = getParameter(request, "transferType", "internal");
+            String paymentMode = getParameter(request, "paymentMode", "cash");
+            
+            if ("external".equalsIgnoreCase(transferType)) {
+                String toAccountNumber = getParameter(request, "beneficiaryAccountNumber", "");
+                String toIfscCode = getParameter(request, "ifscCode", "");
+                String toHolderName = getParameter(request, "beneficiaryName", "");
+                String toBankName = getParameter(request, "bankName", "");
+                String toBranchName = getParameter(request, "branchName", "");
+                
+                if (toAccountNumber.isEmpty() || toIfscCode.isEmpty() || toHolderName.isEmpty() || toBankName.isEmpty()) {
+                    throw new Exception("All required beneficiary details (Account number, IFSC, Name, Bank) must be provided.");
+                }
+                
+                if ("cheque".equalsIgnoreCase(paymentMode)) {
+                    String chequeBookNumber = getParameter(request, "chequeBookNumber", "");
+                    String chequeNumber = getParameter(request, "chequeNumber", "");
+                    if (chequeBookNumber.isEmpty() || chequeNumber.isEmpty()) {
+                        throw new Exception("Cheque Book Number and Cheque Number must be provided for checkbook transfer.");
+                    }
+                    transferSuccess = accountService.externalTransferWithCheque(fromAccountId, toAccountNumber, toIfscCode, toHolderName, toBankName, toBranchName, chequeBookNumber, chequeNumber, amount, description, adminId.longValue());
+                } else {
+                    transferSuccess = accountService.externalTransfer(fromAccountId, toAccountNumber, toIfscCode, toHolderName, toBankName, toBranchName, amount, description, adminId.longValue());
+                }
+            } else {
+                long toAccountId = Long.parseLong(toAccountIdStr);
+                if (fromAccountId == toAccountId) {
+                    throw new Exception("Source and target accounts cannot be the same.");
+                }
+                if ("cheque".equalsIgnoreCase(paymentMode)) {
+                    String chequeBookNumber = getParameter(request, "chequeBookNumber", "");
+                    String chequeNumber = getParameter(request, "chequeNumber", "");
+                    if (chequeBookNumber.isEmpty() || chequeNumber.isEmpty()) {
+                        throw new Exception("Cheque Book Number and Cheque Number must be provided for checkbook transfer.");
+                    }
+                    transferSuccess = accountService.transferWithCheque(fromAccountId, toAccountId, chequeBookNumber, chequeNumber, amount, description, adminId.longValue());
+                } else {
+                    transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description, adminId.longValue());
+                }
             }
-            transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description);
         } else {
+            Long performedById = customerId;
             if ("own".equalsIgnoreCase(destType)) {
                 long toAccountId = Long.parseLong(toAccountIdStr);
                 if (fromAccountId == toAccountId) {
                     throw new Exception("Source and target accounts cannot be the same.");
                 }
-                transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description);
+                transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description, performedById);
             } else {
                 if (toAccountIdStr.startsWith("ext_")) {
                     long beneficiaryId = Long.parseLong(toAccountIdStr.substring(4));
@@ -1310,14 +1356,17 @@ public class AccountServlet extends BaseServlet {
                     if (details == null) {
                         throw new Exception("Saved beneficiary details not found.");
                     }
-                    transferSuccess = accountService.externalTransfer(fromAccountId, details[0], details[1], details[2], amount, description);
+                    Account sourceAcc = accountService.getAccountById(fromAccountId);
+                    long sourceCustId = sourceAcc != null ? sourceAcc.getCustomerId() : customerId;
+                    
+                    transferSuccess = accountService.externalTransfer(fromAccountId, details[0], details[1], details[2], "External Bank", "Branch", amount, description, sourceCustId);
                 } else {
                     long toAccountId = Long.parseLong(toAccountIdStr);
                     Account targetAcc = accountService.getAccountById(toAccountId);
                     if (targetAcc == null) {
                         throw new Exception("Recipient account not found.");
                     }
-                    transferSuccess = accountService.transfer(fromAccountId, targetAcc.getAccountId(), amount, description);
+                    transferSuccess = accountService.transfer(fromAccountId, targetAcc.getAccountId(), amount, description, performedById);
                 }
             }
         }
@@ -1379,9 +1428,25 @@ public class AccountServlet extends BaseServlet {
             }
         }
 
-        boolean success = accountService.withdraw(accountId, amount, description);
+        Long performedById = adminId != null ? adminId.longValue() : customerId;
+        String paymentMode = getParameter(request, "paymentMode", "cash");
+        boolean success = false;
+        if ("cheque".equalsIgnoreCase(paymentMode)) {
+            String chequeBookNumber = getParameter(request, "chequeBookNumber", "");
+            String chequeNumber = getParameter(request, "chequeNumber", "");
+            if (chequeBookNumber.isEmpty() || chequeNumber.isEmpty()) {
+                throw new Exception("Cheque Book Number and Cheque Number must be provided for checkbook withdrawal.");
+            }
+            success = accountService.withdrawWithCheque(accountId, chequeBookNumber, chequeNumber, amount, description, performedById);
+        } else {
+            success = accountService.withdraw(accountId, amount, description, performedById);
+        }
+
         if (success) {
-            session.setAttribute("success", "Counter cash withdrawal of ₹" + amount.setScale(2) + " processed successfully!");
+            String successMsg = "cheque".equalsIgnoreCase(paymentMode) ? 
+                "Checkbook withdrawal of ₹" + amount.setScale(2) + " using Cheque #" + getParameter(request, "chequeNumber", "") + " processed successfully!" :
+                "Counter cash withdrawal of ₹" + amount.setScale(2) + " processed successfully!";
+            session.setAttribute("success", successMsg);
         } else {
             session.setAttribute("error", "Withdrawal operation failed.");
         }
@@ -1419,7 +1484,8 @@ public class AccountServlet extends BaseServlet {
             accountId = card.getAccountId();
         }
 
-        boolean success = accountService.deposit(accountId, amount, description);
+        Long performedById = adminId != null ? adminId.longValue() : customerId;
+        boolean success = accountService.deposit(accountId, amount, description, performedById);
         if (success) {
             session.setAttribute("success", (adminId != null ? "Counter cash deposit" : "Card deposit") + " of ₹" + amount.setScale(2) + " processed successfully!");
         } else {
@@ -1467,6 +1533,113 @@ public class AccountServlet extends BaseServlet {
               .append("\"status\":\"").append(escapeJson(t.getStatus())).append("\",")
               .append("\"transactionDate\":\"").append(t.getTransactionDate() != null ? t.getTransactionDate().toString() : "").append("\",")
               .append("\"runningBalance\":").append(t.getRunningBalance() != null ? t.getRunningBalance() : "0")
+              .append("}");
+        }
+        sb.append("]");
+        out.print(sb.toString());
+        out.flush();
+    }
+
+    private void getChequeBooksJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        java.io.PrintWriter out = response.getWriter();
+
+        if (accountId <= 0) {
+            out.print("[]");
+            out.flush();
+            return;
+        }
+
+        com.vgb.service.ChequeBookService cbService = new com.vgb.service.ChequeBookService();
+        List<com.vgb.model.ChequeBook> books = cbService.getActiveChequeBooks(accountId);
+
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < books.size(); i++) {
+            com.vgb.model.ChequeBook cb = books.get(i);
+            if (i > 0) sb.append(",");
+            sb.append("{")
+              .append("\"chequebookId\":").append(cb.getChequebookId()).append(",")
+              .append("\"chequebookNumber\":\"").append(escapeJson(cb.getChequebookNumber())).append("\",")
+              .append("\"startChequeNo\":").append(cb.getStartChequeNo()).append(",")
+              .append("\"endChequeNo\":").append(cb.getEndChequeNo()).append(",")
+              .append("\"status\":\"").append(escapeJson(cb.getStatus())).append("\"")
+              .append("}");
+        }
+        sb.append("]");
+        out.print(sb.toString());
+        out.flush();
+    }
+
+    private void getUnusedChequesJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long chequeBookId = Long.parseLong(getParameter(request, "chequeBookId", "0"));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        java.io.PrintWriter out = response.getWriter();
+
+        if (chequeBookId <= 0) {
+            out.print("[]");
+            out.flush();
+            return;
+        }
+
+        com.vgb.service.ChequeBookService cbService = new com.vgb.service.ChequeBookService();
+        List<com.vgb.model.ChequeLeaf> leaves = cbService.getUnusedCheques(chequeBookId);
+
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < leaves.size(); i++) {
+            com.vgb.model.ChequeLeaf leaf = leaves.get(i);
+            if (i > 0) sb.append(",");
+            sb.append("{")
+              .append("\"chequeId\":").append(leaf.getChequeId()).append(",")
+              .append("\"chequeNumber\":\"").append(escapeJson(leaf.getChequeNumber())).append("\",")
+              .append("\"status\":\"").append(escapeJson(leaf.getStatus())).append("\"")
+              .append("}");
+        }
+        sb.append("]");
+        out.print(sb.toString());
+        out.flush();
+    }
+
+    private void getFilteredTransactionsJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        java.io.PrintWriter out = response.getWriter();
+
+        String customerName = getParameter(request, "customerName", "");
+        String accountNumber = getParameter(request, "accountNumber", "");
+        String transactionType = getParameter(request, "transactionType", "all");
+        String status = getParameter(request, "status", "all");
+        String dateFilter = getParameter(request, "dateFilter", "all");
+        String startDate = getParameter(request, "startDate", "");
+        String endDate = getParameter(request, "endDate", "");
+        String queryText = getParameter(request, "queryText", "");
+
+        List<Transaction> transactions = transactionDAO.searchTransactions(customerName, accountNumber, transactionType, status, dateFilter, startDate, endDate, queryText);
+
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t = transactions.get(i);
+            if (i > 0) sb.append(",");
+            sb.append("{")
+              .append("\"transactionId\":").append(t.getTransactionId()).append(",")
+              .append("\"fromAccountId\":").append(t.getFromAccountId() != null ? t.getFromAccountId() : "null").append(",")
+              .append("\"toAccountId\":").append(t.getToAccountId() != null ? t.getToAccountId() : "null").append(",")
+              .append("\"transactionType\":\"").append(escapeJson(t.getTransactionType())).append("\",")
+              .append("\"amount\":").append(t.getAmount()).append(",")
+              .append("\"referenceNumber\":\"").append(escapeJson(t.getReferenceNumber())).append("\",")
+              .append("\"description\":\"").append(escapeJson(t.getDescription())).append("\",")
+              .append("\"status\":\"").append(escapeJson(t.getStatus())).append("\",")
+              .append("\"transferMode\":\"").append(escapeJson(t.getTransferMode() != null ? t.getTransferMode() : "")).append("\",")
+              .append("\"senderAccountNumber\":\"").append(escapeJson(t.getSenderAccountNumber() != null ? t.getSenderAccountNumber() : "")).append("\",")
+              .append("\"receiverAccountNumber\":\"").append(escapeJson(t.getReceiverAccountNumber() != null ? t.getReceiverAccountNumber() : "")).append("\",")
+              .append("\"beneficiaryName\":\"").append(escapeJson(t.getBeneficiaryName() != null ? t.getBeneficiaryName() : "")).append("\",")
+              .append("\"beneficiaryIfsc\":\"").append(escapeJson(t.getBeneficiaryIfsc() != null ? t.getBeneficiaryIfsc() : "")).append("\",")
+              .append("\"beneficiaryBank\":\"").append(escapeJson(t.getBeneficiaryBank() != null ? t.getBeneficiaryBank() : "")).append("\",")
+              .append("\"beneficiaryBranch\":\"").append(escapeJson(t.getBeneficiaryBranch() != null ? t.getBeneficiaryBranch() : "")).append("\",")
+              .append("\"performedById\":").append(t.getPerformedById() != null ? t.getPerformedById() : "null").append(",")
+              .append("\"transactionDate\":\"").append(t.getTransactionDate() != null ? t.getTransactionDate().toString() : "").append("\"")
               .append("}");
         }
         sb.append("]");

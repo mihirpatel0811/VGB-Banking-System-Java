@@ -1857,13 +1857,13 @@
                                                      </button>
                                                      <c:choose>
                                                          <c:when test="${req.status eq 'pending'}">
-                                                             <a href="${pageContext.request.contextPath}/passbook?action=approve&id=${req.requestId}" 
+                                                             <a href="${pageContext.request.contextPath}/passbook?action=approve&id=${req.requestId}&csrfToken=${sessionScope.csrfToken}" 
                                                                 class="btn btn-primary" 
                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
                                                                 onclick="return confirm('Are you sure you want to approve this passbook request?');">
                                                                  Approve
                                                              </a>
-                                                             <a href="${pageContext.request.contextPath}/passbook?action=reject&id=${req.requestId}" 
+                                                             <a href="${pageContext.request.contextPath}/passbook?action=reject&id=${req.requestId}&csrfToken=${sessionScope.csrfToken}" 
                                                                 class="btn btn-danger" 
                                                                 style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
                                                                 onclick="return confirm('Are you sure you want to reject this request? Processing fees of ₹100.00 will be refunded.');">

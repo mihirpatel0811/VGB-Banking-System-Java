@@ -258,50 +258,60 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public Account getById(long accountId) throws Exception {
         Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
         try {
             conn = dbConfig.getConnection();
-            stmt = conn.prepareStatement(GET_ACCOUNT_BY_ID);
-            stmt.setLong(1, accountId);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return mapResultSetToAccount(rs);
-            }
-            return null;
-
+            return getById(conn, accountId);
         } catch (SQLException e) {
             logger.error("Error fetching account by ID: {}", accountId, e);
             throw new Exception("Failed to fetch account", e);
         } finally {
-            DatabaseConfig.closeResources(rs, stmt, conn);
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    public Account getById(Connection conn, long accountId) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement(GET_ACCOUNT_BY_ID);
+            stmt.setLong(1, accountId);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToAccount(rs);
+            }
+            return null;
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, null);
         }
     }
 
     @Override
     public Account getByAccountNumber(String accountNumber) throws Exception {
         Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
         try {
             conn = dbConfig.getConnection();
-            stmt = conn.prepareStatement(GET_ACCOUNT_BY_NUMBER);
-            stmt.setString(1, accountNumber);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return mapResultSetToAccount(rs);
-            }
-            return null;
-
+            return getByAccountNumber(conn, accountNumber);
         } catch (SQLException e) {
             logger.error("Error fetching account by number: {}", accountNumber, e);
             throw new Exception("Failed to fetch account", e);
         } finally {
-            DatabaseConfig.closeResources(rs, stmt, conn);
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    public Account getByAccountNumber(Connection conn, String accountNumber) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement(GET_ACCOUNT_BY_NUMBER);
+            stmt.setString(1, accountNumber);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToAccount(rs);
+            }
+            return null;
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, null);
         }
     }
 
@@ -596,23 +606,28 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public boolean updateBalance(long accountId, BigDecimal balance) throws Exception {
         Connection conn = null;
-        PreparedStatement stmt = null;
-
         try {
             conn = dbConfig.getConnection();
-            stmt = conn.prepareStatement(UPDATE_ACCOUNT_BALANCE);
-            stmt.setBigDecimal(1, balance);
-            stmt.setLong(2, accountId);
-
-            int result = stmt.executeUpdate();
-            logger.info("Account balance updated - ID: {}, Balance: {}", accountId, balance);
-            return result > 0;
-
+            return updateBalance(conn, accountId, balance);
         } catch (SQLException e) {
             logger.error("Error updating account balance", e);
             throw new Exception("Failed to update balance", e);
         } finally {
-            DatabaseConfig.closeResources(null, stmt, conn);
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    public boolean updateBalance(Connection conn, long accountId, BigDecimal balance) throws SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement(UPDATE_ACCOUNT_BALANCE);
+            stmt.setBigDecimal(1, balance);
+            stmt.setLong(2, accountId);
+            int result = stmt.executeUpdate();
+            logger.info("Account balance updated - ID: {}, Balance: {}", accountId, balance);
+            return result > 0;
+        } finally {
+            DatabaseConfig.closeStatement(stmt);
         }
     }
 

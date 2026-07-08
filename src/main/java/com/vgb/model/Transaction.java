@@ -20,6 +20,16 @@ public class Transaction implements Serializable {
     private String status; // pending, completed, failed, reversed
     private LocalDateTime transactionDate;
     private BigDecimal runningBalance;
+    
+    // Auditing and Beneficiary Fields
+    private String transferMode;
+    private String senderAccountNumber;
+    private String receiverAccountNumber;
+    private String beneficiaryName;
+    private String beneficiaryIfsc;
+    private String beneficiaryBank;
+    private String beneficiaryBranch;
+    private Long performedById;
 
     // Constructors
     public Transaction() {}
@@ -61,6 +71,30 @@ public class Transaction implements Serializable {
 
     public BigDecimal getRunningBalance() { return runningBalance; }
     public void setRunningBalance(BigDecimal runningBalance) { this.runningBalance = runningBalance; }
+
+    public String getTransferMode() { return transferMode; }
+    public void setTransferMode(String transferMode) { this.transferMode = transferMode; }
+
+    public String getSenderAccountNumber() { return senderAccountNumber; }
+    public void setSenderAccountNumber(String senderAccountNumber) { this.senderAccountNumber = senderAccountNumber; }
+
+    public String getReceiverAccountNumber() { return receiverAccountNumber; }
+    public void setReceiverAccountNumber(String receiverAccountNumber) { this.receiverAccountNumber = receiverAccountNumber; }
+
+    public String getBeneficiaryName() { return beneficiaryName; }
+    public void setBeneficiaryName(String beneficiaryName) { this.beneficiaryName = beneficiaryName; }
+
+    public String getBeneficiaryIfsc() { return beneficiaryIfsc; }
+    public void setBeneficiaryIfsc(String beneficiaryIfsc) { this.beneficiaryIfsc = beneficiaryIfsc; }
+
+    public String getBeneficiaryBank() { return beneficiaryBank; }
+    public void setBeneficiaryBank(String beneficiaryBank) { this.beneficiaryBank = beneficiaryBank; }
+
+    public String getBeneficiaryBranch() { return beneficiaryBranch; }
+    public void setBeneficiaryBranch(String beneficiaryBranch) { this.beneficiaryBranch = beneficiaryBranch; }
+
+    public Long getPerformedById() { return performedById; }
+    public void setPerformedById(Long performedById) { this.performedById = performedById; }
 
     @Override
     public String toString() {

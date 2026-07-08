@@ -370,6 +370,48 @@ public class DatabaseConfig {
             }
             rs.close();
 
+            // 3h. Upgrade transaction table for additional transfer/withdrawal details
+            rs = metaData.getColumns(null, null, "transaction", "transfer_mode");
+            if (!rs.next()) {
+                logger.info("Upgrading schema: Adding transfer_mode and beneficiary columns to transaction table");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN transfer_mode VARCHAR(50) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN sender_account_number VARCHAR(20) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN receiver_account_number VARCHAR(20) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN beneficiary_name VARCHAR(100) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN beneficiary_ifsc VARCHAR(20) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN beneficiary_bank VARCHAR(100) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN beneficiary_branch VARCHAR(100) NULL");
+                stmt.execute("ALTER TABLE transaction ADD COLUMN performed_by_id BIGINT NULL");
+                logger.info("Transaction table schema upgraded successfully!");
+            }
+            rs.close();
+
+            // 3i. Upgrade database with cheque_book and cheque_leaf tables if missing
+            rs = metaData.getTables(null, null, "cheque_book", null);
+            if (!rs.next()) {
+                logger.info("Upgrading schema: Creating cheque_book and cheque_leaf tables");
+                stmt.execute("CREATE TABLE cheque_book (" +
+                             "chequebook_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                             "account_id BIGINT NOT NULL, " +
+                             "chequebook_number VARCHAR(50) NOT NULL UNIQUE, " +
+                             "start_cheque_no INT NOT NULL, " +
+                             "end_cheque_no INT NOT NULL, " +
+                             "status VARCHAR(20) NOT NULL DEFAULT 'active', " +
+                             "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                             "FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE)");
+
+                stmt.execute("CREATE TABLE cheque_leaf (" +
+                             "cheque_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                             "chequebook_id BIGINT NOT NULL, " +
+                             "cheque_number VARCHAR(20) NOT NULL, " +
+                             "status VARCHAR(20) NOT NULL DEFAULT 'unused', " +
+                             "used_at TIMESTAMP NULL, " +
+                             "FOREIGN KEY (chequebook_id) REFERENCES cheque_book(chequebook_id) ON DELETE CASCADE, " +
+                             "UNIQUE KEY unique_cheque (chequebook_id, cheque_number))");
+                logger.info("Cheque book tracking tables created successfully!");
+            }
+            rs.close();
+
             // 4. Upgrade decimal columns in database if they are too small
             upgradeColumnDecimalIfNeeded(conn, stmt, metaData, "transaction", "amount", "DECIMAL(15, 4) NOT NULL");
             upgradeColumnDecimalIfNeeded(conn, stmt, metaData, "account", "balance", "DECIMAL(15, 4) NOT NULL DEFAULT 0.0000");

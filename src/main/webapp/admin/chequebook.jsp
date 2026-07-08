@@ -1206,13 +1206,13 @@
                                                        </button>
                                                        <c:choose>
                                                            <c:when test="${req.status eq 'pending'}">
-                                                               <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}" 
+                                                               <a href="${pageContext.request.contextPath}/chequebook?action=approve&id=${req.requestId}&csrfToken=${sessionScope.csrfToken}" 
                                                                   class="btn btn-primary" 
                                                                   style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600;"
                                                                   onclick="return confirm('Are you sure you want to approve this cheque book request? Account has_cheque_book will be activated.');">
                                                                    Approve
                                                                </a>
-                                                               <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}" 
+                                                               <a href="${pageContext.request.contextPath}/chequebook?action=reject&id=${req.requestId}&csrfToken=${sessionScope.csrfToken}" 
                                                                   class="btn btn-danger" 
                                                                   style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); background: #ef4444; color: white; border: none; text-decoration: none; font-weight: 600;"
                                                                   onclick="return confirm('Are you sure you want to reject this cheque book request? upfront fees of ₹${req.charges} will be refunded to customer account.');">

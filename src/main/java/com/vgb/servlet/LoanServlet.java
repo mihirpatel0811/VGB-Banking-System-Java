@@ -281,21 +281,43 @@ public class LoanServlet extends BaseServlet {
     }
 
     private void approveLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Integer adminId = getAdminId(request);
+        if (adminId == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
+            return;
+        }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/loan");
+            return;
+        }
+
         long loanId = Long.parseLong(getParameter(request, "id", "0"));
         if (loanService.approveLoan(loanId)) {
-            request.setAttribute("success", "Loan approved successfully");
+            request.getSession().setAttribute("success", "Loan approved successfully");
         } else {
-            request.setAttribute("error", "Failed to approve loan");
+            request.getSession().setAttribute("error", "Failed to approve loan");
         }
         response.sendRedirect(request.getContextPath() + "/loan");
     }
 
     private void rejectLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Integer adminId = getAdminId(request);
+        if (adminId == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
+            return;
+        }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/loan");
+            return;
+        }
+
         long loanId = Long.parseLong(getParameter(request, "id", "0"));
         if (loanService.rejectLoan(loanId)) {
-            request.setAttribute("success", "Loan rejected");
+            request.getSession().setAttribute("success", "Loan rejected successfully");
         } else {
-            request.setAttribute("error", "Failed to reject loan");
+            request.getSession().setAttribute("error", "Failed to reject loan");
         }
         response.sendRedirect(request.getContextPath() + "/loan");
     }

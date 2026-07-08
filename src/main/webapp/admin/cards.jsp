@@ -3265,11 +3265,11 @@
                                                             </td>
                                                             <td class="table-actions-cell">
                                                                 <c:if test="${card.status eq 'pending'}">
-                                                                    <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}"
+                                                                    <a href="${pageContext.request.contextPath}/card?action=approve&id=${card.cardId}&csrfToken=${sessionScope.csrfToken}"
                                                                         class="btn-action btn-action-approve">
                                                                         <i class="bx bx-check"></i> Approve
                                                                     </a>
-                                                                    <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
+                                                                    <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}&csrfToken=${sessionScope.csrfToken}"
                                                                         class="btn-action btn-action-reject"
                                                                         onclick="return confirm('Reject and permanently close this card application?');">
                                                                         <i class="bx bx-x"></i> Reject

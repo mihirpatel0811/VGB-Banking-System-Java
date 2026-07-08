@@ -38,6 +38,38 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
     <style>
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .sidebar, .navbar, .counter-tabs, .print-hidden, .footer, #btnTabHistory {
+                display: none !important;
+            }
+            main, .content, .container {
+                margin: 0 !important;
+                padding: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            body.print-receipt-active * {
+                visibility: hidden;
+            }
+            body.print-receipt-active #receiptPrintArea, 
+            body.print-receipt-active #receiptPrintArea * {
+                visibility: visible;
+            }
+            body.print-receipt-active #receiptPrintArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none !important;
+                box-shadow: none !important;
+            }
+        }
+
         :root {
             --glass-bg: rgba(255, 255, 255, 0.45);
             --glass-border: rgba(99, 102, 241, 0.08);
@@ -715,10 +747,16 @@
                     <i class="bx bx-up-arrow-alt"></i> <span>Cash Withdrawal</span>
                 </button>
                 <button type="button" class="counter-tab-btn" id="btnTabTransfer" onclick="switchCounterPane('transfer')">
-                    <i class="bx bx-transfer"></i> <span>Funds Transfer</span>
+                    <i class="bx bx-transfer"></i> <span>Internal Transfer</span>
+                </button>
+                <button type="button" class="counter-tab-btn" id="btnTabExternalTransfer" onclick="switchCounterPane('external_transfer')">
+                    <i class="bx bx-transfer-alt"></i> <span>External Transfer</span>
                 </button>
                 <button type="button" class="counter-tab-btn" id="btnTabLoanRepay" onclick="switchCounterPane('loanrepay')">
                     <i class="bx bx-credit-card"></i> <span>Loan Repayment</span>
+                </button>
+                <button type="button" class="counter-tab-btn" id="btnTabHistory" onclick="switchCounterPane('history')">
+                    <i class="bx bx-history"></i> <span>Transaction History</span>
                 </button>
             </div>
 
@@ -817,6 +855,32 @@
                             </div>
 
                             <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Payment Mode</label>
+                                <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--gray-800);">
+                                        <input type="radio" name="paymentMode" value="cash" checked onchange="togglePaymentMode('withdraw', this.value)" style="accent-color: var(--primary-500);"> Cash Withdrawal
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--gray-800);">
+                                        <input type="radio" name="paymentMode" value="cheque" onchange="togglePaymentMode('withdraw', this.value)" style="accent-color: var(--primary-500);"> Checkbook Withdrawal
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group cheque-only-withdraw" style="margin-bottom: 20px; display: none;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Cheque Book Number</label>
+                                <select name="chequeBookNumber" id="selWithdrawChequeBook" class="search-select-input" style="width: 100%; height: auto;" onchange="loadCheques('withdraw', this.value)">
+                                    <option value="">-- Select Active Cheque Book --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group cheque-only-withdraw" style="margin-bottom: 20px; display: none;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Cheque Number</label>
+                                <select name="chequeNumber" id="selWithdrawChequeNo" class="search-select-input" style="width: 100%; height: auto;" onchange="recalcWithdrawPayout()">
+                                    <option value="">-- Select Unused Cheque Number --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
                                 <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Withdrawal Amount (INR)</label>
                                 <input type="number" step="0.01" min="100" name="amount" id="numWithdrawAmt" required placeholder="Max. ₹3,00,000" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcWithdrawPayout()">
                             </div>
@@ -864,6 +928,7 @@
 
                         <form action="${pageContext.request.contextPath}/account?action=transfer" method="post" id="formTransfer" onsubmit="return validateTransferForm()">
                             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                            <input type="hidden" name="transferType" value="internal">
                             <input type="hidden" name="fromAccountId" id="hidTransferFromId">
                             <input type="hidden" name="toAccountId" id="hidTransferToId">
                             <input type="hidden" name="redirectUrl" value="/admin/transfer.jsp">
@@ -876,6 +941,32 @@
                                     <i class="bx bx-chevron-down search-select-arrow"></i>
                                     <div class="search-select-results" id="dropdownTransferFrom"></div>
                                 </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Payment Mode</label>
+                                <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--gray-800);">
+                                        <input type="radio" name="paymentMode" value="cash" checked onchange="togglePaymentMode('transfer', this.value)" style="accent-color: var(--primary-500);"> Cash Transfer
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--gray-800);">
+                                        <input type="radio" name="paymentMode" value="cheque" onchange="togglePaymentMode('transfer', this.value)" style="accent-color: var(--primary-500);"> Checkbook Transfer
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group cheque-only-transfer" style="margin-bottom: 20px; display: none;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Cheque Book Number</label>
+                                <select name="chequeBookNumber" id="selTransferChequeBook" class="search-select-input" style="width: 100%; height: auto;" onchange="loadCheques('transfer', this.value)">
+                                    <option value="">-- Select Active Cheque Book --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group cheque-only-transfer" style="margin-bottom: 20px; display: none;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Cheque Number</label>
+                                <select name="chequeNumber" id="selTransferChequeNo" class="search-select-input" style="width: 100%; height: auto;" onchange="recalcTransferPayout()">
+                                    <option value="">-- Select Unused Cheque Number --</option>
+                                </select>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 20px;">
@@ -924,6 +1015,131 @@
                         </div>
 
                         <div id="transferAlertContainer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE 3b: External Funds Transfer -->
+            <div class="counter-pane" id="paneExternalTransfer">
+                <div class="counter-grid">
+                    <!-- Left: Form -->
+                    <div class="glass-card">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px;">
+                            <i class="bx bx-transfer-alt"></i> External Funds Transfer (Other Bank)
+                        </h3>
+
+                        <div class="counter-clock-card">
+                            <div class="clock-icon-wrapper"><i class="bx bx-time-five"></i></div>
+                            <div>
+                                <span class="clock-label">Active Counter Session Time</span>
+                                <div class="clock-display">Fetching system time...</div>
+                            </div>
+                            <div class="clock-pulse"></div>
+                        </div>
+
+                        <form action="${pageContext.request.contextPath}/account?action=transfer" method="post" id="formExternalTransfer" onsubmit="return validateExternalTransferForm()">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                            <input type="hidden" name="transferType" value="external">
+                            <input type="hidden" name="fromAccountId" id="hidExtTransferFromId">
+                            <input type="hidden" name="redirectUrl" value="/admin/transfer.jsp">
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Select Source Account (From)</label>
+                                <div class="search-select-wrapper" id="selectExtTransferFromWrapper">
+                                    <input type="text" class="search-select-input" id="txtExtTransferFrom" placeholder="Type source customer name or account number..." autocomplete="off">
+                                    <i class="bx bx-search search-select-icon"></i>
+                                    <i class="bx bx-chevron-down search-select-arrow"></i>
+                                    <div class="search-select-results" id="dropdownExtTransferFrom"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Payment Mode</label>
+                                <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--gray-800);">
+                                        <input type="radio" name="paymentMode" value="cash" checked onchange="togglePaymentMode('ext_transfer', this.value)" style="accent-color: var(--primary-500);"> Cash Wire
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: var(--gray-800);">
+                                        <input type="radio" name="paymentMode" value="cheque" onchange="togglePaymentMode('ext_transfer', this.value)" style="accent-color: var(--primary-500);"> Checkbook Wire
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group cheque-only-ext_transfer" style="margin-bottom: 20px; display: none;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Cheque Book Number</label>
+                                <select name="chequeBookNumber" id="selExtTransferChequeBook" class="search-select-input" style="width: 100%; height: auto;" onchange="loadCheques('ext_transfer', this.value)">
+                                    <option value="">-- Select Active Cheque Book --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group cheque-only-ext_transfer" style="margin-bottom: 20px; display: none;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Cheque Number</label>
+                                <select name="chequeNumber" id="selExtTransferChequeNo" class="search-select-input" style="width: 100%; height: auto;" onchange="recalcExternalTransferPayout()">
+                                    <option value="">-- Select Unused Cheque Number --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Beneficiary Name</label>
+                                <input type="text" name="beneficiaryName" id="txtExtBeneficiaryName" required placeholder="Enter holder's name" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcExternalTransferPayout()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Beneficiary Account Number</label>
+                                <input type="text" name="beneficiaryAccountNumber" id="txtExtBeneficiaryAcc" required placeholder="Enter account number" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcExternalTransferPayout()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">IFSC Code</label>
+                                <input type="text" name="ifscCode" id="txtExtBeneficiaryIfsc" required placeholder="E.g., SBIN0001234" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcExternalTransferPayout()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Bank Name</label>
+                                <input type="text" name="bankName" id="txtExtBeneficiaryBank" required placeholder="E.g., State Bank of India" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcExternalTransferPayout()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Branch Name (Optional)</label>
+                                <input type="text" name="branchName" id="txtExtBeneficiaryBranch" placeholder="E.g., Connaught Place" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcExternalTransferPayout()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Transfer Amount (INR)</label>
+                                <input type="number" step="0.01" min="1" name="amount" id="numExtTransferAmt" required placeholder="Max. ₹3,50,000" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;" oninput="recalcExternalTransferPayout()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 25px;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--gray-700); margin-bottom: 8px;">Transaction Description</label>
+                                <input type="text" name="description" id="txtExtTransferDesc" value="Teller counter external bank transfer" style="width: 100%; padding: 12px 15px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem;">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-submit" id="btnSubmitExtTransfer" style="width: 100%;">Post External Transfer</button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Verified Preview -->
+                    <div style="display: flex; flex-direction: column;">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-700); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;">Verified Wire Route</h4>
+
+                        <!-- Stacked panels representing wire flow -->
+                        <div id="extTransferRouteContainer">
+                            <div class="verified-preview-card" id="cardExtTransferSourcePreview" style="margin-bottom: 10px;">
+                                <div class="verified-badge" style="background: rgba(99,102,241,0.08); color: var(--primary-500);"><i class="bx bx-shield-quarter"></i> Source Awaiting</div>
+                                <p style="color: var(--gray-400); font-size: 0.82rem; text-align: center; padding: 10px 0;">Select source account.</p>
+                            </div>
+
+                            <div class="wire-transfer-arrow" id="extTransferVisualArrow" style="display: none;">
+                                <i class="bx bx-down-arrow-alt"></i>
+                            </div>
+
+                            <div class="verified-preview-card" id="cardExtTransferTargetPreview">
+                                <div class="verified-badge" style="background: rgba(245, 158, 11, 0.08); color: #d97706;"><i class="bx bx-shield-quarter"></i> Target Beneficiary Details</div>
+                                <p style="color: var(--gray-400); font-size: 0.82rem; text-align: center; padding: 10px 0;">Enter beneficiary details left.</p>
+                            </div>
+                        </div>
+
+                        <div id="extTransferAlertContainer"></div>
                     </div>
                 </div>
             </div>
@@ -996,6 +1212,114 @@
                     </div>
                 </div>
             </div>
+
+            <!-- PANE 5: Transaction History Ledger -->
+            <div class="counter-pane" id="paneHistory">
+                <div class="glass-card" style="margin-bottom: 25px; padding: 25px;">
+                    <div class="print-hidden" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 15px; margin-bottom: 20px;">
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 10px;">
+                            <i class="bx bx-history" style="color: var(--primary-500);"></i> Core Transaction Ledger Log
+                        </h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" class="btn btn-secondary" onclick="exportToCSV()" style="display: flex; align-items: center; gap: 6px; padding: 8px 15px; font-size: 0.85rem; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-700); cursor: pointer; border-radius: var(--radius-md);">
+                                <i class="bx bx-file" style="font-size: 1.1rem;"></i> Export Excel (CSV)
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="window.print()" style="display: flex; align-items: center; gap: 6px; padding: 8px 15px; font-size: 0.85rem; background: var(--primary-500); color: white; cursor: pointer; border: none; border-radius: var(--radius-md);">
+                                <i class="bx bx-printer" style="font-size: 1.1rem;"></i> Print Ledger
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Filtering Options -->
+                    <div class="print-hidden" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">Customer Name</label>
+                            <input type="text" id="filterCustName" placeholder="Search name..." oninput="triggerHistoryLoad()" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">Account Number</label>
+                            <input type="text" id="filterAccNum" placeholder="Search account..." oninput="triggerHistoryLoad()" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">Type</label>
+                            <select id="filterType" onchange="triggerHistoryLoad()" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                                <option value="all">All Types</option>
+                                <option value="deposit">Deposit</option>
+                                <option value="withdrawal">Withdrawal</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="fee">Fee</option>
+                                <option value="interest">Interest</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">Status</label>
+                            <select id="filterStatus" onchange="triggerHistoryLoad()" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                                <option value="all">All Statuses</option>
+                                <option value="completed">Completed</option>
+                                <option value="pending">Pending</option>
+                                <option value="failed">Failed</option>
+                                <option value="reversed">Reversed</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">Date Filter</label>
+                            <select id="filterDate" onchange="toggleCustomDateFields(this.value); triggerHistoryLoad();" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                                <option value="all">All Dates</option>
+                                <option value="today">Today</option>
+                                <option value="month">This Month</option>
+                                <option value="year">This Year</option>
+                                <option value="custom">Custom Date Range</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Custom Date Fields -->
+                    <div id="customDateContainer" class="print-hidden" style="display: none; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; background: #f1f5f9; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">Start Date</label>
+                            <input type="date" id="filterStartDate" onchange="triggerHistoryLoad()" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); margin-bottom: 6px;">End Date</label>
+                            <input type="date" id="filterEndDate" onchange="triggerHistoryLoad()" style="width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; background: white;">
+                        </div>
+                    </div>
+
+                    <!-- Transaction ID Search Box -->
+                    <div class="form-group print-hidden" style="margin-bottom: 20px;">
+                        <div style="position: relative;">
+                            <input type="text" id="filterQueryText" placeholder="Search by Transaction ID or Reference Number (e.g., TXN...)" oninput="triggerHistoryLoad()" style="width: 100%; padding: 12px 15px 12px 40px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-md); outline: none; font-size: 0.9rem; background: white; box-shadow: var(--shadow-sm);">
+                            <i class="bx bx-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--gray-400);"></i>
+                        </div>
+                    </div>
+
+                    <!-- Ledger Table -->
+                    <div style="overflow-x: auto; border: 1px solid var(--gray-200); border-radius: var(--radius-md);">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;" id="tblHistoryLedger">
+                            <thead>
+                                <tr style="background: var(--gray-50); border-bottom: 1.5px solid var(--gray-200); color: var(--gray-600); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
+                                    <th style="padding: 12px 15px;">Txn ID / Ref</th>
+                                    <th style="padding: 12px 15px;">Date &amp; Time</th>
+                                    <th style="padding: 12px 15px;">Type</th>
+                                    <th style="padding: 12px 15px;">Sender Account</th>
+                                    <th style="padding: 12px 15px;">Receiver / Target</th>
+                                    <th style="padding: 12px 15px; text-align: right;">Amount (INR)</th>
+                                    <th style="padding: 12px 15px;">Mode</th>
+                                    <th style="padding: 12px 15px; text-align: center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyHistoryLedger">
+                                <tr>
+                                    <td colspan="8" style="padding: 40px; text-align: center; color: var(--gray-400);">
+                                        <i class="bx bx-loader-alt bx-spin" style="font-size: 2rem; margin-bottom: 10px; color: var(--primary-500);"></i>
+                                        <div>Loading transaction database ledger logs...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -1058,11 +1382,355 @@
             loan.principalAmount = parseFloat(loan.principalAmount) || 0.0;
         });
 
+        // Checkbook UI visibility toggle
+        function togglePaymentMode(formType, val) {
+            const chequeGroups = document.querySelectorAll('.cheque-only-' + formType);
+            if (val === 'cheque') {
+                chequeGroups.forEach(el => el.style.display = 'block');
+                
+                // Get selected account ID to load active checkbooks
+                let accountId = 0;
+                if (formType === 'withdraw' && selectedWithdrawAcc) {
+                    accountId = selectedWithdrawAcc.accountId;
+                } else if (formType === 'transfer' && selectedTransferFrom) {
+                    accountId = selectedTransferFrom.accountId;
+                } else if (formType === 'ext_transfer' && selectedExtTransferFrom) {
+                    accountId = selectedExtTransferFrom.accountId;
+                }
+                
+                if (accountId > 0) {
+                    loadChequeBooks(formType, accountId);
+                } else {
+                    const cbSelect = document.getElementById('sel' + capitalize(formType) + 'ChequeBook');
+                    if (cbSelect) {
+                        cbSelect.innerHTML = '<option value="">-- First Select an Account --</option>';
+                    }
+                }
+            } else {
+                chequeGroups.forEach(el => el.style.display = 'none');
+            }
+        }
+
+        function capitalize(str) {
+            if (str === 'ext_transfer') return 'ExtTransfer';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // Cache for loaded checkbooks and checks to prevent duplicate fetches
+        const chequeBooksCache = {};
+        const chequesCache = {};
+
+        function loadChequeBooks(formType, accountId) {
+            const cbSelect = document.getElementById('sel' + capitalize(formType) + 'ChequeBook');
+            const chkSelect = document.getElementById('sel' + capitalize(formType) + 'ChequeNo');
+            if (!cbSelect) return;
+            
+            cbSelect.innerHTML = '<option value="">-- Loading Cheque Books... --</option>';
+            if (chkSelect) chkSelect.innerHTML = '<option value="">-- Select Unused Cheque Number --</option>';
+
+            const cacheKey = accountId;
+            if (chequeBooksCache[cacheKey]) {
+                renderChequeBooks(cbSelect, chequeBooksCache[cacheKey]);
+                return;
+            }
+
+            fetch('${pageContext.request.contextPath}/account?action=getChequeBooksJson&accountId=' + accountId)
+                .then(res => res.json())
+                .then(data => {
+                    chequeBooksCache[cacheKey] = data;
+                    renderChequeBooks(cbSelect, data);
+                })
+                .catch(err => {
+                    console.error('Failed to load checkbooks', err);
+                    cbSelect.innerHTML = '<option value="">-- Failed to Load Checkbooks --</option>';
+                });
+        }
+
+        function renderChequeBooks(selectEl, books) {
+            if (!books || books.length === 0) {
+                selectEl.innerHTML = '<option value="">-- No Active Cheque Books Found --</option>';
+                return;
+            }
+            let html = '<option value="">-- Select Active Cheque Book --</option>';
+            books.forEach(b => {
+                html += '<option value="' + b.chequebookNumber + '" data-id="' + b.chequebookId + '">' + b.chequebookNumber + ' (Chq #' + b.startChequeNo + '-' + b.endChequeNo + ')</option>';
+            });
+            selectEl.innerHTML = html;
+        }
+
+        function loadCheques(formType, chequeBookNumber) {
+            const cbSelect = document.getElementById('sel' + capitalize(formType) + 'ChequeBook');
+            const chkSelect = document.getElementById('sel' + capitalize(formType) + 'ChequeNo');
+            if (!chkSelect || !cbSelect) return;
+
+            const selectedOption = cbSelect.options[cbSelect.selectedIndex];
+            const chequeBookId = selectedOption ? selectedOption.getAttribute('data-id') : null;
+
+            if (!chequeBookId) {
+                chkSelect.innerHTML = '<option value="">-- Select Unused Cheque Number --</option>';
+                return;
+            }
+
+            chkSelect.innerHTML = '<option value="">-- Loading Cheques... --</option>';
+
+            const cacheKey = chequeBookId;
+            if (chequesCache[cacheKey]) {
+                renderCheques(chkSelect, chequesCache[cacheKey]);
+                return;
+            }
+
+            fetch('${pageContext.request.contextPath}/account?action=getUnusedChequesJson&chequeBookId=' + chequeBookId)
+                .then(res => res.json())
+                .then(data => {
+                    chequesCache[cacheKey] = data;
+                    renderCheques(chkSelect, data);
+                })
+                .catch(err => {
+                    console.error('Failed to load cheque leaves', err);
+                    chkSelect.innerHTML = '<option value="">-- Failed to Load Cheques --</option>';
+                });
+        }
+
+        function renderCheques(selectEl, leaves) {
+            if (!leaves || leaves.length === 0) {
+                selectEl.innerHTML = '<option value="">-- No Unused Cheques Remaining --</option>';
+                return;
+            }
+            let html = '<option value="">-- Select Unused Cheque Number --</option>';
+            leaves.forEach(l => {
+                html += '<option value="' + l.chequeNumber + '">' + l.chequeNumber + '</option>';
+            });
+            selectEl.innerHTML = html;
+        }
+
+        // Ledger History Loading
+        let historyData = [];
+        let historyLoadTimeout = null;
+
+        function triggerHistoryLoad() {
+            clearTimeout(historyLoadTimeout);
+            historyLoadTimeout = setTimeout(loadHistoryLedger, 300);
+        }
+
+        function toggleCustomDateFields(val) {
+            const container = document.getElementById('customDateContainer');
+            if (container) {
+                if (val === 'custom') {
+                    container.style.display = 'grid';
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+        }
+
+        function loadHistoryLedger() {
+            const tbody = document.getElementById('tbodyHistoryLedger');
+            if (!tbody) return;
+
+            const custName = document.getElementById('filterCustName').value;
+            const accNum = document.getElementById('filterAccNum').value;
+            const type = document.getElementById('filterType').value;
+            const status = document.getElementById('filterStatus').value;
+            const dateFilter = document.getElementById('filterDate').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+            const queryText = document.getElementById('filterQueryText').value;
+
+            tbody.innerHTML = `<tr>
+                <td colspan="8" style="padding: 40px; text-align: center; color: var(--gray-400);">
+                    <i class="bx bx-loader-alt bx-spin" style="font-size: 2rem; margin-bottom: 10px; color: var(--primary-500);"></i>
+                    <div>Querying system ledger database...</div>
+                </td>
+            </tr>`;
+
+            const params = new URLSearchParams({
+                action: 'getFilteredTransactionsJson',
+                customerName: custName,
+                accountNumber: accNum,
+                transactionType: type,
+                status: status,
+                dateFilter: dateFilter,
+                startDate: startDate,
+                endDate: endDate,
+                queryText: queryText
+            });
+
+            fetch('${pageContext.request.contextPath}/account?' + params.toString())
+                .then(res => res.json())
+                .then(data => {
+                    historyData = data;
+                    renderHistoryLedger(data);
+                })
+                .catch(err => {
+                    console.error('Failed to load transaction history', err);
+                    tbody.innerHTML = `<tr>
+                        <td colspan="8" style="padding: 20px; text-align: center; color: var(--danger-500); font-weight: 500;">
+                            Failed to load transaction ledger. Please check admin connection.
+                        </td>
+                    </tr>`;
+                });
+        }
+
+        function renderHistoryLedger(txns) {
+            const tbody = document.getElementById('tbodyHistoryLedger');
+            if (!tbody) return;
+
+            if (!txns || txns.length === 0) {
+                tbody.innerHTML = `<tr>
+                    <td colspan="8" style="padding: 40px; text-align: center; color: var(--gray-400);">
+                        No transaction records match the specified filters.
+                    </td>
+                </tr>`;
+                return;
+            }
+
+            let html = '';
+            txns.forEach(t => {
+                const dateStr = t.transactionDate ? t.transactionDate.replace('T', ' ') : '-';
+                
+                // Color badges based on status and type
+                let typeColor = 'var(--gray-600)';
+                if (t.transactionType === 'deposit') typeColor = '#10b981';
+                else if (t.transactionType === 'withdrawal') typeColor = '#ef4444';
+                else if (t.transactionType === 'transfer') typeColor = '#3b82f6';
+                else if (t.transactionType === 'fee') typeColor = '#f59e0b';
+                
+                let statusBg = 'rgba(16, 185, 129, 0.08)';
+                let statusColor = '#10b981';
+                if (t.status === 'pending') {
+                    statusBg = 'rgba(245, 158, 11, 0.08)';
+                    statusColor = '#d97706';
+                } else if (t.status === 'failed') {
+                    statusBg = 'rgba(239, 68, 68, 0.08)';
+                    statusColor = '#ef4444';
+                } else if (t.status === 'reversed') {
+                    statusBg = 'rgba(107, 114, 128, 0.08)';
+                    statusColor = '#6b7280';
+                }
+
+                const senderAcc = t.senderAccountNumber || '-';
+                let receiverAcc = t.receiverAccountNumber || '-';
+                if (t.beneficiaryName) {
+                    receiverAcc = t.beneficiaryName + ' (Ext A/C: ' + t.receiverAccountNumber + ')';
+                }
+
+                html += `<tr onclick="showReceipt(${t.transactionId})" style="border-bottom: 1px solid var(--gray-100); hover: background-color: var(--gray-50); cursor: pointer; transition: all 0.2s;">
+                    <td style="padding: 12px 15px; font-weight: 700; color: var(--gray-800);">
+                        <div>#${t.transactionId}</div>
+                        <div style="font-size: 0.72rem; color: var(--gray-400); font-family: monospace;">${t.referenceNumber}</div>
+                    </td>
+                    <td style="padding: 12px 15px; color: var(--gray-600); font-size: 0.8rem;">${dateStr}</td>
+                    <td style="padding: 12px 15px; text-transform: uppercase; font-weight: 700; color: ${typeColor}; font-size: 0.75rem;">${t.transactionType}</td>
+                    <td style="padding: 12px 15px; color: var(--gray-700); font-weight: 500;">${senderAcc}</td>
+                    <td style="padding: 12px 15px; color: var(--gray-700); font-weight: 500;">${receiverAcc}</td>
+                    <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: var(--gray-800); font-size: 0.9rem;">₹${parseFloat(t.amount).toFixed(2)}</td>
+                    <td style="padding: 12px 15px; text-transform: uppercase; font-weight: 600; color: var(--gray-500); font-size: 0.75rem;">${t.transferMode || 'Cash'}</td>
+                    <td style="padding: 12px 15px; text-align: center;">
+                        <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; background: ${statusBg}; color: ${statusColor}; text-transform: uppercase;">
+                            ${t.status}
+                        </span>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // Receipt Modal operations
+        function showReceipt(txnId) {
+            const t = historyData.find(x => x.transactionId === txnId);
+            if (!t) return;
+
+            document.getElementById('recTxnId').textContent = '#' + t.transactionId;
+            document.getElementById('recRefNum').textContent = t.referenceNumber;
+            document.getElementById('recDateTime').textContent = t.transactionDate ? t.transactionDate.replace('T', ' ') : '-';
+            document.getElementById('recType').textContent = t.transactionType.toUpperCase();
+            document.getElementById('recMode').textContent = t.transferMode || 'Cash';
+            document.getElementById('recSender').textContent = t.senderAccountNumber || 'Counter Vault';
+            document.getElementById('recReceiver').textContent = t.receiverAccountNumber || 'Counter Cashier';
+            document.getElementById('recStatus').textContent = t.status.toUpperCase();
+            document.getElementById('recAmount').textContent = '₹' + parseFloat(t.amount).toFixed(2);
+            document.getElementById('recPerfBy').textContent = t.performedById ? 'Admin (ID: ' + t.performedById + ')' : 'System / Auto';
+
+            if (t.beneficiaryName) {
+                document.getElementById('rowRecBeneficiary').style.display = 'table-row';
+                document.getElementById('recBeneficiaryVal').innerHTML = 
+                    'Name: ' + t.beneficiaryName + '<br>' +
+                    'Bank: ' + (t.beneficiaryBank || 'Other Bank') + '<br>' +
+                    'Branch: ' + (t.beneficiaryBranch || '-') + '<br>' +
+                    'IFSC: ' + (t.beneficiaryIfsc || '-');
+            } else {
+                document.getElementById('rowRecBeneficiary').style.display = 'none';
+            }
+
+            // Style status
+            const statusEl = document.getElementById('recStatus');
+            if (t.status === 'completed') statusEl.style.color = '#10b981';
+            else if (t.status === 'pending') statusEl.style.color = '#f59e0b';
+            else statusEl.style.color = '#ef4444';
+
+            document.getElementById('receiptModal').style.display = 'flex';
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receiptModal').style.display = 'none';
+        }
+
+        function printReceipt() {
+            document.body.classList.add('print-receipt-active');
+            window.print();
+            document.body.classList.remove('print-receipt-active');
+        }
+
+        // Export to Excel (CSV format)
+        function exportToCSV() {
+            if (!historyData || historyData.length === 0) {
+                alert('No transaction records available to export.');
+                return;
+            }
+
+            let csvContent = '\uFEFF'; // Excel UTF-8 BOM
+            csvContent += 'Transaction ID,Reference Number,Date & Time,Type,Sender Account,Receiver/Target Account,Beneficiary Name,Beneficiary IFSC,Beneficiary Bank,Beneficiary Branch,Amount,Mode,Performed By ID,Status\n';
+
+            historyData.forEach(t => {
+                const row = [
+                    t.transactionId,
+                    t.referenceNumber,
+                    t.transactionDate ? t.transactionDate.replace('T', ' ') : '',
+                    t.transactionType,
+                    t.senderAccountNumber || '',
+                    t.receiverAccountNumber || '',
+                    t.beneficiaryName || '',
+                    t.beneficiaryIfsc || '',
+                    t.beneficiaryBank || '',
+                    t.beneficiaryBranch || '',
+                    t.amount,
+                    t.transferMode || 'Cash',
+                    t.performedById || '',
+                    t.status
+                ].map(val => {
+                    const text = String(val).replace(/"/g, '""');
+                    return text.includes(',') || text.includes('\n') || text.includes('"') ? '"' + text + '"' : text;
+                }).join(',');
+                csvContent += row + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'VGB_Transaction_Ledger_' + new Date().toISOString().substring(0,10) + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         // Active State Selected Trackers
         let selectedDepositAcc = null;
         let selectedWithdrawAcc = null;
         let selectedTransferFrom = null;
         let selectedTransferTo = null;
+        let selectedExtTransferFrom = null;
         let selectedRepayLoan = null;
 
         // Switched tab controls
@@ -1079,9 +1747,16 @@
             } else if (paneType === 'transfer') {
                 document.getElementById('paneTransfer').classList.add('active');
                 document.getElementById('btnTabTransfer').classList.add('active');
+            } else if (paneType === 'external_transfer') {
+                document.getElementById('paneExternalTransfer').classList.add('active');
+                document.getElementById('btnTabExternalTransfer').classList.add('active');
             } else if (paneType === 'loanrepay') {
                 document.getElementById('paneLoanRepay').classList.add('active');
                 document.getElementById('btnTabLoanRepay').classList.add('active');
+            } else if (paneType === 'history') {
+                document.getElementById('paneHistory').classList.add('active');
+                document.getElementById('btnTabHistory').classList.add('active');
+                loadHistoryLedger();
             }
         }
 
@@ -1376,7 +2051,14 @@
                 alert("Please select a target active account profile.");
                 return false;
             }
-            return true;
+            const amtVal = parseFloat(document.getElementById('numDepositAmt').value) || 0;
+            if (amtVal <= 0) {
+                shakePane('paneDeposit');
+                alert("Deposit amount must be greater than zero.");
+                return false;
+            }
+            const ownerName = selectedDepositAcc.businessName ? selectedDepositAcc.businessName : selectedDepositAcc.customerName;
+            return confirm(`Are you sure you want to deposit ₹${amtVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })} into Account #${selectedDepositAcc.accountNumber} (${ownerName})?`);
         }
 
         function validateWithdrawForm() {
@@ -1386,6 +2068,11 @@
                 return false;
             }
             const amtVal = parseFloat(document.getElementById('numWithdrawAmt').value) || 0;
+            if (amtVal <= 0) {
+                shakePane('paneWithdraw');
+                alert("Withdrawal amount must be greater than zero.");
+                return false;
+            }
             if (amtVal > 300000) {
                 shakePane('paneWithdraw');
                 alert("Withdrawal amount cannot exceed ₹3,00,000.");
@@ -1396,7 +2083,20 @@
                 alert("Insufficient available balance for this payout.");
                 return false;
             }
-            return true;
+
+            const mode = document.querySelector('input[name="paymentMode"]:checked').value;
+            if (mode === 'cheque') {
+                const cb = document.getElementById('selWithdrawChequeBook').value;
+                const chq = document.getElementById('selWithdrawChequeNo').value;
+                if (!cb || !chq) {
+                    shakePane('paneWithdraw');
+                    alert("Please select a valid Cheque Book and Cheque Leaf Number.");
+                    return false;
+                }
+            }
+
+            const ownerName = selectedWithdrawAcc.businessName ? selectedWithdrawAcc.businessName : selectedWithdrawAcc.customerName;
+            return confirm(`Are you sure you want to withdraw ₹${amtVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })} from Account #${selectedWithdrawAcc.accountNumber} (${ownerName})?`);
         }
 
         function validateTransferForm() {
@@ -1411,6 +2111,11 @@
                 return false;
             }
             const amtVal = parseFloat(document.getElementById('numTransferAmt').value) || 0;
+            if (amtVal <= 0) {
+                shakePane('paneTransfer');
+                alert("Transfer amount must be greater than zero.");
+                return false;
+            }
             if (amtVal > 350000) {
                 shakePane('paneTransfer');
                 alert("Transfer amount cannot exceed ₹3,50,000.");
@@ -1421,7 +2126,146 @@
                 alert("Insufficient funds in the source account for transfer.");
                 return false;
             }
-            return true;
+
+            const mode = document.querySelector('input[name="paymentMode"]:checked').value;
+            if (mode === 'cheque') {
+                const cb = document.getElementById('selTransferChequeBook').value;
+                const chq = document.getElementById('selTransferChequeNo').value;
+                if (!cb || !chq) {
+                    shakePane('paneTransfer');
+                    alert("Please select a valid Cheque Book and Cheque Leaf Number.");
+                    return false;
+                }
+            }
+
+            const fromName = selectedTransferFrom.businessName ? selectedTransferFrom.businessName : selectedTransferFrom.customerName;
+            const toName = selectedTransferTo.businessName ? selectedTransferTo.businessName : selectedTransferTo.customerName;
+            return confirm(`Are you sure you want to transfer ₹${amtVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })} from Account #${selectedTransferFrom.accountNumber} (${fromName}) to Account #${selectedTransferTo.accountNumber} (${toName})?`);
+        }
+
+        function recalcExternalTransferPayout() {
+            const amtVal = parseFloat(document.getElementById('numExtTransferAmt').value) || 0;
+            const beneName = document.getElementById('txtExtBeneficiaryName').value.trim() || 'N/A';
+            const beneAcc = document.getElementById('txtExtBeneficiaryAcc').value.trim() || 'N/A';
+            const beneIfsc = document.getElementById('txtExtBeneficiaryIfsc').value.trim().toUpperCase() || 'N/A';
+            const beneBank = document.getElementById('txtExtBeneficiaryBank').value.trim() || 'N/A';
+            const beneBranch = document.getElementById('txtExtBeneficiaryBranch').value.trim() || '';
+
+            const alertContainer = document.getElementById('extTransferAlertContainer');
+            alertContainer.innerHTML = '';
+
+            const sourceCard = document.getElementById('cardExtTransferSourcePreview');
+            const targetCard = document.getElementById('cardExtTransferTargetPreview');
+            const arrow = document.getElementById('extTransferVisualArrow');
+
+            if (selectedExtTransferFrom) {
+                const ownerName = selectedExtTransferFrom.businessName ? selectedExtTransferFrom.businessName + ' (Business)' : selectedExtTransferFrom.customerName;
+                const newBal = selectedExtTransferFrom.balance - amtVal;
+                
+                sourceCard.innerHTML = 
+                    '<div class="verified-badge" style="background: rgba(99,102,241,0.08); color: var(--primary-500);"><i class="bx bx-log-out"></i> Verified Source Account (Debit)</div>' +
+                    '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">' +
+                        '<div style="grid-column: span 2;">' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Owner / Number</span>' +
+                            '<strong style="font-size: 0.85rem; color: var(--gray-800);">' + ownerName + ' (' + selectedExtTransferFrom.accountNumber + ')</strong>' +
+                        '</div>' +
+                        '<div>' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Balance</span>' +
+                            '<strong style="font-size: 0.85rem; color: var(--gray-700);">₹ ' + selectedExtTransferFrom.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                        '<div style="text-align: right;">' +
+                            '<span style="display: block; font-size: 0.7rem; color: var(--primary-400); text-transform: uppercase;">Remaining</span>' +
+                            '<strong style="font-size: 0.88rem; color: ' + (newBal < 0 ? '#ef4444' : 'var(--gray-800)') + ';">₹ ' + newBal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                        '</div>' +
+                    '</div>';
+                sourceCard.classList.add('selected');
+            }
+
+            targetCard.innerHTML = 
+                '<div class="verified-badge" style="background: rgba(245, 158, 11, 0.08); color: #d97706;"><i class="bx bx-user-voice"></i> External Recipient Details</div>' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">' +
+                    '<div style="grid-column: span 2;">' +
+                        '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Beneficiary / A/C</span>' +
+                        '<strong style="font-size: 0.85rem; color: var(--gray-800);">' + beneName + ' (' + beneAcc + ')</strong>' +
+                    '</div>' +
+                    '<div>' +
+                        '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Bank / IFSC</span>' +
+                        '<strong style="font-size: 0.8rem; color: var(--gray-700);">' + beneBank + ' | ' + beneIfsc + '</strong>' +
+                    '</div>' +
+                    '<div style="text-align: right;">' +
+                        '<span style="display: block; font-size: 0.7rem; color: var(--gray-400); text-transform: uppercase;">Branch / Amount</span>' +
+                        '<strong style="font-size: 0.8rem; color: var(--gray-700);">' + (beneBranch ? beneBranch : 'N/A') + ' | ₹' + amtVal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) + '</strong>' +
+                    '</div>' +
+                '</div>';
+            targetCard.classList.add('selected');
+
+            if (selectedExtTransferFrom) {
+                arrow.style.display = 'flex';
+            }
+
+            if (amtVal > 350000) {
+                alertContainer.innerHTML = `
+                    <div class="counter-alert-warning">
+                        <i class="bx bx-error"></i>
+                        <span>Transfer limit exceeded (Max ₹3,50,000 per routing wire transaction).</span>
+                    </div>
+                `;
+            } else if (selectedExtTransferFrom && amtVal > selectedExtTransferFrom.balance) {
+                alertContainer.innerHTML = `
+                    <div class="counter-alert-danger">
+                        <i class="bx bx-error-circle"></i>
+                        <span>Insufficient funds in source account.</span>
+                    </div>
+                `;
+            }
+        }
+
+        function validateExternalTransferForm() {
+            if (!selectedExtTransferFrom) {
+                shakePane('paneExternalTransfer');
+                alert("Please select a source active account profile.");
+                return false;
+            }
+            const beneName = document.getElementById('txtExtBeneficiaryName').value.trim();
+            const beneAcc = document.getElementById('txtExtBeneficiaryAcc').value.trim();
+            const beneIfsc = document.getElementById('txtExtBeneficiaryIfsc').value.trim();
+            const beneBank = document.getElementById('txtExtBeneficiaryBank').value.trim();
+
+            if (!beneName || !beneAcc || !beneIfsc || !beneBank) {
+                shakePane('paneExternalTransfer');
+                alert("Please fill in all required beneficiary details.");
+                return false;
+            }
+
+            const amtVal = parseFloat(document.getElementById('numExtTransferAmt').value) || 0;
+            if (amtVal <= 0) {
+                shakePane('paneExternalTransfer');
+                alert("Transfer amount must be greater than zero.");
+                return false;
+            }
+            if (amtVal > 350000) {
+                shakePane('paneExternalTransfer');
+                alert("Transfer amount cannot exceed ₹3,50,000.");
+                return false;
+            }
+            if (amtVal > selectedExtTransferFrom.balance) {
+                shakePane('paneExternalTransfer');
+                alert("Insufficient funds in the source account.");
+                return false;
+            }
+
+            const mode = document.querySelector('input[name="paymentMode"]:checked').value;
+            if (mode === 'cheque') {
+                const cb = document.getElementById('selExtTransferChequeBook').value;
+                const chq = document.getElementById('selExtTransferChequeNo').value;
+                if (!cb || !chq) {
+                    shakePane('paneExternalTransfer');
+                    alert("Please select a valid Cheque Book and Cheque Leaf Number.");
+                    return false;
+                }
+            }
+
+            return confirm(`Are you sure you want to process an external transfer of ₹${amtVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })} from Account #${selectedExtTransferFrom.accountNumber} to ${beneName} (${beneBank})?`);
         }
 
         function shakePane(id) {
@@ -1569,7 +2413,7 @@
                 alert("Insufficient funds in the selected customer source account.");
                 return false;
             }
-            return true;
+            return confirm(`Are you sure you want to pay ₹${amtVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })} for Loan #LN-${selectedRepayLoan.loanId} from Account #${selectedAcc.accountNumber}?`);
         }
 
         function renderLoanResults(query, dropdown, input, hidden, wrapper, onSelectCallback) {
@@ -1669,6 +2513,10 @@
                 (acc) => {
                     selectedWithdrawAcc = acc;
                     recalcWithdrawPayout();
+                    const mode = document.querySelector('input[name="paymentMode"]:checked');
+                    if (mode && mode.value === 'cheque') {
+                        loadChequeBooks('withdraw', acc.accountId);
+                    }
                 }
             );
 
@@ -1680,6 +2528,10 @@
                 (acc) => {
                     selectedTransferFrom = acc;
                     recalcTransferPayout();
+                    const mode = document.querySelector('input[name="paymentMode"]:checked');
+                    if (mode && mode.value === 'cheque') {
+                        loadChequeBooks('transfer', acc.accountId);
+                    }
                 }
             );
 
@@ -1694,6 +2546,21 @@
                 }
             );
 
+            setupAutocomplete(
+                'txtExtTransferFrom', 
+                'dropdownExtTransferFrom', 
+                'hidExtTransferFromId', 
+                'selectExtTransferFromWrapper', 
+                (acc) => {
+                    selectedExtTransferFrom = acc;
+                    recalcExternalTransferPayout();
+                    const mode = document.querySelector('input[name="paymentMode"]:checked');
+                    if (mode && mode.value === 'cheque') {
+                        loadChequeBooks('ext_transfer', acc.accountId);
+                    }
+                }
+            );
+
             setupLoanAutocomplete(
                 'txtRepayLoan',
                 'dropdownRepayLoan',
@@ -1705,6 +2572,19 @@
                     recalcLoanRepayPayout();
                 }
             );
+
+            // Double Submission Lock & Loading State Interceptor
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const btn = form.querySelector('button[type="submit"]');
+                    if (btn) {
+                        // Check if already processing
+                        if (btn.disabled) return;
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Processing Transaction...';
+                    }
+                });
+            });
 
 
 
@@ -1745,5 +2625,83 @@
             }
         });
     </script>
+    <!-- Transaction Receipt Modal (Print-friendly layout) -->
+    <div id="receiptModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; padding: 20px;" class="print-hidden">
+        <div style="background: white; width: 100%; max-width: 500px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Header -->
+            <div style="background: var(--primary-500); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="margin: 0; font-size: 1.1rem; font-weight: 600;">Transaction Receipt</h4>
+                <button onclick="closeReceiptModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center;"><i class="bx bx-x"></i></button>
+            </div>
+            
+            <!-- Receipt Printable Content -->
+            <div id="receiptPrintArea" style="padding: 25px; overflow-y: auto; flex-grow: 1; font-family: 'Outfit', sans-serif;">
+                <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px dashed var(--gray-200); padding-bottom: 15px;">
+                    <h3 style="margin: 0 0 5px 0; font-size: 1.5rem; font-weight: 800; color: var(--primary-600); letter-spacing: 0.5px;">VERTEX GALAXY BANK</h3>
+                    <p style="margin: 0; font-size: 0.8rem; color: var(--gray-500); text-transform: uppercase;">Counter Service Branch</p>
+                </div>
+                
+                <table style="width: 100%; font-size: 0.88rem; border-collapse: collapse; color: var(--gray-800);">
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500); width: 40%;">Transaction ID</td>
+                        <td style="padding: 10px 0; text-align: right; font-weight: 700;" id="recTxnId">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Reference Number</td>
+                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-family: monospace;" id="recRefNum">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Date &amp; Time</td>
+                        <td style="padding: 10px 0; text-align: right;" id="recDateTime">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Transaction Type</td>
+                        <td style="padding: 10px 0; text-align: right; text-transform: capitalize; font-weight: 600;" id="recType">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Payment Mode</td>
+                        <td style="padding: 10px 0; text-align: right; text-transform: capitalize;" id="recMode">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Sender Account</td>
+                        <td style="padding: 10px 0; text-align: right; font-weight: 600;" id="recSender">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Receiver Account</td>
+                        <td style="padding: 10px 0; text-align: right; font-weight: 600;" id="recReceiver">-</td>
+                    </tr>
+                    <!-- External Beneficiary Row Group -->
+                    <tr id="rowRecBeneficiary" style="border-bottom: 1px solid var(--gray-100); display: none;">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Beneficiary Details</td>
+                        <td style="padding: 10px 0; text-align: right; font-size: 0.8rem; line-height: 1.4;" id="recBeneficiaryVal">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Performed By (ID)</td>
+                        <td style="padding: 10px 0; text-align: right;" id="recPerfBy">-</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 10px 0; font-weight: 600; color: var(--gray-500);">Status</td>
+                        <td style="padding: 10px 0; text-align: right; font-weight: 700;" id="recStatus">-</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px 0 10px 0; font-weight: 700; font-size: 1.1rem; color: var(--gray-800);">Amount Paid</td>
+                        <td style="padding: 15px 0 10px 0; text-align: right; font-weight: 800; font-size: 1.3rem; color: var(--primary-600);" id="recAmount">-</td>
+                    </tr>
+                </table>
+                
+                <div style="margin-top: 25px; text-align: center; font-size: 0.75rem; color: var(--gray-400); border-top: 1px dashed var(--gray-200); padding-top: 15px;">
+                    Thank you for banking with Vertex Galaxy Bank. This is a computer-generated transaction receipt.
+                </div>
+            </div>
+            
+            <!-- Footer Actions -->
+            <div style="background: var(--gray-50); padding: 15px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--gray-200);">
+                <button type="button" onclick="closeReceiptModal()" style="border: 1.5px solid var(--gray-300); background: white; color: var(--gray-700); padding: 8px 16px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 500; cursor: pointer;">Close</button>
+                <button type="button" onclick="printReceipt()" style="background: var(--primary-500); border: none; color: white; padding: 8px 16px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <i class="bx bx-printer"></i> Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

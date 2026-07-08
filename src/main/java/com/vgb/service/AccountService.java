@@ -8,6 +8,8 @@ import com.vgb.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,22 +78,40 @@ public class AccountService {
     }
 
     /**
-     * Deposit money into account
+    /**
+     * Deposit money into account (legacy backward-compatible method)
      */
     public boolean deposit(long accountId, BigDecimal amount, String description) throws Exception {
+        try {
+            Account account = getAccountById(accountId);
+            long customerId = account != null ? account.getCustomerId() : 0L;
+            return deposit(accountId, amount, description, customerId);
+        } catch (Exception e) {
+            throw new Exception("Deposit failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Deposit money into account (transactional with performedById)
+     */
+    public boolean deposit(long accountId, BigDecimal amount, String description, Long performedById) throws Exception {
         if (!ValidatorUtil.isValidAmount(amount, new BigDecimal("100"))) {
             throw new Exception("Deposit amount must be at least 100");
         }
 
+        Connection conn = null;
         try {
-            Account account = accountDAO.getById(accountId);
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Account account = accountDAO.getById(conn, accountId);
             if (account == null) {
                 throw new Exception("Account not found");
             }
 
             // Update account balance
             BigDecimal newBalance = account.getBalance().add(amount);
-            accountDAO.updateBalance(accountId, newBalance);
+            accountDAO.updateBalance(conn, accountId, newBalance);
 
             // Record transaction
             Transaction transaction = new Transaction();
@@ -101,27 +121,56 @@ public class AccountService {
             transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             transaction.setDescription(description);
             transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
 
+            // Audit and routing fields
+            transaction.setTransferMode("cash");
+            transaction.setReceiverAccountNumber(account.getAccountNumber());
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit(); // Commit Transaction!
             logger.info("Deposit successful - Account: {}, Amount: {}", accountId, amount);
             return true;
 
         } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
             logger.error("Error processing deposit", e);
-            throw new Exception("Deposit failed", e);
+            throw new Exception("Deposit failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
         }
     }
 
     /**
-     * Withdraw money from account
+     * Withdraw money from account (legacy backward-compatible method)
      */
     public boolean withdraw(long accountId, BigDecimal amount, String description) throws Exception {
+        try {
+            Account account = getAccountById(accountId);
+            long customerId = account != null ? account.getCustomerId() : 0L;
+            return withdraw(accountId, amount, description, customerId);
+        } catch (Exception e) {
+            throw new Exception("Withdrawal failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Withdraw money from account (transactional with performedById)
+     */
+    public boolean withdraw(long accountId, BigDecimal amount, String description, Long performedById) throws Exception {
         if (!ValidatorUtil.isValidAmount(amount, new BigDecimal("100"))) {
             throw new Exception("Withdrawal amount must be at least 100");
         }
 
+        Connection conn = null;
         try {
-            Account account = accountDAO.getById(accountId);
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Account account = accountDAO.getById(conn, accountId);
             if (account == null) {
                 throw new Exception("Account not found");
             }
@@ -132,7 +181,7 @@ public class AccountService {
 
             // Update account balance
             BigDecimal newBalance = account.getBalance().subtract(amount);
-            accountDAO.updateBalance(accountId, newBalance);
+            accountDAO.updateBalance(conn, accountId, newBalance);
 
             // Record transaction
             Transaction transaction = new Transaction();
@@ -142,28 +191,57 @@ public class AccountService {
             transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             transaction.setDescription(description);
             transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
 
+            // Audit and routing fields
+            transaction.setTransferMode("cash");
+            transaction.setSenderAccountNumber(account.getAccountNumber());
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit(); // Commit Transaction!
             logger.info("Withdrawal successful - Account: {}, Amount: {}", accountId, amount);
             return true;
 
         } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
             logger.error("Error processing withdrawal", e);
-            throw new Exception("Withdrawal failed", e);
+            throw new Exception("Withdrawal failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
         }
     }
 
     /**
-     * Transfer money between accounts
+     * Transfer money between accounts (legacy backward-compatible method)
      */
     public boolean transfer(long fromAccountId, long toAccountId, BigDecimal amount, String description) throws Exception {
+        try {
+            Account account = getAccountById(fromAccountId);
+            long customerId = account != null ? account.getCustomerId() : 0L;
+            return transfer(fromAccountId, toAccountId, amount, description, customerId);
+        } catch (Exception e) {
+            throw new Exception("Transfer failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Transfer money between accounts (transactional with performedById)
+     */
+    public boolean transfer(long fromAccountId, long toAccountId, BigDecimal amount, String description, Long performedById) throws Exception {
         if (!ValidatorUtil.isValidAmount(amount, AppConstants.MIN_TRANSFER_AMOUNT != null ? AppConstants.MIN_TRANSFER_AMOUNT : BigDecimal.ZERO)) {
             throw new Exception("Transfer amount is invalid");
         }
 
+        Connection conn = null;
         try {
-            Account fromAccount = accountDAO.getById(fromAccountId);
-            Account toAccount = accountDAO.getById(toAccountId);
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Account fromAccount = accountDAO.getById(conn, fromAccountId);
+            Account toAccount = accountDAO.getById(conn, toAccountId);
 
             if (fromAccount == null || toAccount == null) {
                 throw new Exception("One or both accounts not found");
@@ -182,8 +260,8 @@ public class AccountService {
             BigDecimal fromNewBalance = fromAccount.getBalance().subtract(amount);
             BigDecimal toNewBalance = toAccount.getBalance().add(amount);
             
-            accountDAO.updateBalance(fromAccountId, fromNewBalance);
-            accountDAO.updateBalance(toAccountId, toNewBalance);
+            accountDAO.updateBalance(conn, fromAccountId, fromNewBalance);
+            accountDAO.updateBalance(conn, toAccountId, toNewBalance);
 
             // Record transaction
             Transaction transaction = new Transaction();
@@ -194,14 +272,27 @@ public class AccountService {
             transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             transaction.setDescription(description);
             transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
 
+            // Audit and routing fields
+            transaction.setTransferMode("internal");
+            transaction.setSenderAccountNumber(fromAccount.getAccountNumber());
+            transaction.setReceiverAccountNumber(toAccount.getAccountNumber());
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit(); // Commit Transaction!
             logger.info("Transfer successful - From: {}, To: {}, Amount: {}", fromAccountId, toAccountId, amount);
             return true;
 
         } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
             logger.error("Error processing transfer", e);
-            throw new Exception("Transfer failed", e);
+            throw new Exception("Transfer failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
         }
     }
 
@@ -360,15 +451,32 @@ public class AccountService {
     }
 
     /**
-     * Transfer money to an external other-bank account
+     * Transfer money to an external other-bank account (legacy backward-compatible method)
      */
     public boolean externalTransfer(long fromAccountId, String toAccountNumber, String toIfscCode, String toHolderName, BigDecimal amount, String description) throws Exception {
+        try {
+            Account account = getAccountById(fromAccountId);
+            long customerId = account != null ? account.getCustomerId() : 0L;
+            return externalTransfer(fromAccountId, toAccountNumber, toIfscCode, toHolderName, "Other Bank", "Unknown Branch", amount, description, customerId);
+        } catch (Exception e) {
+            throw new Exception("External transfer failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Transfer money to an external other-bank account (transactional with performedById)
+     */
+    public boolean externalTransfer(long fromAccountId, String toAccountNumber, String toIfscCode, String toHolderName, String toBankName, String toBranchName, BigDecimal amount, String description, Long performedById) throws Exception {
         if (!ValidatorUtil.isValidAmount(amount, AppConstants.MIN_TRANSFER_AMOUNT != null ? AppConstants.MIN_TRANSFER_AMOUNT : BigDecimal.ZERO)) {
             throw new Exception("Transfer amount is invalid");
         }
 
+        Connection conn = null;
         try {
-            Account fromAccount = accountDAO.getById(fromAccountId);
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Account fromAccount = accountDAO.getById(conn, fromAccountId);
 
             if (fromAccount == null) {
                 throw new Exception("Source account not found");
@@ -384,7 +492,7 @@ public class AccountService {
 
             // Update source balance
             BigDecimal fromNewBalance = fromAccount.getBalance().subtract(amount);
-            accountDAO.updateBalance(fromAccountId, fromNewBalance);
+            accountDAO.updateBalance(conn, fromAccountId, fromNewBalance);
 
             // Record transaction (toAccountId = null represents external recipient)
             Transaction transaction = new Transaction();
@@ -395,14 +503,297 @@ public class AccountService {
             transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             transaction.setDescription(description + " (To: " + toHolderName + ", A/C: " + toAccountNumber + ", IFSC: " + toIfscCode + ")");
             transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
 
+            // Audit and routing fields
+            transaction.setTransferMode("external");
+            transaction.setSenderAccountNumber(fromAccount.getAccountNumber());
+            transaction.setReceiverAccountNumber(toAccountNumber);
+            transaction.setBeneficiaryName(toHolderName);
+            transaction.setBeneficiaryIfsc(toIfscCode);
+            transaction.setBeneficiaryBank(toBankName);
+            transaction.setBeneficiaryBranch(toBranchName);
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit(); // Commit Transaction!
             logger.info("External transfer successful - From: {}, To External A/C: {}, Amount: {}", fromAccountId, toAccountNumber, amount);
             return true;
 
         } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
             logger.error("Error processing external transfer", e);
             throw new Exception("External transfer failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Withdraw money from account using a checkbook and check number
+     */
+    public boolean withdrawWithCheque(long accountId, String chequeBookNumber, String chequeNumber, BigDecimal amount, String description, Long performedById) throws Exception {
+        if (!ValidatorUtil.isValidAmount(amount, new BigDecimal("100"))) {
+            throw new Exception("Withdrawal amount must be at least 100");
+        }
+
+        Connection conn = null;
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            // 1. Verify and update cheque leaf status
+            com.vgb.dao.ChequeBookDAOImpl cbDAO = new com.vgb.dao.ChequeBookDAOImpl();
+            com.vgb.model.ChequeLeaf leaf = cbDAO.getChequeLeaf(chequeBookNumber, chequeNumber);
+            if (leaf == null) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " not found or does not belong to Cheque Book " + chequeBookNumber + ".");
+            }
+            if (!"unused".equalsIgnoreCase(leaf.getStatus())) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " is already " + leaf.getStatus() + ".");
+            }
+
+            List<com.vgb.model.ChequeBook> activeBooks = cbDAO.getActiveChequeBooksByAccount(accountId);
+            boolean belongs = false;
+            for (com.vgb.model.ChequeBook cb : activeBooks) {
+                if (cb.getChequebookId() == leaf.getChequebookId() && cb.getChequebookNumber().equals(chequeBookNumber)) {
+                    belongs = true;
+                    if (!"active".equalsIgnoreCase(cb.getStatus())) {
+                        throw new Exception("Cheque Book " + chequeBookNumber + " is not active.");
+                    }
+                    break;
+                }
+            }
+            if (!belongs) {
+                throw new Exception("Cheque Book " + chequeBookNumber + " does not belong to the selected account.");
+            }
+
+            // Mark cheque leaf as used
+            cbDAO.updateChequeLeafStatus(conn, leaf.getChequebookId(), chequeNumber, "used");
+
+            // 2. Account verification and update
+            Account account = accountDAO.getById(conn, accountId);
+            if (account == null) {
+                throw new Exception("Account not found.");
+            }
+            if (!AppConstants.ACCOUNT_STATUS_ACTIVE.equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Account is not active.");
+            }
+            if (account.getBalance().compareTo(amount) < 0) {
+                throw new Exception("Insufficient balance.");
+            }
+
+            BigDecimal newBalance = account.getBalance().subtract(amount);
+            accountDAO.updateBalance(conn, accountId, newBalance);
+
+            // Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(accountId);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_WITHDRAWAL);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (Cheque #" + chequeNumber + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("cheque");
+            transaction.setSenderAccountNumber(account.getAccountNumber());
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Cheque withdrawal successful - Account: {}, Cheque: {}, Amount: {}", accountId, chequeNumber, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing cheque withdrawal", e);
+            throw new Exception("Cheque withdrawal failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Transfer money between internal accounts using a checkbook and check number
+     */
+    public boolean transferWithCheque(long fromAccountId, long toAccountId, String chequeBookNumber, String chequeNumber, BigDecimal amount, String description, Long performedById) throws Exception {
+        if (!ValidatorUtil.isValidAmount(amount, AppConstants.MIN_TRANSFER_AMOUNT != null ? AppConstants.MIN_TRANSFER_AMOUNT : BigDecimal.ZERO)) {
+            throw new Exception("Transfer amount is invalid");
+        }
+
+        Connection conn = null;
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            // 1. Verify and update cheque leaf status
+            com.vgb.dao.ChequeBookDAOImpl cbDAO = new com.vgb.dao.ChequeBookDAOImpl();
+            com.vgb.model.ChequeLeaf leaf = cbDAO.getChequeLeaf(chequeBookNumber, chequeNumber);
+            if (leaf == null) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " not found or does not belong to Cheque Book " + chequeBookNumber + ".");
+            }
+            if (!"unused".equalsIgnoreCase(leaf.getStatus())) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " is already " + leaf.getStatus() + ".");
+            }
+
+            List<com.vgb.model.ChequeBook> activeBooks = cbDAO.getActiveChequeBooksByAccount(fromAccountId);
+            boolean belongs = false;
+            for (com.vgb.model.ChequeBook cb : activeBooks) {
+                if (cb.getChequebookId() == leaf.getChequebookId() && cb.getChequebookNumber().equals(chequeBookNumber)) {
+                    belongs = true;
+                    if (!"active".equalsIgnoreCase(cb.getStatus())) {
+                        throw new Exception("Cheque Book " + chequeBookNumber + " is not active.");
+                    }
+                    break;
+                }
+            }
+            if (!belongs) {
+                throw new Exception("Cheque Book " + chequeBookNumber + " does not belong to the selected source account.");
+            }
+
+            // Mark cheque leaf as used
+            cbDAO.updateChequeLeafStatus(conn, leaf.getChequebookId(), chequeNumber, "used");
+
+            // 2. Perform transfer operation
+            Account fromAccount = accountDAO.getById(conn, fromAccountId);
+            Account toAccount = accountDAO.getById(conn, toAccountId);
+
+            if (fromAccount == null || toAccount == null) {
+                throw new Exception("One or both accounts not found.");
+            }
+            if (!fromAccount.getStatus().equalsIgnoreCase(AppConstants.ACCOUNT_STATUS_ACTIVE) ||
+                !toAccount.getStatus().equalsIgnoreCase(AppConstants.ACCOUNT_STATUS_ACTIVE)) {
+                throw new Exception("One or both accounts are not active.");
+            }
+            if (fromAccount.getBalance().compareTo(amount) < 0) {
+                throw new Exception("Insufficient balance.");
+            }
+
+            BigDecimal fromNewBalance = fromAccount.getBalance().subtract(amount);
+            BigDecimal toNewBalance = toAccount.getBalance().add(amount);
+
+            accountDAO.updateBalance(conn, fromAccountId, fromNewBalance);
+            accountDAO.updateBalance(conn, toAccountId, toNewBalance);
+
+            // Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(fromAccountId);
+            transaction.setToAccountId(toAccountId);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (Cheque #" + chequeNumber + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("cheque");
+            transaction.setSenderAccountNumber(fromAccount.getAccountNumber());
+            transaction.setReceiverAccountNumber(toAccount.getAccountNumber());
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Cheque transfer successful - From: {}, To: {}, Cheque: {}, Amount: {}", fromAccountId, toAccountId, chequeNumber, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing cheque transfer", e);
+            throw new Exception("Cheque transfer failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Transfer money to an external bank using a checkbook and check number
+     */
+    public boolean externalTransferWithCheque(long fromAccountId, String toAccountNumber, String toIfscCode, String toHolderName, String toBankName, String toBranchName, String chequeBookNumber, String chequeNumber, BigDecimal amount, String description, Long performedById) throws Exception {
+        if (!ValidatorUtil.isValidAmount(amount, AppConstants.MIN_TRANSFER_AMOUNT != null ? AppConstants.MIN_TRANSFER_AMOUNT : BigDecimal.ZERO)) {
+            throw new Exception("Transfer amount is invalid");
+        }
+
+        Connection conn = null;
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            // 1. Verify and update cheque leaf status
+            com.vgb.dao.ChequeBookDAOImpl cbDAO = new com.vgb.dao.ChequeBookDAOImpl();
+            com.vgb.model.ChequeLeaf leaf = cbDAO.getChequeLeaf(chequeBookNumber, chequeNumber);
+            if (leaf == null) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " not found or does not belong to Cheque Book " + chequeBookNumber + ".");
+            }
+            if (!"unused".equalsIgnoreCase(leaf.getStatus())) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " is already " + leaf.getStatus() + ".");
+            }
+
+            List<com.vgb.model.ChequeBook> activeBooks = cbDAO.getActiveChequeBooksByAccount(fromAccountId);
+            boolean belongs = false;
+            for (com.vgb.model.ChequeBook cb : activeBooks) {
+                if (cb.getChequebookId() == leaf.getChequebookId() && cb.getChequebookNumber().equals(chequeBookNumber)) {
+                    belongs = true;
+                    if (!"active".equalsIgnoreCase(cb.getStatus())) {
+                        throw new Exception("Cheque Book " + chequeBookNumber + " is not active.");
+                    }
+                    break;
+                }
+            }
+            if (!belongs) {
+                throw new Exception("Cheque Book " + chequeBookNumber + " does not belong to the selected source account.");
+            }
+
+            // Mark cheque leaf as used
+            cbDAO.updateChequeLeafStatus(conn, leaf.getChequebookId(), chequeNumber, "used");
+
+            // 2. Perform external transfer operation
+            Account fromAccount = accountDAO.getById(conn, fromAccountId);
+            if (fromAccount == null) {
+                throw new Exception("Source account not found.");
+            }
+            if (!fromAccount.getStatus().equalsIgnoreCase(AppConstants.ACCOUNT_STATUS_ACTIVE)) {
+                throw new Exception("Source account is not active.");
+            }
+            if (fromAccount.getBalance().compareTo(amount) < 0) {
+                throw new Exception("Insufficient balance.");
+            }
+
+            BigDecimal fromNewBalance = fromAccount.getBalance().subtract(amount);
+            accountDAO.updateBalance(conn, fromAccountId, fromNewBalance);
+
+            // Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(fromAccountId);
+            transaction.setToAccountId(null);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (Cheque #" + chequeNumber + ", To: " + toHolderName + ", A/C: " + toAccountNumber + ", IFSC: " + toIfscCode + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("cheque");
+            transaction.setSenderAccountNumber(fromAccount.getAccountNumber());
+            transaction.setReceiverAccountNumber(toAccountNumber);
+            transaction.setBeneficiaryName(toHolderName);
+            transaction.setBeneficiaryIfsc(toIfscCode);
+            transaction.setBeneficiaryBank(toBankName);
+            transaction.setBeneficiaryBranch(toBranchName);
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Cheque external transfer successful - From: {}, To External A/C: {}, Cheque: {}, Amount: {}", fromAccountId, toAccountNumber, chequeNumber, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing cheque external transfer", e);
+            throw new Exception("Cheque external transfer failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
         }
     }
 

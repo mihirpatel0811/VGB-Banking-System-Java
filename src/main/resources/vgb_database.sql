@@ -16,6 +16,8 @@ USE vgb_database;
 -- Drop dependent child tables first to avoid foreign key dependency conflicts on rebuild
 DROP TABLE IF EXISTS repayment;
 DROP TABLE IF EXISTS card;
+DROP TABLE IF EXISTS cheque_leaf;
+DROP TABLE IF EXISTS cheque_book;
 DROP TABLE IF EXISTS cheque_book_request;
 DROP TABLE IF EXISTS passbook_request;
 DROP TABLE IF EXISTS loan;
@@ -219,6 +221,14 @@ CREATE TABLE transaction (
                              reference_number VARCHAR(50) NOT NULL UNIQUE,
                              description VARCHAR(255),
                              status ENUM('pending', 'completed', 'failed', 'reversed') NOT NULL DEFAULT 'completed',
+                             transfer_mode VARCHAR(50) NULL,
+                             sender_account_number VARCHAR(20) NULL,
+                             receiver_account_number VARCHAR(20) NULL,
+                             beneficiary_name VARCHAR(100) NULL,
+                             beneficiary_ifsc VARCHAR(20) NULL,
+                             beneficiary_bank VARCHAR(100) NULL,
+                             beneficiary_branch VARCHAR(100) NULL,
+                             performed_by_id BIGINT NULL,
                              transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                              FOREIGN KEY (from_account_id) REFERENCES account(account_id) ON DELETE RESTRICT,
                              FOREIGN KEY (to_account_id) REFERENCES account(account_id) ON DELETE RESTRICT
@@ -294,6 +304,30 @@ CREATE TABLE cheque_book_request (
     requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE,
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
+);
+
+-- ==========================================
+-- 7a. CHEQUE BOOK BOOKLET TRACKING
+-- ==========================================
+CREATE TABLE cheque_book (
+    chequebook_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account_id BIGINT NOT NULL,
+    chequebook_number VARCHAR(50) NOT NULL UNIQUE,
+    start_cheque_no INT NOT NULL,
+    end_cheque_no INT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
+);
+
+CREATE TABLE cheque_leaf (
+    cheque_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    chequebook_id BIGINT NOT NULL,
+    cheque_number VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'unused',
+    used_at TIMESTAMP NULL,
+    FOREIGN KEY (chequebook_id) REFERENCES cheque_book(chequebook_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_cheque (chequebook_id, cheque_number)
 );
 
 -- ==========================================

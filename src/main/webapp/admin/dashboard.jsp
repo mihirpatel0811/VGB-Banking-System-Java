@@ -731,8 +731,8 @@
                                             <td style="font-weight: 500; color: var(--gray-500);">${loan.termMonths} Months</td>
                                             <td style="text-align: center;">
                                                 <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                                    <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}" class="btn-action-approve"><i class="bx bx-check"></i> Approve</a>
-                                                    <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}" class="btn-action-reject"><i class="bx bx-x"></i> Reject</a>
+                                                    <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}" class="btn-action-approve"><i class="bx bx-check"></i> Approve</a>
+                                                    <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}" class="btn-action-reject"><i class="bx bx-x"></i> Reject</a>
                                                 </div>
                                             </td>
                                         </tr>

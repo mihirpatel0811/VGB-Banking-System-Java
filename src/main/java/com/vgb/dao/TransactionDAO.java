@@ -14,4 +14,5 @@ public interface TransactionDAO {
     List<Transaction> getByDateRange(LocalDateTime startDate, LocalDateTime endDate) throws Exception;
     List<Transaction> getAll() throws Exception;
     boolean updateStatus(long transactionId, String status) throws Exception;
+    List<Transaction> searchTransactions(String customerName, String accountNumber, String transactionType, String status, String dateFilter, String startDateStr, String endDateStr, String queryText) throws Exception;
 }

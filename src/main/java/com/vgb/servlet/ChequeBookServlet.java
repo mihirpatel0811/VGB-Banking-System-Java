@@ -106,6 +106,11 @@ public class ChequeBookServlet extends BaseServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
             return;
         }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/chequebook");
+            return;
+        }
 
         long requestId = Long.parseLong(getParameter(request, "id", "0"));
         if (chequeBookService.approveRequest(requestId)) {
@@ -119,6 +124,11 @@ public class ChequeBookServlet extends BaseServlet {
     private void rejectRequest(HttpServletRequest request, HttpServletResponse response, Integer adminId) throws Exception {
         if (adminId == null) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
+            return;
+        }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/chequebook");
             return;
         }
 

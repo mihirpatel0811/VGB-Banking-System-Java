@@ -10,7 +10,9 @@ import com.vgb.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +20,7 @@ public class ChequeBookRequestService {
     private static final Logger logger = LoggerFactory.getLogger(ChequeBookRequestService.class);
     
     private ChequeBookRequestDAOImpl chequeBookDAO = new ChequeBookRequestDAOImpl();
+    private com.vgb.dao.ChequeBookDAOImpl chequeBookLedgerDAO = new com.vgb.dao.ChequeBookDAOImpl();
     private AccountDAOImpl accountDAO = new AccountDAOImpl();
     private TransactionDAOImpl transactionDAO = new TransactionDAOImpl();
 
@@ -173,6 +176,49 @@ public class ChequeBookRequestService {
             if (statusUpdated) {
                 // Toggles has_cheque_book = 1 in account
                 accountDAO.updateChequeBookStatus(request.getAccountId(), true);
+
+                // Dynamic auto-issuance of checkbook and check leaves
+                Connection conn = null;
+                try {
+                    conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+                    conn.setAutoCommit(false);
+
+                    int maxChequeNo = chequeBookLedgerDAO.getMaxChequeNumberForAccount(request.getAccountId());
+                    int startChequeNo = maxChequeNo > 0 ? maxChequeNo + 1 : 100001;
+                    int endChequeNo = startChequeNo + request.getLeavesCount() - 1;
+
+                    String cbNumber = "CB-" + request.getAccountNumber() + "-" + request.getRequestId();
+
+                    com.vgb.model.ChequeBook cb = new com.vgb.model.ChequeBook();
+                    cb.setAccountId(request.getAccountId());
+                    cb.setChequebookNumber(cbNumber);
+                    cb.setStartChequeNo(startChequeNo);
+                    cb.setEndChequeNo(endChequeNo);
+                    cb.setStatus("active");
+
+                    chequeBookLedgerDAO.createChequeBook(conn, cb);
+
+                    List<com.vgb.model.ChequeLeaf> leaves = new ArrayList<>();
+                    for (int i = startChequeNo; i <= endChequeNo; i++) {
+                        com.vgb.model.ChequeLeaf leaf = new com.vgb.model.ChequeLeaf();
+                        leaf.setChequebookId(cb.getChequebookId());
+                        leaf.setChequeNumber(String.format("%06d", i));
+                        leaf.setStatus("unused");
+                        leaves.add(leaf);
+                    }
+                    chequeBookLedgerDAO.createChequeLeaves(conn, leaves);
+
+                    conn.commit();
+                    logger.info("Cheque book booklet dynamically auto-issued: {}", cbNumber);
+                } catch (Exception e) {
+                    if (conn != null) {
+                        try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+                    }
+                    logger.error("Error auto-issuing cheque book on approval", e);
+                } finally {
+                    com.vgb.config.DatabaseConfig.closeConnection(conn);
+                }
+
                 logger.info("Cheque book request approved: ID {}", requestId);
                 return true;
             }

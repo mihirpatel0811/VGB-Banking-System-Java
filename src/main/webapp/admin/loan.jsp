@@ -1694,8 +1694,8 @@
                                                         <button type="button" class="btn btn-secondary" onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i class="bx bx-show"></i> View</button>
                                                         <c:choose>
                                                             <c:when test="${loan.status == 'pending_approval'}">
-                                                                <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald); text-decoration: none;" onclick="return confirm('Are you sure you want to approve this loan application?');"><i class="bx bx-check"></i> Approve</a>
-                                                                <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; text-decoration: none;" onclick="return confirm('Are you sure you want to reject this loan application?');"><i class="bx bx-x"></i> Reject</a>
+                                                                <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald); text-decoration: none;" onclick="return confirm('Are you sure you want to approve this loan application?');"><i class="bx bx-check"></i> Approve</a>
+                                                                <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; text-decoration: none;" onclick="return confirm('Are you sure you want to reject this loan application?');"><i class="bx bx-x"></i> Reject</a>
                                                                 <button type="button" class="btn btn-secondary" onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))" data-form-details="<c:out value="${loan.formDetails}" />" style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500); display: inline-flex; align-items: center; gap: 4px;"><i class="bx bx-edit"></i> Edit</button>
                                                             </c:when>
                                                             <c:when test="${loan.status == 'approved'}">
@@ -2985,8 +2985,8 @@
                         if (loanStatus === 'pending_approval') {
                             approveBtn.style.display = 'inline-flex';
                             rejectBtn.style.display = 'inline-flex';
-                            approveBtn.href = '${pageContext.request.contextPath}/loan?action=approve&id=' + loanId;
-                            rejectBtn.href = '${pageContext.request.contextPath}/loan?action=reject&id=' + loanId;
+                            approveBtn.href = '${pageContext.request.contextPath}/loan?action=approve&id=' + loanId + '&csrfToken=${sessionScope.csrfToken}';
+                            rejectBtn.href = '${pageContext.request.contextPath}/loan?action=reject&id=' + loanId + '&csrfToken=${sessionScope.csrfToken}';
 
                             // Setup confirmations on click
                             approveBtn.onclick = function () {
