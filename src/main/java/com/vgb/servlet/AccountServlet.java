@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * AccountServlet: Handles administrative account management operations
  */
-@WebServlet(name = "AccountServlet", value = "/account")
+@WebServlet(name = "AccountServlet", urlPatterns = {"/account", "/account/transfer"})
 @MultipartConfig(
     fileSizeThreshold = 1024 * 1024 * 2, // 2MB
     maxFileSize = 1024 * 1024 * 10,      // 10MB
@@ -46,6 +46,12 @@ public class AccountServlet extends BaseServlet {
 
         if (session == null || (customerId == null && adminId == null)) {
             response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        String servletPath = request.getServletPath();
+        if (adminId != null && ("/account/transfer".equals(servletPath) || "/account/transfer/".equals(servletPath))) {
+            request.getRequestDispatcher("/admin/transfer.jsp").forward(request, response);
             return;
         }
 
@@ -137,6 +143,12 @@ public class AccountServlet extends BaseServlet {
 
         if (session == null || (customerId == null && adminId == null)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized access");
+            return;
+        }
+
+        String servletPath = request.getServletPath();
+        if (adminId != null && ("/account/transfer".equals(servletPath) || "/account/transfer/".equals(servletPath))) {
+            request.getRequestDispatcher("/admin/transfer.jsp").forward(request, response);
             return;
         }
 

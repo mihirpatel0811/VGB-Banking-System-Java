@@ -291,14 +291,17 @@ public class CardServlet extends BaseServlet {
 
     private void payDues(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Long customerId = getUserId(request);
-        if (customerId == null) {
+        Integer adminId = getAdminId(request);
+        if (customerId == null && adminId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
+        String redirectUrl = getParameter(request, "redirectUrl", "/card");
+
         if (!validateCSRFToken(request)) {
             request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
-            response.sendRedirect(request.getContextPath() + "/card");
+            response.sendRedirect(request.getContextPath() + redirectUrl);
             return;
         }
 
@@ -308,7 +311,7 @@ public class CardServlet extends BaseServlet {
 
         if (cardId == 0 || accountId == 0 || amount.compareTo(BigDecimal.ZERO) <= 0) {
             request.getSession().setAttribute("error", "Invalid inputs for paying card dues.");
-            response.sendRedirect(request.getContextPath() + "/card");
+            response.sendRedirect(request.getContextPath() + redirectUrl);
             return;
         }
 
@@ -321,7 +324,7 @@ public class CardServlet extends BaseServlet {
         } catch (Exception e) {
             request.getSession().setAttribute("error", e.getMessage());
         }
-        response.sendRedirect(request.getContextPath() + "/card");
+        response.sendRedirect(request.getContextPath() + redirectUrl);
     }
 
     private void updateLimits(HttpServletRequest request, HttpServletResponse response) throws Exception {
