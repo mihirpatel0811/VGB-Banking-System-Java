@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * AccountServlet: Handles administrative account management operations
  */
-@WebServlet(name = "AccountServlet", urlPatterns = {"/account", "/account/transfer"})
+@WebServlet(name = "AccountServlet", urlPatterns = {"/account"})
 @MultipartConfig(
     fileSizeThreshold = 1024 * 1024 * 2, // 2MB
     maxFileSize = 1024 * 1024 * 10,      // 10MB
@@ -49,11 +49,6 @@ public class AccountServlet extends BaseServlet {
             return;
         }
 
-        String servletPath = request.getServletPath();
-        if (adminId != null && ("/account/transfer".equals(servletPath) || "/account/transfer/".equals(servletPath))) {
-            request.getRequestDispatcher("/admin/transfer.jsp").forward(request, response);
-            return;
-        }
 
         String action = getParameter(request, "action", "list");
 
@@ -146,11 +141,6 @@ public class AccountServlet extends BaseServlet {
             return;
         }
 
-        String servletPath = request.getServletPath();
-        if (adminId != null && ("/account/transfer".equals(servletPath) || "/account/transfer/".equals(servletPath))) {
-            request.getRequestDispatcher("/admin/transfer.jsp").forward(request, response);
-            return;
-        }
 
         String action = getParameter(request, "action", "");
 
@@ -1314,7 +1304,7 @@ public class AccountServlet extends BaseServlet {
         boolean transferSuccess = false;
         if (adminId != null) {
             String transferType = getParameter(request, "transferType", "internal");
-            String paymentMode = getParameter(request, "paymentMode", "cash");
+            String paymentMode = "cash";
             
             if ("external".equalsIgnoreCase(transferType)) {
                 String toAccountNumber = getParameter(request, "beneficiaryAccountNumber", "");
@@ -1441,7 +1431,7 @@ public class AccountServlet extends BaseServlet {
         }
 
         Long performedById = adminId != null ? adminId.longValue() : customerId;
-        String paymentMode = getParameter(request, "paymentMode", "cash");
+        String paymentMode = adminId != null ? "cash" : getParameter(request, "paymentMode", "cash");
         boolean success = false;
         if ("cheque".equalsIgnoreCase(paymentMode)) {
             String chequeBookNumber = getParameter(request, "chequeBookNumber", "");
@@ -1834,4 +1824,7 @@ public class AccountServlet extends BaseServlet {
             return null;
         }
     }
+
+
 }
+

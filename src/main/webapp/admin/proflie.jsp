@@ -115,11 +115,11 @@
                 }
 
                 .profile-cover {
-                    background-image: url('${pageContext.request.contextPath}/assest/images/cover page image.png');
-                    background-size: 100% 100%;
+                    background-image: url('${pageContext.request.contextPath}/assest/images/Extra/cover page image.png');
+                    background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
-                    height: 120px;
+                    height: 160px;
                     border-radius: var(--radius-md);
                     position: relative;
                 }
@@ -426,8 +426,6 @@
                         Dashboard</a>
                     <a href="${pageContext.request.contextPath}/account?action=list"><i class="bx bx-user-check"></i>
                         Manage Accounts</a>
-                    <a href="${pageContext.request.contextPath}/account/transfer"><i class="bx bx-transfer-alt"></i>
-                        Admin Counter</a>
                     <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i>
                         Manage Cards</a>
                     <a href="${pageContext.request.contextPath}/chequebook?action=list"><i

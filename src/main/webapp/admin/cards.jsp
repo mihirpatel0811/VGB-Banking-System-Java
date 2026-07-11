@@ -2547,8 +2547,6 @@
                             Dashboard</a>
                         <a href="${pageContext.request.contextPath}/account?action=list"><i
                                 class="bx bx-user-check"></i> Manage Accounts</a>
-                        <a href="${pageContext.request.contextPath}/account/transfer"><i class="bx bx-transfer-alt"></i>
-                            Admin Counter</a>
                         <a href="${pageContext.request.contextPath}/card?action=list" class="active"><i
                                 class="bx bx-credit-card"></i> Manage Cards</a>
                         <a href="${pageContext.request.contextPath}/chequebook?action=list"><i

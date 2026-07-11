@@ -30,7 +30,7 @@
 // Enforce light mode globally to prevent dark mode rendering
 (function () {
     const theme = 'light';
-    
+
     document.documentElement.classList.remove('dark-mode');
     document.documentElement.classList.add('light-mode');
     document.documentElement.setAttribute('data-theme', theme);
@@ -241,7 +241,7 @@ const App = {
         document.documentElement.classList.remove('dark-mode');
         document.documentElement.classList.add('light-mode');
         document.documentElement.setAttribute('data-theme', theme);
-        
+
         // Clean up any previously stored theme preferences
         localStorage.removeItem('theme');
     },
@@ -1535,7 +1535,15 @@ class VGBAdminAccountManager {
             const depInput = document.getElementById("wizInitialDeposit");
             const depLabel = document.getElementById("wizMinDepositLabel");
             if (depInput && depLabel) {
-                const minVal = this.activeFlow === "current" ? "5000" : "1000";
+                const typeSelect = document.getElementById("wizAccountType");
+                const type = typeSelect ? typeSelect.value : "savings";
+                let minVal = 1000;
+                if (type === "current") minVal = 5000;
+                else if (type === "student") minVal = 500;
+                else if (type === "salary") minVal = 0;
+                else if (type === "fd") minVal = 10000;
+                else if (type === "rd") minVal = 1000;
+
                 depLabel.innerText = `₹${parseFloat(minVal).toLocaleString('en-IN', { minimumFractionDigits: 2 })} Minimum Fixed Amount`;
                 depInput.min = minVal;
                 // Only set default value if empty, not a number, or less than minimum
@@ -1811,7 +1819,15 @@ class VGBAdminAccountManager {
             const depositInput = document.getElementById("wizInitialDeposit");
             if (!depositInput) return false;
             const deposit = parseFloat(depositInput.value);
-            const minVal = this.activeFlow === "current" ? 5000 : 1000;
+
+            const typeSelect = document.getElementById("wizAccountType");
+            const type = typeSelect ? typeSelect.value : "savings";
+            let minVal = 1000;
+            if (type === "current") minVal = 5000;
+            else if (type === "student") minVal = 500;
+            else if (type === "salary") minVal = 0;
+            else if (type === "fd") minVal = 10000;
+            else if (type === "rd") minVal = 1000;
 
             if (isNaN(deposit) || deposit < minVal) {
                 alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}.`);
@@ -2348,7 +2364,15 @@ class VGBAdminAccountManager {
                 const depositInput = document.getElementById("wizInitialDeposit");
                 if (!depositInput) return;
                 const deposit = parseFloat(depositInput.value);
-                const minVal = this.activeFlow === "current" ? 5000 : 1000;
+
+                const typeSelect = document.getElementById("wizAccountType");
+                const type = typeSelect ? typeSelect.value : "savings";
+                let minVal = 1000;
+                if (type === "current") minVal = 5000;
+                else if (type === "student") minVal = 500;
+                else if (type === "salary") minVal = 0;
+                else if (type === "fd") minVal = 10000;
+                else if (type === "rd") minVal = 1000;
 
                 if (isNaN(deposit) || deposit < minVal) {
                     alert(`Onboarding deposit payment declines: Deposit must be a minimum of ₹${minVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}.`);

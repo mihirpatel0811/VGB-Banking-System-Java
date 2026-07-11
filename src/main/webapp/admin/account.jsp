@@ -2115,8 +2115,6 @@
                             Dashboard</a>
                         <a href="${pageContext.request.contextPath}/account?action=list" class="active"><i
                                 class="bx bx-user-check"></i> Manage Accounts</a>
-                        <a href="${pageContext.request.contextPath}/account/transfer"><i class="bx bx-transfer-alt"></i>
-                            Admin Counter</a>
                         <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i>
                             Manage Cards</a>
                         <a href="${pageContext.request.contextPath}/chequebook?action=list"><i
@@ -4553,7 +4551,8 @@
                 <footer class="footer no-print">
                     <div class="container" style="text-align: center; max-width: 1200px; padding: 0;">
                         <p style="font-size: 0.85rem; color: var(--gray-500); font-weight: 500;">&copy;
-                            <span>2026</span> Vertex Galaxy Bank. Internal administrative access.</p>
+                            <span>2026</span> Vertex Galaxy Bank. Internal administrative access.
+                        </p>
                     </div>
                 </footer>
 
@@ -5695,7 +5694,7 @@
                             toggleSectionInputs('studentWorkflowSection', false);
                             toggleSectionInputs('corporateWorkflowSection', false);
                             toggleSectionInputs('salaryWorkflowSection', false);
-                            toggleSectionInputs('termWorkflowSection', false); // termDeposit
+                            toggleSectionInputs('termDepositWorkflowSection', false); // termDeposit
                             toggleSectionInputs('a4NomineeSection', true);
 
                             // Reset standard nominee required attributes
@@ -5734,7 +5733,7 @@
                                 if (salarySection) salarySection.style.display = 'block';
                                 toggleSectionInputs('salaryWorkflowSection', true);
                                 setRequired('a4SalaryCompany', true);
-                                setRequired('a4SalaryHR', true);
+                                setRequired('a4SalaryEmployer', true);
                                 setRequired('a4SalaryEmpId', true);
                             }
                             else if (type === 'current') {
