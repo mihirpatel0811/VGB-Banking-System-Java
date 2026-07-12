@@ -1371,6 +1371,7 @@
                                 class="bx bx-book-open"></i> Passbook Requests</a>
                         <a href="${pageContext.request.contextPath}/loan?action=list" class="active"><i
                                 class="bx bx-building-house"></i> Review Loans</a>
+                        <a href="${pageContext.request.contextPath}/cash-counter"><i class="bx bx-wallet"></i> Cash Counter</a>
                         <a href="${pageContext.request.contextPath}/admin/proflie.jsp"><i class="bx bx-user"></i> My
                             Profile</a>
 

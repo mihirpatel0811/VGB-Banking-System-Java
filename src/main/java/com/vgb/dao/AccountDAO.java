@@ -59,6 +59,11 @@ public interface AccountDAO {
     boolean updatePassbookStatus(long accountId, boolean hasPassbook) throws Exception;
 
     /**
+     * Update ATM card status
+     */
+    boolean updateAtmCardStatus(long accountId, boolean hasAtmCard) throws Exception;
+
+    /**
      * Delete account
      */
     boolean delete(long accountId) throws Exception;

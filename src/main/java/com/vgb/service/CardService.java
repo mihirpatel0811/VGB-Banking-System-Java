@@ -351,7 +351,11 @@ public class CardService {
                 cardDAO.updateFeePaidStatus(cardId, true);
             }
 
-            return cardDAO.updateStatus(cardId, "active");
+            boolean statusUpdated = cardDAO.updateStatus(cardId, "active");
+            if (statusUpdated) {
+                accountDAO.updateAtmCardStatus(card.getAccountId(), true);
+            }
+            return statusUpdated;
         } catch (SQLException e) {
             logger.error("Error approving card", e);
             throw new Exception("Failed to approve card: " + e.getMessage());
@@ -429,6 +433,171 @@ public class CardService {
             if (cardDAO.getByCardNumber(formatted) == null) {
                 return formatted;
             }
+        }
+    }
+
+    /**
+     * Pay credit card outstanding dues using Cash at the Cash Counter
+     */
+    public boolean payCreditCardDuesWithCash(long cardId, BigDecimal amount, Long performedById) throws Exception {
+        runExpiryCheck();
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Invalid payment amount.");
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Card card = cardDAO.getById(cardId);
+            if (card == null) {
+                throw new Exception("Card not found.");
+            }
+            if (!"credit".equalsIgnoreCase(card.getCardType())) {
+                throw new Exception("This is not a credit card.");
+            }
+            if (card.getOutstandingBalance().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("No outstanding dues to pay for this card.");
+            }
+            if (amount.compareTo(card.getOutstandingBalance()) > 0) {
+                throw new Exception("Cannot pay more than the outstanding balance of ₹" + card.getOutstandingBalance().setScale(2) + ".");
+            }
+
+            // Reduce credit card outstanding balance
+            BigDecimal newOutstanding = card.getOutstandingBalance().subtract(amount);
+            cardDAO.updateOutstandingBalance(cardId, newOutstanding);
+
+            // Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(null);
+            transaction.setToAccountId(null);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription("VGB " + card.getCardTier().toUpperCase() + " Credit Card Cash Counter Bill Payment (Card: " + card.getMaskedCardNumber() + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("cash");
+            transaction.setPerformedById(performedById);
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Card dues cash payment successful - Card: {}, Amount: {}", cardId, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error paying card dues with cash", e);
+            throw new Exception("Failed to pay card dues: " + e.getMessage(), e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Pay credit card outstanding dues using a VGB cheque
+     */
+    public boolean payCreditCardDuesWithCheque(long cardId, long accountId, String chequeBookNumber, String chequeNumber, BigDecimal amount, Long performedById) throws Exception {
+        runExpiryCheck();
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Invalid payment amount.");
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            // 1. Verify and update cheque leaf status
+            com.vgb.dao.ChequeBookDAOImpl cbDAO = new com.vgb.dao.ChequeBookDAOImpl();
+            com.vgb.model.ChequeLeaf leaf = cbDAO.getChequeLeaf(chequeBookNumber, chequeNumber);
+            if (leaf == null) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " not found or does not belong to Cheque Book " + chequeBookNumber + ".");
+            }
+            if (!"unused".equalsIgnoreCase(leaf.getStatus())) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " is already " + leaf.getStatus() + ".");
+            }
+
+            List<com.vgb.model.ChequeBook> activeBooks = cbDAO.getActiveChequeBooksByAccount(accountId);
+            boolean belongs = false;
+            for (com.vgb.model.ChequeBook cb : activeBooks) {
+                if (cb.getChequebookId() == leaf.getChequebookId() && cb.getChequebookNumber().equals(chequeBookNumber)) {
+                    belongs = true;
+                    if (!"active".equalsIgnoreCase(cb.getStatus())) {
+                        throw new Exception("Cheque Book " + chequeBookNumber + " is not active.");
+                    }
+                    break;
+                }
+            }
+            if (!belongs) {
+                throw new Exception("Cheque Book " + chequeBookNumber + " does not belong to the selected account.");
+            }
+
+            // Mark cheque leaf as used
+            cbDAO.updateChequeLeafStatus(conn, leaf.getChequebookId(), chequeNumber, "used");
+
+            // 2. Card verification
+            Card card = cardDAO.getById(cardId);
+            if (card == null) {
+                throw new Exception("Card not found.");
+            }
+            if (!"credit".equalsIgnoreCase(card.getCardType())) {
+                throw new Exception("This is not a credit card.");
+            }
+            if (card.getOutstandingBalance().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("No outstanding dues to pay for this card.");
+            }
+            if (amount.compareTo(card.getOutstandingBalance()) > 0) {
+                throw new Exception("Cannot pay more than the outstanding balance of ₹" + card.getOutstandingBalance().setScale(2) + ".");
+            }
+
+            // 3. Account verification and balance check
+            Account account = accountDAO.getById(accountId);
+            if (account == null) {
+                throw new Exception("Source account not found.");
+            }
+            if (!"active".equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Source account is not active.");
+            }
+            if (account.getBalance().compareTo(amount) < 0) {
+                throw new Exception("Insufficient balance in selected account to pay card dues.");
+            }
+
+            // Deduct from account balance
+            BigDecimal newBalance = account.getBalance().subtract(amount);
+            accountDAO.updateBalance(accountId, newBalance);
+
+            // Reduce credit card outstanding balance
+            BigDecimal newOutstanding = card.getOutstandingBalance().subtract(amount);
+            cardDAO.updateOutstandingBalance(cardId, newOutstanding);
+
+            // Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(accountId);
+            transaction.setToAccountId(null);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription("VGB " + card.getCardTier().toUpperCase() + " Credit Card Bill Payment (Cheque #" + chequeNumber + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("cheque");
+            transaction.setPerformedById(performedById);
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Card dues cheque payment successful - Card: {}, Cheque: {}, Amount: {}", cardId, chequeNumber, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error paying card dues with cheque", e);
+            throw new Exception("Failed to pay card dues: " + e.getMessage(), e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
         }
     }
 }

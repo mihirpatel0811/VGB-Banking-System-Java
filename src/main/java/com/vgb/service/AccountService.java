@@ -820,4 +820,57 @@ public class AccountService {
             throw new Exception("Failed to delete account: " + e.getMessage(), e);
         }
     }
+
+    /**
+     * Deposit money via external cheque
+     */
+    public boolean chequeDeposit(long accountId, String bankName, String chequeNumber, BigDecimal amount, String description, Long performedById) throws Exception {
+        if (!ValidatorUtil.isValidAmount(amount, new java.math.BigDecimal("100"))) {
+            throw new Exception("Deposit amount must be at least 100");
+        }
+
+        Connection conn = null;
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false);
+
+            Account account = accountDAO.getById(conn, accountId);
+            if (account == null) {
+                throw new Exception("Account not found");
+            }
+
+            // Update account balance
+            BigDecimal newBalance = account.getBalance().add(amount);
+            accountDAO.updateBalance(conn, accountId, newBalance);
+
+            // Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setToAccountId(accountId);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_DEPOSIT);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (Cheque #" + chequeNumber + " - " + bankName + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+
+            // Audit and routing fields
+            transaction.setTransferMode("cheque");
+            transaction.setReceiverAccountNumber(account.getAccountNumber());
+            transaction.setBeneficiaryBank(bankName);
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Cheque deposit successful - Account: {}, Amount: {}, Cheque: {}", accountId, amount, chequeNumber);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing cheque deposit", e);
+            throw new Exception("Cheque deposit failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
+        }
+    }
 }

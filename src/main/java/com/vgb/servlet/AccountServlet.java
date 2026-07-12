@@ -873,9 +873,9 @@ public class AccountServlet extends BaseServlet {
                 accStmt.setString(1, accountType.toLowerCase());
                 accStmt.setBigDecimal(2, initialAmount);
                 accStmt.setString(3, accountNumber);
-                accStmt.setInt(4, atmSelected ? 1 : 0);
-                accStmt.setInt(5, chequeSelected ? 1 : 0);
-                accStmt.setInt(6, passbookSelected ? 1 : 0);
+                accStmt.setInt(4, 0); // Start as 0 (inactive), enabled on Admin approval
+                accStmt.setInt(5, 0); // Start as 0 (inactive), enabled on Admin approval
+                accStmt.setInt(6, 0); // Start as 0 (inactive), enabled on Admin approval
                 
                 Customer primaryCust = customerList.get(0);
                 accStmt.setString(7, primaryCust.getUsername());

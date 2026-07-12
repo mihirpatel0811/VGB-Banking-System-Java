@@ -526,4 +526,330 @@ public class LoanService {
             throw new Exception("Failed to update loan details: " + e.getMessage(), e);
         }
     }
+
+    /**
+     * Process loan repayment using Cash at the Cash Counter
+     */
+    public boolean processCashRepayment(long loanId, long customerId, BigDecimal amount, Long performedById) throws Exception {
+        if (!ValidatorUtil.isValidAmount(amount)) {
+            throw new Exception("Invalid repayment amount");
+        }
+
+        Connection conn = null;
+        PreparedStatement stmtCheck = null;
+        PreparedStatement stmtTxn = null;
+        PreparedStatement stmtRepay = null;
+        PreparedStatement stmtLoanBal = null;
+        PreparedStatement stmtLoanStat = null;
+        ResultSet rsCheck = null;
+
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // BEGIN TRANSACTION
+
+            // Fetch active loan details
+            BigDecimal remainingBalance = null;
+            BigDecimal interestRate = null;
+            String status = null;
+            String fetchLoanSql = "SELECT remaining_balance, interest_rate, status FROM loan WHERE loan_id = ?";
+            stmtCheck = conn.prepareStatement(fetchLoanSql);
+            stmtCheck.setLong(1, loanId);
+            rsCheck = stmtCheck.executeQuery();
+            if (rsCheck.next()) {
+                remainingBalance = rsCheck.getBigDecimal("remaining_balance");
+                interestRate = rsCheck.getBigDecimal("interest_rate");
+                status = rsCheck.getString("status");
+            } else {
+                throw new Exception("Loan not found");
+            }
+            rsCheck.close();
+            stmtCheck.close();
+
+            if ("closed".equalsIgnoreCase(status) || remainingBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("This loan has already been fully repaid and closed.");
+            }
+            if ("pending_approval".equalsIgnoreCase(status) || "rejected".equalsIgnoreCase(status)) {
+                throw new Exception("Repayment is only allowed on active or disbursed loans.");
+            }
+
+            BigDecimal repaymentAmount = amount;
+            BigDecimal principalComponent;
+            BigDecimal interestComponent;
+
+            if (repaymentAmount.compareTo(remainingBalance) >= 0) {
+                repaymentAmount = remainingBalance;
+                principalComponent = remainingBalance;
+                interestComponent = BigDecimal.ZERO;
+            } else {
+                BigDecimal monthlyRate = interestRate.divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
+                principalComponent = calculatePrincipalComponent(repaymentAmount, monthlyRate);
+                if (principalComponent.compareTo(remainingBalance) > 0) {
+                    principalComponent = remainingBalance;
+                }
+                interestComponent = repaymentAmount.subtract(principalComponent);
+            }
+
+            // Log entry into the transactions ledger
+            String insertTxnSql = "INSERT INTO transaction (from_account_id, to_account_id, transaction_type, amount, reference_number, description, status, transfer_mode, performed_by_id) VALUES (NULL, NULL, ?, ?, ?, ?, ?, ?, ?)";
+            stmtTxn = conn.prepareStatement(insertTxnSql, Statement.RETURN_GENERATED_KEYS);
+            stmtTxn.setString(1, AppConstants.TRANSACTION_TYPE_TRANSFER);
+            stmtTxn.setBigDecimal(2, repaymentAmount);
+            stmtTxn.setString(3, "REPAY" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            stmtTxn.setString(4, "Loan Repayment (Cash Counter) - Loan ID: " + loanId);
+            stmtTxn.setString(5, AppConstants.TRANSACTION_STATUS_COMPLETED);
+            stmtTxn.setString(6, "cash");
+            stmtTxn.setObject(7, performedById, Types.BIGINT);
+            stmtTxn.executeUpdate();
+
+            long transactionId = 0;
+            try (ResultSet generatedKeys = stmtTxn.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    transactionId = generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Failed to retrieve transaction ID for repayment.");
+                }
+            }
+            stmtTxn.close();
+
+            // Create repayment history
+            String insertRepaySql = "INSERT INTO repayment (loan_id, customer_id, transaction_id, amount_paid, principal_component, interest_component) VALUES (?, ?, ?, ?, ?, ?)";
+            stmtRepay = conn.prepareStatement(insertRepaySql);
+            stmtRepay.setLong(1, loanId);
+            stmtRepay.setLong(2, customerId);
+            stmtRepay.setLong(3, transactionId);
+            stmtRepay.setBigDecimal(4, repaymentAmount);
+            stmtRepay.setBigDecimal(5, principalComponent);
+            stmtRepay.setBigDecimal(6, interestComponent);
+            stmtRepay.executeUpdate();
+            stmtRepay.close();
+
+            // Reduce loans outstanding balance
+            BigDecimal newRemainingBalance = remainingBalance.subtract(principalComponent);
+            String updateLoanBalSql = "UPDATE loan SET remaining_balance = ? WHERE loan_id = ?";
+            stmtLoanBal = conn.prepareStatement(updateLoanBalSql);
+            stmtLoanBal.setBigDecimal(1, newRemainingBalance);
+            stmtLoanBal.setLong(2, loanId);
+            stmtLoanBal.executeUpdate();
+            stmtLoanBal.close();
+
+            if (newRemainingBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                String updateLoanStatSql = "UPDATE loan SET status = ? WHERE loan_id = ?";
+                stmtLoanStat = conn.prepareStatement(updateLoanStatSql);
+                stmtLoanStat.setString(1, AppConstants.LOAN_STATUS_CLOSED);
+                stmtLoanStat.setLong(2, loanId);
+                stmtLoanStat.executeUpdate();
+                stmtLoanStat.close();
+                logger.info("Loan closed via cash payment - Loan ID: {}", loanId);
+            }
+
+            conn.commit();
+            logger.info("Cash repayment processed successfully - Loan: {}, Amount: {}", loanId, repaymentAmount);
+            return true;
+
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing cash repayment", e);
+            throw new Exception("Failed to process cash repayment: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeResources(rsCheck, stmtCheck, conn);
+            try { if (stmtTxn != null) stmtTxn.close(); } catch (Exception e) {}
+            try { if (stmtRepay != null) stmtRepay.close(); } catch (Exception e) {}
+            try { if (stmtLoanBal != null) stmtLoanBal.close(); } catch (Exception e) {}
+            try { if (stmtLoanStat != null) stmtLoanStat.close(); } catch (Exception e) {}
+        }
+    }
+
+    /**
+     * Process loan repayment using a VGB cheque
+     */
+    public boolean processChequeRepayment(long loanId, long customerId, BigDecimal amount, long accountId, String chequeBookNumber, String chequeNumber, Long performedById) throws Exception {
+        if (!ValidatorUtil.isValidAmount(amount)) {
+            throw new Exception("Invalid repayment amount");
+        }
+
+        Connection conn = null;
+        PreparedStatement stmtCheck = null;
+        PreparedStatement stmtDebit = null;
+        PreparedStatement stmtTxn = null;
+        PreparedStatement stmtRepay = null;
+        PreparedStatement stmtLoanBal = null;
+        PreparedStatement stmtLoanStat = null;
+        ResultSet rsCheck = null;
+
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // BEGIN TRANSACTION
+
+            // 1. Verify and update cheque leaf status
+            com.vgb.dao.ChequeBookDAOImpl cbDAO = new com.vgb.dao.ChequeBookDAOImpl();
+            com.vgb.model.ChequeLeaf leaf = cbDAO.getChequeLeaf(chequeBookNumber, chequeNumber);
+            if (leaf == null) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " not found or does not belong to Cheque Book " + chequeBookNumber + ".");
+            }
+            if (!"unused".equalsIgnoreCase(leaf.getStatus())) {
+                throw new Exception("Cheque leaf #" + chequeNumber + " is already " + leaf.getStatus() + ".");
+            }
+
+            List<com.vgb.model.ChequeBook> activeBooks = cbDAO.getActiveChequeBooksByAccount(accountId);
+            boolean belongs = false;
+            for (com.vgb.model.ChequeBook cb : activeBooks) {
+                if (cb.getChequebookId() == leaf.getChequebookId() && cb.getChequebookNumber().equals(chequeBookNumber)) {
+                    belongs = true;
+                    if (!"active".equalsIgnoreCase(cb.getStatus())) {
+                        throw new Exception("Cheque Book " + chequeBookNumber + " is not active.");
+                    }
+                    break;
+                }
+            }
+            if (!belongs) {
+                throw new Exception("Cheque Book " + chequeBookNumber + " does not belong to the selected account.");
+            }
+
+            // Mark cheque leaf as used
+            cbDAO.updateChequeLeafStatus(conn, leaf.getChequebookId(), chequeNumber, "used");
+
+            // 2. Fetch active loan details
+            BigDecimal remainingBalance = null;
+            BigDecimal interestRate = null;
+            String status = null;
+            String fetchLoanSql = "SELECT remaining_balance, interest_rate, status FROM loan WHERE loan_id = ?";
+            stmtCheck = conn.prepareStatement(fetchLoanSql);
+            stmtCheck.setLong(1, loanId);
+            rsCheck = stmtCheck.executeQuery();
+            if (rsCheck.next()) {
+                remainingBalance = rsCheck.getBigDecimal("remaining_balance");
+                interestRate = rsCheck.getBigDecimal("interest_rate");
+                status = rsCheck.getString("status");
+            } else {
+                throw new Exception("Loan not found");
+            }
+            rsCheck.close();
+            stmtCheck.close();
+
+            if ("closed".equalsIgnoreCase(status) || remainingBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("This loan has already been fully repaid and closed.");
+            }
+            if ("pending_approval".equalsIgnoreCase(status) || "rejected".equalsIgnoreCase(status)) {
+                throw new Exception("Repayment is only allowed on active or disbursed loans.");
+            }
+
+            // 3. Fetch bank account balance
+            BigDecimal accountBalance = null;
+            String fetchAccSql = "SELECT balance FROM account WHERE account_id = ?";
+            stmtCheck = conn.prepareStatement(fetchAccSql);
+            stmtCheck.setLong(1, accountId);
+            rsCheck = stmtCheck.executeQuery();
+            if (rsCheck.next()) {
+                accountBalance = rsCheck.getBigDecimal("balance");
+            } else {
+                throw new Exception("Account not found");
+            }
+            rsCheck.close();
+            stmtCheck.close();
+
+            BigDecimal repaymentAmount = amount;
+            BigDecimal principalComponent;
+            BigDecimal interestComponent;
+
+            if (repaymentAmount.compareTo(remainingBalance) >= 0) {
+                repaymentAmount = remainingBalance;
+                principalComponent = remainingBalance;
+                interestComponent = BigDecimal.ZERO;
+            } else {
+                BigDecimal monthlyRate = interestRate.divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
+                principalComponent = calculatePrincipalComponent(repaymentAmount, monthlyRate);
+                if (principalComponent.compareTo(remainingBalance) > 0) {
+                    principalComponent = remainingBalance;
+                }
+                interestComponent = repaymentAmount.subtract(principalComponent);
+            }
+
+            if (accountBalance.compareTo(repaymentAmount) < 0) {
+                throw new Exception("Insufficient balance");
+            }
+
+            // 4. Debit bank account balance
+            BigDecimal newBalance = accountBalance.subtract(repaymentAmount);
+            String debitSql = "UPDATE account SET balance = ? WHERE account_id = ?";
+            stmtDebit = conn.prepareStatement(debitSql);
+            stmtDebit.setBigDecimal(1, newBalance);
+            stmtDebit.setLong(2, accountId);
+            stmtDebit.executeUpdate();
+            stmtDebit.close();
+
+            // 5. Log entry into the transactions ledger
+            String insertTxnSql = "INSERT INTO transaction (from_account_id, to_account_id, transaction_type, amount, reference_number, description, status, transfer_mode, performed_by_id) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?)";
+            stmtTxn = conn.prepareStatement(insertTxnSql, Statement.RETURN_GENERATED_KEYS);
+            stmtTxn.setLong(1, accountId);
+            stmtTxn.setString(2, AppConstants.TRANSACTION_TYPE_TRANSFER);
+            stmtTxn.setBigDecimal(3, repaymentAmount);
+            stmtTxn.setString(4, "REPAY" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            stmtTxn.setString(5, "Loan Repayment (Cheque #" + chequeNumber + ") - Loan ID: " + loanId);
+            stmtTxn.setString(6, AppConstants.TRANSACTION_STATUS_COMPLETED);
+            stmtTxn.setString(7, "cheque");
+            stmtTxn.setObject(8, performedById, Types.BIGINT);
+            stmtTxn.executeUpdate();
+
+            long transactionId = 0;
+            try (ResultSet generatedKeys = stmtTxn.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    transactionId = generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Failed to retrieve transaction ID for repayment.");
+                }
+            }
+            stmtTxn.close();
+
+            // 6. Create repayment history
+            String insertRepaySql = "INSERT INTO repayment (loan_id, customer_id, transaction_id, amount_paid, principal_component, interest_component) VALUES (?, ?, ?, ?, ?, ?)";
+            stmtRepay = conn.prepareStatement(insertRepaySql);
+            stmtRepay.setLong(1, loanId);
+            stmtRepay.setLong(2, customerId);
+            stmtRepay.setLong(3, transactionId);
+            stmtRepay.setBigDecimal(4, repaymentAmount);
+            stmtRepay.setBigDecimal(5, principalComponent);
+            stmtRepay.setBigDecimal(6, interestComponent);
+            stmtRepay.executeUpdate();
+            stmtRepay.close();
+
+            // 7. Reduce loans outstanding balance
+            BigDecimal newRemainingBalance = remainingBalance.subtract(principalComponent);
+            String updateLoanBalSql = "UPDATE loan SET remaining_balance = ? WHERE loan_id = ?";
+            stmtLoanBal = conn.prepareStatement(updateLoanBalSql);
+            stmtLoanBal.setBigDecimal(1, newRemainingBalance);
+            stmtLoanBal.setLong(2, loanId);
+            stmtLoanBal.executeUpdate();
+            stmtLoanBal.close();
+
+            if (newRemainingBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                String updateLoanStatSql = "UPDATE loan SET status = ? WHERE loan_id = ?";
+                stmtLoanStat = conn.prepareStatement(updateLoanStatSql);
+                stmtLoanStat.setString(1, AppConstants.LOAN_STATUS_CLOSED);
+                stmtLoanStat.setLong(2, loanId);
+                stmtLoanStat.executeUpdate();
+                stmtLoanStat.close();
+                logger.info("Loan closed via cheque payment - Loan ID: {}", loanId);
+            }
+
+            conn.commit();
+            logger.info("Cheque repayment processed successfully - Loan: {}, Cheque: {}, Amount: {}", loanId, chequeNumber, repaymentAmount);
+            return true;
+
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing cheque repayment", e);
+            throw new Exception("Failed to process cheque repayment: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeResources(rsCheck, stmtCheck, conn);
+            try { if (stmtDebit != null) stmtDebit.close(); } catch (Exception e) {}
+            try { if (stmtTxn != null) stmtTxn.close(); } catch (Exception e) {}
+            try { if (stmtRepay != null) stmtRepay.close(); } catch (Exception e) {}
+            try { if (stmtLoanBal != null) stmtLoanBal.close(); } catch (Exception e) {}
+            try { if (stmtLoanStat != null) stmtLoanStat.close(); } catch (Exception e) {}
+        }
+    }
 }

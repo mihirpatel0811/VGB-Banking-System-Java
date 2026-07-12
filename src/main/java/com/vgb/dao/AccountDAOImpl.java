@@ -703,6 +703,30 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
+    public boolean updateAtmCardStatus(long accountId, boolean hasAtmCard) throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        String sql = "UPDATE account SET has_atm_card = ? WHERE account_id = ?";
+
+        try {
+            conn = dbConfig.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, hasAtmCard ? 1 : 0);
+            stmt.setLong(2, accountId);
+
+            int result = stmt.executeUpdate();
+            logger.info("Account ATM card status updated - ID: {}, hasAtmCard: {}", accountId, hasAtmCard);
+            return result > 0;
+
+        } catch (SQLException e) {
+            logger.error("Error updating account ATM card status", e);
+            throw new Exception("Failed to update account ATM card status", e);
+        } finally {
+            DatabaseConfig.closeResources(null, stmt, conn);
+        }
+    }
+
+    @Override
     public boolean delete(long accountId) throws Exception {
         Connection conn = null;
         PreparedStatement stmtGetSignatories = null;
