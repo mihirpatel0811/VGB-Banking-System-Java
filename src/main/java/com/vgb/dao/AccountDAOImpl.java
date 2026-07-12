@@ -59,6 +59,7 @@ public class AccountDAOImpl implements AccountDAO {
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.employee_id END) as primary_employee_id, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.salary_frequency END) as primary_salary_frequency, " +
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.relationship_manager END) as primary_relationship_manager, " +
+        "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.signature_path END) as primary_signature_path, " +
         
         
         // Joint Customer fields
@@ -1202,6 +1203,7 @@ public class AccountDAOImpl implements AccountDAO {
             account.setPrimaryEmployeeId(rs.getString("primary_employee_id"));
             account.setPrimarySalaryFrequency(rs.getString("primary_salary_frequency"));
             account.setPrimaryRelationshipManager(rs.getString("primary_relationship_manager"));
+            account.setPrimarySignaturePath(rs.getString("primary_signature_path"));
         } catch (SQLException e) {
             // ignore
         }

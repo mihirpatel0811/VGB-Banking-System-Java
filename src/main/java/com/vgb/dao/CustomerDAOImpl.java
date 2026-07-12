@@ -16,7 +16,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     private DatabaseConfig dbConfig = DatabaseConfig.getInstance();
 
     private static final String CREATE_CUSTOMER = 
-        "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO customer (first_name, middle_name, last_name, father_name, mother_name, dob, gender, marital_status, nationality, email, pan_card, aadhaar_card, phone_no, alt_phone_no, address, perm_address, city, state, zip_code, username, pin, password, status, occupation, annual_income, signature_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String GET_CUSTOMER_BY_ID = 
         "SELECT * FROM customer WHERE customer_id = ?";
     private static final String GET_CUSTOMER_BY_USERNAME = 
@@ -28,7 +28,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     private static final String GET_CUSTOMERS_BY_STATUS = 
         "SELECT * FROM customer WHERE status = ? ORDER BY created_at DESC";
     private static final String UPDATE_CUSTOMER = 
-        "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, father_name = ?, mother_name = ?, dob = ?, gender = ?, marital_status = ?, nationality = ?, email = ?, phone_no = ?, alt_phone_no = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ? WHERE customer_id = ?";
+        "UPDATE customer SET first_name = ?, middle_name = ?, last_name = ?, father_name = ?, mother_name = ?, dob = ?, gender = ?, marital_status = ?, nationality = ?, email = ?, phone_no = ?, alt_phone_no = ?, address = ?, perm_address = ?, city = ?, state = ?, zip_code = ?, occupation = ?, annual_income = ?, signature_path = ? WHERE customer_id = ?";
     private static final String UPDATE_CUSTOMER_STATUS = 
         "UPDATE customer SET status = ? WHERE customer_id = ?";
     private static final String UPDATE_CUSTOMER_PASSWORD = 
@@ -85,6 +85,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             stmt.setString(23, customer.getStatus() != null ? customer.getStatus() : "active");
             stmt.setString(24, customer.getOccupation());
             stmt.setBigDecimal(25, customer.getAnnualIncome());
+            stmt.setString(26, customer.getSignaturePath());
 
             int result = stmt.executeUpdate();
             logger.info("Customer created: {}", customer.getEmail());
@@ -253,7 +254,8 @@ public class CustomerDAOImpl implements CustomerDAO {
             stmt.setString(17, customer.getZipCode());
             stmt.setString(18, customer.getOccupation());
             stmt.setBigDecimal(19, customer.getAnnualIncome());
-            stmt.setLong(20, customer.getCustomerId());
+            stmt.setString(20, customer.getSignaturePath());
+            stmt.setLong(21, customer.getCustomerId());
 
             int result = stmt.executeUpdate();
             logger.info("Customer updated: {}", customer.getCustomerId());
@@ -589,6 +591,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             customer.setPassportCopyPath(rs.getString("passport_copy_path"));
             customer.setDrivingLicenseCopyPath(rs.getString("driving_license_copy_path"));
             customer.setVoterIdCopyPath(rs.getString("voter_id_copy_path"));
+            customer.setSignaturePath(rs.getString("signature_path"));
         } catch (SQLException e) {
             // ignore if columns don't exist
         }

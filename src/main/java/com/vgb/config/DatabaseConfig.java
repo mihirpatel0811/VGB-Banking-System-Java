@@ -320,6 +320,15 @@ public class DatabaseConfig {
             }
             rs.close();
 
+            // 3e2. Upgrade customer table to add signature_path if needed
+            rs = metaData.getColumns(null, null, "customer", "signature_path");
+            if (!rs.next()) {
+                logger.info("Upgrading schema: Adding signature_path column to customer table");
+                stmt.execute("ALTER TABLE customer ADD COLUMN signature_path VARCHAR(255) NULL");
+                logger.info("Customer schema upgraded successfully with signature_path!");
+            }
+            rs.close();
+
             // 3f. Upgrade admin table to add pin if needed
             rs = metaData.getColumns(null, null, "admin", "pin");
             if (!rs.next()) {

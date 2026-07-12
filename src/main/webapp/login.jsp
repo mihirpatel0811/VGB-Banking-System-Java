@@ -593,42 +593,8 @@
 
                         <!-- Rotating/Floating 3D Card Mockup -->
                         <div class="bank-card-container" style="margin-top: 30px; transform: scale(1.05);">
-                            <div class="bank-card" style="transform: rotateX(12deg) rotateY(-12deg);">
+                            <div class="bank-card" style="transform: rotateX(12deg) rotateY(-12deg); background: url('${pageContext.request.contextPath}/assest/images/Extra/card.png') no-repeat center center; background-size: cover; border: none;">
                                 <div class="card-glare"></div>
-                                <div class="bank-card-top">
-                                    <div class="bank-card-logo-container">
-                                        <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
-                                        <span class="bank-name-text">Vertex Galaxy Bank</span>
-                                    </div>
-                                    <svg class="bank-card-chip" viewBox="0 0 100 80" width="45" height="36"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="5" y="5" width="90" height="70" rx="10" fill="url(#chipGoldGradLogin)"
-                                            stroke="#b59410" stroke-width="1.5" />
-                                        <path d="M 5,25 H 45 V 55 H 5" fill="none" stroke="#8c710c"
-                                            stroke-width="1.5" />
-                                        <path d="M 95,25 H 55 V 55 H 95" fill="none" stroke="#8c710c"
-                                            stroke-width="1.5" />
-                                        <path d="M 45,5 V 75" fill="none" stroke="#8c710c" stroke-width="1.5" />
-                                        <path d="M 55,5 V 75" fill="none" stroke="#8c710c" stroke-width="1.5" />
-                                        <rect x="30" y="25" width="40" height="30" rx="4" fill="#8c710c"
-                                            opacity="0.3" />
-                                        <defs>
-                                            <linearGradient id="chipGoldGradLogin" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stop-color="#ffe875" />
-                                                <stop offset="50%" stop-color="#f7c844" />
-                                                <stop offset="100%" stop-color="#b88f14" />
-                                            </linearGradient>
-                                        </defs>
-                                    </svg>
-                                </div>
-                                <div class="bank-card-number">
-                                    <span class="dots">•••• &nbsp; •••• &nbsp; ••••</span>
-                                    <span class="digits">1719</span>
-                                </div>
-                                <div class="bank-card-bottom">
-                                    <span>VGB Smart Access</span>
-                                    <strong class="vgb-gradient-logo">VGB</strong>
-                                </div>
                             </div>
                         </div>
 

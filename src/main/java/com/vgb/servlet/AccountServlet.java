@@ -582,6 +582,7 @@ public class AccountServlet extends BaseServlet {
             primary.setPassportCopyPath(processUploadedFile(request, "passportCopy", "passport"));
             primary.setDrivingLicenseCopyPath(processUploadedFile(request, "dlCopy", "dl"));
             primary.setVoterIdCopyPath(processUploadedFile(request, "voterIdCopy", "voter_id"));
+            primary.setSignaturePath(processUploadedFile(request, "signatureCopy", "signature"));
 
             // Guardian details (Minors)
             primary.setGuardianName(getParameter(request, "guardianName", null));
@@ -738,8 +739,8 @@ public class AccountServlet extends BaseServlet {
                         "guardian_name, guardian_relationship, guardian_phone, guardian_aadhaar, guardian_pan, guardian_signature_path, birth_certificate_path, " +
                         "school_college_name, student_id, course, admission_number, " +
                         "company_name, employer_name, employee_id, salary_frequency, " +
-                        "relationship_manager, aadhaar_proof_path, pan_proof_path, passport_copy_path, driving_license_copy_path, voter_id_copy_path) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "relationship_manager, aadhaar_proof_path, pan_proof_path, passport_copy_path, driving_license_copy_path, voter_id_copy_path, signature_path) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     
                     try (PreparedStatement custStmt = conn.prepareStatement(createCustomerSql, Statement.RETURN_GENERATED_KEYS)) {
                         custStmt.setString(1, customer.getFirstName());
@@ -793,6 +794,7 @@ public class AccountServlet extends BaseServlet {
                         custStmt.setString(45, customer.getPassportCopyPath());
                         custStmt.setString(46, customer.getDrivingLicenseCopyPath());
                         custStmt.setString(47, customer.getVoterIdCopyPath());
+                        custStmt.setString(48, customer.getSignaturePath());
                         
                         int affectedRows = custStmt.executeUpdate();
                         if (affectedRows == 0) {

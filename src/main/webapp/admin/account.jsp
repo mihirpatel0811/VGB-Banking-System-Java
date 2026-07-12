@@ -202,19 +202,29 @@
                         cursor: pointer;
                     }
 
+                    .print-bg-container {
+                         display: none;
+                     }
+
                     /* Print Media Overrides */
                     @media print {
-                        body {
-                            background: white !important;
-                            color: black !important;
+                        @page {
+                            size: A4 portrait;
+                            margin: 0;
                         }
-
+                        body {
+                            background-color: white !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            color: #1a1a1a !important;
+                        }
                         .sidebar,
                         .header,
                         .footer,
                         .no-print,
                         .modal-header,
-                        .modal-footer {
+                        .modal-footer,
+                        .print-hide-header {
                             display: none !important;
                         }
 
@@ -234,6 +244,7 @@
                             padding: 0 !important;
                             display: block !important;
                             z-index: 99999 !important;
+                            overflow: visible !important;
                         }
 
                         .modal-content {
@@ -242,7 +253,57 @@
                             border: none !important;
                             box-shadow: none !important;
                             padding: 0 !important;
-                            background: white !important;
+                            background: transparent !important;
+                        }
+
+                        .modal-body {
+                            padding: 0 !important;
+                            background: transparent !important;
+                        }
+
+                        .statement-print-area {
+                            position: relative !important;
+                            z-index: 1 !important;
+                            margin: 0 !important;
+                            padding: 160px 60px 100px 60px !important;
+                            width: 100% !important;
+                            box-sizing: border-box !important;
+                            background: transparent !important;
+                        }
+                        .print-bg-container {
+                             display: block !important;
+                             position: fixed !important;
+                             left: 0 !important;
+                             top: 0 !important;
+                             width: 210mm !important;
+                             height: 297mm !important;
+                             z-index: -10 !important;
+                             pointer-events: none !important;
+                         }
+                         .print-bg-img {
+                             width: 100% !important;
+                             height: 100% !important;
+                             object-fit: fill !important;
+                         }
+
+                        #statementTxnTable {
+                            table-layout: fixed !important;
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                            background: transparent !important;
+                        }
+                        #statementTxnTable th, #statementTxnTable td {
+                            padding: 8px 6px !important;
+                            font-size: 11px !important;
+                            white-space: normal !important;
+                            word-wrap: break-word !important;
+                            word-break: break-word !important;
+                            border-bottom: 1px solid #ddd !important;
+                        }
+                        #statementTxnTable th {
+                            background: rgba(0, 0, 0, 0.04) !important;
+                            color: #000 !important;
+                            font-weight: 700 !important;
                         }
 
                         .a4-container {
@@ -4186,30 +4247,12 @@
                                         </div>
                                         <div class="a4-form-row">
                                             <div class="a4-form-group">
-                                                <label
-                                                    style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                                    <span>Applicant Digital Signature *</span>
-                                                    <button type="button" class="btn btn-secondary btn-sm"
-                                                        onclick="clearSignatureCanvas()"
-                                                        style="padding: 4px 8px; font-size: 0.72rem; display: flex; align-items: center; gap: 4px;">
-                                                        <i class="bx bx-brush"></i> Clear Pad
-                                                    </button>
-                                                </label>
-                                                <div class="signature-pad-wrapper"
-                                                    style="position: relative; margin-top: 8px; background: #ffffff; border: 2px dashed #cbd5e1; border-radius: 8px; overflow: hidden; height: 160px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                                                    <canvas id="signatureCanvas"
-                                                        style="display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none;"></canvas>
-                                                    <div id="signaturePlaceholder"
-                                                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #94a3b8; font-size: 0.85rem; gap: 6px; font-weight: 500; font-style: italic;">
-                                                        <i class="bx bx-edit" style="font-size: 1.1rem;"></i> Draw
-                                                        signature using mouse or touch
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" name="applicantSignatureBase64"
-                                                    id="a4SignatureBase64">
+                                                <label>Applicant Signature Copy *</label>
+                                                <input type="file" name="signatureCopy" id="signatureCopyInput"
+                                                    accept="image/*">
                                                 <div class="validation-msg" id="signatureError"
                                                     style="display:none; color: #ef4444; font-size: 0.75rem; margin-top: 4px;">
-                                                    Please draw a signature before submitting.</div>
+                                                    Please upload a signature copy before submitting.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -4388,12 +4431,15 @@
                                 </div>
                             </div>
 
-                            <!-- Statement Document Body -->
                             <div class="statement-print-area">
+                                <!-- Print Background Image (Always visible in print layout) -->
+                                <div class="print-bg-container">
+                                    <img src="${pageContext.request.contextPath}/assest/images/All Forms/Letter Pad.png" class="print-bg-img" alt="VGB Letterhead">
+                                </div>
                                 <!-- Official Bank Logo & Name -->
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
-                                    <div>
+                                    <div class="print-hide-header">
                                         <h1
                                             style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1;">
                                             VERTEX GALAXY BANK</h1>
@@ -4607,6 +4653,7 @@
                         primaryPan: "${acc.primaryPan}",
                         primaryAadhaar: "${acc.primaryAadhaar}",
                         primaryGender: "${acc.primaryGender}",
+                        primarySignaturePath: "${acc.primarySignaturePath}",
                         primaryMaritalStatus: "${acc.primaryMaritalStatus}",
                         primaryOccupation: "${acc.primaryOccupation}",
                         primaryIncome: "${acc.primaryIncome}",
@@ -4681,6 +4728,7 @@
 
                 <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
                 <script>
+                    var contextPath = "${pageContext.request.contextPath}";
                     var currentWizardStep = 1;
 
                     window.onload = function () {
@@ -4919,6 +4967,7 @@
                                 <td style="color:var(--gray-500);">Address:</td>
                                 <td style="font-weight:700;">\${acc.primaryAddress ? acc.primaryAddress + ', ' + acc.primaryCity + ', ' + acc.primaryState + ' - ' + acc.primaryZip : 'N/A'}</td>
                             </tr>
+                            \${acc.primarySignaturePath ? '<tr><td style="color:var(--gray-500);">Applicant Signature:</td><td><img src="' + contextPath + acc.primarySignaturePath + '" alt="Signature" style="max-height: 50px; border: 1.5px solid var(--gray-200); border-radius: 4px; padding: 2px; background: white;"></td></tr>' : ''}
                         </table>
                     </div>
                 `;
@@ -5253,8 +5302,6 @@
 
                             openModal('createAccountModal');
 
-                            // Initialize digital signature pad after modal animation opens
-                            setTimeout(initSignaturePad, 200);
                         } catch (err) {
                             console.error("Error in openWizardModal:", err);
                             alert("Error initializing Create Account modal: " + err.message);
@@ -5455,7 +5502,7 @@
                         // Validate Section E: KYC Uploads
                         var aadhaarCopy = document.getElementById('aadhaarCopyInput');
                         var panCopy = document.getElementById('panCopyInput');
-                        var sigBase64 = document.getElementById('a4SignatureBase64');
+                        var signatureCopy = document.getElementById('signatureCopyInput');
 
                         if (aadhaarCopy && !aadhaarCopy.value && !aadhaarCopy.hasAttribute('disabled')) {
                             alert("Aadhaar Card Copy is required for KYC verification.");
@@ -5465,8 +5512,8 @@
                             alert("PAN Card Copy is required for KYC verification.");
                             return false;
                         }
-                        if (sigBase64 && !sigBase64.value && !sigBase64.hasAttribute('disabled')) {
-                            alert("Please draw your signature in the Applicant Digital Signature Pad.");
+                        if (signatureCopy && !signatureCopy.value && !signatureCopy.hasAttribute('disabled')) {
+                            alert("Applicant Signature Copy is required for KYC verification.");
                             return false;
                         }
 
@@ -6221,94 +6268,6 @@
                                 mobileToggle.querySelector('i').className = 'bx bx-menu';
                             }
                         });
-                    }
-
-                    // Initialize HTML5 Canvas Signature Pad
-                    var signaturePadInited = false;
-                    function initSignaturePad() {
-                        if (signaturePadInited) return;
-                        var canvas = document.getElementById('signatureCanvas');
-                        if (!canvas) return;
-
-                        var ctx = canvas.getContext('2d');
-                        var drawing = false;
-                        var prevX = 0;
-                        var prevY = 0;
-
-                        function resizeCanvas() {
-                            var rect = canvas.getBoundingClientRect();
-                            canvas.width = rect.width;
-                            canvas.height = rect.height;
-                            ctx.strokeStyle = '#1e293b';
-                            ctx.lineWidth = 2.5;
-                            ctx.lineCap = 'round';
-                            ctx.lineJoin = 'round';
-                            signaturePadInited = true;
-                        }
-
-                        resizeCanvas();
-
-                        function getMousePos(e) {
-                            var rect = canvas.getBoundingClientRect();
-                            var clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                            var clientY = e.clientY || (e.touches && e.touches[0].clientY);
-                            return {
-                                x: clientX - rect.left,
-                                y: clientY - rect.top
-                            };
-                        }
-
-                        function startDrawing(e) {
-                            drawing = true;
-                            var pos = getMousePos(e);
-                            prevX = pos.x;
-                            prevY = pos.y;
-                            var placeholder = document.getElementById('signaturePlaceholder');
-                            if (placeholder) placeholder.style.display = 'none';
-                        }
-
-                        function draw(e) {
-                            if (!drawing) return;
-                            e.preventDefault();
-                            var pos = getMousePos(e);
-                            ctx.beginPath();
-                            ctx.moveTo(prevX, prevY);
-                            ctx.lineTo(pos.x, pos.y);
-                            ctx.stroke();
-                            prevX = pos.x;
-                            prevY = pos.y;
-                        }
-
-                        function stopDrawing() {
-                            if (!drawing) return;
-                            drawing = false;
-                            var hiddenInput = document.getElementById('a4SignatureBase64');
-                            if (hiddenInput) {
-                                hiddenInput.value = canvas.toDataURL('image/png');
-                            }
-                        }
-
-                        canvas.addEventListener('mousedown', startDrawing);
-                        canvas.addEventListener('mousemove', draw);
-                        canvas.addEventListener('mouseup', stopDrawing);
-                        canvas.addEventListener('mouseleave', stopDrawing);
-
-                        canvas.addEventListener('touchstart', startDrawing, { passive: false });
-                        canvas.addEventListener('touchmove', draw, { passive: false });
-                        canvas.addEventListener('touchend', stopDrawing);
-                    }
-
-                    function clearSignatureCanvas() {
-                        var canvas = document.getElementById('signatureCanvas');
-                        if (!canvas) return;
-                        var ctx = canvas.getContext('2d');
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                        var hiddenInput = document.getElementById('a4SignatureBase64');
-                        if (hiddenInput) hiddenInput.value = '';
-
-                        var placeholder = document.getElementById('signaturePlaceholder');
-                        if (placeholder) placeholder.style.display = 'flex';
                     }
 
                     // Toggle password and PIN visibility helper

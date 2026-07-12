@@ -176,6 +176,28 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* 6-slot Actions Horizontal Line Grid */
+        .actions-line-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+        @media (max-width: 1024px) {
+            .actions-line-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .actions-line-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .actions-line-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         .action-tile {
             background: rgba(255, 255, 255, 0.45) !important;
             border: 1px solid rgba(255, 255, 255, 0.5) !important;
@@ -230,112 +252,349 @@
             line-height: 1.3;
         }
 
-        /* ATM Card styling modifications */
-        .vgb-premium-atm-card-container {
-            perspective: 1500px;
+        /* VGB Luxury Card Design System */
+        :root {
+            --primary-luxury: #041C54;
+            --secondary-luxury: #0A2D7A;
+            --gold-luxury: #F4B400;
+            --white-luxury: #FFFFFF;
+            --bg-light-luxury: #F5F7FA;
+            --text-dark-luxury: #0E214A;
+        }
+
+        .vgb-luxury-card-container {
+            perspective: 2000px;
             width: 100%;
-            height: 100%;
-        }
-        .vgb-premium-atm-card {
-            background: linear-gradient(135deg, #09061c 0%, #030209 100%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            border-radius: 24px !important;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 
-                        0 0 35px rgba(99, 102, 241, 0.15),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
-            padding: 32px !important;
-            color: white !important;
-            position: relative !important;
-            overflow: hidden !important;
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease !important;
-            transform-style: preserve-3d !important;
-        }
-        .vgb-premium-atm-card::after {
-            content: '';
-            position: absolute;
-            top: -150%;
-            left: -150%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(
-                45deg,
-                transparent 45%,
-                rgba(255, 255, 255, 0.05) 48%,
-                rgba(255, 255, 255, 0.12) 50%,
-                rgba(255, 255, 255, 0.05) 52%,
-                transparent 55%
-            );
-            transform: rotate(-15deg);
-            transition: transform 0.6s ease;
-            z-index: 5;
-            pointer-events: none;
-        }
-        .vgb-premium-atm-card:hover::after {
-            transform: rotate(-15deg) translate(30%, 30%);
-        }
-        .vgb-premium-atm-card:hover {
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), 
-                        0 0 50px rgba(168, 85, 247, 0.3),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
-            border-color: rgba(168, 85, 247, 0.35) !important;
-        }
-        .vgb-premium-atm-card > *:not(.card-bg-waves) {
-            transform: translateZ(40px);
+            position: relative;
             transform-style: preserve-3d;
+        }
+
+        .vgb-luxury-card {
+            background: linear-gradient(135deg, var(--primary-luxury) 0%, var(--secondary-luxury) 100%);
+            border-radius: 32px;
+            border: 1.5px solid rgba(244, 180, 0, 0.25);
+            box-shadow: 0 30px 60px rgba(4, 28, 84, 0.35),
+                        0 0 40px rgba(244, 180, 0, 0.05),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .vgb-luxury-card.animate-float {
+            animation: floatingCard 6s ease-in-out infinite;
+        }
+
+        @keyframes floatingCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .vgb-luxury-card-top {
+            display: flex;
             position: relative;
             z-index: 2;
+            transform-style: preserve-3d;
         }
-        .vgb-premium-atm-card .card-bg-waves {
+
+        .vgb-luxury-card-left {
+            flex: 0.65;
+            padding: 35px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+            transform: translateZ(30px);
+        }
+
+        .vgb-luxury-card-right {
+            flex: 0.35;
+            padding: 35px;
+            background: var(--white-luxury);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+            transform: translateZ(50px);
+            border-left: 1px solid rgba(244, 180, 0, 0.15);
+        }
+
+        /* Responsive stack for tablet/mobile */
+        @media (max-width: 991px) {
+            .vgb-luxury-card-top {
+                flex-direction: column;
+            }
+            .vgb-luxury-card-left, .vgb-luxury-card-right {
+                flex: 1;
+                min-height: auto;
+            }
+            .vgb-luxury-card-right {
+                border-left: none;
+                border-top: 1px solid rgba(244, 180, 0, 0.15);
+                padding: 30px;
+            }
+        }
+
+        /* Glass Glare & Reflections */
+        .vgb-luxury-glare {
             position: absolute;
             inset: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            transform: translateZ(0px);
-        }
-        .vgb-premium-atm-card .card-glare {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 65%);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 65%);
             mix-blend-mode: overlay;
             pointer-events: none;
+            z-index: 10;
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: 10;
-            transform: translateZ(0px);
         }
-        .vgb-premium-atm-card:hover .card-glare {
+        .vgb-luxury-card:hover .vgb-luxury-glare {
             opacity: 1;
         }
-        .vgb-premium-atm-card .card-divider {
-            margin: 15px 0;
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
-            box-shadow: 0 1px 8px rgba(139, 92, 246, 0.25);
-            opacity: 0.7;
-            transform: translateZ(20px);
+
+        /* Header elements */
+        .vgb-luxury-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        @keyframes goldShimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+        .vgb-luxury-logo {
+            width: 32px;
+            height: 34px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(244, 180, 0, 0.4));
         }
-        .premium-shimmer {
-            font-size: 1.15rem;
-            font-weight: 900;
-            font-family: 'Poppins', sans-serif;
-            font-style: italic;
+        .vgb-luxury-brand {
+            display: flex;
+            flex-direction: column;
+        }
+        .vgb-luxury-bank-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--white-luxury);
             letter-spacing: 0.5px;
-            background: linear-gradient(90deg, #ffd700 0%, #ffe082 25%, #ffb300 50%, #ffe082 75%, #ffd700 100%);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .vgb-luxury-tagline {
+            font-size: 0.55rem;
+            color: var(--gold-luxury);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* Separator lines */
+        .vgb-luxury-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(244, 180, 0, 0.3), transparent);
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        /* Balance & account labels */
+        .vgb-luxury-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .vgb-luxury-balance-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .vgb-luxury-balance {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--white-luxury);
+            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+        .vgb-luxury-account-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vgb-luxury-account-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--white-luxury);
+            letter-spacing: 3px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Toggle eye buttons */
+        .vgb-luxury-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(20px);
+            border-radius: 50%;
+        }
+        .vgb-luxury-toggle-btn:hover {
+            background: rgba(244, 180, 0, 0.15);
+            border-color: var(--gold-luxury);
+            color: var(--gold-luxury);
+            box-shadow: 0 0 10px rgba(244, 180, 0, 0.3);
+            transform: translateZ(25px) scale(1.1);
+        }
+
+        /* Profile details on right */
+        .vgb-luxury-profile-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(45deg, #ffd700, #ff8f00, #ffd700);
             background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: goldShimmer 4s linear infinite;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.15);
+            animation: goldBorderShine 4s linear infinite;
+            box-shadow: 0 10px 25px rgba(244, 180, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .vgb-luxury-profile-wrapper:hover {
+            transform: scale(1.08) rotate(5deg);
+        }
+        @keyframes goldBorderShine {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+        .vgb-luxury-profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: white;
+            border: 2px solid white;
+        }
+        .vgb-luxury-customer-name {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-dark-luxury);
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+        .vgb-luxury-holder-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--gold-luxury);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Bottom Info Bar */
+        .vgb-luxury-card-bottom {
+            background: rgba(4, 28, 84, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1.5px solid rgba(244, 180, 0, 0.25);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 25px 35px;
+            position: relative;
+            z-index: 2;
+            transform: translateZ(40px);
+        }
+
+        @media (max-width: 991px) {
+            .vgb-luxury-card-bottom {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 576px) {
+            .vgb-luxury-card-bottom {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vgb-luxury-info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            position: relative;
+        }
+
+        .vgb-luxury-info-item i {
+            font-size: 1.25rem;
+            color: var(--gold-luxury);
+            background: rgba(244, 180, 0, 0.1);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(244, 180, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .vgb-luxury-info-item:hover i {
+            transform: scale(1.15) rotate(10deg);
+        }
+        .vgb-luxury-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .vgb-luxury-info-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+        .vgb-luxury-info-value {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--white-luxury);
+            margin-top: 1px;
+        }
+
+        /* Dividers for grid items */
+        @media (min-width: 992px) {
+            .vgb-luxury-info-item:not(:nth-child(4n))::after {
+                content: '';
+                position: absolute;
+                right: -10px;
+                top: 15%;
+                bottom: 15%;
+                width: 1px;
+                background: linear-gradient(to bottom, transparent, var(--gold-luxury), transparent);
+                opacity: 0.4;
+            }
+        }
+        @media (min-width: 577px) and (max-width: 991px) {
+            .vgb-luxury-info-item:not(:nth-child(2n))::after {
+                content: '';
+                position: absolute;
+                right: -10px;
+                top: 15%;
+                bottom: 15%;
+                width: 1px;
+                background: linear-gradient(to bottom, transparent, var(--gold-luxury), transparent);
+                opacity: 0.4;
+            }
         }
 
         /* Modern Tables & Badges */
@@ -568,155 +827,223 @@
             </div>
             </c:if>
 
-            <!-- Top Row Stat Cards -->
-            <div style="display: grid; grid-template-columns: 1.6fr 1.4fr; gap: 30px; margin-bottom: 40px; align-items: stretch;" class="mobile-grid-1">
-                <!-- VGB Credit Card Rendering + Total Balance -->
-                <div class="vgb-premium-atm-card-container">
-                    <div class="vgb-premium-atm-card">
+            <!-- Top Row: Full Width Luxury Card -->
+            <div style="margin-bottom: 30px;">
+                <div class="vgb-luxury-card-container">
+                    <div class="vgb-luxury-card animate-float">
                         <!-- Glare Layer -->
-                        <div class="card-glare"></div>
+                        <div class="vgb-luxury-glare"></div>
 
-                        <!-- 3D Vector Wave and Dot Grid Background -->
-                        <svg class="card-bg-waves" viewBox="0 0 400 250" preserveAspectRatio="none">
-                            <defs>
-                                <radialGradient id="bgGrad" cx="20%" cy="20%" r="90%">
-                                    <stop offset="0%" stop-color="#140f35"/>
-                                    <stop offset="60%" stop-color="#070417"/>
-                                    <stop offset="100%" stop-color="#020106"/>
-                                </radialGradient>
+                        <!-- Top Section -->
+                        <div class="vgb-luxury-card-top">
+                            <!-- Left Section (65%) -->
+                            <div class="vgb-luxury-card-left">
+                                <!-- Connection Constellation SVG Background -->
+                                <svg class="world-map-svg" viewBox="0 0 400 250" style="position: absolute; right: 0; top: 0; width: 100%; height: 100%; opacity: 0.12; pointer-events: none; z-index: 1;">
+                                    <!-- Connection lines -->
+                                    <path d="M 30,150 Q 130,50 230,180 T 360,60" fill="none" stroke="#F4B400" stroke-width="1.2" stroke-dasharray="4,4" />
+                                    <path d="M 60,80 Q 180,200 300,90" fill="none" stroke="#FFFFFF" stroke-width="0.8" stroke-dasharray="3,3" />
+                                    <!-- Nodes -->
+                                    <circle cx="30" cy="150" r="3.5" fill="#F4B400" />
+                                    <circle cx="130" cy="98" r="2.5" fill="#FFFFFF" />
+                                    <circle cx="230" cy="180" r="4.5" fill="#F4B400" />
+                                    <circle cx="300" cy="90" r="3.5" fill="#FFFFFF" />
+                                    <circle cx="360" cy="60" r="2.5" fill="#F4B400" />
+                                </svg>
+
+                                <!-- Header Area -->
+                                <div class="vgb-luxury-logo-area">
+                                    <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" class="vgb-luxury-logo">
+                                    <div class="vgb-luxury-brand">
+                                        <span class="vgb-luxury-bank-name">Vertex Galaxy Bank</span>
+                                        <span class="vgb-luxury-tagline">Trust &bull; Innovate &bull; Prosper</span>
+                                    </div>
+                                </div>
+
+                                <div class="vgb-luxury-divider"></div>
+
+                                <!-- Balance Details -->
+                                <div>
+                                    <span class="vgb-luxury-label">Available Balance</span>
+                                    <div class="vgb-luxury-balance-wrapper">
+                                        <span class="vgb-luxury-balance" id="cardBalanceDisplay" 
+                                              data-full="₹ <fmt:formatNumber value='${totalBalance}' minFractionDigits='2' maxFractionDigits='2'/>" 
+                                              data-masked="₹ &bull;&bull;&bull;&bull;&bull;">
+                                            ₹ <fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </span>
+                                        <button type="button" onclick="toggleBalanceVisibility()" class="vgb-luxury-toggle-btn" id="eyeBalanceBtn" title="Show/Hide Balance">
+                                            <i class="bx bx-show" id="eyeBalanceIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Account Number Details -->
+                                <div>
+                                    <span class="vgb-luxury-label">Account Number</span>
+                                    <div class="vgb-luxury-account-wrapper">
+                                        <span class="vgb-luxury-account-number" id="cardNumberDisplay" 
+                                              data-full="${not empty accounts ? accounts[0].accountNumber : '000000000000'}" 
+                                              data-masked="${not empty accounts ? '••••  ••••  ••••  '.concat(accounts[0].accountNumber.substring(accounts[0].accountNumber.length() - 4)) : '••••  ••••  ••••  0000'}">
+                                            ${not empty accounts ? accounts[0].accountNumber : '000000000000'}
+                                        </span>
+                                        <button type="button" onclick="toggleCardNumberVisibility()" class="vgb-luxury-toggle-btn" id="eyeIconBtn" title="Show/Hide Account Number">
+                                            <i class="bx bx-show" id="eyeIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Section (35%) -->
+                            <div class="vgb-luxury-card-right">
+                                <!-- Subtle Shield Icon Overlay -->
+                                <i class="bx bxs-shield-alt-2" style="position: absolute; top: 20px; right: 20px; font-size: 1.8rem; color: rgba(244, 180, 0, 0.15);"></i>
                                 
-                                <linearGradient id="wavePurple" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"/>
-                                    <stop offset="50%" stop-color="#6366f1" stop-opacity="0.3"/>
-                                    <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
-                                </linearGradient>
-
-                                <linearGradient id="waveMagenta" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#db2777" stop-opacity="0.5"/>
-                                    <stop offset="70%" stop-color="#7c3aed" stop-opacity="0.15"/>
-                                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
-                                </linearGradient>
-
-                                <pattern id="dotGrid" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
-                                    <circle cx="2" cy="2" r="0.75" fill="#a855f7" fill-opacity="0.25"/>
-                                </pattern>
-                            </defs>
-                            
-                            <rect width="100%" height="100%" fill="url(#bgGrad)"/>
-                            <rect width="100%" height="100%" fill="url(#dotGrid)"/>
-
-                            <path d="M-50,260 C80,260 180,180 260,110 C340,40 380,0 450,-50 L450,260 Z" fill="url(#wavePurple)"/>
-                            <path d="M-50,260 C120,240 220,130 310,70 C370,30 400,-10 450,-50" fill="none" stroke="url(#waveMagenta)" stroke-width="2.5" opacity="0.65"/>
-                            <path d="M-20,270 C100,270 200,210 280,150 C360,90 410,30 450,-20" fill="none" stroke="#db2777" stroke-width="1.5" opacity="0.4"/>
-                            <path d="M50,280 C180,250 250,180 340,110 C400,60 430,20 470,-10" fill="none" stroke="#a855f7" stroke-width="1.2" opacity="0.3"/>
-                        </svg>
-                        
-                        <!-- Card Header -->
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 24px; height: 26px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(168,85,247,0.5));">
-                                <span style="font-weight: 700; letter-spacing: 0.5px; font-size: 0.95rem; color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">Vertex Galaxy Bank</span>
-                            </div>
-                            
-                            <!-- Detailed Golden EMV Chip -->
-                            <svg width="48" height="38" viewBox="0 0 48 38" style="border-radius: 8px; box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.15); flex-shrink: 0;">
-                                <defs>
-                                    <linearGradient id="chipBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#fff4cc" />
-                                        <stop offset="25%" stop-color="#ffd54f" />
-                                        <stop offset="50%" stop-color="#ffb300" />
-                                        <stop offset="85%" stop-color="#ff8f00" />
-                                        <stop offset="100%" stop-color="#b36200" />
-                                    </linearGradient>
-                                </defs>
-                                <rect width="100%" height="100%" fill="url(#chipBg)" />
-                                <rect x="4" y="4" width="40" height="30" rx="4" fill="none" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <line x1="16" y1="4" x2="16" y2="34" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <line x1="32" y1="4" x2="32" y2="34" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <line x1="4" y1="14" x2="44" y2="14" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <line x1="4" y1="24" x2="44" y2="24" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <circle cx="24" cy="19" r="5" fill="none" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <path d="M 20 19 L 4 19" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                                <path d="M 28 19 L 44 19" stroke="rgba(0, 0, 0, 0.25)" stroke-width="0.75" />
-                            </svg>
-                        </div>
-
-                        <!-- Balance & Card Number -->
-                        <div style="margin-top: 15px;">
-                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.75; color: rgba(165, 180, 252, 0.75); font-weight: 600;">Total Net Balance</span>
-                            <h3 style="font-size: 2.6rem; font-weight: 800; color: white; margin-top: 2px; text-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);">₹ <fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/></h3>
-                            
-                            <!-- Masked/Full Account Number -->
-                            <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px;">
-                                <span id="cardNumberDisplay" data-full="${not empty accounts ? accounts[0].accountNumber : '000000000000'}" style="font-family: 'Courier New', monospace; font-size: 1.45rem; letter-spacing: 3px; font-weight: 700; color: white; text-shadow: 0 2px 5px rgba(0,0,0,0.4); opacity: 0.95;">
-                                    ••••  ••••  ••••  0000
-                                </span>
-                                <button type="button" onclick="toggleCardNumberVisibility()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.9); cursor: pointer; border-radius: 50%; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: all 0.3s ease; z-index: 999; transform: translateZ(50px);" id="eyeIconBtn" title="Show/Hide Account Number">
-                                    <i class="bx bx-show" id="eyeIcon"></i>
-                                </button>
+                                <!-- Profile Wrapper with gold shining border -->
+                                <div class="vgb-luxury-profile-wrapper">
+                                    <c:choose>
+                                        <c:when test="${not empty customer && not empty customer.avatarPath}">
+                                            <img src="${pageContext.request.contextPath}${customer.avatarPath}" alt="Customer Profile Avatar" class="vgb-luxury-profile-img">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div style="width: 100%; height: 100%; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 2rem; border: 2px solid white; text-transform: uppercase;">
+                                                ${not empty customer ? customer.fullName.substring(0, 1) : 'V'}
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div style="margin-top: 15px; text-align: center;">
+                                    <h4 class="vgb-luxury-customer-name" style="margin: 0; margin-bottom: 4px;">${not empty customer ? customer.fullName : 'VGB CUSTOMER'}</h4>
+                                    <span class="vgb-luxury-holder-title">Premium Member</span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Glowing Separator Line -->
-                        <div class="card-divider"></div>
-
-                        <!-- Card Footer -->
-                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                            <div style="display: flex; gap: 40px;">
-                                <div>
-                                    <span style="display: block; font-size: 0.6rem; color: rgba(160, 174, 192, 0.7); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-bottom: 2px;">Card Holder</span>
-                                    <span style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: white; letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">${not empty customer ? customer.fullName : 'VGB CUSTOMER'}</span>
-                                </div>
-                                <div>
-                                    <span style="display: block; font-size: 0.6rem; color: rgba(160, 174, 192, 0.7); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-bottom: 2px;">Birth Date</span>
-                                    <span style="font-size: 0.95rem; font-weight: 700; color: white; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">${not empty birthDate ? birthDate : '08/08/2002'}</span>
+                        <!-- Bottom Information Bar -->
+                        <div class="vgb-luxury-card-bottom">
+                            <!-- 1. DOB -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-calendar"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">Date of Birth</span>
+                                    <span class="vgb-luxury-info-value">${not empty birthDate ? birthDate : '08/08/2002'}</span>
                                 </div>
                             </div>
-                            <div style="text-align: right;">
-                                <span class="premium-shimmer">PREMIUM</span>
+                            <!-- 2. Account Type -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-wallet"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">Account Type</span>
+                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">${not empty accounts ? accounts[0].accountType : 'Savings'}</span>
+                                </div>
+                            </div>
+                            <!-- 3. Branch Name -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-map-pin"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">Branch Name</span>
+                                    <span class="vgb-luxury-info-value">Mumbai Main Branch</span>
+                                </div>
+                            </div>
+                            <!-- 4. Customer Since -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-time-five"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">Customer Since</span>
+                                    <span class="vgb-luxury-info-value">
+                                        <c:choose>
+                                            <c:when test="${not empty customer && not empty customer.createdAt}">
+                                                2026
+                                            </c:when>
+                                            <c:otherwise>
+                                                2026
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- 5. Customer ID -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-user-badge"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">Customer ID</span>
+                                    <span class="vgb-luxury-info-value">${not empty customer ? customer.customerId : '000000'}</span>
+                                </div>
+                            </div>
+                            <!-- 6. IFSC Code -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-building"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">IFSC Code</span>
+                                    <span class="vgb-luxury-info-value">${not empty accounts ? accounts[0].ifscCode : 'VGBK0000101'}</span>
+                                </div>
+                            </div>
+                            <!-- 7. Account Status -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-check-shield"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">Account Status</span>
+                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">${not empty accounts ? accounts[0].status : 'Active'}</span>
+                                </div>
+                            </div>
+                            <!-- 8. KYC Status -->
+                            <div class="vgb-luxury-info-item">
+                                <i class="bx bx-shield-quarter"></i>
+                                <div class="vgb-luxury-info-text">
+                                    <span class="vgb-luxury-info-title">KYC Status</span>
+                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">
+                                        <c:choose>
+                                            <c:when test="${not empty customer.status && customer.status == 'active'}">
+                                                Verified
+                                            </c:when>
+                                            <c:otherwise>
+                                                Verified
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Fast Actions Panel -->
-                <div class="glass-actions-panel">
-                    <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 15px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                        <i class="bx bx-bolt-circle" style="color: var(--primary-500); font-size: 1.3rem;"></i>
-                        <span>Quick Portal Actions</span>
-                    </h4>
-                    <div class="actions-grid">
-                        <a href="${pageContext.request.contextPath}/account?action=transferPage" class="action-tile tile-purple">
-                            <i class="bx bx-send"></i>
-                            <span class="action-title">Send Money</span>
-                            <span class="action-desc">Instant IMPS/NEFT</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/loan?action=list" class="action-tile tile-pink">
-                            <i class="bx bx-building-house"></i>
-                            <span class="action-title">Apply Loan</span>
-                            <span class="action-desc">Low interest limits</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/card?action=list" class="action-tile tile-cyan">
-                            <i class="bx bx-credit-card"></i>
-                            <span class="action-title">My Cards</span>
-                            <span class="action-desc">Limits &amp; status</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/chequebook?action=list" class="action-tile tile-teal">
-                            <i class="bx bx-book-bookmark"></i>
-                            <span class="action-title">Cheque Books</span>
-                            <span class="action-desc">Request &amp; tracking</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/passbook?action=list" class="action-tile tile-emerald">
-                            <i class="bx bx-book-open"></i>
-                            <span class="action-title">Passbook</span>
-                            <span class="action-desc">Update logs</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/account?action=statement" class="action-tile tile-amber">
-                            <i class="bx bx-file"></i>
-                            <span class="action-title">Statements</span>
-                            <span class="action-desc">Download statements</span>
-                        </a>
-                    </div>
+            <!-- Fast Actions Panel (Full Width Horizontal) -->
+            <div class="glass-actions-panel" style="margin-bottom: 40px; width: 100%;">
+                <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 15px; border-bottom: 1px solid rgba(99, 102, 241, 0.1); padding-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i class="bx bx-bolt-circle" style="color: var(--primary-500); font-size: 1.3rem;"></i>
+                    <span>Quick Portal Actions</span>
+                </h4>
+                <div class="actions-line-grid">
+                    <a href="${pageContext.request.contextPath}/account?action=transferPage" class="action-tile tile-purple">
+                        <i class="bx bx-send"></i>
+                        <span class="action-title">Send Money</span>
+                        <span class="action-desc">Instant IMPS/NEFT</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/loan?action=list" class="action-tile tile-pink">
+                        <i class="bx bx-building-house"></i>
+                        <span class="action-title">Apply Loan</span>
+                        <span class="action-desc">Low interest limits</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/card?action=list" class="action-tile tile-cyan">
+                        <i class="bx bx-credit-card"></i>
+                        <span class="action-title">My Cards</span>
+                        <span class="action-desc">Limits &amp; status</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/chequebook?action=list" class="action-tile tile-teal">
+                        <i class="bx bx-book-bookmark"></i>
+                        <span class="action-title">Cheque Books</span>
+                        <span class="action-desc">Request &amp; tracking</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/passbook?action=list" class="action-tile tile-emerald">
+                        <i class="bx bx-book-open"></i>
+                        <span class="action-title">Passbook</span>
+                        <span class="action-desc">Update logs</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/account?action=statement" class="action-tile tile-amber">
+                        <i class="bx bx-file"></i>
+                        <span class="action-title">Statements</span>
+                        <span class="action-desc">Download statements</span>
+                    </a>
                 </div>
             </div>
 
@@ -841,16 +1168,20 @@
             const displayEl = document.getElementById('cardNumberDisplay');
             if (displayEl) {
                 const fullNumber = displayEl.getAttribute('data-full');
-                const last4 = fullNumber.slice(-4);
-                displayEl.setAttribute('data-masked', `••••  ••••  ••••  ${last4}`);
-                displayEl.textContent = `••••  ••••  ••••  ${last4}`;
+                // Format full number with credit card spacing
+                const formattedFull = fullNumber.replace(/(\d{4})(?=\d)/g, '$1  ');
+                displayEl.setAttribute('data-full', formattedFull);
+                displayEl.textContent = formattedFull;
             }
 
-            // Interactive 3D ATM Card Tilt & Glare script
-            const cardContainer = document.querySelector('.vgb-premium-atm-card-container');
-            const card = document.querySelector('.vgb-premium-atm-card');
+            // Interactive 3D Luxury Card Tilt & Glare script
+            const cardContainer = document.querySelector('.vgb-luxury-card-container');
+            const card = document.querySelector('.vgb-luxury-card');
             if (cardContainer && card) {
                 cardContainer.addEventListener('mousemove', (e) => {
+                    // Temporarily remove float animation to avoid fighting transforms
+                    card.classList.remove('animate-float');
+                    
                     const rect = cardContainer.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
@@ -858,11 +1189,11 @@
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
 
-                    // Calculate rotation angles (max 15 degrees)
-                    const rotX = -((y - centerY) / centerY) * 15;
-                    const rotY = ((x - centerX) / centerX) * 15;
+                    // Calculate rotation angles (max 10 degrees)
+                    const rotX = -((y - centerY) / centerY) * 10;
+                    const rotY = ((x - centerX) / centerX) * 10;
 
-                    card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-8px) scale(1.02)`;
+                    card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-5px) scale(1.02)`;
 
                     // Set custom property positions for glare positioning
                     card.style.setProperty('--x', `${(x / rect.width) * 100}%`);
@@ -874,6 +1205,11 @@
                     card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
                     card.style.setProperty('--x', '50%');
                     card.style.setProperty('--y', '50%');
+                    
+                    // Re-enable float animation after transition
+                    setTimeout(() => {
+                        card.classList.add('animate-float');
+                    }, 150);
                 });
             }
 
@@ -935,10 +1271,30 @@
                 
                 if (isMasked) {
                     displayEl.textContent = fullNumber;
-                    iconEl.className = 'bx bx-hide';
+                    iconEl.className = 'bx bx-show';
                 } else {
                     displayEl.textContent = maskedNumber;
+                    iconEl.className = 'bx bx-hide';
+                }
+            }
+        }
+
+        function toggleBalanceVisibility() {
+            const displayEl = document.getElementById('cardBalanceDisplay');
+            const iconEl = document.getElementById('eyeBalanceIcon');
+            if (displayEl && iconEl) {
+                const fullVal = displayEl.getAttribute('data-full');
+                const maskedVal = displayEl.getAttribute('data-masked');
+                
+                const currentText = displayEl.textContent.trim();
+                const isMasked = (currentText === maskedVal.trim());
+                
+                if (isMasked) {
+                    displayEl.textContent = fullVal;
                     iconEl.className = 'bx bx-show';
+                } else {
+                    displayEl.textContent = maskedVal;
+                    iconEl.className = 'bx bx-hide';
                 }
             }
         }

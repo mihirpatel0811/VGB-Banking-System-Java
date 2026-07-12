@@ -770,10 +770,10 @@
         function showToast(message, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `toast-card ${isError ? 'error' : ''}`;
+            toast.className = 'toast-card ' + (isError ? 'error' : '');
             
             const icon = document.createElement('i');
-            icon.className = `bx ${isError ? 'bx-error-circle' : 'bx-badge-check'} toast-icon`;
+            icon.className = 'bx ' + (isError ? 'bx-error-circle' : 'bx-badge-check') + ' toast-icon';
             
             const text = document.createElement('span');
             text.style.fontWeight = '500';
@@ -820,7 +820,7 @@
             }
 
             searchTimeout = setTimeout(() => {
-                fetch(`${pageContext.request.contextPath}/cash-counter?action=search&query=${encodeURIComponent(query)}`)
+                fetch('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(query))
                     .then(res => res.json())
                     .then(data => {
                         resultsPanel.innerHTML = '';
@@ -833,13 +833,12 @@
                         data.forEach(item => {
                             const div = document.createElement('div');
                             div.style.cssText = 'padding: 12px 18px; border-bottom: 1px solid rgba(99, 102, 241, 0.05); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s;';
-                            div.innerHTML = `
-                                <div>
-                                    <strong style="color: var(--gray-800);">${item.firstName} ${item.lastName}</strong>
-                                    <span style="color: var(--gray-400); font-size: 0.8rem; margin-left: 10px;">Phone: ${item.phoneNo}</span>
-                                </div>
-                                <span style="font-family: monospace; font-size: 0.85rem; font-weight: 700; color: var(--primary-500); background: rgba(99, 102, 241, 0.06); padding: 3px 8px; border-radius: var(--radius-sm);">${item.accountNumber}</span>
-                            `;
+                            div.innerHTML = 
+                                '<div>' +
+                                    '<strong style="color: var(--gray-800);">' + item.firstName + ' ' + item.lastName + '</strong>' +
+                                    '<span style="color: var(--gray-400); font-size: 0.8rem; margin-left: 10px;">Phone: ' + item.phoneNo + '</span>' +
+                                '</div>' +
+                                '<span style="font-family: monospace; font-size: 0.85rem; font-weight: 700; color: var(--primary-500); background: rgba(99, 102, 241, 0.06); padding: 3px 8px; border-radius: var(--radius-sm);">' + item.accountNumber + '</span>';
                             div.addEventListener('mouseover', () => div.style.background = 'rgba(99, 102, 241, 0.02)');
                             div.addEventListener('mouseout', () => div.style.background = 'none');
                             div.addEventListener('click', () => selectCustomer(item));
@@ -871,11 +870,11 @@
 
             // Populate Customer summary
             document.getElementById('summaryAvatar').src = account.avatarPath || '${pageContext.request.contextPath}/assest/img/avatars/default.png';
-            document.getElementById('summaryName').innerText = `${account.firstName} ${account.lastName}`;
-            document.getElementById('summaryDetails').innerText = `Customer ID: #CUST-${account.customerId} | Email: ${account.email} | Phone: +91 ${account.phoneNo}`;
+            document.getElementById('summaryName').innerText = account.firstName + ' ' + account.lastName;
+            document.getElementById('summaryDetails').innerText = 'Customer ID: #CUST-' + account.customerId + ' | Email: ' + account.email + ' | Phone: +91 ' + account.phoneNo;
             document.getElementById('summaryAccNo').innerText = account.accountNumber;
             document.getElementById('summaryAccType').innerText = account.accountType;
-            document.getElementById('summaryAccBalance').innerText = `₹ ${parseFloat(account.balance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('summaryAccBalance').innerText = '₹ ' + parseFloat(account.balance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
             document.getElementById('customerSummaryCard').style.display = 'block';
 
@@ -892,7 +891,7 @@
                     account.chequeBooks.forEach(cb => {
                         const opt = document.createElement('option');
                         opt.value = cb.chequebookNumber;
-                        opt.innerText = `${cb.chequebookNumber} (Leaves: ${cb.startChequeNo} to ${cb.endChequeNo})`;
+                        opt.innerText = cb.chequebookNumber + ' (Leaves: ' + cb.startChequeNo + ' to ' + cb.endChequeNo + ')';
                         dropdown.appendChild(opt);
                     });
                 } else {
@@ -909,7 +908,7 @@
                     const opt = document.createElement('option');
                     opt.value = loan.loanId;
                     opt.setAttribute('data-bal', loan.remainingBalance);
-                    opt.innerText = `#LN-${loan.loanId} (${loan.loanType}) - Outstanding: ₹${parseFloat(loan.remainingBalance).toLocaleString('en-IN')}`;
+                    opt.innerText = '#LN-' + loan.loanId + ' (' + loan.loanType + ') - Outstanding: ₹' + parseFloat(loan.remainingBalance).toLocaleString('en-IN');
                     loanSelect.appendChild(opt);
                 });
                 updateLoanRepayMax();
@@ -925,7 +924,7 @@
                     const opt = document.createElement('option');
                     opt.value = card.cardId;
                     opt.setAttribute('data-bal', card.outstandingBalance);
-                    opt.innerText = `${card.cardNumber} (${card.cardTier}) - Dues: ₹${parseFloat(card.outstandingBalance).toLocaleString('en-IN')}`;
+                    opt.innerText = card.cardNumber + ' (' + card.cardTier + ') - Dues: ₹' + parseFloat(card.outstandingBalance).toLocaleString('en-IN');
                     cardSelect.appendChild(opt);
                 });
                 updateCardRepayMax();
@@ -934,7 +933,7 @@
             }
 
             document.getElementById('transactionTabsContainer').style.display = 'block';
-            showToast(`Loaded account desk for ${account.firstName} ${account.lastName}.`);
+            showToast('Loaded account desk for ' + account.firstName + ' ' + account.lastName + '.');
         }
 
         // --- SUB-FORM VISIBILITY TOGGLES ---
@@ -970,7 +969,7 @@
         depIntFromAccInput.addEventListener('change', () => {
             const accNum = depIntFromAccInput.value.trim();
             if (accNum.length > 0) {
-                fetch(`${pageContext.request.contextPath}/cash-counter?action=search&query=${encodeURIComponent(accNum)}`)
+                fetch('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(accNum))
                     .then(res => res.json())
                     .then(data => {
                         const matched = data.find(a => a.accountNumber === accNum);
@@ -1051,7 +1050,7 @@
         loanSourceAccInput.addEventListener('change', () => {
             const accNum = loanSourceAccInput.value.trim();
             if (accNum.length > 0) {
-                fetch(`${pageContext.request.contextPath}/cash-counter?action=search&query=${encodeURIComponent(accNum)}`)
+                fetch('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(accNum))
                     .then(res => res.json())
                     .then(data => {
                         const matched = data.find(a => a.accountNumber === accNum);
@@ -1085,7 +1084,7 @@
             if (opt) {
                 const bal = parseFloat(opt.getAttribute('data-bal'));
                 loanRepayInput.max = bal;
-                loanRepayInput.placeholder = `Max ₹${bal.toLocaleString('en-IN')}`;
+                loanRepayInput.placeholder = 'Max ₹' + bal.toLocaleString('en-IN');
             }
         }
 
@@ -1108,7 +1107,7 @@
         cardSourceAccInput.addEventListener('change', () => {
             const accNum = cardSourceAccInput.value.trim();
             if (accNum.length > 0) {
-                fetch(`${pageContext.request.contextPath}/cash-counter?action=search&query=${encodeURIComponent(accNum)}`)
+                fetch('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(accNum))
                     .then(res => res.json())
                     .then(data => {
                         const matched = data.find(a => a.accountNumber === accNum);
@@ -1142,7 +1141,7 @@
             if (opt) {
                 const bal = parseFloat(opt.getAttribute('data-bal'));
                 cardRepayInput.max = bal;
-                cardRepayInput.placeholder = `Max ₹${bal.toLocaleString('en-IN')}`;
+                cardRepayInput.placeholder = 'Max ₹' + bal.toLocaleString('en-IN');
             }
         }
 
@@ -1190,7 +1189,7 @@
                     // Re-fetch the current selected customer account to update details and balance
                     if (currentSelectedAccount) {
                         const accNo = currentSelectedAccount.accountNumber;
-                        fetch(`${pageContext.request.contextPath}/cash-counter?action=search&query=${encodeURIComponent(accNo)}`)
+                        fetch('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(accNo))
                             .then(r => r.json())
                             .then(d => {
                                 const matched = d.find(a => a.accountNumber === accNo);

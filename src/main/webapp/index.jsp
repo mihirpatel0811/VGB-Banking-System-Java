@@ -533,10 +533,11 @@
 
             /* FRONT SIDE */
             .flip-card-front {
-                background: rgba(255, 255, 255, 0.8) !important;
+                background: url('${pageContext.request.contextPath}/assest/images/Extra/front-card.png') no-repeat center center !important;
+                background-size: cover !important;
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
-                border: 1px solid rgba(99, 102, 241, 0.15);
+                border: none !important;
                 color: var(--gray-800);
                 display: flex;
                 z-index: 2;
@@ -649,9 +650,10 @@
 
             /* BACK SIDE */
             .flip-card-back {
-                background: #09122c !important;
+                background: url('${pageContext.request.contextPath}/assest/images/Extra/back-side card.png') no-repeat center center !important;
+                background-size: cover !important;
                 transform: rotateY(180deg);
-                border: 1.5px solid rgba(212, 175, 55, 0.25);
+                border: none !important;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -1202,43 +1204,7 @@
                             <div class="img-wrapper bank-card-wrapper" style="border: none;">
                                 <div class="img-border" style="display: none;"></div>
                                 <div class="bank-card-container">
-                                    <div class="bank-card">
-                                        <div class="bank-card-top">
-                                            <div class="bank-card-logo-container">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
-                                                <span class="bank-name-text">Vertex Galaxy Bank</span>
-                                            </div>
-                                            <svg class="bank-card-chip" viewBox="0 0 100 80" width="45" height="36"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <rect x="5" y="5" width="90" height="70" rx="10"
-                                                    fill="url(#chipGoldGradIndexRedesigned)" stroke="#b59410"
-                                                    stroke-width="1.5" />
-                                                <path d="M 5,25 H 45 V 55 H 5" fill="none" stroke="#8c710c"
-                                                    stroke-width="1.5" />
-                                                <path d="M 95,25 H 55 V 55 H 95" fill="none" stroke="#8c710c"
-                                                    stroke-width="1.5" />
-                                                <path d="M 45,5 V 75" fill="none" stroke="#8c710c" stroke-width="1.5" />
-                                                <path d="M 55,5 V 75" fill="none" stroke="#8c710c" stroke-width="1.5" />
-                                                <rect x="30" y="25" width="40" height="30" rx="4" fill="#8c710c"
-                                                    opacity="0.3" />
-                                                <defs>
-                                                    <linearGradient id="chipGoldGradIndexRedesigned" x1="0%" y1="0%"
-                                                        x2="100%" y2="100%">
-                                                        <stop offset="0%" stop-color="#ffe875" />
-                                                        <stop offset="50%" stop-color="#f7c844" />
-                                                        <stop offset="100%" stop-color="#b88f14" />
-                                                    </linearGradient>
-                                                </defs>
-                                            </svg>
-                                        </div>
-                                        <div class="bank-card-number">
-                                            <span class="dots">•••• &nbsp; •••• &nbsp; ••••</span>
-                                            <span class="digits">2190</span>
-                                        </div>
-                                        <div class="bank-card-bottom">
-                                            <span>Infinite Digital Account</span>
-                                            <strong class="vgb-gradient-logo">VGB</strong>
-                                        </div>
+                                    <div class="bank-card" style="background: url('${pageContext.request.contextPath}/assest/images/Extra/card.png') no-repeat center center; background-size: cover; border: none;">
                                     </div>
                                 </div>
                                 <div class="floating-icons">
@@ -1282,47 +1248,9 @@
                                 <div class="flip-card-inner">
                                     <!-- FRONT -->
                                     <div class="flip-card-front">
-                                        <div class="ceo-card-left">
-                                            <div class="ceo-profile-info">
-                                                <h3 class="ceo-name">Dani Martinez</h3>
-                                                <span class="ceo-title">Chief Executive Officer</span>
-                                            </div>
-                                            <div class="ceo-contact-list">
-                                                <div class="ceo-contact-item">
-                                                    <div class="ceo-contact-icon"><i class="bx bx-phone"></i></div>
-                                                    <span>+123 456 7890</span>
-                                                </div>
-                                                <div class="ceo-contact-item">
-                                                    <div class="ceo-contact-icon"><i class="bx bx-envelope"></i></div>
-                                                    <span>hello@vertexgalaxybank.com</span>
-                                                </div>
-                                                <div class="ceo-contact-item">
-                                                    <div class="ceo-contact-icon"><i class="bx bx-map"></i></div>
-                                                    <span>123 Security Blvd, Cyber City</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ceo-card-right">
-                                            <div class="ceo-front-logo-block">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="width: 36px; height: 36px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
-                                                <h4 style="margin: 0; font-size: 0.62rem; color: #ffffff;">Vertex Galaxy
-                                                </h4>
-                                                <span>Bank</span>
-                                            </div>
-                                        </div>
                                     </div>
                                     <!-- BACK -->
                                     <div class="flip-card-back">
-                                        <div class="ceo-back-content">
-                                            <div class="ceo-back-logo-section">
-                                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" class="vg-orbit-logo" alt="VGB Logo" style="object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));">
-                                                <div class="ceo-back-title">Vertex Galaxy</div>
-                                                <div class="ceo-back-sub">Bank</div>
-                                            </div>
-                                            <a href="https://www.vertexgalaxybank.com" class="ceo-back-web"
-                                                target="_blank"
-                                                onclick="event.stopPropagation();">www.vertexgalaxybank.com</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

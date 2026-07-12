@@ -113,6 +113,7 @@ public class Account implements Serializable {
 
     // Senior RM details
     private String primaryRelationshipManager;
+    private String primarySignaturePath;
 
     // Joint Customer fields
     private String jointFirstName;
@@ -292,6 +293,9 @@ public class Account implements Serializable {
 
     public String getPrimaryPermAddress() { return primaryPermAddress; }
     public void setPrimaryPermAddress(String primaryPermAddress) { this.primaryPermAddress = primaryPermAddress; }
+
+    public String getPrimarySignaturePath() { return primarySignaturePath; }
+    public void setPrimarySignaturePath(String primarySignaturePath) { this.primarySignaturePath = primarySignaturePath; }
 
     // Getters and Setters for Joint Customer details
     public String getJointFirstName() { return jointFirstName; }

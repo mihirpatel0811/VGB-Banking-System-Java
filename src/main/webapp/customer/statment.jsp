@@ -308,29 +308,66 @@
             color: var(--accent-blue);
         }
 
+        .print-bg-container {
+            display: none;
+        }
+
         .print-only {
             display: none !important;
         }
 
         /* Print Optimized CSS */
         @media print {
-            body {
-                background: white !important;
-                color: black !important;
+            @page {
+                size: A4 portrait;
+                margin: 0;
             }
-            .sidebar, .header, .footer, .no-print {
+            body {
+                background-color: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                color: #1a1a1a !important;
+            }
+            .sidebar, .header, .footer, .no-print, .print-hide-header {
                 display: none !important;
             }
             .main-content {
                 margin-left: 0 !important;
                 padding: 0 !important;
                 width: 100% !important;
+                box-sizing: border-box !important;
             }
             .glass-card {
                 border: none !important;
                 box-shadow: none !important;
                 padding: 0 !important;
                 background: transparent !important;
+            }
+            #regularStatement, #loanStatement {
+                position: relative !important;
+                z-index: 1 !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 160px 60px 100px 60px !important;
+                margin: 0 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .print-bg-container {
+                display: block !important;
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                z-index: -10 !important;
+                pointer-events: none !important;
+            }
+            .print-bg-img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: fill !important;
             }
             .print-header {
                 display: block !important;
@@ -343,15 +380,22 @@
                 table-layout: fixed !important;
                 width: 100% !important;
                 border-collapse: collapse !important;
+                background: transparent !important;
             }
             #txnTable th, #txnTable td, 
             #regularStatement table th, #regularStatement table td,
             #loanStatement table th, #loanStatement table td {
-                padding: 6px 4px !important;
-                font-size: 10px !important;
+                padding: 8px 6px !important;
+                font-size: 11px !important;
                 white-space: normal !important;
                 word-wrap: break-word !important;
                 word-break: break-word !important;
+                border-bottom: 1px solid #ddd !important;
+            }
+            #txnTable th, #regularStatement table th, #loanStatement table th {
+                background: rgba(0, 0, 0, 0.04) !important;
+                color: #000 !important;
+                font-weight: 700 !important;
             }
             
             #txnTable th:nth-child(1), #txnTable td:nth-child(1),
@@ -374,6 +418,12 @@
             .badge-status, .txn-deposit-val, .txn-withdrawal-val, span[style*="background"] {
                 background: transparent !important;
                 padding: 0 !important;
+            }
+            .txn-deposit-val {
+                color: #2e7d32 !important;
+            }
+            .txn-withdrawal-val {
+                color: #c62828 !important;
             }
         }
     </style>
@@ -548,11 +598,13 @@
                 </div>
             </div>
 
-            <!-- Regular Transactions Ledger Table -->
             <div class="glass-card" id="regularStatement">
-                <!-- Official Bank Logo & Name -->
+                <!-- Print Background Image (Always visible in print layout) -->
+                <div class="print-bg-container">
+                    <img src="${pageContext.request.contextPath}/assest/images/All Forms/Letter Pad.png" class="print-bg-img" alt="VGB Letterhead">
+                </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
-                    <div>
+                    <div class="print-hide-header">
                         <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1; margin: 0;">VERTEX GALAXY BANK</h1>
                         <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 5px; font-weight: 500; margin-bottom: 0;">Always Beyond Boundaries</p>
                     </div>
@@ -675,11 +727,13 @@
                 </div>
             </div>
 
-            <!-- Loan Repayment Ledger Table -->
             <div class="glass-card" id="loanStatement" style="display: none;">
-                <!-- Official Bank Logo & Name -->
+                <!-- Print Background Image (Always visible in print layout) -->
+                <div class="print-bg-container">
+                    <img src="${pageContext.request.contextPath}/assest/images/All Forms/Letter Pad.png" class="print-bg-img" alt="VGB Letterhead">
+                </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
-                    <div>
+                    <div class="print-hide-header">
                         <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1; margin: 0;">VERTEX GALAXY BANK</h1>
                         <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 5px; font-weight: 500; margin-bottom: 0;">Always Beyond Boundaries</p>
                     </div>

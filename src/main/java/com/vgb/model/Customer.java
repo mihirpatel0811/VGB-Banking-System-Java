@@ -68,6 +68,7 @@ public class Customer implements Serializable {
     private String passportCopyPath;
     private String drivingLicenseCopyPath;
     private String voterIdCopyPath;
+    private String signaturePath;
 
     // Constructors
     public Customer() {}
@@ -234,6 +235,9 @@ public class Customer implements Serializable {
 
     public String getVoterIdCopyPath() { return voterIdCopyPath; }
     public void setVoterIdCopyPath(String voterIdCopyPath) { this.voterIdCopyPath = voterIdCopyPath; }
+
+    public String getSignaturePath() { return signaturePath; }
+    public void setSignaturePath(String signaturePath) { this.signaturePath = signaturePath; }
 
     @Override
     public String toString() {
