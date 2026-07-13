@@ -8,6 +8,8 @@ import com.vgb.dao.TransactionDAOImpl;
 import com.vgb.model.Account;
 import com.vgb.model.Card;
 import com.vgb.model.Transaction;
+import com.vgb.model.CreditCardRepayment;
+import com.vgb.dao.CreditCardRepaymentDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ public class CardService {
     private CardDAOImpl cardDAO = new CardDAOImpl();
     private AccountDAOImpl accountDAO = new AccountDAOImpl();
     private TransactionDAOImpl transactionDAO = new TransactionDAOImpl();
+    private CreditCardRepaymentDAO repaymentDAO = new CreditCardRepaymentDAO();
     private Random random = new Random();
 
     /**
@@ -596,6 +599,294 @@ public class CardService {
             }
             logger.error("Error paying card dues with cheque", e);
             throw new Exception("Failed to pay card dues: " + e.getMessage(), e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Process a customer credit card bill repayment atomically using a single DB transaction.
+     */
+    public CreditCardRepayment processCreditCardRepayment(long customerId, long cardId, long accountId, BigDecimal amount, String paymentOption) throws Exception {
+        runExpiryCheck();
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Repayment amount must be greater than zero.");
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Start Transaction
+
+            // 1. Fetch and validate card
+            Card card = cardDAO.getById(cardId);
+            if (card == null) {
+                throw new Exception("Credit card not found.");
+            }
+            if (card.getCustomerId() != customerId) {
+                throw new Exception("Unauthorized: You can only repay your own credit card bill.");
+            }
+            if (!"credit".equalsIgnoreCase(card.getCardType())) {
+                throw new Exception("Selected card is not a credit card.");
+            }
+            if (!"active".equalsIgnoreCase(card.getStatus())) {
+                throw new Exception("This credit card is not active.");
+            }
+            if (card.getOutstandingBalance().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("This card has no outstanding balance.");
+            }
+            if (amount.compareTo(card.getOutstandingBalance()) > 0) {
+                throw new Exception("Repayment amount of ₹" + amount.setScale(2) + " exceeds outstanding balance of ₹" + card.getOutstandingBalance().setScale(2));
+            }
+
+            // 2. Fetch and validate account
+            Account account = accountDAO.getById(accountId);
+            if (account == null) {
+                throw new Exception("Source account not found.");
+            }
+            if (!"active".equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Selected source account is not active.");
+            }
+            if (account.getBalance().compareTo(amount) < 0) {
+                throw new Exception("Insufficient funds in selected account. Available balance: ₹" + account.getBalance().setScale(2));
+            }
+
+            // 3. Perform Debits & Credits
+            BigDecimal newAccountBalance = account.getBalance().subtract(amount);
+            accountDAO.updateBalance(conn, accountId, newAccountBalance);
+
+            BigDecimal newCardOutstanding = card.getOutstandingBalance().subtract(amount);
+            cardDAO.updateOutstandingBalance(conn, cardId, newCardOutstanding);
+
+            // Generate unique txn reference
+            String txRef = "TXN-CC-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + "-" + (1000 + random.nextInt(9000));
+
+            // 4. Create general ledger transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(accountId);
+            transaction.setToAccountId(null);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber(txRef);
+            transaction.setDescription("VGB " + card.getCardTier().toUpperCase() + " Credit Card Repayment (Card: " + card.getMaskedCardNumber() + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("debit_account");
+            transaction.setPerformedById(customerId);
+            transactionDAO.create(conn, transaction);
+
+            // 5. Create Credit Card Repayment log
+            CreditCardRepayment repayment = new CreditCardRepayment();
+            repayment.setCardId(cardId);
+            repayment.setCustomerId(customerId);
+            repayment.setAccountId(accountId);
+            repayment.setAmountPaid(amount);
+            repayment.setPaymentOption(paymentOption);
+            repayment.setTransactionReference(txRef);
+            repayment.setStatus("completed");
+            repaymentDAO.create(conn, repayment);
+
+            // Commit!
+            conn.commit();
+            logger.info("Credit card repayment successfully processed. Txn: {}", txRef);
+            
+            // Set transient fields for receipt rendering
+            repayment.setMaskedCardNumber(card.getMaskedCardNumber());
+            repayment.setCardHolderName(card.getCardHolderName());
+            repayment.setSourceAccountNumber("••••" + account.getAccountNumber().substring(account.getAccountNumber().length() - 4));
+            
+            return repayment;
+        } catch (Exception e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    logger.error("Failed to rollback transaction", ex);
+                }
+            }
+            logger.error("Transaction failed during credit card repayment", e);
+            throw e;
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Charge credit card outstanding balance for local transfer to another VGB account
+     */
+    public boolean processCreditCardTransfer(long cardId, long toAccountId, BigDecimal amount, String description, Long performedById) throws Exception {
+        runExpiryCheck();
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Invalid transfer amount.");
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Card card = cardDAO.getById(conn, cardId);
+            if (card == null || !"active".equalsIgnoreCase(card.getStatus()) || !"credit".equalsIgnoreCase(card.getCardType())) {
+                throw new Exception("Selected credit card is invalid or not active.");
+            }
+
+            BigDecimal availableCredit = card.getOnlineLimit().subtract(card.getOutstandingBalance());
+            if (amount.compareTo(availableCredit) > 0) {
+                throw new Exception("Insufficient credit card limit. Available: ₹" + availableCredit.setScale(2));
+            }
+
+            Account toAccount = accountDAO.getById(conn, toAccountId);
+            if (toAccount == null || !"active".equalsIgnoreCase(toAccount.getStatus())) {
+                throw new Exception("Destination account is invalid or not active.");
+            }
+
+            // 1. Increase credit card outstanding balance
+            BigDecimal newOutstanding = card.getOutstandingBalance().add(amount);
+            cardDAO.updateOutstandingBalance(conn, cardId, newOutstanding);
+
+            // 2. Increase recipient account balance
+            BigDecimal newBalance = toAccount.getBalance().add(amount);
+            accountDAO.updateBalance(conn, toAccountId, newBalance);
+
+            // 3. Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(null);
+            transaction.setToAccountId(toAccountId);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (Card: " + card.getMaskedCardNumber() + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("card");
+            transaction.setPerformedById(performedById);
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Credit card transfer successful - Card: {}, To Account: {}, Amount: {}", cardId, toAccountId, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing credit card transfer", e);
+            throw new Exception("Transfer failed: " + e.getMessage(), e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Charge credit card outstanding balance for external transfer to another bank
+     */
+    public boolean processCreditCardExternalTransfer(long cardId, String toAccountNumber, String toIfscCode, String toHolderName, String toBankName, String toBranchName, BigDecimal amount, String description, Long performedById) throws Exception {
+        runExpiryCheck();
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Invalid transfer amount.");
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Card card = cardDAO.getById(conn, cardId);
+            if (card == null || !"active".equalsIgnoreCase(card.getStatus()) || !"credit".equalsIgnoreCase(card.getCardType())) {
+                throw new Exception("Selected credit card is invalid or not active.");
+            }
+
+            BigDecimal availableCredit = card.getOnlineLimit().subtract(card.getOutstandingBalance());
+            if (amount.compareTo(availableCredit) > 0) {
+                throw new Exception("Insufficient credit card limit. Available: ₹" + availableCredit.setScale(2));
+            }
+
+            // 1. Increase credit card outstanding balance
+            BigDecimal newOutstanding = card.getOutstandingBalance().add(amount);
+            cardDAO.updateOutstandingBalance(conn, cardId, newOutstanding);
+
+            // 2. Record transaction (toAccountId = null represents external recipient)
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(null);
+            transaction.setToAccountId(null);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (To: " + toHolderName + ", A/C: " + toAccountNumber + ", IFSC: " + toIfscCode + " - Card: " + card.getMaskedCardNumber() + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("external");
+            transaction.setReceiverAccountNumber(toAccountNumber);
+            transaction.setBeneficiaryName(toHolderName);
+            transaction.setBeneficiaryIfsc(toIfscCode);
+            transaction.setBeneficiaryBank(toBankName);
+            transaction.setBeneficiaryBranch(toBranchName);
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Credit card external transfer successful - Card: {}, To External A/C: {}, Amount: {}", cardId, toAccountNumber, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing credit card external transfer", e);
+            throw new Exception("External transfer failed: " + e.getMessage(), e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Charge credit card outstanding balance for counter cash withdrawal
+     */
+    public boolean processCreditCardWithdrawal(long cardId, BigDecimal amount, String description, Long performedById) throws Exception {
+        runExpiryCheck();
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new Exception("Invalid withdrawal amount.");
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Card card = cardDAO.getById(conn, cardId);
+            if (card == null || !"active".equalsIgnoreCase(card.getStatus()) || !"credit".equalsIgnoreCase(card.getCardType())) {
+                throw new Exception("Selected credit card is invalid or not active.");
+            }
+
+            BigDecimal availableCredit = card.getAtmLimit().subtract(card.getOutstandingBalance());
+            if (amount.compareTo(availableCredit) > 0) {
+                throw new Exception("Insufficient cash limit. Available: ₹" + availableCredit.setScale(2));
+            }
+
+            // 1. Increase credit card outstanding balance
+            BigDecimal newOutstanding = card.getOutstandingBalance().add(amount);
+            cardDAO.updateOutstandingBalance(conn, cardId, newOutstanding);
+
+            // 2. Record transaction
+            Transaction transaction = new Transaction();
+            transaction.setFromAccountId(null);
+            transaction.setToAccountId(null);
+            transaction.setTransactionType(AppConstants.TRANSACTION_TYPE_WITHDRAWAL);
+            transaction.setAmount(amount);
+            transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            transaction.setDescription(description + " (Card: " + card.getMaskedCardNumber() + ")");
+            transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+            transaction.setTransferMode("card");
+            transaction.setPerformedById(performedById);
+
+            transactionDAO.create(conn, transaction);
+
+            conn.commit();
+            logger.info("Credit card withdrawal successful - Card: {}, Amount: {}", cardId, amount);
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error processing credit card withdrawal", e);
+            throw new Exception("Withdrawal failed: " + e.getMessage(), e);
         } finally {
             DatabaseConfig.closeConnection(conn);
         }

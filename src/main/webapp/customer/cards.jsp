@@ -1599,6 +1599,7 @@
                                     class="bx bx-transfer-alt"></i> Fund Transfer</a>
                             <a href="${pageContext.request.contextPath}/card?action=list" class="active"><i
                                     class="bx bx-credit-card"></i> My Cards</a>
+                            <a href="${pageContext.request.contextPath}/card-repayment?action=history"><i class="bx bx-receipt"></i> Card Repayments</a>
                             <a href="${pageContext.request.contextPath}/chequebook?action=list"><i
                                     class="bx bx-book-bookmark"></i> Cheque Books</a>
                             <a href="${pageContext.request.contextPath}/passbook?action=list"><i
@@ -1822,10 +1823,9 @@
                                                             </c:if>
                                                             <c:if
                                                                 test="${card.cardType eq 'credit' and card.status eq 'active' and card.outstandingBalance gt 0}">
-                                                                <button type="button"
-                                                                    onclick="openPayDuesModal('${card.cardId}', '${card.outstandingBalance}')"
-                                                                    class="btn-renew-action"
-                                                                    style="background: #ef4444 !important;">Pay Dues</button>
+                                                                <a href="${pageContext.request.contextPath}/card-repayment?action=repay&cardId=${card.cardId}"
+                                                                     class="btn-renew-action"
+                                                                     style="background: #ef4444 !important; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 38px;">Pay Dues</a>
                                                             </c:if>
                                                             <c:if
                                                                 test="${card.status eq 'expired' or card.status eq 'closed'}">

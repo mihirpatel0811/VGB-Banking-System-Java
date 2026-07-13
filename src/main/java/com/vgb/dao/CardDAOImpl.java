@@ -70,6 +70,23 @@ public class CardDAOImpl {
         }
     }
 
+    public Card getById(Connection conn, long cardId) throws SQLException {
+        String sql = "SELECT c.*, a.account_number, a.account_type FROM card c JOIN account a ON c.account_id = a.account_id WHERE c.card_id = ?";
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, cardId);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToCard(rs);
+            }
+            return null;
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, null);
+        }
+    }
+
     public Card getByCardNumber(String cardNumber) throws SQLException {
         String sql = "SELECT c.*, a.account_number, a.account_type FROM card c JOIN account a ON c.account_id = a.account_id WHERE REPLACE(c.card_number, ' ', '') = REPLACE(?, ' ', '')";
         Connection conn = null;
@@ -180,17 +197,25 @@ public class CardDAOImpl {
     }
 
     public boolean updateOutstandingBalance(long cardId, java.math.BigDecimal amount) throws SQLException {
-        String sql = "UPDATE card SET outstanding_balance = ? WHERE card_id = ?";
         Connection conn = null;
-        PreparedStatement stmt = null;
         try {
             conn = DatabaseConfig.getInstance().getConnection();
+            return updateOutstandingBalance(conn, cardId, amount);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    public boolean updateOutstandingBalance(Connection conn, long cardId, java.math.BigDecimal amount) throws SQLException {
+        String sql = "UPDATE card SET outstanding_balance = ? WHERE card_id = ?";
+        PreparedStatement stmt = null;
+        try {
             stmt = conn.prepareStatement(sql);
             stmt.setBigDecimal(1, amount);
             stmt.setLong(2, cardId);
             return stmt.executeUpdate() > 0;
         } finally {
-            DatabaseConfig.closeResources(null, stmt, conn);
+            DatabaseConfig.closeStatement(stmt);
         }
     }
 

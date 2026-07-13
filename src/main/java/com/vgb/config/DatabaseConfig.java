@@ -232,6 +232,39 @@ public class DatabaseConfig {
                 }
             }
 
+            // 6b. Create credit_card_repayment table if needed
+            try {
+                rs = metaData.getTables(null, null, "credit_card_repayment", null);
+                if (!rs.next()) {
+                    logger.info("Upgrading schema: Creating credit_card_repayment table");
+                    stmt.execute(
+                        "CREATE TABLE credit_card_repayment (" +
+                        "    repayment_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                        "    card_id BIGINT NOT NULL, " +
+                        "    customer_id BIGINT NOT NULL, " +
+                        "    account_id BIGINT NOT NULL, " +
+                        "    amount_paid DECIMAL(15, 4) NOT NULL, " +
+                        "    payment_option VARCHAR(20) NOT NULL, " +
+                        "    transaction_reference VARCHAR(50) NOT NULL UNIQUE, " +
+                        "    repayment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                        "    status VARCHAR(20) NOT NULL DEFAULT 'completed', " +
+                        "    FOREIGN KEY (card_id) REFERENCES card(card_id) ON DELETE CASCADE, " +
+                        "    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, " +
+                        "    FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE" +
+                        ")"
+                    );
+                    logger.info("Credit card repayment table created successfully!");
+                } else {
+                    logger.debug("Schema verification: credit_card_repayment table is present.");
+                }
+            } catch (SQLException ex) {
+                logger.warn("Credit card repayment table creation error: {}", ex.getMessage());
+            } finally {
+                if (rs != null) {
+                    try { rs.close(); } catch (SQLException e) {}
+                }
+            }
+
             // 3c. Create cheque_book_request table if needed
             try {
                 rs = metaData.getTables(null, null, "cheque_book_request", null);
@@ -528,9 +561,9 @@ public class DatabaseConfig {
     }
 
     /**
-     * Close prepared statement safely
+     * Close statement safely
      */
-    public static void closeStatement(PreparedStatement stmt) {
+    public static void closeStatement(Statement stmt) {
         if (stmt != null) {
             try {
                 stmt.close();
@@ -556,7 +589,7 @@ public class DatabaseConfig {
     /**
      * Close all resources safely
      */
-    public static void closeResources(ResultSet rs, PreparedStatement stmt, Connection conn) {
+    public static void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         closeResultSet(rs);
         closeStatement(stmt);
         closeConnection(conn);

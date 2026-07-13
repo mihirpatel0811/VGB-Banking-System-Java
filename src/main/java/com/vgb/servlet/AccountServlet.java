@@ -1273,6 +1273,9 @@ public class AccountServlet extends BaseServlet {
         BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
         String description = getParameter(request, "description", "Fund Transfer");
 
+        boolean isCreditCard = false;
+        long creditCardId = 0;
+
         if (adminId == null) {
             boolean useCard = "true".equalsIgnoreCase(getParameter(request, "useCard", "false"));
 
@@ -1287,19 +1290,26 @@ public class AccountServlet extends BaseServlet {
                 if (!card.getCvv().equals(cvv)) {
                     throw new Exception("Invalid Card CVV security code.");
                 }
-                fromAccountId = card.getAccountId();
-            }
-
-            List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
-            boolean authorized = false;
-            for (Account acc : customerAccounts) {
-                if (acc.getAccountId() == fromAccountId) {
-                    authorized = true;
-                    break;
+                if ("credit".equalsIgnoreCase(card.getCardType())) {
+                    isCreditCard = true;
+                    creditCardId = cardId;
+                } else {
+                    fromAccountId = card.getAccountId();
                 }
             }
-            if (!authorized) {
-                throw new Exception("Unauthorized source account selection.");
+
+            if (!isCreditCard) {
+                List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
+                boolean authorized = false;
+                for (Account acc : customerAccounts) {
+                    if (acc.getAccountId() == fromAccountId) {
+                        authorized = true;
+                        break;
+                    }
+                }
+                if (!authorized) {
+                    throw new Exception("Unauthorized source account selection.");
+                }
             }
         }
 
@@ -1347,30 +1357,50 @@ public class AccountServlet extends BaseServlet {
             }
         } else {
             Long performedById = customerId;
-            if ("own".equalsIgnoreCase(destType)) {
-                long toAccountId = Long.parseLong(toAccountIdStr);
-                if (fromAccountId == toAccountId) {
-                    throw new Exception("Source and target accounts cannot be the same.");
-                }
-                transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description, performedById);
-            } else {
-                if (toAccountIdStr.startsWith("ext_")) {
-                    long beneficiaryId = Long.parseLong(toAccountIdStr.substring(4));
-                    String[] details = accountService.getExternalBeneficiaryDetails(beneficiaryId);
-                    if (details == null) {
-                        throw new Exception("Saved beneficiary details not found.");
-                    }
-                    Account sourceAcc = accountService.getAccountById(fromAccountId);
-                    long sourceCustId = sourceAcc != null ? sourceAcc.getCustomerId() : customerId;
-                    
-                    transferSuccess = accountService.externalTransfer(fromAccountId, details[0], details[1], details[2], "External Bank", "Branch", amount, description, sourceCustId);
-                } else {
+            if (isCreditCard) {
+                com.vgb.service.CardService cardService = new com.vgb.service.CardService();
+                if ("own".equalsIgnoreCase(destType)) {
                     long toAccountId = Long.parseLong(toAccountIdStr);
-                    Account targetAcc = accountService.getAccountById(toAccountId);
-                    if (targetAcc == null) {
-                        throw new Exception("Recipient account not found.");
+                    transferSuccess = cardService.processCreditCardTransfer(creditCardId, toAccountId, amount, description, performedById);
+                } else {
+                    if (toAccountIdStr.startsWith("ext_")) {
+                        long beneficiaryId = Long.parseLong(toAccountIdStr.substring(4));
+                        String[] details = accountService.getExternalBeneficiaryDetails(beneficiaryId);
+                        if (details == null) {
+                            throw new Exception("Saved beneficiary details not found.");
+                        }
+                        transferSuccess = cardService.processCreditCardExternalTransfer(creditCardId, details[0], details[1], details[2], "External Bank", "Branch", amount, description, performedById);
+                    } else {
+                        long toAccountId = Long.parseLong(toAccountIdStr);
+                        transferSuccess = cardService.processCreditCardTransfer(creditCardId, toAccountId, amount, description, performedById);
                     }
-                    transferSuccess = accountService.transfer(fromAccountId, targetAcc.getAccountId(), amount, description, performedById);
+                }
+            } else {
+                if ("own".equalsIgnoreCase(destType)) {
+                    long toAccountId = Long.parseLong(toAccountIdStr);
+                    if (fromAccountId == toAccountId) {
+                        throw new Exception("Source and target accounts cannot be the same.");
+                    }
+                    transferSuccess = accountService.transfer(fromAccountId, toAccountId, amount, description, performedById);
+                } else {
+                    if (toAccountIdStr.startsWith("ext_")) {
+                        long beneficiaryId = Long.parseLong(toAccountIdStr.substring(4));
+                        String[] details = accountService.getExternalBeneficiaryDetails(beneficiaryId);
+                        if (details == null) {
+                            throw new Exception("Saved beneficiary details not found.");
+                        }
+                        Account sourceAcc = accountService.getAccountById(fromAccountId);
+                        long sourceCustId = sourceAcc != null ? sourceAcc.getCustomerId() : customerId;
+                        
+                        transferSuccess = accountService.externalTransfer(fromAccountId, details[0], details[1], details[2], "External Bank", "Branch", amount, description, sourceCustId);
+                    } else {
+                        long toAccountId = Long.parseLong(toAccountIdStr);
+                        Account targetAcc = accountService.getAccountById(toAccountId);
+                        if (targetAcc == null) {
+                            throw new Exception("Recipient account not found.");
+                        }
+                        transferSuccess = accountService.transfer(fromAccountId, targetAcc.getAccountId(), amount, description, performedById);
+                    }
                 }
             }
         }
@@ -1398,6 +1428,9 @@ public class AccountServlet extends BaseServlet {
         BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
         String description = getParameter(request, "description", "Cash Withdrawal");
 
+        boolean isCreditCard = false;
+        long creditCardId = 0;
+
         if (adminId != null) {
             accountId = Long.parseLong(getParameter(request, "accountId", "0"));
         } else {
@@ -1414,28 +1447,38 @@ public class AccountServlet extends BaseServlet {
                 if (!card.getCvv().equals(cvv)) {
                     throw new Exception("Invalid Card CVV security code.");
                 }
-                accountId = card.getAccountId();
+                if ("credit".equalsIgnoreCase(card.getCardType())) {
+                    isCreditCard = true;
+                    creditCardId = cardId;
+                } else {
+                    accountId = card.getAccountId();
+                }
             } else {
                 accountId = Long.parseLong(getParameter(request, "accountId", "0"));
             }
 
-            List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
-            boolean authorized = false;
-            for (Account acc : customerAccounts) {
-                if (acc.getAccountId() == accountId) {
-                    authorized = true;
-                    break;
+            if (!isCreditCard) {
+                List<Account> customerAccounts = accountService.getCustomerAccounts(customerId);
+                boolean authorized = false;
+                for (Account acc : customerAccounts) {
+                    if (acc.getAccountId() == accountId) {
+                        authorized = true;
+                        break;
+                    }
                 }
-            }
-            if (!authorized) {
-                throw new Exception("Unauthorized account selection.");
+                if (!authorized) {
+                    throw new Exception("Unauthorized account selection.");
+                }
             }
         }
 
         Long performedById = adminId != null ? adminId.longValue() : customerId;
         String paymentMode = adminId != null ? "cash" : getParameter(request, "paymentMode", "cash");
         boolean success = false;
-        if ("cheque".equalsIgnoreCase(paymentMode)) {
+        if (isCreditCard) {
+            com.vgb.service.CardService cardService = new com.vgb.service.CardService();
+            success = cardService.processCreditCardWithdrawal(creditCardId, amount, description, performedById);
+        } else if ("cheque".equalsIgnoreCase(paymentMode)) {
             String chequeBookNumber = getParameter(request, "chequeBookNumber", "");
             String chequeNumber = getParameter(request, "chequeNumber", "");
             if (chequeBookNumber.isEmpty() || chequeNumber.isEmpty()) {
