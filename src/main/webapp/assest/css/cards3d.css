@@ -606,9 +606,11 @@
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 12px !important;
-    padding: 10px 16px !important;
+    padding: 8px 10px !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     box-sizing: border-box;
+    flex-wrap: nowrap;
+    gap: 4px;
 }
 
 .status-badge-vertical {
@@ -618,13 +620,14 @@
     justify-content: center;
     background: #e6f4ea !important;
     border-radius: 8px !important;
-    padding: 6px 12px !important;
+    padding: 4px 8px !important;
     color: #137333 !important;
     font-size: 0.65rem !important;
     font-weight: 700 !important;
     letter-spacing: 0.5px;
     line-height: 1.2;
-    min-width: 48px;
+    min-width: 44px;
+    white-space: nowrap;
 }
 
 .status-badge-vertical .status-dot {
@@ -665,17 +668,18 @@
     background: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 20px !important;
-    padding: 8px 18px !important;
+    padding: 6px 12px !important;
     color: #334155 !important;
     font-weight: 700 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .btn-limits-action:hover {
@@ -689,13 +693,14 @@
     border: none !important;
     color: #475569 !important;
     font-weight: 700 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     cursor: pointer;
     text-decoration: none;
-    padding: 6px 12px !important;
+    padding: 4px 8px !important;
     transition: color 0.2s ease;
+    white-space: nowrap;
 }
 
 .btn-close-action:hover {
@@ -706,15 +711,19 @@
     background: #10b981 !important;
     border: none !important;
     border-radius: 20px !important;
-    padding: 8px 18px !important;
+    padding: 6px 12px !important;
     color: #ffffff !important;
     font-weight: 700 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.72rem !important;
     cursor: pointer;
     transition: opacity 0.2s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-renew-action:hover {

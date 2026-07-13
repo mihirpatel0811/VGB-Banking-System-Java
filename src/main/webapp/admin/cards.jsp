@@ -3342,6 +3342,7 @@
                                                     <th>Card Type</th>
                                                     <th>Provider</th>
                                                     <th>Expiry Date</th>
+                                                    <th>Auto Pay</th>
                                                     <th>Status</th>
                                                     <th style="text-align: center;">Actions</th>
                                                 </tr>
@@ -3350,6 +3351,18 @@
                                                 <c:choose>
                                                     <c:when test="${not empty cards}">
                                                         <c:forEach var="card" items="${cards}" varStatus="status">
+                                                            <c:set var="autoPayEnabled" value="false" />
+                                                            <c:set var="autoPaySourceAccountId" value="" />
+                                                            <c:set var="autoPayPaymentType" value="" />
+                                                            <c:set var="autoPayStatus" value="" />
+                                                            <c:forEach var="ins" items="${autoPayInstructions}">
+                                                                <c:if test="${ins.targetType eq 'credit_card' and ins.cardId eq card.cardId}">
+                                                                    <c:set var="autoPayEnabled" value="true" />
+                                                                    <c:set var="autoPaySourceAccountId" value="${ins.sourceAccountId}" />
+                                                                    <c:set var="autoPayPaymentType" value="${ins.paymentType}" />
+                                                                    <c:set var="autoPayStatus" value="${ins.status}" />
+                                                                </c:if>
+                                                            </c:forEach>
                                                             <fmt:formatDate var="formattedExpiryDate"
                                                                 value="${card.expiryDate}" pattern="MM/yy" />
                                                             <tr>
@@ -3399,6 +3412,30 @@
                                                                 </td>
                                                                 <td>
                                                                     <c:choose>
+                                                                        <c:when test="${card.cardType eq 'credit'}">
+                                                                            <c:choose>
+                                                                                <c:when test="${autoPayEnabled}">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${autoPayStatus eq 'active'}">
+                                                                                            <span class="status-badge status-badge-active" style="text-transform: uppercase;">Active</span>
+                                                                                        </c:when>
+                                                                                        <c:otherwise>
+                                                                                            <span class="status-badge status-badge-pending" style="text-transform: uppercase;">Paused</span>
+                                                                                        </c:otherwise>
+                                                                                    </c:choose>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <span class="status-badge status-badge-closed" style="text-transform: uppercase;">Disabled</span>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <span style="color: var(--gray-400); font-size: 0.8rem;">N/A (Debit)</span>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </td>
+                                                                <td>
+                                                                    <c:choose>
                                                                         <c:when test="${card.status eq 'active'}">
                                                                             <span
                                                                                 class="status-badge status-badge-active">Active</span>
@@ -3430,6 +3467,12 @@
                                                                         </a>
                                                                     </c:if>
                                                                     <c:if test="${card.status eq 'active'}">
+                                                                        <button type="button"
+                                                                            onclick="openControlsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', '${card.internationalEnabled}', '${card.cardType}', '${autoPayEnabled}', '${autoPaySourceAccountId}', '${autoPayPaymentType}', '${autoPayStatus}', '${card.customerId}')"
+                                                                            class="btn-action btn-action-approve"
+                                                                            style="cursor: pointer; border: none; background: var(--primary-gradient) !important; color: white !important; padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+                                                                            <i class="bx bx-slider-alt"></i> Controls
+                                                                        </button>
                                                                         <a href="${pageContext.request.contextPath}/card?action=close&id=${card.cardId}"
                                                                             class="btn-action btn-action-reject"
                                                                             onclick="return confirm('Are you sure you want to permanently close card #${card.cardId}?');">
@@ -3449,7 +3492,7 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <tr>
-                                                            <td colspan="8"
+                                                            <td colspan="9"
                                                                 style="text-align: center; padding: 30px; color: var(--gray-400); font-weight: 500;">
                                                                 No ATM cards registered in database directory.</td>
                                                         </tr>
@@ -3844,7 +3887,210 @@
                             expiryInput.value = expiryDateStr;
                         }
                     }
+
+                    function openControlsModal(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled, cardType, autoPayEnabled, autoPaySourceAccountId, autoPayPaymentType, autoPayStatus, customerId) {
+                        document.getElementById('controlsCardId').value = cardId;
+                        
+                        const dLim = parseInt(parseFloat(dailyLimit)) || 50000;
+                        const aLim = parseInt(parseFloat(atmLimit)) || 25000;
+                        const oLim = parseInt(parseFloat(onlineLimit)) || 50000;
+                        
+                        document.getElementById('controlsDailyLimitRange').value = dLim;
+                        document.getElementById('controlsDailyLimitInput').value = dLim;
+                        document.getElementById('controlsDailyLimitVal').textContent = '₹ ' + dLim.toLocaleString('en-IN');
+                        
+                        document.getElementById('controlsAtmLimitRange').value = aLim;
+                        document.getElementById('controlsAtmLimitInput').value = aLim;
+                        document.getElementById('controlsAtmLimitVal').textContent = '₹ ' + aLim.toLocaleString('en-IN');
+                        
+                        document.getElementById('controlsOnlineLimitRange').value = oLim;
+                        document.getElementById('controlsOnlineLimitInput').value = oLim;
+                        document.getElementById('controlsOnlineLimitVal').textContent = '₹ ' + oLim.toLocaleString('en-IN');
+                        
+                        const isIntl = internationalEnabled === true || internationalEnabled === 'true' || internationalEnabled === 1;
+                        document.getElementById('controlsIntlEnabledCheckbox').checked = isIntl;
+                        document.getElementById('controlsIntlEnabledInput').value = isIntl ? 'true' : 'false';
+                        
+                        // Auto Pay Logic (Ajax dynamic loading of customer accounts)
+                        const apSection = document.getElementById('controlsAutoPaySection');
+                        if (cardType === 'credit') {
+                            apSection.style.display = 'block';
+                            
+                            // Initialize source account dropdown
+                            const sourceSelect = document.getElementById('controlsAutoPaySourceAccount');
+                            sourceSelect.innerHTML = '<option value="">Loading accounts...</option>';
+                            
+                            fetch('${pageContext.request.contextPath}/account?action=details&searchQuery=' + encodeURIComponent(customerId))
+                                .then(response => response.json())
+                                .then(accounts => {
+                                    sourceSelect.innerHTML = '';
+                                    if (!accounts || accounts.length === 0) {
+                                        sourceSelect.innerHTML = '<option value="">No savings/checking accounts found</option>';
+                                        return;
+                                    }
+                                    accounts.forEach(acc => {
+                                        // filter out FD/RD
+                                        if (acc.accountType !== 'fd' && acc.accountType !== 'rd') {
+                                            const opt = document.createElement('option');
+                                            opt.value = acc.accountId;
+                                            opt.textContent = 'VGB ' + acc.accountType.toUpperCase() + ' - Account No: ••••' + acc.accountNumber.substring(acc.accountNumber.length - 4);
+                                            sourceSelect.appendChild(opt);
+                                        }
+                                    });
+                                    
+                                    // select correct option if already set
+                                    if (autoPaySourceAccountId && autoPaySourceAccountId !== '' && autoPaySourceAccountId !== 'null') {
+                                        sourceSelect.value = autoPaySourceAccountId;
+                                    } else {
+                                        sourceSelect.selectedIndex = 0;
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error('Failed to load customer accounts:', err);
+                                    sourceSelect.innerHTML = '<option value="">Failed to load accounts</option>';
+                                });
+                                
+                            const isAP = autoPayEnabled === true || autoPayEnabled === 'true';
+                            document.getElementById('controlsAutoPayEnabledCheckbox').checked = isAP;
+                            document.getElementById('controlsAutoPayEnabledInput').value = isAP ? 'true' : 'false';
+                            
+                            const typeSelect = document.getElementById('controlsAutoPayPaymentType');
+                            if (autoPayPaymentType && autoPayPaymentType !== '' && autoPayPaymentType !== 'null') {
+                                typeSelect.value = autoPayPaymentType;
+                            } else {
+                                typeSelect.selectedIndex = 0;
+                            }
+                            
+                            toggleControlsAutoPayFields(isAP);
+                        } else {
+                            apSection.style.display = 'none';
+                        }
+                        
+                        document.getElementById('controlsModal').style.display = 'flex';
+                    }
+
+                    function closeControlsModal() {
+                        document.getElementById('controlsModal').style.display = 'none';
+                    }
+
+                    function updateControlsLimitVal(type, val) {
+                        const parsedVal = parseInt(val) || 0;
+                        document.getElementById(type + 'Input').value = parsedVal;
+                        document.getElementById(type + 'Val').textContent = '₹ ' + parsedVal.toLocaleString('en-IN');
+                    }
+
+                    function updateControlsIntlInput(checked) {
+                        document.getElementById('controlsIntlEnabledInput').value = checked ? 'true' : 'false';
+                    }
+
+                    function toggleControlsAutoPayFields(checked) {
+                        document.getElementById('controlsAutoPayEnabledInput').value = checked ? 'true' : 'false';
+                        const fields = document.getElementById('controlsAutoPayConfigFields');
+                        if (checked) {
+                            fields.style.display = 'flex';
+                        } else {
+                            fields.style.display = 'none';
+                        }
+                    }
                 </script>
+
+                <!-- Modal: Card Controls & Limits (Admin version) -->
+                <div id="controlsModal" class="modal">
+                    <div class="modal-content" style="max-width: 500px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
+                        <div class="modal-header-container">
+                            <h3 class="modal-title-text">
+                                <i class="bx bx-slider-alt" style="color: var(--primary-500);"></i> Card Controls & Auto Pay
+                            </h3>
+                            <button type="button" onclick="closeControlsModal()" class="modal-close-btn">&times;</button>
+                        </div>
+                        <form action="${pageContext.request.contextPath}/card?action=updateLimits" method="post" style="padding: 25px; display: flex; flex-direction: column; gap: 20px; text-align: left;">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                            <input type="hidden" id="controlsCardId" name="cardId">
+                            
+                            <!-- Daily Limit Slider -->
+                            <div class="form-group">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <label for="controlsDailyLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Daily Transaction Limit</label>
+                                    <span id="controlsDailyLimitVal" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                </div>
+                                <input type="range" id="controlsDailyLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsDailyLimit', this.value)">
+                                <input type="hidden" id="controlsDailyLimitInput" name="dailyLimit">
+                                <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily spend capacity across all transactions</small>
+                            </div>
+
+                            <!-- ATM Limit Slider -->
+                            <div class="form-group">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <label for="controlsAtmLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">ATM Cash Withdrawal Limit</label>
+                                    <span id="controlsAtmLimitVal" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 25,000</span>
+                                </div>
+                                <input type="range" id="controlsAtmLimitRange" min="1000" max="100000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsAtmLimit', this.value)">
+                                <input type="hidden" id="controlsAtmLimitInput" name="atmLimit">
+                                <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily withdrawal capacity at ATMs</small>
+                            </div>
+
+                            <!-- Online Limit Slider -->
+                            <div class="form-group">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <label for="controlsOnlineLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Online & POS Shopping Limit</label>
+                                    <span id="controlsOnlineLimitVal" style="background: rgba(245, 158, 11, 0.1); color: #d97706; font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                </div>
+                                <input type="range" id="controlsOnlineLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsOnlineLimit', this.value)">
+                                <input type="hidden" id="controlsOnlineLimitInput" name="onlineLimit">
+                                <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily limit for E-Commerce, online, and POS store purchases</small>
+                            </div>
+
+                            <!-- International Toggle -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 5px;">
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <strong style="font-size: 0.9rem; color: var(--gray-800);">International Usage</strong>
+                                    <small style="color: var(--gray-450); font-size: 0.75rem;">Allow transactions outside India</small>
+                                </div>
+                                <label class="switch-toggle">
+                                    <input type="checkbox" id="controlsIntlEnabledCheckbox" onchange="updateControlsIntlInput(this.checked)">
+                                    <span class="slider-toggle-round"></span>
+                                </label>
+                                <input type="hidden" id="controlsIntlEnabledInput" name="internationalEnabled">
+                            </div>
+
+                            <!-- Auto Pay Section (Credit Cards only) -->
+                            <div id="controlsAutoPaySection" style="display: none; border-top: 1px dashed rgba(99, 102, 241, 0.15); padding-top: 15px; margin-top: 5px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 15px;">
+                                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                                        <strong style="font-size: 0.9rem; color: var(--gray-800);">Auto Pay Bill Dues</strong>
+                                        <small style="color: var(--gray-450); font-size: 0.75rem;">Automatically pay credit card outstanding/minimum dues</small>
+                                    </div>
+                                    <label class="switch-toggle">
+                                        <input type="checkbox" id="controlsAutoPayEnabledCheckbox" onchange="toggleControlsAutoPayFields(this.checked)">
+                                        <span class="slider-toggle-round"></span>
+                                    </label>
+                                    <input type="hidden" id="controlsAutoPayEnabledInput" name="autoPayEnabled">
+                                </div>
+
+                                <!-- Auto Pay Configurations (shown when enabled) -->
+                                <div id="controlsAutoPayConfigFields" style="display: none; flex-direction: column; gap: 15px;">
+                                    <div class="form-group">
+                                        <label for="controlsAutoPaySourceAccount" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Source Bank Account</label>
+                                        <select id="controlsAutoPaySourceAccount" name="autoPaySourceAccountId" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none; color: black;">
+                                            <!-- Dynamically populated via AJAX fetch -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="controlsAutoPayPaymentType" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Payment Type</label>
+                                        <select id="controlsAutoPayPaymentType" name="autoPayPaymentType" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none; color: black;">
+                                            <option value="full_amount_due">Full Outstanding Amount Due</option>
+                                            <option value="minimum_due">Minimum Amount Due (5%)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 5px;">
+                                Save Control Preferences
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
                 <!-- Modal: Apply / Renew Card -->
                 <div id="applyModal" class="modal">

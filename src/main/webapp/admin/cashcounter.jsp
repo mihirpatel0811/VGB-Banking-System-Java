@@ -972,8 +972,22 @@
                                         <div class="form-group" style="margin-bottom: 0;">
                                             <label class="form-label">Beneficiary Account Number</label>
                                             <div class="form-control-container">
-                                                <input type="text" name="toAccountNumber" class="form-control" required placeholder="Enter destination account number...">
+                                                <input type="text" id="transferToAccountNumber" name="toAccountNumber" class="form-control" required placeholder="Enter destination account number...">
                                                 <i class="bx bx-credit-card-front form-icon"></i>
+                                            </div>
+                                            <!-- Beneficiary Account Details Preview -->
+                                            <div id="transferBeneficiaryDetails" style="display: none; margin-top: 10px; padding: 12px; background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: var(--radius-sm); font-size: 0.85rem;">
+                                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                                    <img id="beneficiaryAvatar" src="" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary-500);">
+                                                    <div>
+                                                        <strong id="beneficiaryName" style="color: var(--gray-800); display: block;"></strong>
+                                                        <span id="beneficiaryType" style="color: var(--primary-500); font-size: 0.75rem; font-weight: 600; text-transform: capitalize;"></span>
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; flex-direction: column; gap: 2px; color: var(--gray-500);">
+                                                    <span id="beneficiaryContact"></span>
+                                                    <span>Status: <strong id="beneficiaryStatus" style="text-transform: uppercase;"></strong></span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group external-transfer-fields" style="display: none; margin-bottom: 0;">
@@ -1202,6 +1216,50 @@
             }, 4500);
         }
 
+        function extractErrorMessage(text) {
+            try {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
+                const paragraphs = htmlDoc.querySelectorAll('p');
+                let errorMsg = '';
+                for (let i = 0; i < paragraphs.length; i++) {
+                    const cleanText = paragraphs[i].textContent.trim();
+                    if (cleanText.toLowerCase().includes('message')) {
+                        errorMsg = cleanText.replace(/^(Message\s*:?\s*)/i, '').trim();
+                        break;
+                    }
+                }
+                if (!errorMsg) {
+                    for (let i = 0; i < paragraphs.length; i++) {
+                        const cleanText = paragraphs[i].textContent.trim();
+                        if (cleanText.toLowerCase().includes('description')) {
+                            errorMsg = cleanText.replace(/^(Description\s*:?\s*)/i, '').trim();
+                            break;
+                        }
+                    }
+                }
+                if (!errorMsg) {
+                    for (let i = 0; i < paragraphs.length; i++) {
+                        const cleanText = paragraphs[i].textContent.trim();
+                        if (!cleanText.toLowerCase().startsWith('type')) {
+                            errorMsg = cleanText;
+                            break;
+                        }
+                    }
+                }
+                if (!errorMsg) {
+                    const h1 = htmlDoc.querySelector('h1');
+                    errorMsg = h1 ? h1.textContent : '';
+                }
+                if (errorMsg.includes("perceived to be a client error")) {
+                    errorMsg = "Bad Request: The server received malformed parameters or an invalid request format.";
+                }
+                return errorMsg || 'Invalid response from server.';
+            } catch (e) {
+                return 'Invalid response from server.';
+            }
+        }
+
         function safeFetchJson(url, options = {}) {
             return fetch(url, options)
                 .then(res => {
@@ -1215,11 +1273,7 @@
                         });
                     } else {
                         return res.text().then(text => {
-                            const parser = new DOMParser();
-                            const htmlDoc = parser.parseFromString(text, 'text/html');
-                            const errorPara = htmlDoc.querySelector('p');
-                            const errorMsg = errorPara ? errorPara.textContent : 'Invalid response from server.';
-                            throw new Error(errorMsg);
+                            throw new Error(extractErrorMessage(text));
                         });
                     }
                 });
@@ -1585,14 +1639,59 @@
 
         const trsfType = document.getElementById('transferTargetTypeSelect');
         const extFields = document.querySelectorAll('.external-transfer-fields');
+        const trsfToAccInput = document.getElementById('transferToAccountNumber');
+        const trsfBenefDetails = document.getElementById('transferBeneficiaryDetails');
+
         trsfType.addEventListener('change', () => {
             const isExt = trsfType.value === 'external';
             extFields.forEach(f => f.style.display = isExt ? 'block' : 'none');
             const toAccInput = document.querySelector('input[name="toAccountNumber"]');
             if (isExt) {
                 toAccInput.placeholder = "Enter external account number...";
+                trsfBenefDetails.style.display = 'none';
             } else {
                 toAccInput.placeholder = "Enter destination VGB account number...";
+                trsfToAccInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Autocomplete beneficiary account details on Transfer Tab VGB Account
+        trsfToAccInput.addEventListener('change', () => {
+            if (trsfType.value === 'external') {
+                trsfBenefDetails.style.display = 'none';
+                return;
+            }
+            const accNum = trsfToAccInput.value.trim();
+            if (accNum.length > 0) {
+                safeFetchJson('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(accNum))
+                    .then(data => {
+                        const matched = data.find(a => a.accountNumber === accNum);
+                        if (matched) {
+                            document.getElementById('beneficiaryName').innerText = matched.firstName + ' ' + matched.lastName;
+                            document.getElementById('beneficiaryType').innerText = matched.accountType + ' account';
+                            document.getElementById('beneficiaryContact').innerText = matched.email + ' | +91 ' + matched.phoneNo;
+                            
+                            const statusEl = document.getElementById('beneficiaryStatus');
+                            statusEl.innerText = matched.status || 'Active';
+                            if (matched.status && matched.status.toLowerCase() !== 'active') {
+                                statusEl.style.color = '#ef4444';
+                            } else {
+                                statusEl.style.color = '#10b981';
+                            }
+                            
+                            document.getElementById('beneficiaryAvatar').src = matched.avatarPath ? ('${pageContext.request.contextPath}/' + matched.avatarPath) : '${pageContext.request.contextPath}/assest/images/logo.png';
+                            trsfBenefDetails.style.display = 'block';
+                        } else {
+                            showToast('VGB destination account not found.', true);
+                            trsfBenefDetails.style.display = 'none';
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        trsfBenefDetails.style.display = 'none';
+                    });
+            } else {
+                trsfBenefDetails.style.display = 'none';
             }
         });
 
@@ -1647,8 +1746,13 @@
             const opt = loanSelect.options[loanSelect.selectedIndex];
             if (opt) {
                 const bal = parseFloat(opt.getAttribute('data-bal'));
-                loanRepayInput.max = bal;
-                loanRepayInput.placeholder = 'Max ₹' + bal.toLocaleString('en-IN');
+                if (bal > 0) {
+                    loanRepayInput.max = bal;
+                    loanRepayInput.placeholder = 'Max ₹' + bal.toLocaleString('en-IN');
+                } else {
+                    loanRepayInput.removeAttribute('max');
+                    loanRepayInput.placeholder = 'Enter amount... (No dues pending)';
+                }
             }
         }
 
@@ -1703,8 +1807,13 @@
             const opt = cardSelect.options[cardSelect.selectedIndex];
             if (opt) {
                 const bal = parseFloat(opt.getAttribute('data-bal'));
-                cardRepayInput.max = bal;
-                cardRepayInput.placeholder = 'Max ₹' + bal.toLocaleString('en-IN');
+                if (bal > 0) {
+                    cardRepayInput.max = bal;
+                    cardRepayInput.placeholder = 'Max ₹' + bal.toLocaleString('en-IN');
+                } else {
+                    cardRepayInput.removeAttribute('max');
+                    cardRepayInput.placeholder = 'Enter amount... (No dues pending)';
+                }
             }
         }
 
@@ -1722,20 +1831,15 @@
                     params.append(pair[0], pair[1]);
                 }
 
-                const headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                };
-
                 // Add loading spinner or visual feedback
                 const submitBtn = form.querySelector('.btn-submit');
                 const originalBtnContent = submitBtn.innerHTML;
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Processing...';
 
-                safeFetchJson(form.action, {
+                safeFetchJson(form.getAttribute('action'), {
                     method: 'POST',
-                    headers: headers,
-                    body: params.toString()
+                    body: params
                 })
                 .then(data => {
                     showToast(data.message || 'Transaction executed successfully!');

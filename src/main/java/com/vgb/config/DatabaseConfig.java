@@ -454,6 +454,94 @@ public class DatabaseConfig {
             }
             rs.close();
 
+            // 3j. Create auto_pay_instruction table if needed
+            try {
+                rs = metaData.getTables(null, null, "auto_pay_instruction", null);
+                if (!rs.next()) {
+                    logger.info("Upgrading schema: Creating auto_pay_instruction table");
+                    stmt.execute(
+                        "CREATE TABLE auto_pay_instruction (" +
+                        "    auto_pay_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                        "    customer_id BIGINT NOT NULL, " +
+                        "    target_type VARCHAR(20) NOT NULL, " +
+                        "    card_id BIGINT NULL, " +
+                        "    loan_id BIGINT NULL, " +
+                        "    source_account_id BIGINT NOT NULL, " +
+                        "    payment_type VARCHAR(50) NOT NULL, " +
+                        "    payment_frequency VARCHAR(20) NOT NULL DEFAULT 'monthly', " +
+                        "    next_payment_date DATE NOT NULL, " +
+                        "    status VARCHAR(20) NOT NULL DEFAULT 'active', " +
+                        "    last_processed_date TIMESTAMP NULL, " +
+                        "    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                        "    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
+                        "    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE, " +
+                        "    FOREIGN KEY (source_account_id) REFERENCES account(account_id) ON DELETE CASCADE" +
+                        ")"
+                    );
+                    logger.info("auto_pay_instruction table created successfully!");
+                }
+            } catch (SQLException ex) {
+                logger.warn("auto_pay_instruction table creation error: {}", ex.getMessage());
+            } finally {
+                if (rs != null) {
+                    try { rs.close(); } catch (SQLException e) {}
+                }
+            }
+
+            // 3k. Create auto_pay_history table if needed
+            try {
+                rs = metaData.getTables(null, null, "auto_pay_history", null);
+                if (!rs.next()) {
+                    logger.info("Upgrading schema: Creating auto_pay_history table");
+                    stmt.execute(
+                        "CREATE TABLE auto_pay_history (" +
+                        "    history_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                        "    auto_pay_id BIGINT NOT NULL, " +
+                        "    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                        "    amount DECIMAL(15, 4) NOT NULL, " +
+                        "    status VARCHAR(20) NOT NULL, " +
+                        "    failure_reason VARCHAR(255) NULL, " +
+                        "    transaction_reference VARCHAR(50) NULL, " +
+                        "    FOREIGN KEY (auto_pay_id) REFERENCES auto_pay_instruction(auto_pay_id) ON DELETE CASCADE" +
+                        ")"
+                    );
+                    logger.info("auto_pay_history table created successfully!");
+                }
+            } catch (SQLException ex) {
+                logger.warn("auto_pay_history table creation error: {}", ex.getMessage());
+            } finally {
+                if (rs != null) {
+                    try { rs.close(); } catch (SQLException e) {}
+                }
+            }
+
+            // 3l. Create notification table if needed
+            try {
+                rs = metaData.getTables(null, null, "notification", null);
+                if (!rs.next()) {
+                    logger.info("Upgrading schema: Creating notification table");
+                    stmt.execute(
+                        "CREATE TABLE notification (" +
+                        "    notification_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                        "    customer_id BIGINT NOT NULL, " +
+                        "    type VARCHAR(20) NOT NULL, " +
+                        "    title VARCHAR(255) NOT NULL, " +
+                        "    message TEXT NOT NULL, " +
+                        "    is_read TINYINT(1) DEFAULT 0, " +
+                        "    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                        "    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE" +
+                        ")"
+                    );
+                    logger.info("notification table created successfully!");
+                }
+            } catch (SQLException ex) {
+                logger.warn("notification table creation error: {}", ex.getMessage());
+            } finally {
+                if (rs != null) {
+                    try { rs.close(); } catch (SQLException e) {}
+                }
+            }
+
             // 4. Upgrade decimal columns in database if they are too small
             upgradeColumnDecimalIfNeeded(conn, stmt, metaData, "transaction", "amount", "DECIMAL(15, 4) NOT NULL");
             upgradeColumnDecimalIfNeeded(conn, stmt, metaData, "account", "balance", "DECIMAL(15, 4) NOT NULL DEFAULT 0.0000");

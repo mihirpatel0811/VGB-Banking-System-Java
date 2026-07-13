@@ -1729,6 +1729,50 @@
         const allAccounts = JSON.parse(document.getElementById('accounts-data').textContent);
         const allBeneficiaries = JSON.parse(document.getElementById('beneficiaries-data').textContent);
 
+        function extractErrorMessage(text) {
+            try {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
+                const paragraphs = htmlDoc.querySelectorAll('p');
+                let errorMsg = '';
+                for (let i = 0; i < paragraphs.length; i++) {
+                    const cleanText = paragraphs[i].textContent.trim();
+                    if (cleanText.toLowerCase().includes('message')) {
+                        errorMsg = cleanText.replace(/^(Message\s*:?\s*)/i, '').trim();
+                        break;
+                    }
+                }
+                if (!errorMsg) {
+                    for (let i = 0; i < paragraphs.length; i++) {
+                        const cleanText = paragraphs[i].textContent.trim();
+                        if (cleanText.toLowerCase().includes('description')) {
+                            errorMsg = cleanText.replace(/^(Description\s*:?\s*)/i, '').trim();
+                            break;
+                        }
+                    }
+                }
+                if (!errorMsg) {
+                    for (let i = 0; i < paragraphs.length; i++) {
+                        const cleanText = paragraphs[i].textContent.trim();
+                        if (!cleanText.toLowerCase().startsWith('type')) {
+                            errorMsg = cleanText;
+                            break;
+                        }
+                    }
+                }
+                if (!errorMsg) {
+                    const h1 = htmlDoc.querySelector('h1');
+                    errorMsg = h1 ? h1.textContent : '';
+                }
+                if (errorMsg.includes("perceived to be a client error")) {
+                    errorMsg = "Bad Request: The server received malformed parameters or an invalid request format.";
+                }
+                return errorMsg || 'Invalid response from server.';
+            } catch (e) {
+                return 'Invalid response from server.';
+            }
+        }
+
         function showPortalTab(tab) {
             const tabTransfer = document.getElementById('tabBtnTransfer');
             const tabWithdraw = document.getElementById('tabBtnWithdraw');
@@ -1995,11 +2039,7 @@
                         try {
                             return JSON.parse(text);
                         } catch (err) {
-                            const parser = new DOMParser();
-                            const htmlDoc = parser.parseFromString(text, 'text/html');
-                            const errorPara = htmlDoc.querySelector('p');
-                            const errorMsg = errorPara ? errorPara.textContent : 'Invalid response from server.';
-                            throw new Error(errorMsg);
+                            throw new Error(extractErrorMessage(text));
                         }
                     });
                 })
@@ -2074,11 +2114,7 @@
                         try {
                             return JSON.parse(text);
                         } catch (err) {
-                            const parser = new DOMParser();
-                            const htmlDoc = parser.parseFromString(text, 'text/html');
-                            const errorPara = htmlDoc.querySelector('p');
-                            const errorMsg = errorPara ? errorPara.textContent : 'Invalid response from server.';
-                            throw new Error(errorMsg);
+                            throw new Error(extractErrorMessage(text));
                         }
                     });
                 })

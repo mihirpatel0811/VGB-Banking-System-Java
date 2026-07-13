@@ -78,6 +78,14 @@ public class AccountService {
     }
 
     /**
+     * Returns all accounts for the specified customer.
+     * Backward-compatible alias for existing modules such as Auto Pay.
+     */
+    public List<Account> getAccountsByCustomerId(long customerId) throws Exception {
+        return getCustomerAccounts(customerId);
+    }
+
+    /**
     /**
      * Deposit money into account (legacy backward-compatible method)
      */

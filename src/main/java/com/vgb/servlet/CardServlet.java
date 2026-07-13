@@ -94,12 +94,27 @@ public class CardServlet extends BaseServlet {
             // Admin list
             List<Card> allCards = cardService.getAllCards();
             request.setAttribute("cards", allCards);
+            // Fetch Auto Pay instructions to show status in Admin card directory
+            try {
+                List<com.vgb.model.AutoPayInstruction> autoPayInstructions = new com.vgb.service.AutoPayService().getAllInstructions("", "", "credit_card", 1000, 0);
+                request.setAttribute("autoPayInstructions", autoPayInstructions);
+            } catch (Exception e) {
+                logger.error("Failed to load Auto Pay instructions for Admin Cards page", e);
+            }
             request.getRequestDispatcher("/admin/cards.jsp").forward(request, response);
         } else if (customerId != null) {
             // Customer list
             List<Card> customerCards = cardService.getCustomerCards(customerId);
             List<Account> accounts = accountService.getCustomerAccounts(customerId);
             com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
+            
+            // Fetch Auto Pay instructions to show status on Cards page
+            try {
+                List<com.vgb.model.AutoPayInstruction> autoPayInstructions = new com.vgb.service.AutoPayService().getInstructionsByCustomer(customerId);
+                request.setAttribute("autoPayInstructions", autoPayInstructions);
+            } catch (Exception e) {
+                logger.error("Failed to load Auto Pay instructions for Cards page", e);
+            }
             
             request.setAttribute("cards", customerCards);
             request.setAttribute("accounts", accounts);
@@ -329,7 +344,8 @@ public class CardServlet extends BaseServlet {
 
     private void updateLimits(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Long customerId = getUserId(request);
-        if (customerId == null) {
+        Integer adminId = getAdminId(request);
+        if (customerId == null && adminId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -352,9 +368,14 @@ public class CardServlet extends BaseServlet {
             return;
         }
 
-        // Verify ownership
+        // Verify ownership / authorization
         Card card = cardService.getCardById(cardId);
-        if (card == null || card.getCustomerId() != customerId) {
+        if (card == null) {
+            request.getSession().setAttribute("error", "Card not found.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+        if (adminId == null && card.getCustomerId() != customerId) {
             request.getSession().setAttribute("error", "Unauthorized access.");
             response.sendRedirect(request.getContextPath() + "/card");
             return;
@@ -368,7 +389,56 @@ public class CardServlet extends BaseServlet {
 
         try {
             if (cardService.updateLimits(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled)) {
-                request.getSession().setAttribute("success", "Card limits updated successfully!");
+                // Auto Pay Processing
+                if ("credit".equalsIgnoreCase(card.getCardType())) {
+                    String autoPayEnabledStr = getParameter(request, "autoPayEnabled", "false");
+                    boolean autoPayEnabled = "true".equals(autoPayEnabledStr);
+                    String autoPaySourceAccountIdStr = getParameter(request, "autoPaySourceAccountId", "0");
+                    String autoPayPaymentType = getParameter(request, "autoPayPaymentType", "full_amount_due");
+
+                    com.vgb.dao.AutoPayDAO autoPayDAO = new com.vgb.dao.AutoPayDAO();
+                    com.vgb.model.AutoPayInstruction existingIns = null;
+                    List<com.vgb.model.AutoPayInstruction> instructions = autoPayDAO.getInstructionsByCustomerId(card.getCustomerId());
+                    for (com.vgb.model.AutoPayInstruction ins : instructions) {
+                        if ("credit_card".equals(ins.getTargetType()) && ins.getCardId() != null && ins.getCardId() == cardId) {
+                            existingIns = ins;
+                            break;
+                        }
+                    }
+
+                    if (autoPayEnabled) {
+                        long sourceAccountId = Long.parseLong(autoPaySourceAccountIdStr);
+                        if (sourceAccountId > 0) {
+                            if (existingIns != null) {
+                                existingIns.setSourceAccountId(sourceAccountId);
+                                existingIns.setPaymentType(autoPayPaymentType);
+                                existingIns.setStatus("active");
+                                if (existingIns.getNextPaymentDate() == null || existingIns.getNextPaymentDate().before(new java.util.Date())) {
+                                    existingIns.setNextPaymentDate(new java.sql.Date(System.currentTimeMillis() + 30L * 24L * 60L * 60L * 1000L));
+                                }
+                                try (java.sql.Connection conn = com.vgb.config.DatabaseConfig.getInstance().getConnection()) {
+                                    autoPayDAO.updateInstruction(conn, existingIns);
+                                }
+                            } else {
+                                com.vgb.model.AutoPayInstruction newIns = new com.vgb.model.AutoPayInstruction();
+                                newIns.setCustomerId(card.getCustomerId());
+                                newIns.setTargetType("credit_card");
+                                newIns.setCardId(cardId);
+                                newIns.setSourceAccountId(sourceAccountId);
+                                newIns.setPaymentType(autoPayPaymentType);
+                                newIns.setPaymentFrequency("monthly");
+                                newIns.setStatus("active");
+                                newIns.setNextPaymentDate(new java.sql.Date(System.currentTimeMillis() + 30L * 24L * 60L * 60L * 1000L));
+                                autoPayDAO.createInstruction(newIns);
+                            }
+                        }
+                    } else {
+                        if (existingIns != null) {
+                            autoPayDAO.deleteInstruction(existingIns.getAutoPayId());
+                        }
+                    }
+                }
+                request.getSession().setAttribute("success", "Card controls & auto pay preferences updated successfully!");
             } else {
                 request.getSession().setAttribute("error", "Failed to update card limits.");
             }

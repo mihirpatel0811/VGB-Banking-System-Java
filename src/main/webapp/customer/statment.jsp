@@ -344,7 +344,7 @@
                 background: transparent !important;
             }
             #regularStatement, #loanStatement {
-                position: relative !important;
+                position: static !important;
                 z-index: 1 !important;
                 background: transparent !important;
                 border: none !important;

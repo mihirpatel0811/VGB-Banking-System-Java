@@ -40,7 +40,7 @@ public class CreditCardRepaymentDAO {
         String sql = "SELECT r.*, c.card_number, c.card_holder_name, a.account_number " +
                      "FROM credit_card_repayment r " +
                      "JOIN card c ON r.card_id = c.card_id " +
-                     "JOIN account a ON r.account_id = a.account_id " +
+                     "LEFT JOIN account a ON r.account_id = a.account_id " +
                      "WHERE r.repayment_id = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -63,7 +63,7 @@ public class CreditCardRepaymentDAO {
         String sql = "SELECT r.*, c.card_number, c.card_holder_name, a.account_number " +
                      "FROM credit_card_repayment r " +
                      "JOIN card c ON r.card_id = c.card_id " +
-                     "JOIN account a ON r.account_id = a.account_id " +
+                     "LEFT JOIN account a ON r.account_id = a.account_id " +
                      "WHERE r.transaction_reference = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -86,7 +86,7 @@ public class CreditCardRepaymentDAO {
         String sql = "SELECT r.*, c.card_number, c.card_holder_name, a.account_number " +
                      "FROM credit_card_repayment r " +
                      "JOIN card c ON r.card_id = c.card_id " +
-                     "JOIN account a ON r.account_id = a.account_id " +
+                     "LEFT JOIN account a ON r.account_id = a.account_id " +
                      "WHERE r.customer_id = ? " +
                      "ORDER BY r.repayment_date DESC LIMIT ? OFFSET ?";
         Connection conn = null;
@@ -133,20 +133,21 @@ public class CreditCardRepaymentDAO {
             "SELECT r.*, c.card_number, c.card_holder_name, a.account_number " +
             "FROM credit_card_repayment r " +
             "JOIN card c ON r.card_id = c.card_id " +
-            "JOIN account a ON r.account_id = a.account_id " +
+            "LEFT JOIN account a ON r.account_id = a.account_id " +
             "WHERE 1=1 "
         );
 
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
-            sql.append("AND (r.customer_id = ? OR c.card_number LIKE ? OR r.transaction_reference LIKE ?) ");
+            sql.append("AND (r.customer_id = ? OR c.card_number LIKE ? OR r.transaction_reference LIKE ? OR c.card_holder_name LIKE ?) ");
             String searchPattern = "%" + search.trim() + "%";
             try {
                 params.add(Long.parseLong(search.trim()));
             } catch (NumberFormatException e) {
                 params.add(-1L); // Not a customer ID
             }
+            params.add(searchPattern);
             params.add(searchPattern);
             params.add(searchPattern);
         }
@@ -201,13 +202,14 @@ public class CreditCardRepaymentDAO {
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
-            sql.append("AND (r.customer_id = ? OR c.card_number LIKE ? OR r.transaction_reference LIKE ?) ");
+            sql.append("AND (r.customer_id = ? OR c.card_number LIKE ? OR r.transaction_reference LIKE ? OR c.card_holder_name LIKE ?) ");
             String searchPattern = "%" + search.trim() + "%";
             try {
                 params.add(Long.parseLong(search.trim()));
             } catch (NumberFormatException e) {
                 params.add(-1L);
             }
+            params.add(searchPattern);
             params.add(searchPattern);
             params.add(searchPattern);
         }

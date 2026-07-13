@@ -53,6 +53,13 @@ public class CardService {
         }
     }
 
+    /**
+     * Backward-compatible alias for Auto Pay and other modules.
+     */
+    public List<Card> getCardsByCustomerId(long customerId) throws Exception {
+        return getCustomerCards(customerId);
+    }
+
     public List<Card> getAllCards() throws Exception {
         runExpiryCheck();
         try {
@@ -262,8 +269,12 @@ public class CardService {
             throw new Exception("Invalid payment amount.");
         }
 
+        Connection conn = null;
         try {
-            Card card = cardDAO.getById(cardId);
+            conn = DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Card card = cardDAO.getById(conn, cardId);
             if (card == null) {
                 throw new Exception("Card not found.");
             }
@@ -277,7 +288,7 @@ public class CardService {
                 throw new Exception("Cannot pay more than the outstanding balance of ₹" + card.getOutstandingBalance().setScale(2) + ".");
             }
 
-            Account account = accountDAO.getById(accountId);
+            Account account = accountDAO.getById(conn, accountId);
             if (account == null) {
                 throw new Exception("Source account not found.");
             }
@@ -290,11 +301,11 @@ public class CardService {
 
             // Deduct from account balance
             BigDecimal newBalance = account.getBalance().subtract(amount);
-            accountDAO.updateBalance(accountId, newBalance);
+            accountDAO.updateBalance(conn, accountId, newBalance);
 
             // Reduce credit card outstanding balance
             BigDecimal newOutstanding = card.getOutstandingBalance().subtract(amount);
-            cardDAO.updateOutstandingBalance(cardId, newOutstanding);
+            cardDAO.updateOutstandingBalance(conn, cardId, newOutstanding);
 
             // Record transaction
             Transaction transaction = new Transaction();
@@ -304,12 +315,30 @@ public class CardService {
             transaction.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             transaction.setDescription("VGB " + card.getCardTier().toUpperCase() + " Credit Card Bill Payment (Card: " + card.getMaskedCardNumber() + ")");
             transaction.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
-            transactionDAO.create(transaction);
+            transactionDAO.create(conn, transaction);
 
+            // Create Credit Card Repayment log
+            CreditCardRepayment repayment = new CreditCardRepayment();
+            repayment.setCardId(cardId);
+            repayment.setCustomerId(card.getCustomerId());
+            repayment.setAccountId(accountId);
+            repayment.setAmountPaid(amount);
+            repayment.setPaymentOption("account");
+            repayment.setTransactionReference(transaction.getReferenceNumber());
+            repayment.setStatus("completed");
+            repaymentDAO.create(conn, repayment);
+
+            conn.commit();
+            logger.info("Card dues account payment successful - Card: {}, Account: {}, Amount: {}", cardId, accountId, amount);
             return true;
-        } catch (SQLException e) {
-            logger.error("SQL Error paying card dues", e);
-            throw new Exception("Database error paying credit dues: " + e.getMessage());
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error paying card dues from account", e);
+            throw new Exception("Failed to pay card dues: " + e.getMessage(), e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
         }
     }
 
@@ -454,7 +483,7 @@ public class CardService {
             conn = DatabaseConfig.getInstance().getConnection();
             conn.setAutoCommit(false); // Begin Transaction!
 
-            Card card = cardDAO.getById(cardId);
+            Card card = cardDAO.getById(conn, cardId);
             if (card == null) {
                 throw new Exception("Card not found.");
             }
@@ -470,7 +499,7 @@ public class CardService {
 
             // Reduce credit card outstanding balance
             BigDecimal newOutstanding = card.getOutstandingBalance().subtract(amount);
-            cardDAO.updateOutstandingBalance(cardId, newOutstanding);
+            cardDAO.updateOutstandingBalance(conn, cardId, newOutstanding);
 
             // Record transaction
             Transaction transaction = new Transaction();
@@ -484,6 +513,17 @@ public class CardService {
             transaction.setTransferMode("cash");
             transaction.setPerformedById(performedById);
             transactionDAO.create(conn, transaction);
+
+            // Create Credit Card Repayment log
+            CreditCardRepayment repayment = new CreditCardRepayment();
+            repayment.setCardId(cardId);
+            repayment.setCustomerId(card.getCustomerId());
+            repayment.setAccountId(0L); // No account for cash payment
+            repayment.setAmountPaid(amount);
+            repayment.setPaymentOption("cash");
+            repayment.setTransactionReference(transaction.getReferenceNumber());
+            repayment.setStatus("completed");
+            repaymentDAO.create(conn, repayment);
 
             conn.commit();
             logger.info("Card dues cash payment successful - Card: {}, Amount: {}", cardId, amount);
@@ -543,7 +583,7 @@ public class CardService {
             cbDAO.updateChequeLeafStatus(conn, leaf.getChequebookId(), chequeNumber, "used");
 
             // 2. Card verification
-            Card card = cardDAO.getById(cardId);
+            Card card = cardDAO.getById(conn, cardId);
             if (card == null) {
                 throw new Exception("Card not found.");
             }
@@ -558,7 +598,7 @@ public class CardService {
             }
 
             // 3. Account verification and balance check
-            Account account = accountDAO.getById(accountId);
+            Account account = accountDAO.getById(conn, accountId);
             if (account == null) {
                 throw new Exception("Source account not found.");
             }
@@ -571,11 +611,11 @@ public class CardService {
 
             // Deduct from account balance
             BigDecimal newBalance = account.getBalance().subtract(amount);
-            accountDAO.updateBalance(accountId, newBalance);
+            accountDAO.updateBalance(conn, accountId, newBalance);
 
             // Reduce credit card outstanding balance
             BigDecimal newOutstanding = card.getOutstandingBalance().subtract(amount);
-            cardDAO.updateOutstandingBalance(cardId, newOutstanding);
+            cardDAO.updateOutstandingBalance(conn, cardId, newOutstanding);
 
             // Record transaction
             Transaction transaction = new Transaction();
@@ -589,6 +629,17 @@ public class CardService {
             transaction.setTransferMode("cheque");
             transaction.setPerformedById(performedById);
             transactionDAO.create(conn, transaction);
+
+            // Create Credit Card Repayment log
+            CreditCardRepayment repayment = new CreditCardRepayment();
+            repayment.setCardId(cardId);
+            repayment.setCustomerId(card.getCustomerId());
+            repayment.setAccountId(accountId);
+            repayment.setAmountPaid(amount);
+            repayment.setPaymentOption("cheque");
+            repayment.setTransactionReference(transaction.getReferenceNumber());
+            repayment.setStatus("completed");
+            repaymentDAO.create(conn, repayment);
 
             conn.commit();
             logger.info("Card dues cheque payment successful - Card: {}, Cheque: {}, Amount: {}", cardId, chequeNumber, amount);

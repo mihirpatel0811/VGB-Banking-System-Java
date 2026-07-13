@@ -1665,6 +1665,18 @@
                                 <c:choose>
                                     <c:when test="${not empty cards}">
                                         <c:forEach var="card" items="${cards}">
+                                            <c:set var="autoPayEnabled" value="false" />
+                                            <c:set var="autoPaySourceAccountId" value="" />
+                                            <c:set var="autoPayPaymentType" value="" />
+                                            <c:set var="autoPayStatus" value="" />
+                                            <c:forEach var="ins" items="${autoPayInstructions}">
+                                                <c:if test="${ins.targetType eq 'credit_card' and ins.cardId eq card.cardId}">
+                                                    <c:set var="autoPayEnabled" value="true" />
+                                                    <c:set var="autoPaySourceAccountId" value="${ins.sourceAccountId}" />
+                                                    <c:set var="autoPayPaymentType" value="${ins.paymentType}" />
+                                                    <c:set var="autoPayStatus" value="${ins.status}" />
+                                                </c:if>
+                                            </c:forEach>
                                             <div
                                                 style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                                                 <div class="card-3d-wrapper"
@@ -1805,6 +1817,29 @@
                                                         </div>
                                                     </c:if>
                                                     
+                                                    <c:if test="${card.cardType eq 'credit' and card.status eq 'active'}">
+                                                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); border: 1px solid rgba(99, 102, 241, 0.1); padding: 8px 12px; border-radius: var(--radius-md); font-size: 0.82rem; margin-top: -4px;">
+                                                            <span style="font-weight: 600; color: var(--gray-600); display: flex; align-items: center; gap: 4px;">
+                                                                <i class="bx bx-sync" style="color: var(--primary-500);"></i> Auto Pay
+                                                            </span>
+                                                            <c:choose>
+                                                                <c:when test="${autoPayEnabled}">
+                                                                    <c:choose>
+                                                                        <c:when test="${autoPayStatus eq 'active'}">
+                                                                            <span style="padding: 2px 8px; font-size: 0.65rem; font-weight: 700; border-radius: 4px; text-transform: uppercase; background: rgba(16, 185, 129, 0.08); color: #10b981;">Active</span>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <span style="padding: 2px 8px; font-size: 0.65rem; font-weight: 700; border-radius: 4px; text-transform: uppercase; background: rgba(245, 158, 11, 0.08); color: #f59e0b;">Paused</span>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span style="padding: 2px 8px; font-size: 0.65rem; font-weight: 700; border-radius: 4px; text-transform: uppercase; background: rgba(239, 68, 68, 0.08); color: #ef4444;">Disabled</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+                                                    </c:if>
+                                                    
                                                     <div class="card-action-bar">
                                                         <div>
                                                             <div class="status-badge-vertical ${card.status}">
@@ -1815,7 +1850,7 @@
                                                         <div style="display: flex; gap: 8px; align-items: center;">
                                                             <c:if test="${card.status eq 'active'}">
                                                                 <button type="button"
-                                                                    onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', '${card.internationalEnabled}')"
+                                                                    onclick="openLimitsModal('${card.cardId}', '${card.dailyLimit}', '${card.atmLimit}', '${card.onlineLimit}', '${card.internationalEnabled}', '${card.cardType}', '${autoPayEnabled}', '${autoPaySourceAccountId}', '${autoPayPaymentType}', '${autoPayStatus}')"
                                                                     class="btn-limits-action"
                                                                     title="Manage Limits & Controls">
                                                                     <i class="bx bx-slider-alt"></i> Limits
@@ -1825,7 +1860,7 @@
                                                                 test="${card.cardType eq 'credit' and card.status eq 'active' and card.outstandingBalance gt 0}">
                                                                 <a href="${pageContext.request.contextPath}/card-repayment?action=repay&cardId=${card.cardId}"
                                                                      class="btn-renew-action"
-                                                                     style="background: #ef4444 !important; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 38px;">Pay Dues</a>
+                                                                     style="background: #ef4444 !important; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 30px !important; border-radius: 20px !important; padding: 6px 12px !important; font-size: 0.72rem !important; color: white !important;">Pay Dues</a>
                                                             </c:if>
                                                             <c:if
                                                                 test="${card.status eq 'expired' or card.status eq 'closed'}">
@@ -2584,6 +2619,40 @@
                                         <input type="hidden" id="intlEnabledInput" name="internationalEnabled">
                                     </div>
 
+                                    <!-- Auto Pay Section (Credit Cards only) -->
+                                    <div id="autoPaySection" style="display: none; border-top: 1px dashed rgba(99, 102, 241, 0.15); padding-top: 15px; margin-top: 5px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 15px;">
+                                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                <strong style="font-size: 0.9rem; color: var(--gray-800);">Auto Pay Bill Dues</strong>
+                                                <small style="color: var(--gray-400); font-size: 0.75rem;">Automatically pay credit card outstanding/minimum dues</small>
+                                            </div>
+                                            <label class="switch-toggle">
+                                                <input type="checkbox" id="autoPayEnabledCheckbox" onchange="toggleAutoPayFields(this.checked)">
+                                                <span class="slider-toggle-round"></span>
+                                            </label>
+                                            <input type="hidden" id="autoPayEnabledInput" name="autoPayEnabled">
+                                        </div>
+
+                                        <!-- Auto Pay Configurations (shown when enabled) -->
+                                        <div id="autoPayConfigFields" style="display: none; flex-direction: column; gap: 15px;">
+                                            <div class="form-group">
+                                                <label for="autoPaySourceAccount" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Source Bank Account</label>
+                                                <select id="autoPaySourceAccount" name="autoPaySourceAccountId" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none;">
+                                                    <c:forEach var="acc" items="${accounts}">
+                                                        <option value="${acc.accountId}">VGB ${acc.accountType.toUpperCase()} - Account No: ••••${acc.accountNumber.substring(acc.accountNumber.length() - 4)}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="autoPayPaymentType" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Payment Type</label>
+                                                <select id="autoPayPaymentType" name="autoPayPaymentType" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none;">
+                                                    <option value="full_amount_due">Full Outstanding Amount Due</option>
+                                                    <option value="minimum_due">Minimum Amount Due (5%)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 5px;">
                                         Save Control Preferences
                                     </button>
@@ -2670,7 +2739,7 @@
                             document.getElementById('renewModal').style.display = 'none';
                         }
 
-                        function openLimitsModal(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled) {
+                        function openLimitsModal(cardId, dailyLimit, atmLimit, onlineLimit, internationalEnabled, cardType, autoPayEnabled, autoPaySourceAccountId, autoPayPaymentType, autoPayStatus) {
                             document.getElementById('limitsCardId').value = cardId;
                             
                             const dLim = parseInt(parseFloat(dailyLimit)) || 50000;
@@ -2693,7 +2762,44 @@
                             document.getElementById('intlEnabledCheckbox').checked = isIntl;
                             document.getElementById('intlEnabledInput').value = isIntl ? 'true' : 'false';
                             
+                            // Auto Pay UI initialization
+                            const autoPaySection = document.getElementById('autoPaySection');
+                            if (cardType === 'credit') {
+                                autoPaySection.style.display = 'block';
+                                const isAP = autoPayEnabled === true || autoPayEnabled === 'true';
+                                document.getElementById('autoPayEnabledCheckbox').checked = isAP;
+                                document.getElementById('autoPayEnabledInput').value = isAP ? 'true' : 'false';
+                                
+                                const sourceSelect = document.getElementById('autoPaySourceAccount');
+                                if (autoPaySourceAccountId && autoPaySourceAccountId !== '' && autoPaySourceAccountId !== 'null') {
+                                    sourceSelect.value = autoPaySourceAccountId;
+                                } else {
+                                    sourceSelect.selectedIndex = 0;
+                                }
+                                
+                                const typeSelect = document.getElementById('autoPayPaymentType');
+                                if (autoPayPaymentType && autoPayPaymentType !== '' && autoPayPaymentType !== 'null') {
+                                    typeSelect.value = autoPayPaymentType;
+                                } else {
+                                    typeSelect.selectedIndex = 0;
+                                }
+                                
+                                toggleAutoPayFields(isAP);
+                            } else {
+                                autoPaySection.style.display = 'none';
+                            }
+                            
                             document.getElementById('limitsModal').style.display = 'flex';
+                        }
+
+                        function toggleAutoPayFields(checked) {
+                            document.getElementById('autoPayEnabledInput').value = checked ? 'true' : 'false';
+                            const configFields = document.getElementById('autoPayConfigFields');
+                            if (checked) {
+                                configFields.style.display = 'flex';
+                            } else {
+                                configFields.style.display = 'none';
+                            }
                         }
 
                         function closeLimitsModal() {

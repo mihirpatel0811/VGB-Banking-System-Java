@@ -374,7 +374,15 @@
         </div>
         <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500);">
+                <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="Admin" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500);">
+                <script>
+                    (function () {
+                        const avatar = localStorage.getItem('admin_avatar');
+                        if (avatar) {
+                            document.getElementById('adminHeaderAvatar').src = avatar;
+                        }
+                    })();
+                </script>
                 <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
                     <span style="font-weight: 700; color: var(--gray-800); font-size: 0.85rem; line-height: 1.2;">Root Administrator</span>
                     <span style="font-size: 0.7rem; color: var(--gray-400); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
