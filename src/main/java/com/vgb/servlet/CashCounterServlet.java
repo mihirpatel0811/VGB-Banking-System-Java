@@ -29,6 +29,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonPrimitive;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * CashCounterServlet: Administrative servlet for teller actions
@@ -150,7 +156,13 @@ public class CashCounterServlet extends BaseServlet {
                 fullResults.add(enriched);
             }
 
-            String json = new Gson().toJson(fullResults);
+            Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, typeOfSrc, context) -> 
+                    new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) -> 
+                    new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .create();
+            String json = gson.toJson(fullResults);
             sendJsonResponse(response, json, HttpServletResponse.SC_OK);
 
         } catch (Exception e) {
