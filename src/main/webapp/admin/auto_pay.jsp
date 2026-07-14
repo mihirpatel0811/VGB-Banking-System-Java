@@ -12,100 +12,159 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
     <style>
+        /* Modern Tabs Header */
         .tabs-header {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 25px;
-            border-bottom: 1.5px solid var(--gray-200);
-            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 2px;
+            flex-wrap: wrap;
         }
         .tab-btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-weight: 600;
             font-size: 0.9rem;
             color: var(--gray-500);
             background: none;
             border: none;
-            border-bottom: 3px solid transparent;
+            position: relative;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all var(--transition-fast) ease;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
         }
         .tab-btn:hover {
             color: var(--primary-500);
+            background: rgba(99, 102, 241, 0.04);
         }
         .tab-btn.active {
             color: var(--primary-500);
-            border-bottom-color: var(--primary-500);
+            font-weight: 700;
         }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            animation: lineExpand 0.3s ease forwards;
+        }
+        @keyframes lineExpand {
+            from { left: 50%; right: 50%; }
+            to { left: 0; right: 0; }
+        }
+
         .tab-content {
             display: none;
         }
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Stat Cards Dashboard styling */
         .stat-card-vertical {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: var(--white);
+            border: 1px solid var(--gray-200);
             border-radius: var(--radius-lg);
-            padding: 20px 24px;
+            padding: 22px 26px;
             box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        }
+        .stat-card-vertical:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg), 0 0 15px rgba(99, 102, 241, 0.05);
         }
         .stat-card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            transition: transform 0.3s ease;
+        }
+        .stat-card-vertical:hover .stat-card-icon {
+            transform: scale(1.08) rotate(3deg);
         }
 
+        /* Status Badges with Pulse indicator */
         .autopay-status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
+            gap: 6px;
+            padding: 4px 12px 4px 10px;
             border-radius: var(--radius-full);
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
         }
-        .autopay-status-badge.active {
-            background: #e6f4ea;
-            color: #137333;
+        .autopay-status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
         }
+        
+        .autopay-status-badge.active, .autopay-status-badge.completed {
+            background: rgba(16, 185, 129, 0.08);
+            color: #047857;
+        }
+        .autopay-status-badge.active::before, .autopay-status-badge.completed::before {
+            background: var(--accent-emerald);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: activePulse 1.5s infinite;
+        }
+        @keyframes activePulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
         .autopay-status-badge.paused {
-            background: #fef3c7;
-            color: #d97706;
+            background: rgba(245, 158, 11, 0.08);
+            color: #b45309;
         }
-        .autopay-status-badge.disabled {
-            background: #fde8e8;
-            color: #c81e1e;
+        .autopay-status-badge.paused::before {
+            background: var(--accent-amber);
         }
-        .autopay-status-badge.completed {
-            background: #e6f4ea;
-            color: #137333;
+        
+        .autopay-status-badge.disabled, .autopay-status-badge.failed {
+            background: rgba(239, 68, 68, 0.08);
+            color: #b91c1c;
         }
-        .autopay-status-badge.failed {
-            background: #fde8e8;
-            color: #c81e1e;
+        .autopay-status-badge.disabled::before, .autopay-status-badge.failed::before {
+            background: var(--accent-red);
         }
+        
         .text-completed {
             color: var(--accent-emerald);
         }
         .text-failed {
-            color: var(--gray-500);
+            color: var(--accent-red);
         }
         .text-normal-gray {
             color: var(--gray-600);
@@ -234,7 +293,7 @@
 
             <!-- TAB 1: REGISTERED INSTRUCTIONS -->
             <div id="registered-rules" class="tab-content active">
-                <div class="glass-card" style="background: white; padding: 25px; margin-bottom: 25px;">
+                <div class="glass-card" style="padding: 25px; margin-bottom: 25px;">
                     <!-- Filter bar -->
                     <form action="${pageContext.request.contextPath}/auto-pay" method="GET" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 15px; margin-bottom: 25px;">
                         <input type="hidden" name="action" value="adminDashboard">
@@ -328,7 +387,7 @@
 
             <!-- TAB 2: EXECUTION LOGS -->
             <div id="execution-logs" class="tab-content">
-                <div class="glass-card" style="background: white; padding: 25px; margin-bottom: 25px;">
+                <div class="glass-card" style="padding: 25px; margin-bottom: 25px;">
                     <!-- Filter bar -->
                     <form action="${pageContext.request.contextPath}/auto-pay" method="GET" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 15px; margin-bottom: 25px;">
                         <input type="hidden" name="action" value="adminDashboard">

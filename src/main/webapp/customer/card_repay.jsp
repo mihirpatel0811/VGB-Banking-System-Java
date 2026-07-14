@@ -685,7 +685,10 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0;
+                margin-top: 45mm;
+                margin-bottom: 30mm;
+                margin-left: 15mm;
+                margin-right: 15mm;
             }
             body {
                 background: white !important;
@@ -702,10 +705,11 @@
                 min-height: auto !important;
             }
             .receipt-card {
-                position: static !important;
+                position: relative !important;
+                z-index: 2 !important;
                 border: none !important;
                 box-shadow: none !important;
-                padding: 160px 60px 100px 60px !important;
+                padding: 0 !important;
                 margin: 0 !important;
                 width: 100% !important;
                 box-sizing: border-box !important;
@@ -714,11 +718,11 @@
             .print-bg-container {
                 display: block !important;
                 position: fixed !important;
-                left: 0 !important;
-                top: 0 !important;
+                left: -15mm !important;
+                top: -45mm !important;
                 width: 210mm !important;
                 height: 297mm !important;
-                z-index: -10 !important;
+                z-index: 1 !important;
                 pointer-events: none !important;
             }
             .print-bg-img {
@@ -779,6 +783,7 @@
             <a href="${pageContext.request.contextPath}/account?action=transferPage"><i class="bx bx-transfer-alt"></i> Fund Transfer</a>
             <a href="${pageContext.request.contextPath}/card?action=list" class="${subView == 'repay' ? 'active' : ''}"><i class="bx bx-credit-card"></i> My Cards</a>
             <a href="${pageContext.request.contextPath}/card-repayment?action=history" class="${subView != 'repay' ? 'active' : ''}"><i class="bx bx-receipt"></i> Card Repayments</a>
+            <a href="${pageContext.request.contextPath}/auto-pay?action=dashboard"><i class="bx bx-sync"></i> Auto Pay</a>
             <a href="${pageContext.request.contextPath}/chequebook?action=list"><i class="bx bx-book-bookmark"></i> Cheque Books</a>
             <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i> Passbook Requests</a>
             <a href="${pageContext.request.contextPath}/loan?action=list"><i class="bx bx-building-house"></i> Loans</a>
@@ -856,7 +861,7 @@
                                     <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary-500);"><fmt:formatNumber value="${utilPercent}" pattern="0.0" />%</span>
                                 </div>
                                 <div style="height: 8px; width: 100%; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden; position: relative;">
-                                    <div style="height: 100%; width: ${utilPercent}%; background: var(--gradient-primary); border-radius: var(--radius-full); transition: width 1s ease;"></div>
+                                    <div style="height: 100%; --util-percent: ${utilPercent}%; width: var(--util-percent); background: var(--gradient-primary); border-radius: var(--radius-full); transition: width 1s ease;"></div>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem; font-weight: 500; color: var(--gray-400);">
                                     <span>Used: ₹<fmt:formatNumber value="${card.outstandingBalance}" pattern="#,##,##0.00" /></span>

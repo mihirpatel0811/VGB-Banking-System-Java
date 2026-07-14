@@ -228,7 +228,10 @@
                     @media print {
                         @page {
                             size: A4 portrait;
-                            margin: 0;
+                            margin-top: 160px;
+                            margin-bottom: 100px;
+                            margin-left: 60px;
+                            margin-right: 60px;
                         }
 
                         body {
@@ -296,21 +299,14 @@
                             position: relative !important;
                             z-index: 1 !important;
                             margin: 0 !important;
-                            padding: 160px 60px 100px 60px !important;
+                            padding: 0 !important;
                             width: 100% !important;
                             box-sizing: border-box !important;
                             background: transparent !important;
                         }
 
                         .print-bg-container {
-                            display: block !important;
-                            position: fixed !important;
-                            left: 0 !important;
-                            top: 0 !important;
-                            width: 210mm !important;
-                            height: 297mm !important;
-                            z-index: -10 !important;
-                            pointer-events: none !important;
+                            display: none !important;
                         }
 
                         .print-bg-img {
@@ -1429,6 +1425,7 @@
                         <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i>
                             Manage Cards</a>
                         <a href="${pageContext.request.contextPath}/card-repayment?action=adminLogs"><i class="bx bx-receipt"></i> Repayment Logs</a>
+                        <a href="${pageContext.request.contextPath}/auto-pay?action=adminDashboard"><i class="bx bx-sync"></i> Auto Pay Registry</a>
                         <a href="${pageContext.request.contextPath}/chequebook?action=list"><i
                                 class="bx bx-book-bookmark"></i> Cheque Requests</a>
                         <a href="${pageContext.request.contextPath}/passbook?action=list"><i

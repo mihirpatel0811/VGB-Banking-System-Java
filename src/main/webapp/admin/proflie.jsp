@@ -429,6 +429,7 @@
                     <a href="${pageContext.request.contextPath}/card?action=list"><i class="bx bx-credit-card"></i>
                         Manage Cards</a>
                     <a href="${pageContext.request.contextPath}/card-repayment?action=adminLogs"><i class="bx bx-receipt"></i> Repayment Logs</a>
+                    <a href="${pageContext.request.contextPath}/auto-pay?action=adminDashboard"><i class="bx bx-sync"></i> Auto Pay Registry</a>
                     <a href="${pageContext.request.contextPath}/chequebook?action=list"><i
                             class="bx bx-book-bookmark"></i> Cheque Requests</a>
                     <a href="${pageContext.request.contextPath}/passbook?action=list"><i class="bx bx-book-open"></i>

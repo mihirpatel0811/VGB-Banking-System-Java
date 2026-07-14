@@ -86,7 +86,6 @@ public class AccountService {
     }
 
     /**
-    /**
      * Deposit money into account (legacy backward-compatible method)
      */
     public boolean deposit(long accountId, BigDecimal amount, String description) throws Exception {

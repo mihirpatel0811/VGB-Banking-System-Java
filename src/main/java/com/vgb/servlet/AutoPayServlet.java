@@ -132,7 +132,7 @@ public class AutoPayServlet extends BaseServlet {
         List<AutoPayHistory> historyList = autoPayService.getHistoryByCustomer(customerId, limit, offset);
 
         // Fetch user data for dropdown selection lists
-        List<Account> accounts = accountService.getAccountsByCustomerId(customerId);
+        List<Account> accounts = accountService.getCustomerAccounts(customerId);
         // Filter only savings, checking, or current (not fixed deposits)
         accounts.removeIf(acc -> AppConstants.ACCOUNT_TYPE_FIXED_DEPOSIT.equalsIgnoreCase(acc.getAccountType()));
         

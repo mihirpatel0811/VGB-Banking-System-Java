@@ -12,109 +12,254 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
     <style>
+        /* Modern Tabs Header */
         .tabs-header {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 30px;
-            border-bottom: 1.5px solid var(--gray-200);
-            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 2px;
             flex-wrap: wrap;
         }
         .tab-btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-weight: 600;
             font-size: 0.9rem;
             color: var(--gray-500);
             background: none;
             border: none;
-            border-bottom: 3px solid transparent;
+            position: relative;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all var(--transition-fast) ease;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
         }
         .tab-btn:hover {
             color: var(--primary-500);
+            background: rgba(99, 102, 241, 0.04);
         }
         .tab-btn.active {
             color: var(--primary-500);
-            border-bottom-color: var(--primary-500);
+            font-weight: 700;
         }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            animation: lineExpand 0.3s ease forwards;
+        }
+        @keyframes lineExpand {
+            from { left: 50%; right: 50%; }
+            to { left: 0; right: 0; }
+        }
+
         .tab-content {
             display: none;
         }
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Auto pay cards grid */
+        .autopay-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        @media (max-width: 768px) {
+            .autopay-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         
-        /* Auto pay cards */
-        .autopay-card {
-            background: white;
+        .autopay-card-premium {
+            background: var(--white);
             border: 1px solid var(--gray-200);
             border-radius: var(--radius-lg);
             padding: 24px;
             box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            min-height: 250px;
         }
-        .autopay-card:hover {
-            box-shadow: var(--shadow-md);
+        .autopay-card-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0.8;
+        }
+        .autopay-card-premium.loan-card::before {
+            background: var(--gradient-secondary);
+        }
+        .autopay-card-premium:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl), 0 0 20px rgba(99, 102, 241, 0.08);
             border-color: rgba(99, 102, 241, 0.2);
         }
-        .autopay-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .autopay-card-premium.loan-card:hover {
+            box-shadow: var(--shadow-xl), 0 0 20px rgba(6, 182, 212, 0.08);
+            border-color: rgba(6, 182, 212, 0.25);
         }
-        .autopay-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(99, 102, 241, 0.05);
-            color: var(--primary-500);
+        
+        .autopay-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .autopay-card-icon-container {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
         }
+        .cc-icon-bg {
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--primary-500);
+        }
+        .loan-icon-bg {
+            background: rgba(6, 182, 212, 0.08);
+            color: var(--accent-cyan);
+        }
+        
+        .autopay-card-body {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+        .autopay-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin: 0 0 6px 0;
+            line-height: 1.3;
+        }
+        .autopay-card-desc {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .autopay-card-meta {
+            font-size: 0.82rem;
+            color: var(--gray-500);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            row-gap: 6px;
+            column-gap: 12px;
+            border-top: 1px solid var(--gray-100);
+            padding-top: 12px;
+        }
+        .autopay-meta-label {
+            font-weight: 500;
+            color: var(--gray-400);
+        }
+        .autopay-meta-value {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        
+        .autopay-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid var(--gray-100);
+            padding-top: 15px;
+            margin-top: auto;
+        }
+
+        /* Pulsing Dot Status Badge */
         .autopay-status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
+            gap: 6px;
+            padding: 4px 12px 4px 10px;
             border-radius: var(--radius-full);
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
         }
-        .autopay-status-badge.active {
-            background: #e6f4ea;
-            color: #137333;
-        }
-        .autopay-status-badge.paused {
-            background: #fef3c7;
-            color: #d97706;
-        }
-        .autopay-status-badge.disabled {
-            background: #f3f4f6;
-            color: #4b5563;
+        .autopay-status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
         }
         
-        /* Form segmented selector */
+        .autopay-status-badge.active {
+            background: rgba(16, 185, 129, 0.08);
+            color: #047857;
+        }
+        .autopay-status-badge.active::before {
+            background: var(--accent-emerald);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: activePulse 1.5s infinite;
+        }
+        @keyframes activePulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        .autopay-status-badge.paused {
+            background: rgba(245, 158, 11, 0.08);
+            color: #b45309;
+        }
+        .autopay-status-badge.paused::before {
+            background: var(--accent-amber);
+        }
+        
+        .autopay-status-badge.disabled {
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+        .autopay-status-badge.disabled::before {
+            background: var(--gray-400);
+        }
+        
+        /* Segmented Selector */
         .form-segmented {
             display: flex;
             background: var(--gray-50);
             border: 1px solid var(--gray-200);
-            padding: 6px;
+            padding: 5px;
             border-radius: var(--radius-md);
-            gap: 6px;
+            gap: 5px;
             margin-bottom: 25px;
         }
         .form-segmented-btn {
@@ -122,41 +267,57 @@
             padding: 12px;
             text-align: center;
             font-weight: 600;
+            font-size: 0.85rem;
             border: none;
             background: none;
             color: var(--gray-500);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
         .form-segmented-btn.active {
-            background: white;
+            background: var(--white);
             color: var(--primary-500);
             box-shadow: var(--shadow-sm);
+        }
+        
+        /* Glass Card Custom Styling for Form */
+        .glass-card-form {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 35px;
+            box-shadow: var(--shadow-xl);
+            margin: 0 auto;
         }
 
         .notif-card {
             border-left: 4px solid var(--primary-500);
-            background: white;
+            background: var(--white);
             border: 1px solid var(--gray-200);
             border-left-width: 4px;
             border-radius: var(--radius-md);
-            padding: 16px 20px;
+            padding: 18px 24px;
             margin-bottom: 15px;
             box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .notif-card:hover {
+            transform: translateX(3px);
+            box-shadow: var(--shadow-md);
         }
         .notif-card.unread {
             border-left-color: var(--accent-emerald);
             background: rgba(16, 185, 129, 0.01);
         }
         .notif-card.fail {
-            border-left-color: #ef4444;
+            border-left-color: var(--accent-red);
         }
         .text-completed {
             color: var(--accent-emerald);
         }
         .text-failed {
-            color: var(--gray-500);
+            color: var(--accent-red);
         }
         .text-normal-gray {
             color: var(--gray-600);
@@ -290,63 +451,76 @@
                 <button type="button" class="tab-btn" onclick="switchTab(event, 'alert-notifications')">Alerts &amp; Notifications</button>
             </div>
 
-            <!-- TAB 1: ACTIVE RULES -->
             <div id="active-rules" class="tab-content active">
                 <c:choose>
                     <c:when test="${not empty instructions}">
-                        <c:forEach var="ins" items="${instructions}">
-                            <div class="autopay-card">
-                                <div class="autopay-info">
-                                    <div class="autopay-icon">
-                                        <c:choose>
-                                            <c:when test="${ins.targetType == 'credit_card'}">
-                                                <i class="bx bx-credit-card"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="bx bx-home-alt"></i>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
+                        <div class="autopay-grid">
+                            <c:forEach var="ins" items="${instructions}">
+                                <div class="autopay-card-premium ${ins.targetType == 'loan' ? 'loan-card' : ''}">
                                     <div>
-                                        <h3 style="font-weight: 700; color: var(--gray-800); margin: 0 0 4px;">
-                                            <c:choose>
-                                                <c:when test="${ins.targetType == 'credit_card'}">
-                                                    Credit Card Bill: ${ins.maskedCardNumber}
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Loan Repayment: ${ins.loanType} (ID: ${ins.loanId})
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </h3>
-                                        <p style="font-size: 0.85rem; color: var(--gray-400); margin: 0 0 6px;">
-                                            Source: <strong>Account ${ins.maskedSourceAccountNumber}</strong> &bull;
-                                            Type: <strong style="text-transform: capitalize;">${ins.paymentType.replace('_', ' ')}</strong>
-                                        </p>
-                                        <p style="font-size: 0.82rem; color: var(--gray-500); margin: 0;">
-                                            Next Payment Date: <span style="font-weight: 600; color: var(--primary-500);">${ins.nextPaymentDate}</span> &bull; 
-                                            Last Run: <span>${not empty ins.lastProcessedDate ? ins.lastProcessedDate : 'Never'}</span>
-                                        </p>
+                                        <div class="autopay-card-header">
+                                            <div class="autopay-card-icon-container ${ins.targetType == 'credit_card' ? 'cc-icon-bg' : 'loan-icon-bg'}">
+                                                <c:choose>
+                                                    <c:when test="${ins.targetType == 'credit_card'}">
+                                                        <i class="bx bx-credit-card"></i>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <i class="bx bx-home-alt"></i>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                            <span class="autopay-status-badge ${ins.status}">${ins.status}</span>
+                                        </div>
+                                        <div class="autopay-card-body">
+                                            <h3 class="autopay-card-title">
+                                                <c:choose>
+                                                    <c:when test="${ins.targetType == 'credit_card'}">
+                                                        Credit Card: ${ins.maskedCardNumber}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        Loan EMI: ${ins.loanType}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </h3>
+                                            <p class="autopay-card-desc">
+                                                <i class="bx bx-subdirectory-right" style="color: var(--primary-400); font-size: 1.1rem; vertical-align: middle;"></i>
+                                                <span>From Account: ${ins.maskedSourceAccountNumber}</span>
+                                            </p>
+                                            <div class="autopay-card-meta">
+                                                <span class="autopay-meta-label">Payment Mode:</span>
+                                                <span class="autopay-meta-value" style="text-transform: capitalize;">${ins.paymentType.replace('_', ' ')}</span>
+                                                
+                                                <span class="autopay-meta-label">Next Run Date:</span>
+                                                <span class="autopay-meta-value" style="color: var(--primary-500);">${ins.nextPaymentDate}</span>
+                                                
+                                                <span class="autopay-meta-label">Last Executed:</span>
+                                                <span class="autopay-meta-value">${not empty ins.lastProcessedDate ? ins.lastProcessedDate : 'Never'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 15px;">
-                                    <span class="autopay-status-badge ${ins.status}">${ins.status}</span>
-                                    <div style="display: flex; gap: 8px;">
+                                    <div class="autopay-card-actions">
                                         <c:choose>
                                             <c:when test="${ins.status == 'active'}">
-                                                <a href="${pageContext.request.contextPath}/auto-pay?action=pause&id=${ins.autoPayId}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none;">Pause</a>
+                                                <a href="${pageContext.request.contextPath}/auto-pay?action=pause&id=${ins.autoPayId}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.8rem; font-weight: 600; border-radius: var(--radius-sm); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                                    <i class="bx bx-pause" style="font-size: 1rem;"></i> Pause
+                                                </a>
                                             </c:when>
                                             <c:when test="${ins.status == 'paused'}">
-                                                <a href="${pageContext.request.contextPath}/auto-pay?action=resume&id=${ins.autoPayId}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none;">Resume</a>
+                                                <a href="${pageContext.request.contextPath}/auto-pay?action=resume&id=${ins.autoPayId}" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem; font-weight: 600; border-radius: var(--radius-sm); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                                    <i class="bx bx-play" style="font-size: 1rem;"></i> Resume
+                                                </a>
                                             </c:when>
                                         </c:choose>
-                                        <a href="javascript:void(0)" onclick="confirmCancel('${ins.autoPayId}')" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm); text-decoration: none; background: #ef4444; border-color: #ef4444; color: white;">Cancel</a>
+                                        <a href="javascript:void(0)" onclick="confirmCancel('${ins.autoPayId}')" class="btn btn-danger" style="padding: 8px 16px; font-size: 0.8rem; font-weight: 600; border-radius: var(--radius-sm); text-decoration: none; background: #ef4444; border-color: #ef4444; color: white; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="bx bx-trash" style="font-size: 1rem;"></i> Cancel
+                                        </a>
                                     </div>
                                 </div>
-                            </div>
-                        </c:forEach>
+                            </c:forEach>
+                        </div>
                     </c:when>
                     <c:otherwise>
-                        <div style="text-align: center; padding: 60px 40px; background: white; border: 1px dashed var(--gray-300); border-radius: var(--radius-lg);">
+                        <div style="text-align: center; padding: 60px 40px; background: var(--white); border: 1px dashed var(--gray-300); border-radius: var(--radius-lg);">
                             <i class="bx bx-sync" style="font-size: 3rem; color: var(--gray-400); animation: spin 4s linear infinite; display: inline-block;"></i>
                             <h3 style="font-weight: 700; color: var(--gray-700); margin: 15px 0 5px;">No Auto Pay Configurations</h3>
                             <p style="color: var(--gray-400); max-width: 400px; margin: 0 auto 20px; font-size: 0.9rem;">Automate your utility EMI and credit card payments to avoid manual late fees and bills penalty.</p>
@@ -356,10 +530,11 @@
                 </c:choose>
             </div>
 
-            <!-- TAB 2: SETUP AUTOPAY FORM -->
             <div id="setup-autopay" class="tab-content">
-                <div class="glass-card" style="max-width: 650px; margin: 0 auto; background: white;">
-                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px;">Configure Auto Pay</h3>
+                <div class="glass-card-form" style="max-width: 650px;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                        <i class="bx bx-cog" style="color: var(--primary-500);"></i> Configure New Auto Pay
+                    </h3>
                     
                     <form action="${pageContext.request.contextPath}/auto-pay?action=create" method="POST" onsubmit="return validateForm()">
                         <input type="hidden" name="csrfToken" value="${csrfToken}">
@@ -427,11 +602,9 @@
                         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-weight: 700; border-radius: var(--radius-md);">Register Auto Pay Instructions</button>
                     </form>
                 </div>
-            </div>
-
-            <!-- TAB 3: HISTORY LOGS -->
+               <!-- TAB 3: HISTORY LOGS -->
             <div id="history-logs" class="tab-content">
-                <div class="glass-card" style="background: white; padding: 0;">
+                <div class="glass-card" style="padding: 0; overflow: hidden;">
                     <div style="padding: 20px; border-bottom: 1.5px solid var(--gray-100);">
                         <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--gray-800); margin: 0;">Auto Pay Execution Ledger</h3>
                     </div>
@@ -541,7 +714,7 @@
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <div style="text-align: center; padding: 40px; background: white; border: 1px dashed var(--gray-200); border-radius: var(--radius-md); color: var(--gray-400);">No alerts recorded.</div>
+                            <div style="text-align: center; padding: 40px; background: var(--white); border: 1px dashed var(--gray-200); border-radius: var(--radius-md); color: var(--gray-400);">No alerts recorded.</div>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -551,7 +724,7 @@
 
     <!-- Confirmation Modal Overlay -->
     <div id="cancelOverlay" class="overlay" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999;">
-        <div class="confirm-dialog" style="background: white; border-radius: var(--radius-lg); padding: 30px; max-width: 400px; width: 90%; text-align: center;">
+        <div class="confirm-dialog" style="background: var(--white); border-radius: var(--radius-lg); padding: 30px; max-width: 400px; width: 90%; text-align: center;">
             <h3 style="font-weight: 700; color: var(--gray-800); margin: 0 0 10px;">Cancel Auto Pay?</h3>
             <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px;">Are you sure you want to completely cancel this Auto Pay setup? You can re-configure it at any time.</p>
             <div style="display: flex; gap: 15px;">
