@@ -89,11 +89,15 @@
             padding: 20px 0;
             transition: all 0.3s ease;
         }
+        .mobile-nav-toggle {
+            display: none !important;
+        }
         @media (max-width: 991px) {
             .sidebar { left: -280px !important; }
             .sidebar.active { left: 0 !important; }
             .main-content { margin-left: 0 !important; padding: 120px 20px 40px !important; }
             .footer { margin-left: 0 !important; }
+            .mobile-nav-toggle { display: flex !important; }
         }
 
         /* Redesigned Glass Cards */
@@ -685,10 +689,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin-top: 45mm;
-                margin-bottom: 30mm;
-                margin-left: 15mm;
-                margin-right: 15mm;
+                margin: 20mm 20mm 20mm 20mm;
             }
             body {
                 background: white !important;
@@ -706,29 +707,29 @@
             }
             .receipt-card {
                 position: relative !important;
-                z-index: 2 !important;
                 border: none !important;
                 box-shadow: none !important;
                 padding: 0 !important;
-                margin: 0 !important;
+                margin: 0 auto !important;
                 width: 100% !important;
+                max-width: 100% !important;
                 box-sizing: border-box !important;
                 background: transparent !important;
             }
             .print-bg-container {
-                display: block !important;
-                position: fixed !important;
-                left: -15mm !important;
-                top: -45mm !important;
-                width: 210mm !important;
-                height: 297mm !important;
-                z-index: 1 !important;
-                pointer-events: none !important;
+                display: none !important;
             }
-            .print-bg-img {
-                width: 100% !important;
-                height: 100% !important;
-                object-fit: fill !important;
+            .print-only-header {
+                display: block !important;
+            }
+            .print-only-title {
+                display: block !important;
+            }
+            .print-only-footer {
+                display: block !important;
+            }
+            .screen-only-brand {
+                display: none !important;
             }
         }
     </style>
@@ -1039,15 +1040,37 @@
             <!-- ================= REPAYMENT RECEIPT VIEW ================= -->
             <c:if test="${subView == 'receipt'}">
                 <!-- Print Background Image (Always visible in print layout) -->
-                <div class="print-bg-container">
-                    <img src="${pageContext.request.contextPath}/assest/images/All Forms/Letter Pad.png" class="print-bg-img" alt="VGB Letterhead">
-                </div>
                 <!-- Receipt Card -->
                 <div class="receipt-card">
+                    <!-- Print-only Corporate Header -->
+                    <div class="print-only-header" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #6366f1; padding-bottom: 8px; font-family: 'Poppins', sans-serif; width: 100%; margin-bottom: 20px; text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 45px; height: 45px; object-fit: contain;">
+                                <div>
+                                    <h1 style="font-size: 1.45rem; font-weight: 800; color: #6366f1; letter-spacing: 0.5px; margin: 0; line-height: 1.2;">VERTEX GALAXY BANK</h1>
+                                    <p style="font-size: 0.75rem; color: #718096; margin: 2px 0 0; font-weight: 600;">Always Beyond Boundaries</p>
+                                </div>
+                            </div>
+                            <div style="text-align: right; line-height: 1.3;">
+                                <p style="margin: 0; font-size: 7.5pt; color: #4a5568; font-weight: 600;">Corporate HQ: VGB Corporate Towers, BKC Road,</p>
+                                <p style="margin: 0; font-size: 7.5pt; color: #4a5568; font-weight: 600;">Bandra Kurla Complex, Mumbai, MH - 400051</p>
+                                <p style="margin: 0; font-size: 7.5pt; color: #718096; font-weight: 500;">Toll Free: 1800-VGB-BANK | www.vertexgalaxybank.com</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="receipt-header">
-                        <img class="receipt-logo" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo">
-                        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--gray-800); margin: 5px 0 0;">VERTEX GALAXY BANK</h2>
-                        <p style="font-size: 0.75rem; color: var(--gray-400); font-weight: 600; margin-top: 3px; letter-spacing: 1px;">SECURE CARD PAYMENT RECEIPT</p>
+                        <div class="screen-only-brand">
+                            <img class="receipt-logo" src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo">
+                            <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--gray-800); margin: 5px 0 0;">VERTEX GALAXY BANK</h2>
+                            <p style="font-size: 0.75rem; color: var(--gray-400); font-weight: 600; margin-top: 3px; letter-spacing: 1px;">SECURE CARD PAYMENT RECEIPT</p>
+                        </div>
+
+                        <!-- Print-only receipt title -->
+                        <div class="print-only-title" style="display: none; text-align: center; margin-bottom: 15px;">
+                            <h2 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Secure Card Payment Receipt</h2>
+                        </div>
                         
                         <!-- Animated Success Tick -->
                         <div class="success-animation">
@@ -1100,9 +1123,15 @@
                             <span style="font-size: 1.6rem; font-weight: 800; color: var(--primary-500);">₹<fmt:formatNumber value="${repayment.amountPaid}" pattern="#,##,##0.00" /></span>
                         </div>
 
-                        <div style="text-align: center; color: var(--gray-400); font-size: 0.75rem; margin-top: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                        <div style="text-align: center; color: var(--gray-400); font-size: 0.75rem; margin-top: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 4px;" class="no-print">
                             <i class="bx bx-lock-alt" style="font-size: 0.9rem;"></i> This is a secure computer-generated receipt.
                         </div>
+                    </div>
+
+                    <!-- Print-only Footer -->
+                    <div class="print-only-footer" style="display: none; text-align: center; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                        <p style="margin: 0; font-size: 8pt; color: #718096; font-weight: 600;">Thank you for banking with Vertex Galaxy Bank.</p>
+                        <p style="margin: 3px 0 0; font-size: 7.5pt; color: #a0aec0;">This is a secure computer-generated receipt and does not require a physical signature.</p>
                     </div>
                 </div>
 

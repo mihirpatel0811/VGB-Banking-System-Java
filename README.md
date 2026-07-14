@@ -1,149 +1,478 @@
-# VGB Banking System
+<div align="center">
 
-A secure digital banking platform built with Java Servlet, JSP, and MySQL for Vertex Galaxy Bank.
+# 🏦 Vertex Galaxy Bank (VGB)
+### Enterprise Digital Banking System
 
-## Overview
+*A secure, modern, enterprise-grade digital banking platform built using Java Servlets, JSP, MySQL, and Maven.*
 
-VGB Banking System provides a web-based banking solution with:
-- **Customer Portal**: Account management, fund transfers, statements, loan applications, and service requests
-- **Admin Portal**: Customer management, loan approvals, transaction monitoring, and system oversight
+![Java](https://img.shields.io/badge/Java-SE%208+-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![JSP](https://img.shields.io/badge/JSP-3.0+-blue?style=for-the-badge)
+![Servlet](https://img.shields.io/badge/Jakarta%20Servlet-6.1-red?style=for-the-badge)
+![MySQL](https://img.shields.io/badge/MySQL-9.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-3.x-C71A36?style=for-the-badge&logo=apachemaven)
+![License](https://img.shields.io/badge/License-Proprietary-darkgreen?style=for-the-badge)
 
-## Technology Stack
+---
+
+### 💳 Secure • Modern • Scalable • Enterprise Banking Platform
+
+</div>
+
+---
+
+# 📖 Overview
+
+**Vertex Galaxy Bank (VGB)** is a full-stack enterprise digital banking application that simulates a modern online banking platform.
+
+The application follows a **3-Tier Layered Architecture**, separating the presentation layer, business logic layer, and persistence layer to improve scalability, maintainability, and security.
+
+The system contains two dedicated workspaces:
+
+- 👤 Customer Banking Portal
+- 👑 Administrator Portal
+
+Customers can manage bank accounts, transfer funds, apply for loans, repay credit cards, print official statements, and request banking products.
+
+Administrators manage customer KYC, approve loans, monitor transaction activities, manage cards, cheque books, and oversee the entire banking ecosystem.
+
+---
+
+# ✨ Core Features
+
+## 👤 Customer Portal
+
+### 🔐 Authentication
+
+- Secure Login
+- BCrypt Password Encryption
+- Secure PIN Authentication
+- Forgot Password
+- Session Timeout
+- CSRF Protection
+
+---
+
+### 🏦 Banking Dashboard
+
+- Customer Overview
+- Account Balance
+- Available Balance
+- Total Deposits
+- Total Withdrawals
+- Recent Transactions
+- Account Analytics
+
+---
+
+### 💸 Fund Transfer
+
+- Transfer Between Accounts
+- Add Beneficiary
+- Bank-to-Bank Transfer
+- Instant Transaction Processing
+- Transaction Receipt
+- Transfer History
+
+---
+
+### 📄 Transaction Statements
+
+Professional printable statements featuring:
+
+- Multi-page Printing
+- Automatic Letterhead
+- Page Header Repeating
+- Print Optimized Layout
+- PDF Friendly Design
+- Loan Statement Printing
+
+---
+
+### 💳 Credit Card Services
+
+Supports multiple card categories:
+
+- Classic Card
+- Gold Card
+- Platinum Card
+- Royale Metallic Card
+
+Functions:
+
+- Bill Payment
+- Auto Bill Payment
+- Payment History
+- Printable Receipts
+- Due Tracking
+
+---
+
+### 💰 Loan Center
+
+Available Loans
+
+- Home Loan
+- Personal Loan
+- Car Loan
+- Education Loan
+
+Features
+
+- Apply Loan
+- EMI Calculator
+- Interest Schedule
+- Repayment History
+- Loan Statement
+- Outstanding Balance
+
+---
+
+### 📦 Banking Services
+
+Request:
+
+- Debit Card
+- Credit Card
+- Cheque Book
+- Passbook
+
+Track request status in real time.
+
+---
+
+### 👤 Profile Management
+
+- Edit Profile
+- Upload Avatar
+- Change Password
+- Update Contact Details
+- Security PIN Management
+
+---
+
+# 👑 Admin Portal
+
+## Dashboard
+
+- Customer Statistics
+- Banking Analytics
+- Loan Statistics
+- Transaction Summary
+- Pending Requests
+- Active Accounts
+
+---
+
+## Customer Management
+
+- View Customers
+- Search Customers
+- Update Customer
+- Activate / Suspend Account
+- Delete Customer
+
+---
+
+## KYC Management
+
+- Verify Documents
+- Approve KYC
+- Reject KYC
+- View Uploaded Documents
+
+---
+
+## Loan Management
+
+- Review Applications
+- Approve Loan
+- Reject Loan
+- Interest Assignment
+- Repayment Monitoring
+
+---
+
+## Transaction Monitoring
+
+Live monitoring of
+
+- Deposits
+- Withdrawals
+- Transfers
+- Loan Payments
+- Credit Card Payments
+
+---
+
+## Banking Operations
+
+Manage
+
+- Debit Cards
+- Credit Cards
+- Cheque Books
+- Passbooks
+
+---
+
+# 🏗️ System Architecture
+
+```
+                    +----------------------+
+                    |    Customer Portal   |
+                    +----------+-----------+
+                               |
+                    +----------v-----------+
+                    |   Java Servlets      |
+                    |  Controller Layer    |
+                    +----------+-----------+
+                               |
+                    +----------v-----------+
+                    |   Service Layer      |
+                    | Business Logic       |
+                    +----------+-----------+
+                               |
+                    +----------v-----------+
+                    |     DAO Layer        |
+                    | Data Access Objects  |
+                    +----------+-----------+
+                               |
+                    +----------v-----------+
+                    |      MySQL DB        |
+                    +----------------------+
+```
+
+---
+
+# 🛠 Technology Stack
 
 | Layer | Technology |
-|-------|------------|
-| Build | Maven 3.x |
-| Backend | Java 8, Jakarta Servlet 6.1.0 |
-| Frontend | JSP, HTML5, CSS3, JavaScript |
-| Database | MySQL 9.0.0 |
-| Security | BCrypt (jbcrypt 0.4) |
-| Logging | SLF4J 2.0.13 |
-| JSON | Gson 2.11.0 |
-| Testing | JUnit 5.13.2 |
+|----------|----------------|
+| Language | Java SE 8+ |
+| Frontend | HTML5, CSS3, JavaScript |
+| View Engine | JSP |
+| Controller | Jakarta Servlet 6.1 |
+| Backend | Java |
+| Database | MySQL |
+| Build Tool | Maven |
+| JSON | Gson |
+| Logging | SLF4J |
+| Encryption | BCrypt |
+| Testing | JUnit |
 
-## Project Structure
+---
+
+# 📂 Project Structure
 
 ```
-src/main/
-├── java/com/vgb/
-│   ├── config/          # Database configuration
-│   ├── constants/       # Application constants
-│   ├── dao/            # Data Access Objects
-│   ├── model/          # Entity models
-│   ├── service/        # Business logic layer
-│   ├── servlet/        # HTTP request handlers
-│   └── util/           # Utility classes
-├── webapp/
-│   ├── admin/          # Admin JSP pages
-│   ├── customer/       # Customer JSP pages
-│   ├── assest/         # CSS, JS, images
-│   ├── WEB-INF/
-│   │   └── web.xml     # Deployment descriptor
-│   └── index.jsp       # Landing page
-└── resources/
-    └── vgb_database.sql # Database schema
+VGB-Banking-System-Java
+│
+├── src
+│
+├── main
+│   ├── java
+│   │
+│   └── com.vgb
+│       ├── config
+│       ├── constants
+│       ├── dao
+│       ├── model
+│       ├── service
+│       ├── servlet
+│       └── util
+│
+├── resources
+│   └── vgb_database.sql
+│
+├── webapp
+│   ├── admin
+│   ├── customer
+│   ├── assets
+│   ├── WEB-INF
+│   └── index.jsp
+│
+└── pom.xml
 ```
 
-## Database Schema
+---
 
-The system uses MySQL with the following core tables:
+# 🗄 Database Configuration
 
-- **admin** - Administrator accounts
-- **customer** - Customer profiles with KYC data (PAN, Aadhaar)
-- **account** - Bank accounts (savings/current) with service flags
-- **account_savings** / **account_current** - Sub-tables for account type details
-- **transaction** - Fund transfers, deposits, withdrawals
-- **loan** - Loan applications (home, car, personal, education)
-- **repayment** - Loan repayment tracking
-- **card** - ATM/Debit cards
-- **cheque_book_request** - Cheque book service requests
-- **beneficiary** - Saved beneficiaries for transfers
+Database
 
-## Key Features
+```
+vgb_database
+```
 
-### Customer Features
-- Login with username/password or PIN
-- View account balances and details
-- Money transfers between accounts
-- Transaction statements
-- Loan applications (home, car, personal, education)
-- Cheque book requests
-- ATM card requests
-- Profile management with avatar upload
+Connection
 
-### Admin Features
-- Admin login with role-based access
-- View and manage customer accounts
-- Approve/reject loan applications
-- Monitor all transactions
-- Manage ATM card requests
-- Review cheque book requests
+```java
+jdbc:mysql://localhost:3306/vgb_database
+```
 
-## Configuration
+Username
 
-Database connection settings in `DatabaseConfig.java`:
-- URL: `jdbc:mysql://localhost:3306/vgb_database`
-- Username: `root`
-- Password: `17193` (change for production)
+```
+root
+```
 
-## Build & Deployment
+Password
 
-### Prerequisites
-- Java 8 or higher
-- MySQL 8.0+
-- Maven 3.x
-- Tomcat 9+ or compatible servlet container
+```
+17193
+```
 
-### Build
+---
+
+# ⚙ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/yourusername/VGB-Banking-System-Java.git
+```
+
+---
+
+## Build
+
 ```bash
 mvn clean package
 ```
 
-### Deploy
-Deploy the generated WAR file to your servlet container:
+---
+
+## Deploy
+
+Copy the generated WAR file
+
+```
+target/VGB-Banking-System.war
+```
+
+into
+
+```
+Tomcat/webapps/
+```
+
+Start Tomcat
+
+```
+http://localhost:8080/VGB-Banking-System
+```
+
+---
+
+# 🛡 Security Features
+
+- BCrypt Password Encryption
+- Secure PIN Authentication
+- CSRF Protection
+- SQL Injection Prevention
+- Prepared Statements
+- Session Timeout
+- Role-Based Access Control
+- Authentication Filter
+- Authorization Filter
+- Input Validation
+- Secure File Upload
+- Audit Logs
+- Print Isolation Styles
+
+# 🚀 Future Enhancements
+
+- Mobile Banking App
+- UPI Integration
+- QR Payments
+- Internet Banking
+- Face Recognition Login
+- Fingerprint Authentication
+- Email Notifications
+- SMS OTP
+- Investment Dashboard
+- Fixed Deposit Module
+- Recurring Deposit
+- AI Chat Assistant
+- Banking Analytics
+- Multi-language Support
+- Dark / Light Theme
+
+---
+
+# 📊 Project Highlights
+
+✅ Enterprise Architecture
+
+✅ 3-Tier Layer Design
+
+✅ Responsive UI
+
+✅ Secure Authentication
+
+✅ Role-Based Access
+
+✅ Loan Management
+
+✅ Credit Card Management
+
+✅ Transaction Monitoring
+
+✅ Printable Statements
+
+✅ Banking Product Requests
+
+✅ Modern Banking Workflow
+
+---
+
+# 👨‍💻 Default Administrator Login
+
+| Field | Value |
+|----------|----------------|
+| Username | `vgb@admin$17193` |
+| Password | `admin@17193$` |
+| Secure PIN | `1234` |
+
+---
+
+# 🤝 Contributing
+
+This repository is intended for internal development.
+
+If contributions are allowed in the future:
+
 ```bash
-# Tomcat webapps directory
-cp target/VGB-Banking-System-1.0-SNAPSHOT.war $TOMCAT/webapps/
+Fork Repository
+
+Create Branch
+
+Commit Changes
+
+Push Changes
+
+Create Pull Request
 ```
 
-### Database Setup
-```sql
-source src/main/resources/vgb_database.sql
-```
+---
 
-## API Endpoints
-
-| Servlet | Path | Method | Description |
-|---------|------|--------|-------------|
-| LoginServlet | `/login` | GET, POST | User authentication |
-| AccountServlet | `/account` | GET, POST | Account operations |
-| CustomerDashboardServlet | `/customer-dashboard` | GET | Customer home page |
-| AdminDashboardServlet | `/admin-dashboard` | GET | Admin home page |
-| LoanServlet | `/loan` | GET, POST | Loan applications |
-| ChequeBookServlet | `/chequebook` | GET, POST | Cheque book requests |
-| CardServlet | `/card` | GET, POST | Card services |
-| LogoutServlet | `/logout` | GET | Session termination |
-
-## Security Features
-
-- Password hashing with BCrypt
-- CSRF token protection
-- Session timeout (30 minutes)
-- Role-based access control
-- Input validation utilities
-
-## Default Admin Credentials
+# 📄 License
 
 ```
-Username: vgb@admin$17193
-Password: admin@17193$
-PIN: 1234
+© Vertex Galaxy Bank
+
+All Rights Reserved.
+
+This software is proprietary and confidential.
+Unauthorized distribution or modification is prohibited.
 ```
 
-## License
+---
 
-Internal project for Vertex Galaxy Bank.
-=======
-# Banking-Management-System
-A secure full-stack digital banking web application for Vertex Galaxy Bank, built with Java Servlets, JSP and MySQL. Features Customer and Admin portals with layered 3-tier architecture, BCrypt password security, fund transfers, loan management, statements, cards, and cheque requests alongside comprehensive admin oversight.
->>>>>>> 799d3a7d42e13ed9a358e1e565f3f9f317dc46f6
+<div align="center">
+
+## ⭐ If you like this project, consider giving it a Star!
+
+Made with ❤️ using Java, JSP, Servlets & MySQL
+
+</div>

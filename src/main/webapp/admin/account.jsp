@@ -202,126 +202,230 @@
                         cursor: pointer;
                     }
 
-                    .print-bg-container {
+                     .print-bg-container {
+                          display: none;
+                      }
+
+                     /* Print Layout Table Helper to avoid overlap with fixed headers/footers */
+                     .print-layout-table {
+                         display: block;
+                         width: 100%;
+                         border: none;
+                         margin: 0;
+                         padding: 0;
+                     }
+                     .print-layout-thead,
+                     .print-layout-tbody,
+                     .print-layout-tfoot,
+                     .print-layout-tr,
+                     .print-layout-td {
+                         display: block;
+                         width: 100%;
+                     }
+                     .print-header-space,
+                     .print-footer-space {
                          display: none;
                      }
 
-                    /* Print Media Overrides */
-                    @media print {
-                        @page {
-                            size: A4 portrait;
-                            margin-top: 160px;
-                            margin-bottom: 100px;
-                            margin-left: 60px;
-                            margin-right: 60px;
-                        }
-                        body {
-                            background-color: white !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            color: #1a1a1a !important;
-                        }
-                        .sidebar,
-                        .header,
-                        .footer,
-                        .no-print,
-                        .modal-header,
-                        .modal-footer,
-                        .print-hide-header {
-                            display: none !important;
-                        }
-
-                        .main-content {
-                            margin-left: 0 !important;
-                            padding: 0 !important;
-                        }
-
-                        .modal {
-                            position: absolute !important;
-                            left: 0 !important;
-                            top: 0 !important;
-                            width: 100% !important;
-                            height: auto !important;
-                            background: none !important;
-                            backdrop-filter: none !important;
-                            padding: 0 !important;
-                            display: block !important;
-                            z-index: 99999 !important;
-                            overflow: visible !important;
-                        }
-
-                        .modal-content {
-                            max-width: 100% !important;
-                            max-height: none !important;
-                            border: none !important;
-                            box-shadow: none !important;
-                            padding: 0 !important;
-                            background: transparent !important;
-                        }
-
-                        .modal-body {
-                            padding: 0 !important;
-                            background: transparent !important;
-                        }
-
-                        .statement-print-area {
-                            position: relative !important;
-                            z-index: 1 !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            width: 100% !important;
-                            box-sizing: border-box !important;
-                            background: transparent !important;
-                        }
-                        .print-bg-container {
+                     /* Print Media Overrides for Professional Multi-Page Statements */
+                     @media print {
+                         @page {
+                             size: A4 portrait;
+                             margin-top: 15mm;
+                             margin-bottom: 15mm;
+                             margin-left: 15mm;
+                             margin-right: 15mm;
+                         }
+                         body {
+                             background-color: white !important;
+                             margin: 0 !important;
+                             padding: 0 !important;
+                             color: #1a1a1a !important;
+                             width: 100% !important;
+                             height: auto !important;
+                             min-height: auto !important;
+                             overflow: visible !important;
+                             -webkit-print-color-adjust: exact;
+                             print-color-adjust: exact;
+                         }
+                         .sidebar,
+                         .header,
+                         .footer,
+                         .no-print,
+                         .modal-header,
+                         .modal-footer,
+                         .print-hide-header,
+                         aside,
+                         .preloader,
+                         .cursor-glow {
                              display: none !important;
                          }
-                         .print-bg-img {
+
+                         .main-content {
+                             margin-left: 0 !important;
+                             padding: 0 !important;
                              width: 100% !important;
-                             height: 100% !important;
-                             object-fit: fill !important;
+                             min-height: auto !important;
                          }
 
-                        #statementTxnTable {
-                            table-layout: fixed !important;
-                            width: 100% !important;
-                            border-collapse: collapse !important;
-                            background: transparent !important;
-                        }
-                        #statementTxnTable th, #statementTxnTable td {
-                            padding: 8px 6px !important;
-                            font-size: 11px !important;
-                            white-space: normal !important;
-                            word-wrap: break-word !important;
-                            word-break: break-word !important;
-                            border-bottom: 1px solid #ddd !important;
-                        }
-                        #statementTxnTable th {
-                            background: rgba(0, 0, 0, 0.04) !important;
-                            color: #000 !important;
-                            font-weight: 700 !important;
-                        }
+                         .modal {
+                             position: absolute !important;
+                             left: 0 !important;
+                             top: 0 !important;
+                             width: 100% !important;
+                             height: auto !important;
+                             background: none !important;
+                             backdrop-filter: none !important;
+                             padding: 0 !important;
+                             display: block !important;
+                             z-index: 99999 !important;
+                             overflow: visible !important;
+                         }
 
-                        .a4-container {
-                            box-shadow: none !important;
-                            padding: 0 !important;
-                            border: none !important;
-                            margin: 0 !important;
-                            width: 100% !important;
-                        }
+                         .modal-content {
+                             max-width: 100% !important;
+                             max-height: none !important;
+                             border: none !important;
+                             box-shadow: none !important;
+                             padding: 0 !important;
+                             background: transparent !important;
+                         }
 
-                        .a4-section-card {
-                            box-shadow: none !important;
-                            border: 1px solid #94a3b8 !important;
-                            page-break-inside: avoid !important;
-                        }
+                         .modal-body {
+                             padding: 0 !important;
+                             background: transparent !important;
+                         }
 
-                        select {
-                            appearance: none !important;
-                            background: transparent !important;
-                            border: 1px solid #94a3b8 !important;
-                        }
-                    }
+                         .statement-print-area {
+                             position: relative !important;
+                             z-index: 1 !important;
+                             margin: 0 !important;
+                             padding: 0 !important;
+                             width: 100% !important;
+                             box-sizing: border-box !important;
+                             background: transparent !important;
+                             overflow: visible !important;
+                             page-break-inside: auto !important;
+                         }
+                         
+                         /* Hide the background letterpad image as requested */
+                         .print-bg-container,
+                         .print-bg-img,
+                         .letterpad {
+                              display: none !important;
+                         }
+
+                         /* Repeating bank header - repeats on every printed page */
+                         .print-header {
+                             display: block !important;
+                             width: 100% !important;
+                             box-sizing: border-box !important;
+                         }
+
+                         /* Fixed bank footer with page numbers - repeats on every printed page */
+                         .print-footer {
+                             display: block !important;
+                             width: 100% !important;
+                             box-sizing: border-box !important;
+                         }
+
+                         .print-layout-table {
+                             display: table !important;
+                             width: 100% !important;
+                             border-collapse: collapse !important;
+                             border: none !important;
+                         }
+                         .print-layout-thead {
+                             display: table-header-group !important;
+                         }
+                         .print-layout-tbody {
+                             display: table-row-group !important;
+                         }
+                         .print-layout-tfoot {
+                             display: table-footer-group !important;
+                         }
+                         .print-layout-tr {
+                             display: table-row !important;
+                         }
+                         .print-layout-td {
+                             display: table-cell !important;
+                             border: none !important;
+                             padding: 0 !important;
+                         }
+                         .print-header-space {
+                             display: block !important;
+                             height: 38mm !important; /* height of header (30mm) + safety margin (8mm) */
+                         }
+                         .print-footer-space {
+                             display: block !important;
+                             height: 32mm !important; /* height of footer (22mm) + safety margin (10mm) */
+                         }
+
+                         .print-page-number::after {
+                             content: "Page " counter(page);
+                         }
+
+                          /* Clean up table wrapper borders and overflows in print to prevent empty space boxes */
+                          .statement-print-area div[style*="overflow"] {
+                              overflow: visible !important;
+                              border: none !important;
+                              box-shadow: none !important;
+                              background: transparent !important;
+                              margin-bottom: 0 !important;
+                              padding: 0 !important;
+                          }
+
+                          /* Table Styling */
+                         .statement-print-area table:not(.print-layout-table) {
+                             width: 100% !important;
+                             table-layout: auto !important;
+                             border-collapse: collapse !important;
+                             page-break-inside: auto !important;
+                         }
+                         .statement-print-area table thead {
+                             display: table-header-group !important; /* Repeats table header at top of every page */
+                         }
+                         .statement-print-area table tr {
+                             page-break-inside: avoid !important;   /* Prevent row from splitting across pages */
+                             page-break-after: auto !important;
+                         }
+                         .statement-print-area table th,
+                         .statement-print-area table td {
+                             padding: 8px 10px !important;
+                             font-size: 9.5pt !important;
+                             line-height: 1.4 !important;
+                             white-space: normal !important;
+                             word-wrap: break-word !important;
+                             border-bottom: 1px solid #cbd5e0 !important;
+                             page-break-inside: avoid !important;
+                         }
+                         .statement-print-area table th {
+                             background-color: #f7fafc !important;
+                             color: #2d3748 !important;
+                             font-weight: 700 !important;
+                             border-bottom: 2px solid #cbd5e0 !important;
+                         }
+
+                         .a4-container {
+                             box-shadow: none !important;
+                             padding: 0 !important;
+                             border: none !important;
+                             margin: 0 !important;
+                             width: 100% !important;
+                         }
+
+                         .a4-section-card {
+                             box-shadow: none !important;
+                             border: 1px solid #cbd5e0 !important;
+                             page-break-inside: avoid !important;
+                         }
+
+                         select {
+                             appearance: none !important;
+                             background: transparent !important;
+                             border: 1px solid #cbd5e0 !important;
+                         }
+                     }
 
 
                     body {
@@ -4434,25 +4538,43 @@
                                 <div class="print-bg-container">
                                     <img src="${pageContext.request.contextPath}/assest/images/All Forms/Letter Pad.png" class="print-bg-img" alt="VGB Letterhead">
                                 </div>
-                                <!-- Official Bank Logo & Name -->
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-500); padding-bottom: 15px; margin-bottom: 25px;">
-                                    <div class="print-hide-header">
-                                        <h1
-                                            style="font-size: 1.8rem; font-weight: 800; color: var(--primary-500); letter-spacing: 1px; line-height: 1;">
-                                            VERTEX GALAXY BANK</h1>
-                                        <p
-                                            style="font-size: 0.8rem; color: var(--gray-500); margin-top: 5px; font-weight: 500;">
-                                            Secure Credit &amp; Lending Divisions</p>
-                                    </div>
-                                    <div style="text-align: right;">
-                                        <span
-                                            style="font-family: monospace; font-size: 0.85rem; color: var(--gray-500); font-weight: 700;"
-                                            id="lblStmtRef">ACC-REF: -</span>
-                                        <p style="font-size: 0.8rem; color: var(--gray-400); margin-top: 3px;">Date
-                                            Generated: <span id="lblStmtDateGenerated">-</span></p>
-                                    </div>
-                                </div>
+                                <table class="print-layout-table">
+                                    <thead class="print-layout-thead">
+                                        <tr class="print-layout-tr">
+                                            <td class="print-layout-td">
+                                                <div class="print-header" style="font-family: 'Poppins', sans-serif; width: 100%; margin-bottom: 20px;">
+                                                    <!-- Top Row: Logo & Corporate HQ Details -->
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #6366f1; padding-bottom: 8px;">
+                                                        <div style="display: flex; align-items: center; gap: 12px; text-align: left;">
+                                                            <img src="${pageContext.request.contextPath}/assest/images/logo.png" alt="VGB Logo" style="width: 45px; height: 45px; object-fit: contain;">
+                                                            <div style="text-align: left;">
+                                                                <h1 style="font-size: 1.45rem; font-weight: 800; color: #6366f1; letter-spacing: 0.5px; margin: 0;">VERTEX GALAXY BANK</h1>
+                                                                <p style="font-size: 0.75rem; color: #718096; margin: 2px 0 0; font-weight: 600;">Always Beyond Boundaries</p>
+                                                            </div>
+                                                        </div>
+                                                        <div style="text-align: right; line-height: 1.3;">
+                                                            <p style="margin: 0; font-size: 7.5pt; color: #4a5568; font-weight: 600;">Corporate HQ: VGB Corporate Towers, BKC Road,</p>
+                                                            <p style="margin: 0; font-size: 7.5pt; color: #4a5568; font-weight: 600;">Bandra Kurla Complex, Mumbai, MH - 400051</p>
+                                                            <p style="margin: 0; font-size: 7.5pt; color: #718096; font-weight: 500;">Toll Free: 1800-VGB-BANK | www.vertexgalaxybank.com</p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Bottom Row: Statement Subtitle & Reference Details -->
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 8pt; color: #4a5568; font-weight: 600;">
+                                                        <div style="font-weight: 700; text-transform: uppercase;">Secure Credit &amp; Lending Divisions</div>
+                                                        <div style="display: flex; gap: 15px;">
+                                                            <span style="font-family: monospace;" id="printLblStmtRef">ACC-REF: -</span>
+                                                            <span>Date: <span id="printLblStmtDateGenerated">-</span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="print-layout-tbody">
+                                        <tr class="print-layout-tr">
+                                            <td class="print-layout-td">
+                                                <!-- Official Bank Logo & Name -->
+
 
                                 <!-- Official Header Subtitle (shown in both screen and print) -->
                                 <div
@@ -4562,7 +4684,7 @@
                                 </div>
 
                                 <!-- Footer Signatures -->
-                                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; margin-bottom: 25px;"
+                                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; margin-bottom: 25px; page-break-inside: avoid; break-inside: avoid;"
                                     class="print-only">
                                     <div style="text-align: center; width: 200px;">
                                         <div
@@ -4581,6 +4703,26 @@
                                             Generated Seals</span>
                                     </div>
                                 </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="print-layout-tfoot">
+                                        <tr class="print-layout-tr">
+                                            <td class="print-layout-td">
+                                                <div class="print-footer" style="padding-top: 10px;">
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1.5px solid #cbd5e0; padding-top: 8px; font-family: 'Poppins', sans-serif; width: 100%;">
+                                                        <div style="font-size: 8pt; color: #4a5568; font-weight: 500; line-height: 1.4; text-align: left;">
+                                                            Vertex Galaxy Bank &bull; Support Toll Free: 1800-VGB-BANK &bull; Online Portal: www.vertexgalaxybank.com
+                                                            <br>
+                                                            <span style="font-size: 7.5pt; color: #718096;">Corporate HQ: VGB Corporate Towers, BKC Road, Bandra Kurla Complex, Mumbai - 400051</span>
+                                                        </div>
+                                                        <div class="print-page-number" style="font-size: 8pt; color: #2d3748; font-weight: 700; white-space: nowrap; align-self: flex-start; padding-top: 2px;"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
 
                             <!-- Modal Controls (hidden in print) -->
@@ -6062,11 +6204,17 @@
 
                         // Set print and screen labels
                         document.getElementById('lblStmtRef').textContent = "ACC-REF: #ACC-" + accountId;
+                        if(document.getElementById('printLblStmtRef')) {
+                            document.getElementById('printLblStmtRef').textContent = "ACC-REF: #ACC-" + accountId;
+                        }
                         var compiledDate = new Date();
                         var options = { month: 'long', day: 'numeric', year: 'numeric' };
                         var datePart = compiledDate.toLocaleDateString('en-US', options);
                         var timePart = compiledDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
                         document.getElementById('lblStmtDateGenerated').textContent = datePart + " at " + timePart;
+                        if(document.getElementById('printLblStmtDateGenerated')) {
+                            document.getElementById('printLblStmtDateGenerated').textContent = datePart + " at " + timePart;
+                        }
 
                         // Reset filters
                         document.getElementById('stmtDateFilter').value = 'all';
@@ -6284,6 +6432,8 @@
                             icon.style.color = 'var(--gray-400)';
                         }
                     }
+
+
                 </script>
             </body>
 
