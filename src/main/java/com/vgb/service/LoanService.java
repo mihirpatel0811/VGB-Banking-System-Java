@@ -306,8 +306,7 @@ public class LoanService {
                 interestComponent = BigDecimal.ZERO;
             } else {
                 // Calculate components for partial payment
-                BigDecimal monthlyRate = interestRate.divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
-                principalComponent = calculatePrincipalComponent(repaymentAmount, monthlyRate);
+                principalComponent = calculatePrincipalComponent(repaymentAmount, interestRate, remainingBalance);
                 if (principalComponent.compareTo(remainingBalance) > 0) {
                     principalComponent = remainingBalance;
                 }
@@ -450,10 +449,15 @@ public class LoanService {
     /**
      * Calculate principal component of repayment
      */
-    private BigDecimal calculatePrincipalComponent(BigDecimal totalAmount, BigDecimal monthlyRate) {
-        // Simple calculation: principal = total - (remaining balance * monthly rate)
-        // For now, we'll use 70% as principal and 30% as interest (can be refined)
-        return totalAmount.multiply(new BigDecimal("0.7")).setScale(4, RoundingMode.HALF_UP);
+    private BigDecimal calculatePrincipalComponent(BigDecimal totalAmount, BigDecimal interestRate, BigDecimal remainingBalance) {
+        // Monthly rate = interestRate / 12 / 100 = interestRate / 1200
+        BigDecimal monthlyRate = interestRate.divide(new BigDecimal("1200"), 10, RoundingMode.HALF_UP);
+        BigDecimal interestComponent = remainingBalance.multiply(monthlyRate).setScale(4, RoundingMode.HALF_UP);
+        
+        if (interestComponent.compareTo(totalAmount) >= 0) {
+            return BigDecimal.ZERO;
+        }
+        return totalAmount.subtract(interestComponent);
     }
 
     /**
@@ -581,8 +585,7 @@ public class LoanService {
                 principalComponent = remainingBalance;
                 interestComponent = BigDecimal.ZERO;
             } else {
-                BigDecimal monthlyRate = interestRate.divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
-                principalComponent = calculatePrincipalComponent(repaymentAmount, monthlyRate);
+                principalComponent = calculatePrincipalComponent(repaymentAmount, interestRate, remainingBalance);
                 if (principalComponent.compareTo(remainingBalance) > 0) {
                     principalComponent = remainingBalance;
                 }
@@ -758,8 +761,7 @@ public class LoanService {
                 principalComponent = remainingBalance;
                 interestComponent = BigDecimal.ZERO;
             } else {
-                BigDecimal monthlyRate = interestRate.divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
-                principalComponent = calculatePrincipalComponent(repaymentAmount, monthlyRate);
+                principalComponent = calculatePrincipalComponent(repaymentAmount, interestRate, remainingBalance);
                 if (principalComponent.compareTo(remainingBalance) > 0) {
                     principalComponent = remainingBalance;
                 }
