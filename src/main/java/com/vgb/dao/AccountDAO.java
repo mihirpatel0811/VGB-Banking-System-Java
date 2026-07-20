@@ -24,6 +24,11 @@ public interface AccountDAO {
     Account getByAccountNumber(String accountNumber) throws Exception;
 
     /**
+     * Get account by username
+     */
+    Account getByUsername(String username) throws Exception;
+
+    /**
      * Get all accounts of a customer
      */
     List<Account> getByCustomerId(long customerId) throws Exception;

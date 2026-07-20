@@ -884,9 +884,9 @@
                                     <span class="vgb-luxury-label">Account Number</span>
                                     <div class="vgb-luxury-account-wrapper">
                                         <span class="vgb-luxury-account-number" id="cardNumberDisplay" 
-                                              data-full="${not empty accounts ? accounts[0].accountNumber : '000000000000'}" 
-                                              data-masked="${not empty accounts ? '••••  ••••  ••••  '.concat(accounts[0].accountNumber.substring(accounts[0].accountNumber.length() - 4)) : '••••  ••••  ••••  0000'}">
-                                            ${not empty accounts ? accounts[0].accountNumber : '000000000000'}
+                                              data-full="${not empty activeAccount ? activeAccount.accountNumber : '000000000000'}" 
+                                              data-masked="${not empty activeAccount ? '••••  ••••  ••••  '.concat(activeAccount.accountNumber.substring(activeAccount.accountNumber.length() - 4)) : '••••  ••••  ••••  0000'}">
+                                            ${not empty activeAccount ? activeAccount.accountNumber : '000000000000'}
                                         </span>
                                         <button type="button" onclick="toggleCardNumberVisibility()" class="vgb-luxury-toggle-btn" id="eyeIconBtn" title="Show/Hide Account Number">
                                             <i class="bx bx-show" id="eyeIcon"></i>
@@ -935,7 +935,7 @@
                                 <i class="bx bx-wallet"></i>
                                 <div class="vgb-luxury-info-text">
                                     <span class="vgb-luxury-info-title">Account Type</span>
-                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">${not empty accounts ? accounts[0].accountType : 'Savings'}</span>
+                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">${not empty activeAccount ? activeAccount.accountType : 'Savings'}</span>
                                 </div>
                             </div>
                             <!-- 3. Branch Name -->
@@ -976,7 +976,7 @@
                                 <i class="bx bx-building"></i>
                                 <div class="vgb-luxury-info-text">
                                     <span class="vgb-luxury-info-title">IFSC Code</span>
-                                    <span class="vgb-luxury-info-value">${not empty accounts ? accounts[0].ifscCode : 'VGBK0000101'}</span>
+                                    <span class="vgb-luxury-info-value">${not empty activeAccount ? activeAccount.ifscCode : 'VGBK0000101'}</span>
                                 </div>
                             </div>
                             <!-- 7. Account Status -->
@@ -984,7 +984,7 @@
                                 <i class="bx bx-check-shield"></i>
                                 <div class="vgb-luxury-info-text">
                                     <span class="vgb-luxury-info-title">Account Status</span>
-                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">${not empty accounts ? accounts[0].status : 'Active'}</span>
+                                    <span class="vgb-luxury-info-value" style="text-transform: capitalize;">${not empty activeAccount ? activeAccount.status : 'Active'}</span>
                                 </div>
                             </div>
                             <!-- 8. KYC Status -->
@@ -1065,6 +1065,7 @@
                                 <th>IFSC Code</th>
                                 <th>Status</th>
                                 <th style="text-align: right;">Current Balance</th>
+                                <th style="text-align: center;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1081,12 +1082,22 @@
                                                 <span class="badge-status badge-active"><i class="bx bx-check-shield"></i> ${acc.status}</span>
                                             </td>
                                             <td style="text-align: right; font-weight: 700; color: var(--gray-900); font-size: 0.95rem;">₹ <fmt:formatNumber value="${acc.balance}" minFractionDigits="2" maxFractionDigits="2"/></td>
+                                            <td style="text-align: center;">
+                                                <c:choose>
+                                                    <c:when test="${acc.accountId == activeAccount.accountId}">
+                                                        <span class="badge-status badge-active" style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 8px; border-radius: 4px;"><i class="bx bx-radio-circle-marked"></i> Active</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="${pageContext.request.contextPath}/account?action=switch&accountId=${acc.accountId}" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none;"><i class="bx bx-sync"></i> Switch</a>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
                                     <tr>
-                                        <td colspan="5" style="padding: 0;">
+                                        <td colspan="6" style="padding: 0;">
                                             <div class="empty-state">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                                     <rect x="2" y="5" width="20" height="14" rx="2" />

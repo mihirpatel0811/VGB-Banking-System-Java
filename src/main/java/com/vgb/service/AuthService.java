@@ -3,8 +3,10 @@ package com.vgb.service;
 import com.vgb.constants.AppConstants;
 import com.vgb.dao.AdminDAOImpl;
 import com.vgb.dao.CustomerDAOImpl;
+import com.vgb.dao.AccountDAOImpl;
 import com.vgb.model.Admin;
 import com.vgb.model.Customer;
+import com.vgb.model.Account;
 import com.vgb.util.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ public class AuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private AdminDAOImpl adminDAO = new AdminDAOImpl();
     private CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+    private AccountDAOImpl accountDAO = new AccountDAOImpl();
 
     /**
      * Authenticate admin user
@@ -302,4 +305,63 @@ public class AuthService {
             throw new Exception("PIN update failed", e);
         }
     }
+
+    /**
+     * Authenticate customer by account credentials
+     */
+    public Account authenticateCustomerAccount(String username, String password) throws Exception {
+        if (username == null || password == null) {
+            logger.warn("Null credentials provided for customer account login");
+            return null;
+        }
+
+        try {
+            Account account = accountDAO.getByUsername(username);
+            
+            if (account != null && 
+                account.getStatus().equalsIgnoreCase(AppConstants.ACCOUNT_STATUS_ACTIVE) &&
+                SecurityUtil.verifyPassword(password, account.getPassword())) {
+                
+                logger.info("Customer account authenticated successfully: {}", username);
+                return account;
+            }
+            
+            logger.warn("Customer account authentication failed: {}", username);
+            return null;
+
+        } catch (Exception e) {
+            logger.error("Error authenticating customer account", e);
+            throw new Exception("Authentication failed", e);
+        }
+    }
+
+    /**
+     * Authenticate customer by account PIN
+     */
+    public Account authenticateCustomerAccountByPIN(String username, String pin) throws Exception {
+        if (username == null || pin == null) {
+            logger.warn("Null credentials provided for customer account PIN login");
+            return null;
+        }
+
+        try {
+            Account account = accountDAO.getByUsername(username);
+            
+            if (account != null && 
+                account.getStatus().equalsIgnoreCase(AppConstants.ACCOUNT_STATUS_ACTIVE) &&
+                pin.equals(account.getPin())) {
+                
+                logger.info("Customer account PIN authenticated successfully: {}", username);
+                return account;
+            }
+            
+            logger.warn("Customer account PIN authentication failed: {}", username);
+            return null;
+
+        } catch (Exception e) {
+            logger.error("Error authenticating customer account by PIN", e);
+            throw new Exception("PIN authentication failed", e);
+        }
+    }
 }
+

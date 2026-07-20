@@ -132,6 +132,45 @@ public class AutoPayService {
         return deleted;
     }
 
+    public boolean updateStatusByAdmin(long autoPayId, String status) throws Exception {
+        AutoPayInstruction ins = autoPayDAO.getInstructionById(autoPayId);
+        if (ins == null) {
+            throw new Exception("Auto Pay instruction not found.");
+        }
+        if (!"active".equals(status) && !"paused".equals(status) && !"disabled".equals(status)) {
+            throw new Exception("Invalid status selection.");
+        }
+        
+        boolean updated = autoPayDAO.updateInstructionStatus(autoPayId, status);
+        if (updated) {
+            Notification notif = new Notification();
+            notif.setCustomerId(ins.getCustomerId());
+            notif.setType("inapp");
+            notif.setTitle("Auto Pay Status Changed by Admin");
+            notif.setMessage("Auto Pay instruction status has been updated to: " + status.toUpperCase() + " by bank admin.");
+            notificationDAO.create(notif);
+        }
+        return updated;
+    }
+
+    public boolean cancelInstructionByAdmin(long autoPayId) throws Exception {
+        AutoPayInstruction ins = autoPayDAO.getInstructionById(autoPayId);
+        if (ins == null) {
+            throw new Exception("Auto Pay instruction not found.");
+        }
+        
+        boolean deleted = autoPayDAO.deleteInstruction(autoPayId);
+        if (deleted) {
+            Notification notif = new Notification();
+            notif.setCustomerId(ins.getCustomerId());
+            notif.setType("inapp");
+            notif.setTitle("Auto Pay Cancelled by Admin");
+            notif.setMessage("Auto Pay instruction has been cancelled by bank admin.");
+            notificationDAO.create(notif);
+        }
+        return deleted;
+    }
+
     public List<AutoPayInstruction> getInstructionsByCustomer(long customerId) throws SQLException {
         return autoPayDAO.getInstructionsByCustomerId(customerId);
     }

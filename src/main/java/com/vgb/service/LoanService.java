@@ -299,7 +299,10 @@ public class LoanService {
             BigDecimal principalComponent;
             BigDecimal interestComponent;
 
-            if (repaymentAmount.compareTo(remainingBalance) >= 0) {
+            BigDecimal remainingBalanceRounded = remainingBalance.setScale(2, RoundingMode.HALF_UP);
+            BigDecimal repaymentAmountRounded = repaymentAmount.setScale(2, RoundingMode.HALF_UP);
+
+            if (repaymentAmountRounded.compareTo(remainingBalanceRounded) >= 0) {
                 // If payment amount exceeds or equals remaining balance, treat as full payoff
                 repaymentAmount = remainingBalance;
                 principalComponent = remainingBalance;
@@ -452,7 +455,7 @@ public class LoanService {
     private BigDecimal calculatePrincipalComponent(BigDecimal totalAmount, BigDecimal interestRate, BigDecimal remainingBalance) {
         // Monthly rate = interestRate / 12 / 100 = interestRate / 1200
         BigDecimal monthlyRate = interestRate.divide(new BigDecimal("1200"), 10, RoundingMode.HALF_UP);
-        BigDecimal interestComponent = remainingBalance.multiply(monthlyRate).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal interestComponent = remainingBalance.multiply(monthlyRate).setScale(2, RoundingMode.HALF_UP);
         
         if (interestComponent.compareTo(totalAmount) >= 0) {
             return BigDecimal.ZERO;
@@ -580,7 +583,10 @@ public class LoanService {
             BigDecimal principalComponent;
             BigDecimal interestComponent;
 
-            if (repaymentAmount.compareTo(remainingBalance) >= 0) {
+            BigDecimal remainingBalanceRounded = remainingBalance.setScale(2, RoundingMode.HALF_UP);
+            BigDecimal repaymentAmountRounded = repaymentAmount.setScale(2, RoundingMode.HALF_UP);
+
+            if (repaymentAmountRounded.compareTo(remainingBalanceRounded) >= 0) {
                 repaymentAmount = remainingBalance;
                 principalComponent = remainingBalance;
                 interestComponent = BigDecimal.ZERO;
@@ -756,7 +762,10 @@ public class LoanService {
             BigDecimal principalComponent;
             BigDecimal interestComponent;
 
-            if (repaymentAmount.compareTo(remainingBalance) >= 0) {
+            BigDecimal remainingBalanceRounded = remainingBalance.setScale(2, RoundingMode.HALF_UP);
+            BigDecimal repaymentAmountRounded = repaymentAmount.setScale(2, RoundingMode.HALF_UP);
+
+            if (repaymentAmountRounded.compareTo(remainingBalanceRounded) >= 0) {
                 repaymentAmount = remainingBalance;
                 principalComponent = remainingBalance;
                 interestComponent = BigDecimal.ZERO;

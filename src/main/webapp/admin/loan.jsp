@@ -288,16 +288,13 @@
                             min-height: auto !important;
                         }
 
-                        /* Hide other elements if modal is shown */
-                        body>*:not(#statementModal),
-                        #statementModal>*:not(.modal-dialog),
-                        #statementModal .modal-dialog>*:not(.modal-content),
-                        #statementModal .modal-content>*:not(.modal-body),
-                        #statementModal .modal-body>*:not(.statement-print-area) {
+                        /* Hide other elements if statement print is active */
+                        body.print-statement-active > *:not(.main-content),
+                        body.print-statement-active .main-content > *:not(#statementModal) {
                             display: none !important;
                         }
 
-                        #statementModal {
+                        body.print-statement-active #statementModal {
                             position: absolute !important;
                             left: 0 !important;
                             top: 0 !important;
@@ -312,8 +309,7 @@
                             display: block !important;
                         }
 
-                        #statementModal .modal-card,
-                        #statementModal .modal-content {
+                        body.print-statement-active #statementModal .modal-card {
                             max-width: 100% !important;
                             max-height: none !important;
                             overflow: visible !important;
@@ -1475,6 +1471,280 @@
                     body.dark-mode .lookup-result-card-details span {
                         color: var(--gray-300);
                     }
+
+                    /* --- DIRECTORY TABLE REDESIGN --- */
+                    .directory-table-container {
+                        border-radius: var(--radius-xl);
+                        border: 1px solid rgba(99, 102, 241, 0.12);
+                        background: rgba(255, 255, 255, 0.65);
+                        backdrop-filter: blur(15px);
+                        -webkit-backdrop-filter: blur(15px);
+                        box-shadow: var(--panel-shadow);
+                        overflow: hidden;
+                        margin-top: 15px;
+                        margin-bottom: 30px;
+                        transition: all 0.3s ease;
+                    }
+
+                    body.dark-mode .directory-table-container {
+                        background: rgba(15, 23, 42, 0.45);
+                        border-color: rgba(255, 255, 255, 0.08);
+                    }
+
+                    .directory-table-responsive {
+                        overflow-x: auto;
+                        width: 100%;
+                        -webkit-overflow-scrolling: touch;
+                    }
+
+                    /* Custom Scrollbar for directory table */
+                    .directory-table-responsive::-webkit-scrollbar {
+                        height: 8px;
+                        width: 8px;
+                    }
+                    .directory-table-responsive::-webkit-scrollbar-track {
+                        background: rgba(99, 102, 241, 0.02);
+                        border-radius: 10px;
+                    }
+                    .directory-table-responsive::-webkit-scrollbar-thumb {
+                        background: rgba(99, 102, 241, 0.15);
+                        border-radius: 10px;
+                    }
+                    .directory-table-responsive::-webkit-scrollbar-thumb:hover {
+                        background: rgba(99, 102, 241, 0.3);
+                    }
+
+                    body.dark-mode .directory-table-responsive::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.12);
+                    }
+                    body.dark-mode .directory-table-responsive::-webkit-scrollbar-thumb:hover {
+                        background: rgba(255, 255, 255, 0.25);
+                    }
+
+                    .directory-table {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                        text-align: left;
+                    }
+
+                    .directory-table th {
+                        background: rgba(99, 102, 241, 0.04);
+                        color: var(--gray-700);
+                        font-size: 0.78rem;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                        padding: 18px 20px;
+                        border-bottom: 2px solid rgba(99, 102, 241, 0.12);
+                        white-space: nowrap;
+                    }
+
+                    body.dark-mode .directory-table th {
+                        background: rgba(30, 41, 59, 0.5);
+                        color: var(--gray-300);
+                        border-bottom-color: rgba(255, 255, 255, 0.1);
+                    }
+
+                    .directory-table td {
+                        padding: 16px 20px;
+                        font-size: 0.88rem;
+                        color: var(--gray-600);
+                        border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+                        white-space: nowrap;
+                        vertical-align: middle;
+                        transition: all 0.25s ease;
+                    }
+
+                    body.dark-mode .directory-table td {
+                        color: var(--gray-400);
+                        border-bottom-color: rgba(255, 255, 255, 0.05);
+                    }
+
+                    .directory-table tr {
+                        transition: all 0.25s ease;
+                    }
+
+                    .directory-table tbody tr:hover td {
+                        background: rgba(99, 102, 241, 0.03) !important;
+                        color: var(--gray-900);
+                    }
+
+                    body.dark-mode .directory-table tbody tr:hover td {
+                        background: rgba(255, 255, 255, 0.02) !important;
+                        color: #ffffff;
+                    }
+
+                    /* Rounded outer corners for table header and footer */
+                    .directory-table tr:first-child th:first-child {
+                        border-top-left-radius: var(--radius-xl);
+                    }
+                    .directory-table tr:first-child th:last-child {
+                        border-top-right-radius: var(--radius-xl);
+                    }
+                    .directory-table tr:last-child td:first-child {
+                        border-bottom-left-radius: var(--radius-xl);
+                    }
+                    .directory-table tr:last-child td:last-child {
+                        border-bottom-right-radius: var(--radius-xl);
+                    }
+
+                    /* Financial figures styling */
+                    .amount-column {
+                        font-weight: 700;
+                        font-family: 'Poppins', sans-serif;
+                    }
+                    .amount-principal {
+                        color: var(--primary-600);
+                    }
+                    body.dark-mode .amount-principal {
+                        color: #818cf8;
+                    }
+                    .amount-remaining {
+                        color: #ef4444;
+                    }
+                    body.dark-mode .amount-remaining {
+                        color: #f87171;
+                    }
+                    .amount-emi {
+                        color: var(--gray-800);
+                    }
+                    body.dark-mode .amount-emi {
+                        color: var(--gray-200);
+                    }
+
+                    /* Modern status pill badge redesign */
+                    .badge-status {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        padding: 6px 12px;
+                        border-radius: var(--radius-full);
+                        font-size: 0.72rem;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+                    .badge-status-pending {
+                        background: rgba(245, 158, 11, 0.09) !important;
+                        color: #d97706 !important;
+                        border: 1px solid rgba(245, 158, 11, 0.2);
+                    }
+                    .badge-status-approved {
+                        background: rgba(16, 185, 129, 0.09) !important;
+                        color: #059669 !important;
+                        border: 1px solid rgba(16, 185, 129, 0.2);
+                    }
+                    .badge-status-active {
+                        background: rgba(99, 102, 241, 0.09) !important;
+                        color: var(--primary-600) !important;
+                        border: 1px solid rgba(99, 102, 241, 0.2);
+                    }
+                    body.dark-mode .badge-status-active {
+                        color: #818cf8 !important;
+                    }
+                    .badge-status-rejected {
+                        background: rgba(239, 68, 68, 0.09) !important;
+                        color: #dc2626 !important;
+                        border: 1px solid rgba(239, 68, 68, 0.2);
+                    }
+                    .badge-status-closed {
+                        background: rgba(107, 114, 128, 0.09) !important;
+                        color: #4b5563 !important;
+                        border: 1px solid rgba(107, 114, 128, 0.2);
+                    }
+
+                    /* Sleek Action Buttons */
+                    .action-btn-pill {
+                        padding: 6px 14px !important;
+                        font-size: 0.75rem !important;
+                        font-weight: 600 !important;
+                        border-radius: var(--radius-full) !important;
+                        display: inline-flex !important;
+                        align-items: center !important;
+                        gap: 5px !important;
+                        transition: all 0.2s ease !important;
+                        border: 1.5px solid transparent !important;
+                        text-decoration: none !important;
+                        cursor: pointer;
+                    }
+                    .action-btn-view {
+                        background: rgba(99, 102, 241, 0.06) !important;
+                        color: var(--primary-500) !important;
+                        border-color: rgba(99, 102, 241, 0.25) !important;
+                    }
+                    .action-btn-view:hover {
+                        background: var(--gradient-primary) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
+                    }
+                    .action-btn-statement {
+                        background: rgba(6, 182, 212, 0.06) !important;
+                        color: #0891b2 !important;
+                        border-color: rgba(6, 182, 212, 0.25) !important;
+                    }
+                    .action-btn-statement:hover {
+                        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(6, 182, 212, 0.25);
+                    }
+                    .action-btn-approve {
+                        background: rgba(16, 185, 129, 0.06) !important;
+                        color: #059669 !important;
+                        border-color: rgba(16, 185, 129, 0.25) !important;
+                    }
+                    .action-btn-approve:hover {
+                        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+                    }
+                    .action-btn-reject {
+                        background: rgba(239, 68, 68, 0.06) !important;
+                        color: #dc2626 !important;
+                        border-color: rgba(239, 68, 68, 0.25) !important;
+                    }
+                    .action-btn-reject:hover {
+                        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+                    }
+                    .action-btn-disburse {
+                        background: rgba(59, 130, 246, 0.06) !important;
+                        color: #2563eb !important;
+                        border-color: rgba(59, 130, 246, 0.25) !important;
+                    }
+                    .action-btn-disburse:hover {
+                        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+                    }
+                    .action-btn-repay {
+                        background: rgba(245, 158, 11, 0.06) !important;
+                        color: #d97706 !important;
+                        border-color: rgba(245, 158, 11, 0.25) !important;
+                    }
+                    .action-btn-repay:hover {
+                        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25);
+                    }
+                    .action-btn-edit {
+                        background: rgba(139, 92, 246, 0.06) !important;
+                        color: #7c3aed !important;
+                        border-color: rgba(139, 92, 246, 0.25) !important;
+                    }
+                    .action-btn-edit:hover {
+                        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+                        color: white !important;
+                        border-color: transparent !important;
+                        box-shadow: 0 4px 10px rgba(139, 92, 246, 0.25);
+                    }
                 </style>
             </head>
 
@@ -1929,163 +2199,133 @@
                             </div>
 
                             <!-- Table Element -->
-                            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                                <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
-                                    <thead>
-                                        <tr
-                                            style="border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 0.85rem; font-weight: 600;">
-                                            <th style="padding: 12px 15px; width: 110px;">Loan ID</th>
-                                            <th style="padding: 12px 15px;">Borrower Name</th>
-                                            <th style="padding: 12px 15px;">Loan Category</th>
-                                            <th style="padding: 12px 15px;">Principal</th>
-                                            <th style="padding: 12px 15px;">Remaining Balance</th>
-                                            <th style="padding: 12px 15px;">Monthly EMI</th>
-                                            <th style="padding: 12px 15px;">Term Length</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Status</th>
-                                            <th style="padding: 12px 15px; text-align: center;">Ledger</th>
-                                            <th style="padding: 12px 15px; text-align: right;">Action Control</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="directoryTableBody">
-                                        <c:forEach var="loan" items="${loans}">
-                                            <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; color: var(--gray-700); vertical-align: middle;"
-                                                data-customer-id="${loan.customerId}"
-                                                data-loan-category="${loan.loanType}"
-                                                data-customer-name="${customerNames[loan.customerId]}"
-                                                data-customer-phone="${customerPhones[loan.customerId]}">
-                                                <td style="padding: 15px;"><span
-                                                        class="badge-id">#LN-${loan.loanId}</span></td>
-                                                <td style="padding: 15px; font-weight: 600; color: var(--gray-900);">
-                                                    ${customerNames[loan.customerId]}</td>
-                                                <td
-                                                    style="padding: 15px; text-transform: capitalize; font-weight: 600;">
-                                                    ${loan.loanType}</td>
-                                                <td style="padding: 15px; font-weight: 600;">₹
-                                                    <fmt:formatNumber value="${loan.principalAmount}"
-                                                        minFractionDigits="2" maxFractionDigits="2" />
-                                                </td>
-                                                <td style="padding: 15px; font-weight: 600; color: #ef4444;">₹
-                                                    <fmt:formatNumber value="${loan.remainingBalance}"
-                                                        minFractionDigits="2" maxFractionDigits="2" />
-                                                </td>
-                                                <td style="padding: 15px; font-weight: 600; font-family: monospace;">₹
-                                                    <fmt:formatNumber value="${loan.monthlyEMI}" minFractionDigits="2"
-                                                        maxFractionDigits="2" />
-                                                </td>
-                                                <td style="padding: 15px;">${loan.termMonths} Months</td>
-                                                <td style="padding: 15px; text-align: center;">
-                                                    <c:choose>
-                                                        <c:when test="${loan.status == 'pending_approval'}">
-                                                            <span class="badge-pending"><i class="bx bxs-time"
-                                                                    style="vertical-align: middle; margin-right: 3px;"></i>
-                                                                Pending</span>
-                                                        </c:when>
-                                                        <c:when test="${loan.status == 'approved'}">
-                                                            <span class="badge-approved"
-                                                                style="background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald);"><i
-                                                                    class="bx bxs-check-circle"
-                                                                    style="vertical-align: middle; margin-right: 3px;"></i>
-                                                                Approved</span>
-                                                        </c:when>
-                                                        <c:when
-                                                            test="${loan.status == 'disbursed' or loan.status == 'active'}">
-                                                            <span class="badge-approved"><i class="bx bxs-check-circle"
-                                                                    style="vertical-align: middle; margin-right: 3px;"></i>
-                                                                Active</span>
-                                                        </c:when>
-                                                        <c:when test="${loan.status == 'rejected'}">
-                                                            <span class="badge-rejected"><i class="bx bxs-x-circle"
-                                                                    style="vertical-align: middle; margin-right: 3px;"></i>
-                                                                Rejected</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="badge-rejected"
-                                                                style="background: rgba(156, 163, 175, 0.12); color: var(--gray-500);">${loan.status}</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </td>
-                                                <td style="padding: 15px; text-align: center;">
-                                                    <a href="${pageContext.request.contextPath}/loan?action=statement&id=${loan.loanId}"
-                                                        class="btn btn-secondary"
-                                                        style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-cyan); color: var(--accent-cyan); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;"><i
-                                                            class="bx bx-file"></i> Statement</a>
-                                                </td>
-                                                <td style="padding: 15px; text-align: right;">
-                                                    <div
-                                                        style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
-                                                            data-form-details="<c:out value=" ${loan.formDetails}" />"
-                                                        style="padding: 6px 12px; font-size: 0.75rem; border-color:
-                                                        var(--primary-500); color: var(--primary-500);"><i
-                                                            class="bx bx-show"></i> View</button>
+                            <div class="directory-table-container">
+                                <div class="directory-table-responsive">
+                                    <table class="directory-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 110px;">Loan ID</th>
+                                                <th>Borrower Name</th>
+                                                <th>Loan Category</th>
+                                                <th>Principal</th>
+                                                <th>Remaining Balance</th>
+                                                <th>Monthly EMI</th>
+                                                <th>Term Length</th>
+                                                <th style="text-align: center;">Status</th>
+                                                <th style="text-align: center;">Ledger</th>
+                                                <th style="text-align: right;">Action Control</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="directoryTableBody">
+                                            <c:forEach var="loan" items="${loans}">
+                                                <tr data-customer-id="${loan.customerId}"
+                                                    data-loan-category="${loan.loanType}"
+                                                    data-customer-name="${customerNames[loan.customerId]}"
+                                                    data-customer-phone="${customerPhones[loan.customerId]}">
+                                                    <td><span class="badge-id">#LN-${loan.loanId}</span></td>
+                                                    <td style="font-weight: 600; color: var(--gray-900);">${customerNames[loan.customerId]}</td>
+                                                    <td style="text-transform: capitalize; font-weight: 600;">${loan.loanType}</td>
+                                                    <td class="amount-column amount-principal">₹
+                                                        <fmt:formatNumber value="${loan.principalAmount}"
+                                                            minFractionDigits="2" maxFractionDigits="2" />
+                                                    </td>
+                                                    <td class="amount-column amount-remaining">₹
+                                                        <fmt:formatNumber value="${loan.remainingBalance}"
+                                                            minFractionDigits="2" maxFractionDigits="2" />
+                                                    </td>
+                                                    <td class="amount-column amount-emi">₹
+                                                        <fmt:formatNumber value="${loan.monthlyEMI}" 
+                                                            minFractionDigits="2" maxFractionDigits="2" />
+                                                    </td>
+                                                    <td>${loan.termMonths} Months</td>
+                                                    <td style="text-align: center;">
                                                         <c:choose>
                                                             <c:when test="${loan.status == 'pending_approval'}">
-                                                                <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}"
-                                                                    class="btn btn-secondary"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-emerald); color: var(--accent-emerald); text-decoration: none;"
-                                                                    onclick="return confirm('Are you sure you want to approve this loan application?');"><i
-                                                                        class="bx bx-check"></i> Approve</a>
-                                                                <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}"
-                                                                    class="btn btn-secondary"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-color: #ef4444; color: #ef4444; text-decoration: none;"
-                                                                    onclick="return confirm('Are you sure you want to reject this loan application?');"><i
-                                                                        class="bx bx-x"></i> Reject</a>
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
-                                                                    data-form-details="<c:out value="
-                                                                    ${loan.formDetails}" />" style="padding: 6px 12px;
-                                                                font-size: 0.75rem; border-color: var(--primary-500);
-                                                                color: var(--primary-500); display: inline-flex;
-                                                                align-items: center; gap: 4px;"><i
-                                                                    class="bx bx-edit"></i> Edit</button>
+                                                                <span class="badge-status badge-status-pending"><i class="bx bxs-time"></i> Pending</span>
                                                             </c:when>
                                                             <c:when test="${loan.status == 'approved'}">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openDisburseModal('${loan.loanId}', '${loan.customerId}', '${loan.principalAmount}')"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--primary-500); color: var(--primary-500);"><i
-                                                                        class="bx bx-wallet"></i> Disburse</button>
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
-                                                                    data-form-details="<c:out value="
-                                                                    ${loan.formDetails}" />" style="padding: 6px 12px;
-                                                                font-size: 0.75rem; border-color: var(--primary-500);
-                                                                color: var(--primary-500); display: inline-flex;
-                                                                align-items: center; gap: 4px;"><i
-                                                                    class="bx bx-edit"></i> Edit</button>
+                                                                <span class="badge-status badge-status-approved"><i class="bx bxs-check-circle"></i> Approved</span>
                                                             </c:when>
-                                                            <c:when
-                                                                test="${loan.status == 'active' or loan.status == 'disbursed'}">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openRepayModal('${loan.loanId}', '${loan.customerId}', '${loan.remainingBalance}')"
-                                                                    style="padding: 6px 12px; font-size: 0.75rem; border-color: var(--accent-amber); color: var(--accent-amber);"><i
-                                                                        class="bx bx-wallet-alt"></i> Repay</button>
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
-                                                                    data-form-details="<c:out value="
-                                                                    ${loan.formDetails}" />" style="padding: 6px 12px;
-                                                                font-size: 0.75rem; border-color: var(--primary-500);
-                                                                color: var(--primary-500); display: inline-flex;
-                                                                align-items: center; gap: 4px;"><i
-                                                                    class="bx bx-edit"></i> Edit</button>
+                                                            <c:when test="${loan.status == 'disbursed' or loan.status == 'active'}">
+                                                                <span class="badge-status badge-status-active"><i class="bx bxs-check-circle"></i> Active</span>
                                                             </c:when>
+                                                            <c:when test="${loan.status == 'rejected'}">
+                                                                <span class="badge-status badge-status-rejected"><i class="bx bxs-x-circle"></i> Rejected</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="badge-status badge-status-closed">${loan.status}</span>
+                                                            </c:otherwise>
                                                         </c:choose>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        <c:if test="${loans.size() == 0}">
-                                            <tr class="empty-row">
-                                                <td colspan="10"
-                                                    style="text-align: center; padding: 40px; color: var(--gray-400);">
-                                                    <i class="bx bx-info-circle"
-                                                        style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
-                                                    No loan portfolios found in the system.
-                                                </td>
-                                            </tr>
-                                        </c:if>
-                                    </tbody>
-                                </table>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <a href="${pageContext.request.contextPath}/loan?action=statement&id=${loan.loanId}"
+                                                            class="action-btn-pill action-btn-statement">
+                                                            <i class="bx bx-file"></i> Statement
+                                                        </a>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+                                                            <button type="button" class="action-btn-pill action-btn-view"
+                                                                onclick="openViewModal('${loan.loanId}', '${customerNames[loan.customerId]}', '${customerPhones[loan.customerId]}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'), '${loan.status}', '${customerAadhaars[loan.customerId]}', '${customerPans[loan.customerId]}')"
+                                                                data-form-details="<c:out value="${loan.formDetails}" />">
+                                                                <i class="bx bx-show"></i> View
+                                                            </button>
+                                                            <c:choose>
+                                                                <c:when test="${loan.status == 'pending_approval'}">
+                                                                    <a href="${pageContext.request.contextPath}/loan?action=approve&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}"
+                                                                        class="action-btn-pill action-btn-approve"
+                                                                        onclick="return confirm('Are you sure you want to approve this loan application?');">
+                                                                        <i class="bx bx-check"></i> Approve
+                                                                    </a>
+                                                                    <a href="${pageContext.request.contextPath}/loan?action=reject&id=${loan.loanId}&csrfToken=${sessionScope.csrfToken}"
+                                                                        class="action-btn-pill action-btn-reject"
+                                                                        onclick="return confirm('Are you sure you want to reject this loan application?');">
+                                                                        <i class="bx bx-x"></i> Reject
+                                                                    </a>
+                                                                    <button type="button" class="action-btn-pill action-btn-edit"
+                                                                        onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
+                                                                        data-form-details="<c:out value="${loan.formDetails}" />">
+                                                                        <i class="bx bx-edit"></i> Edit
+                                                                    </button>
+                                                                </c:when>
+                                                                <c:when test="${loan.status == 'approved'}">
+                                                                    <button type="button" class="action-btn-pill action-btn-disburse"
+                                                                        onclick="openDisburseModal('${loan.loanId}', '${loan.customerId}', '${loan.principalAmount}')">
+                                                                        <i class="bx bx-wallet"></i> Disburse
+                                                                    </button>
+                                                                    <button type="button" class="action-btn-pill action-btn-edit"
+                                                                        onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
+                                                                        data-form-details="<c:out value="${loan.formDetails}" />">
+                                                                        <i class="bx bx-edit"></i> Edit
+                                                                    </button>
+                                                                </c:when>
+                                                                <c:when test="${loan.status == 'active' or loan.status == 'disbursed'}">
+                                                                    <button type="button" class="action-btn-pill action-btn-repay"
+                                                                        onclick="openRepayModal('${loan.loanId}', '${loan.customerId}', '${loan.remainingBalance}')">
+                                                                        <i class="bx bx-wallet-alt"></i> Repay
+                                                                    </button>
+                                                                    <button type="button" class="action-btn-pill action-btn-edit"
+                                                                        onclick="openAdminLoanUpdateForm('${loan.loanId}', '${loan.customerId}', '${loan.loanType}', '${loan.principalAmount}', '${loan.interestRate}', '${loan.termMonths}', this.getAttribute('data-form-details'))"
+                                                                        data-form-details="<c:out value="${loan.formDetails}" />">
+                                                                        <i class="bx bx-edit"></i> Edit
+                                                                    </button>
+                                                                </c:when>
+                                                            </c:choose>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            <c:if test="${loans.size() == 0}">
+                                                <tr class="empty-row">
+                                                    <td colspan="10" style="text-align: center; padding: 40px; color: var(--gray-400);">
+                                                        <i class="bx bx-info-circle" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                                                        No loan portfolios found in the system.
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2429,7 +2669,7 @@
                                             <i class="bx bx-history" style="color: var(--primary-500);"></i>
                                             Repayment Ledger Log
                                         </h4>
-                                        <button type="button" onclick="window.print()" class="btn btn-primary no-print"
+                                        <button type="button" onclick="printLoanStatement()" class="btn btn-primary no-print"
                                             style="padding: 8px 18px; font-size: 0.8rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 6px;">
                                             <span>Print Document</span>
                                             <i class="bx bx-printer"></i>
@@ -3624,10 +3864,15 @@
                     }
 
                     function closeStatementModal() {
-                        const statementModal = document.getElementById('statementModal');
-                        if (statementModal) {
-                            statementModal.style.display = 'none';
-                        }
+                        window.location.href = '${pageContext.request.contextPath}/loan';
+                    }
+
+                    function printLoanStatement() {
+                        document.body.classList.add('print-statement-active');
+                        window.print();
+                        setTimeout(() => {
+                            document.body.classList.remove('print-statement-active');
+                        }, 1000);
                     }
 
                     // Initialize state, badges, and default directory filters on page load

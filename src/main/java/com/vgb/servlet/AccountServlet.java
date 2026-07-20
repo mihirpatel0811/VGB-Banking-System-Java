@@ -109,6 +109,9 @@ public class AccountServlet extends BaseServlet {
                     case "verifyBeneficiary":
                         verifyBeneficiaryAction(request, response, customerId);
                         break;
+                    case "switch":
+                        switchAccountAction(request, response, customerId);
+                        break;
                     case "list":
                     default:
                         listCustomerAccounts(request, response, customerId);
@@ -1870,6 +1873,30 @@ public class AccountServlet extends BaseServlet {
         }
     }
 
-
+    private void switchAccountAction(HttpServletRequest request, HttpServletResponse response, Long customerId) throws Exception {
+        long targetAccountId = Long.parseLong(getParameter(request, "accountId", "0"));
+        if (targetAccountId > 0) {
+            List<Account> accounts = accountService.getCustomerAccounts(customerId);
+            boolean belongs = false;
+            for (Account acc : accounts) {
+                if (acc.getAccountId() == targetAccountId) {
+                    belongs = true;
+                    break;
+                }
+            }
+            
+            if (belongs) {
+                HttpSession session = request.getSession(false);
+                if (session != null) {
+                    session.setAttribute("accountId", targetAccountId);
+                    session.setAttribute("success", "Switched active account context successfully!");
+                }
+            } else {
+                request.getSession().setAttribute("error", "Unauthorized account switch attempt.");
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/customer-dashboard");
+    }
 }
+
 

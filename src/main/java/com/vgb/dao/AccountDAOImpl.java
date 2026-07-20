@@ -107,6 +107,15 @@ public class AccountDAOImpl implements AccountDAO {
         "LEFT JOIN account_current curr ON a.account_id = curr.account_id " +
         "WHERE a.account_number = ? " +
         "GROUP BY a.account_id";
+    private static final String GET_ACCOUNT_BY_USERNAME = 
+        ACCOUNT_SELECT_FIELDS + 
+        "FROM account a " +
+        "LEFT JOIN account_signatory s ON a.account_id = s.account_id " +
+        "LEFT JOIN customer c ON s.customer_id = c.customer_id " +
+        "LEFT JOIN account_savings sav ON a.account_id = sav.account_id " +
+        "LEFT JOIN account_current curr ON a.account_id = curr.account_id " +
+        "WHERE a.username = ? " +
+        "GROUP BY a.account_id";
     private static final String GET_ACCOUNTS_BY_CUSTOMER = 
         ACCOUNT_SELECT_FIELDS + 
         "FROM account a " +
@@ -306,6 +315,36 @@ public class AccountDAOImpl implements AccountDAO {
         try {
             stmt = conn.prepareStatement(GET_ACCOUNT_BY_NUMBER);
             stmt.setString(1, accountNumber);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToAccount(rs);
+            }
+            return null;
+        } finally {
+            DatabaseConfig.closeResources(rs, stmt, null);
+        }
+    }
+
+    @Override
+    public Account getByUsername(String username) throws Exception {
+        Connection conn = null;
+        try {
+            conn = dbConfig.getConnection();
+            return getByUsername(conn, username);
+        } catch (SQLException e) {
+            logger.error("Error fetching account by username: {}", username, e);
+            throw new Exception("Failed to fetch account", e);
+        } finally {
+            DatabaseConfig.closeConnection(conn);
+        }
+    }
+
+    public Account getByUsername(Connection conn, String username) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement(GET_ACCOUNT_BY_USERNAME);
+            stmt.setString(1, username);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 return mapResultSetToAccount(rs);

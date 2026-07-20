@@ -76,6 +76,12 @@ public class AutoPayServlet extends BaseServlet {
                     handleAdminTrigger(request, response);
                 } else if ("adminReport".equals(action)) {
                     handleAdminReport(request, response);
+                } else if ("adminPause".equals(action)) {
+                    handleAdminToggleStatus(request, response, "paused");
+                } else if ("adminResume".equals(action)) {
+                    handleAdminToggleStatus(request, response, "active");
+                } else if ("adminCancel".equals(action)) {
+                    handleAdminCancel(request, response);
                 } else {
                     response.sendRedirect(request.getContextPath() + "/admin-dashboard");
                 }
@@ -287,57 +293,178 @@ public class AutoPayServlet extends BaseServlet {
         response.sendRedirect(request.getContextPath() + "/auto-pay?action=adminDashboard");
     }
 
-    private void handleAdminReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String reportType = getParameter(request, "type", "instructions");
-        response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=autopay_" + reportType + "_report.csv");
-
-        PrintWriter writer = response.getWriter();
-        if ("history".equalsIgnoreCase(reportType)) {
-            writer.println("History ID,Auto Pay ID,Customer Name,Target Type,Payment Type,Billing Target,Source Account,Payment Date,Amount (INR),Status,Failure Reason,Txn Reference");
-            List<AutoPayHistory> history = autoPayService.getAllHistory("", "", "", 5000, 0);
-            for (AutoPayHistory h : history) {
-                String target = "credit_card".equals(h.getTargetType()) ? h.getMaskedCardNumber() : "Loan ID " + h.getLoanType();
-                writer.println(String.format("%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-                    h.getHistoryId(),
-                    h.getAutoPayId(),
-                    escapeCsv(h.getCustomerName()),
-                    h.getTargetType(),
-                    h.getPaymentType(),
-                    target,
-                    h.getMaskedSourceAccountNumber(),
-                    h.getPaymentDate(),
-                    h.getAmount().setScale(2).toString(),
-                    h.getStatus(),
-                    escapeCsv(h.getFailureReason()),
-                    h.getTransactionReference()
-                ));
-            }
-        } else {
-            writer.println("Auto Pay ID,Customer ID,Customer Name,Target Type,Billing Target,Source Account,Payment Type,Frequency,Next Payment Date,Status,Last Processed Date");
-            List<AutoPayInstruction> list = autoPayService.getAllInstructions("", "", "", 5000, 0);
-            for (AutoPayInstruction ins : list) {
-                String target = "credit_card".equals(ins.getTargetType()) ? ins.getMaskedCardNumber() : "Loan ID " + ins.getLoanId();
-                writer.println(String.format("%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-                    ins.getAutoPayId(),
-                    ins.getCustomerId(),
-                    escapeCsv(ins.getCustomerName()),
-                    ins.getTargetType(),
-                    target,
-                    ins.getMaskedSourceAccountNumber(),
-                    ins.getPaymentType(),
-                    ins.getPaymentFrequency(),
-                    ins.getNextPaymentDate(),
-                    ins.getStatus(),
-                    ins.getLastProcessedDate() != null ? ins.getLastProcessedDate().toString() : "N/A"
-                ));
+    private void handleAdminToggleStatus(HttpServletRequest request, HttpServletResponse response, String status) throws Exception {
+        String idStr = getParameter(request, "id", null);
+        if (idStr != null) {
+            long autoPayId = Long.parseLong(idStr);
+            try {
+                autoPayService.updateStatusByAdmin(autoPayId, status);
+                request.getSession().setAttribute("success", "Auto Pay instruction updated to " + status.toUpperCase() + " successfully!");
+            } catch (Exception e) {
+                request.getSession().setAttribute("error", e.getMessage());
             }
         }
-        writer.flush();
+        String search = getParameter(request, "search", "");
+        String filterStatus = getParameter(request, "status", "");
+        String type = getParameter(request, "type", "");
+        String redirectUrl = request.getContextPath() + "/auto-pay?action=adminDashboard"
+            + "&search=" + java.net.URLEncoder.encode(search, "UTF-8")
+            + "&status=" + java.net.URLEncoder.encode(filterStatus, "UTF-8")
+            + "&type=" + java.net.URLEncoder.encode(type, "UTF-8");
+        response.sendRedirect(redirectUrl);
+    }
+
+    private void handleAdminCancel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String idStr = getParameter(request, "id", null);
+        if (idStr != null) {
+            long autoPayId = Long.parseLong(idStr);
+            try {
+                autoPayService.cancelInstructionByAdmin(autoPayId);
+                request.getSession().setAttribute("success", "Auto Pay instruction has been closed and deleted.");
+            } catch (Exception e) {
+                request.getSession().setAttribute("error", e.getMessage());
+            }
+        }
+        String search = getParameter(request, "search", "");
+        String filterStatus = getParameter(request, "status", "");
+        String type = getParameter(request, "type", "");
+        String redirectUrl = request.getContextPath() + "/auto-pay?action=adminDashboard"
+            + "&search=" + java.net.URLEncoder.encode(search, "UTF-8")
+            + "&status=" + java.net.URLEncoder.encode(filterStatus, "UTF-8")
+            + "&type=" + java.net.URLEncoder.encode(type, "UTF-8");
+        response.sendRedirect(redirectUrl);
+    }
+
+    private void handleAdminReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String reportType = getParameter(request, "type", "instructions");
+        String format = getParameter(request, "format", "csv");
+
+        if ("excel".equalsIgnoreCase(format)) {
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment; filename=autopay_" + reportType + "_report.xls");
+            PrintWriter writer = response.getWriter();
+
+            // Output a styled HTML table that Excel will render with styles
+            writer.println("<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">");
+            writer.println("<head><style>");
+            writer.println("body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; }");
+            writer.println(".header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }");
+            writer.println(".header-title { font-size: 16pt; font-weight: bold; color: #6366f1; }");
+            writer.println(".header-subtitle { font-size: 10pt; color: #4b5563; font-weight: 600; }");
+            writer.println(".data-table { border-collapse: collapse; width: 100%; margin-top: 15px; }");
+            writer.println(".data-table th { background-color: #6366f1; color: white; font-weight: bold; padding: 10px; border: 1px solid #cbd5e0; text-align: left; }");
+            writer.println(".data-table td { padding: 8px 10px; border: 1px solid #e5e7eb; font-size: 10pt; }");
+            writer.println(".data-table tr:nth-child(even) { background-color: #f9fafb; }");
+            writer.println("</style></head><body>");
+
+            writer.println("<table class='header-table'>");
+            writer.println("<tr>");
+            writer.println("  <td colspan='3' class='header-title'>VERTEX GALAXY BANK</td>");
+            writer.println("  <td colspan='8' style='text-align: right; font-size: 8pt; color: #4a5568; line-height: 1.3;'>");
+            writer.println("    Corporate HQ: VGB Corporate Towers, BKC Road, Bandra Kurla Complex, Mumbai, MH - 400051<br>");
+            writer.println("    Toll Free: 1800-VGB-BANK | www.vertexgalaxybank.com");
+            writer.println("  </td>");
+            writer.println("</tr>");
+            writer.println("<tr><td colspan='11' style='border-bottom: 2.5px solid #6366f1; height: 10px;'></td></tr>");
+            writer.println("<tr>");
+            writer.println("  <td colspan='5' style='font-size: 10pt; font-weight: bold; color: #6366f1; padding-top: 10px;'>AUTO PAY REGISTRY REPORT: " + ("history".equalsIgnoreCase(reportType) ? "EXECUTION LOGS" : "REGISTERED INSTRUCTIONS") + "</td>");
+            writer.println("  <td colspan='6' style='text-align: right; font-size: 8pt; color: #4b5563; padding-top: 10px;'>Date Generated: " + new java.util.Date() + "</td>");
+            writer.println("</tr>");
+            writer.println("</table>");
+
+            writer.println("<table class='data-table'>");
+            if ("history".equalsIgnoreCase(reportType)) {
+                writer.println("<thead><tr>");
+                writer.println("<th>History ID</th><th>Auto Pay ID</th><th>Customer Name</th><th>Target Type</th><th>Payment Type</th><th>Billing Target</th><th>Source Account</th><th>Payment Date</th><th>Amount (INR)</th><th>Status</th><th>Failure Reason / Txn Ref</th>");
+                writer.println("</tr></thead><tbody>");
+                List<AutoPayHistory> history = autoPayService.getAllHistory("", "", "", 5000, 0);
+                for (AutoPayHistory h : history) {
+                    String target = "credit_card".equals(h.getTargetType()) ? h.getMaskedCardNumber() : "Loan ID " + h.getLoanType();
+                    String details = "completed".equals(h.getStatus()) ? h.getTransactionReference() : h.getFailureReason();
+                    writer.println(String.format("<tr><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                        h.getHistoryId(), h.getAutoPayId(), escapeHtml(h.getCustomerName()), h.getTargetType(), h.getPaymentType(), target, h.getMaskedSourceAccountNumber(), h.getPaymentDate(), h.getAmount().setScale(2).toString(), h.getStatus(), escapeHtml(details)
+                    ));
+                }
+            } else {
+                writer.println("<thead><tr>");
+                writer.println("<th>Auto Pay ID</th><th>Customer ID</th><th>Customer Name</th><th>Target Type</th><th>Billing Target</th><th>Source Account</th><th>Payment Type</th><th>Frequency</th><th>Next Payment Date</th><th>Status</th><th>Last Processed Date</th>");
+                writer.println("</tr></thead><tbody>");
+                List<AutoPayInstruction> list = autoPayService.getAllInstructions("", "", "", 5000, 0);
+                for (AutoPayInstruction ins : list) {
+                    String target = "credit_card".equals(ins.getTargetType()) ? ins.getMaskedCardNumber() : "Loan ID " + ins.getLoanId();
+                    writer.println(String.format("<tr><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                        ins.getAutoPayId(), ins.getCustomerId(), escapeHtml(ins.getCustomerName()), ins.getTargetType(), target, ins.getMaskedSourceAccountNumber(), ins.getPaymentType(), ins.getPaymentFrequency(), ins.getNextPaymentDate(), ins.getStatus(), ins.getLastProcessedDate() != null ? ins.getLastProcessedDate().toString() : "N/A"
+                    ));
+                }
+            }
+            writer.println("</tbody></table></body></html>");
+            writer.flush();
+        } else {
+            // Default to branded CSV
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=autopay_" + reportType + "_report.csv");
+            PrintWriter writer = response.getWriter();
+
+            writer.println("# ==========================================================================================");
+            writer.println("# VERTEX GALAXY BANK                               Always Beyond Boundaries");
+            writer.println("# Corporate HQ: VGB Corporate Towers, BKC Road, Bandra Kurla Complex, Mumbai, MH - 400051");
+            writer.println("# Toll Free: 1800-VGB-BANK | www.vertexgalaxybank.com");
+            writer.println("# ==========================================================================================");
+            writer.println("# REPORT TYPE: AUTO PAY REGISTRY REPORT - " + ("history".equalsIgnoreCase(reportType) ? "EXECUTION LOGS" : "REGISTERED INSTRUCTIONS"));
+            writer.println("# GENERATED ON: " + new java.util.Date());
+            writer.println("# ==========================================================================================");
+
+            if ("history".equalsIgnoreCase(reportType)) {
+                writer.println("History ID,Auto Pay ID,Customer Name,Target Type,Payment Type,Billing Target,Source Account,Payment Date,Amount (INR),Status,Failure Reason,Txn Reference");
+                List<AutoPayHistory> history = autoPayService.getAllHistory("", "", "", 5000, 0);
+                for (AutoPayHistory h : history) {
+                    String target = "credit_card".equals(h.getTargetType()) ? h.getMaskedCardNumber() : "Loan ID " + h.getLoanType();
+                    writer.println(String.format("%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                        h.getHistoryId(),
+                        h.getAutoPayId(),
+                        escapeCsv(h.getCustomerName()),
+                        h.getTargetType(),
+                        h.getPaymentType(),
+                        target,
+                        h.getMaskedSourceAccountNumber(),
+                        h.getPaymentDate(),
+                        h.getAmount().setScale(2).toString(),
+                        h.getStatus(),
+                        escapeCsv(h.getFailureReason()),
+                        h.getTransactionReference()
+                    ));
+                }
+            } else {
+                writer.println("Auto Pay ID,Customer ID,Customer Name,Target Type,Billing Target,Source Account,Payment Type,Frequency,Next Payment Date,Status,Last Processed Date");
+                List<AutoPayInstruction> list = autoPayService.getAllInstructions("", "", "", 5000, 0);
+                for (AutoPayInstruction ins : list) {
+                    String target = "credit_card".equals(ins.getTargetType()) ? ins.getMaskedCardNumber() : "Loan ID " + ins.getLoanId();
+                    writer.println(String.format("%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                        ins.getAutoPayId(),
+                        ins.getCustomerId(),
+                        escapeCsv(ins.getCustomerName()),
+                        ins.getTargetType(),
+                        target,
+                        ins.getMaskedSourceAccountNumber(),
+                        ins.getPaymentType(),
+                        ins.getPaymentFrequency(),
+                        ins.getNextPaymentDate(),
+                        ins.getStatus(),
+                        ins.getLastProcessedDate() != null ? ins.getLastProcessedDate().toString() : "N/A"
+                    ));
+                }
+            }
+            writer.flush();
+        }
     }
 
     private String escapeCsv(String val) {
         if (val == null) return "N/A";
         return "\"" + val.replace("\"", "\"\"").replace("\n", " ").trim() + "\"";
+    }
+
+    private String escapeHtml(String val) {
+        if (val == null) return "";
+        return val.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
     }
 }

@@ -49,10 +49,27 @@ public class CustomerDashboardServlet extends BaseServlet {
                 totalBalance = totalBalance.add(acc.getBalance());
             }
             
+            // Determine active account from session
+            Long activeAccountId = (Long) session.getAttribute("accountId");
+            Account activeAccount = null;
+            if (activeAccountId != null) {
+                for (Account acc : accounts) {
+                    if (acc.getAccountId() == activeAccountId) {
+                        activeAccount = acc;
+                        break;
+                    }
+                }
+            }
+            if (activeAccount == null && !accounts.isEmpty()) {
+                activeAccount = accounts.get(0);
+                session.setAttribute("accountId", activeAccount.getAccountId());
+            }
+            
             // Get active loans
             List<com.vgb.model.Loan> activeLoans = loanService.getLoansByCustomerIdAndStatus(customerId, AppConstants.LOAN_STATUS_ACTIVE);
             
             request.setAttribute("accounts", accounts);
+            request.setAttribute("activeAccount", activeAccount);
             request.setAttribute("totalBalance", totalBalance);
             request.setAttribute("activeLoans", activeLoans);
             request.setAttribute("customer", customer);

@@ -2,7 +2,7 @@ package com.vgb.servlet;
 
 import com.vgb.constants.AppConstants;
 import com.vgb.model.Admin;
-import com.vgb.model.Customer;
+import com.vgb.model.Account;
 import com.vgb.service.AuthService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,25 +29,19 @@ public class LoginServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!validateCSRFToken(request)) {
+            request.setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
+        }
+
+        String username = getParameter(request, "username", "");
+        String loginMode = getParameter(request, "loginMode", "password");
+        boolean isPinMode = "pin".equalsIgnoreCase(loginMode);
+        String credential = isPinMode ? getParameter(request, "pin", "") : getParameter(request, "password", "");
+        String userType = getParameter(request, "userType", "customer"); // admin or customer
+
         try {
-            // Validate CSRF token
-            if (!validateCSRFToken(request)) {
-                sendErrorResponse(response, "Invalid request. Please try again.", HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
-            String username = getParameter(request, "username", null);
-            String loginMode = getParameter(request, "loginMode", "password");
-            String userType = getParameter(request, "userType", "customer");
-
-            boolean isPinMode = "pin".equalsIgnoreCase(loginMode);
-            String credential = isPinMode ? getParameter(request, "pin", null) : getParameter(request, "password", null);
-
-            if (username == null || credential == null) {
-                sendErrorResponse(response, "Username and credential are required", HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
             HttpSession session = request.getSession();
             
             if ("admin".equalsIgnoreCase(userType)) {
@@ -73,19 +67,20 @@ public class LoginServlet extends BaseServlet {
                 }
             } else {
                 // Customer login
-                Customer customer;
+                Account account;
                 if (isPinMode) {
-                    customer = authService.authenticateCustomerByPIN(username, credential);
+                    account = authService.authenticateCustomerAccountByPIN(username, credential);
                 } else {
-                    customer = authService.authenticateCustomer(username, credential);
+                    account = authService.authenticateCustomerAccount(username, credential);
                 }
                 
-                if (customer != null) {
-                    session.setAttribute(AppConstants.USER_SESSION_KEY, customer.getCustomerId());
+                if (account != null) {
+                    session.setAttribute(AppConstants.USER_SESSION_KEY, account.getCustomerId());
+                    session.setAttribute("accountId", account.getAccountId());
                     session.setAttribute(AppConstants.USER_ROLE_SESSION, AppConstants.ROLE_CUSTOMER);
                     session.setMaxInactiveInterval(AppConstants.SESSION_TIMEOUT_MINUTES * 60);
                     
-                    logger.info("Customer login successful: {}", username);
+                    logger.info("Customer account login successful: {}", username);
                     response.sendRedirect(request.getContextPath() + AppConstants.PATH_CUSTOMER_DASHBOARD);
                 } else {
                     logger.warn("Customer login failed: {}", username);
