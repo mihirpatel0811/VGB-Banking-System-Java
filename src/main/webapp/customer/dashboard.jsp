@@ -869,9 +869,9 @@
                                     <span class="vgb-luxury-label">Available Balance</span>
                                     <div class="vgb-luxury-balance-wrapper">
                                         <span class="vgb-luxury-balance" id="cardBalanceDisplay" 
-                                              data-full="₹ <fmt:formatNumber value='${totalBalance}' minFractionDigits='2' maxFractionDigits='2'/>" 
+                                              data-full="₹ <fmt:formatNumber value='${activeBalance}' minFractionDigits='2' maxFractionDigits='2'/>" 
                                               data-masked="₹ &bull;&bull;&bull;&bull;&bull;">
-                                            ₹ <fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/>
+                                            ₹ <fmt:formatNumber value="${activeBalance}" minFractionDigits="2" maxFractionDigits="2"/>
                                         </span>
                                         <button type="button" onclick="toggleBalanceVisibility()" class="vgb-luxury-toggle-btn" id="eyeBalanceBtn" title="Show/Hide Balance">
                                             <i class="bx bx-show" id="eyeBalanceIcon"></i>

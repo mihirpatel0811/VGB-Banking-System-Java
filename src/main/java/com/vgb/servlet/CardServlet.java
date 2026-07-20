@@ -4,6 +4,7 @@ import com.vgb.model.Account;
 import com.vgb.model.Card;
 import com.vgb.service.AccountService;
 import com.vgb.service.CardService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -106,6 +107,13 @@ public class CardServlet extends BaseServlet {
             // Customer list
             List<Card> customerCards = cardService.getCustomerCards(customerId);
             List<Account> accounts = accountService.getCustomerAccounts(customerId);
+            Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+            if (activeAccount != null) {
+                long activeAccountId = activeAccount.getAccountId();
+                customerCards = customerCards.stream()
+                        .filter(card -> card.getAccountId() == activeAccountId)
+                        .toList();
+            }
             com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
             
             // Fetch Auto Pay instructions to show status on Cards page
@@ -117,7 +125,9 @@ public class CardServlet extends BaseServlet {
             }
             
             request.setAttribute("cards", customerCards);
-            request.setAttribute("accounts", accounts);
+            request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
+            request.setAttribute("activeAccount", activeAccount);
+            request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
             request.setAttribute("customer", customer);
             request.getRequestDispatcher("/customer/cards.jsp").forward(request, response);
         } else {

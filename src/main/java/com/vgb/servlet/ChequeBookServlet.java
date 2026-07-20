@@ -4,6 +4,7 @@ import com.vgb.model.Account;
 import com.vgb.model.ChequeBookRequest;
 import com.vgb.service.AccountService;
 import com.vgb.service.ChequeBookRequestService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -90,10 +91,19 @@ public class ChequeBookServlet extends BaseServlet {
             // Customer lists their requests and active accounts
             List<ChequeBookRequest> customerRequests = chequeBookService.getCustomerRequests(customerId);
             List<Account> accounts = accountService.getCustomerAccounts(customerId);
+            Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+            if (activeAccount != null) {
+                long activeAccountId = activeAccount.getAccountId();
+                customerRequests = customerRequests.stream()
+                        .filter(req -> req.getAccountId() == activeAccountId)
+                        .toList();
+            }
             com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
 
             request.setAttribute("requests", customerRequests);
-            request.setAttribute("accounts", accounts);
+            request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
+            request.setAttribute("activeAccount", activeAccount);
+            request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
             request.setAttribute("customer", customer);
             request.getRequestDispatcher("/customer/chequebook.jsp").forward(request, response);
         } else {

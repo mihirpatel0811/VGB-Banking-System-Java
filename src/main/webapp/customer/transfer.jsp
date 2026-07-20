@@ -1193,7 +1193,7 @@
                                 <label>Select Source Account</label>
                                 <select id="transferSourceAccount" name="fromAccountId" required style="display: none;">
                                     <c:forEach items="${accounts}" var="acc">
-                                        <option value="${acc.accountId}">
+                                        <option value="${acc.accountId}" ${acc.accountId == selectedAccountId ? 'selected' : ''}>
                                             ${acc.accountNumber} - ${acc.accountType} (Available: ₹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2" maxFractionDigits="2"/>)
                                         </option>
                                     </c:forEach>
@@ -1210,7 +1210,7 @@
                                         <c:if test="${acc.accountType == 'Salary' or acc.accountType == 'SALARY' or acc.accountType == 'salary'}">
                                             <c:set var="cardTypeClass" value="type-salary" />
                                         </c:if>
-                                        <div class="account-select-card ${vs.first ? 'active' : ''} ${cardTypeClass}" data-value="${acc.accountId}">
+                                        <div class="account-select-card ${acc.accountId == selectedAccountId ? 'active' : ''} ${cardTypeClass}" data-value="${acc.accountId}">
                                             <div class="acc-card-top">
                                                 <div class="acc-chip-container">
                                                     <svg class="acc-card-chip" width="28" height="20" viewBox="0 0 32 24" fill="none">
@@ -1395,7 +1395,7 @@
                                 <label>Select Source Account</label>
                                 <select id="withdrawSourceAccount" name="accountId" required style="display: none;">
                                     <c:forEach items="${accounts}" var="acc">
-                                        <option value="${acc.accountId}">
+                                        <option value="${acc.accountId}" ${acc.accountId == selectedAccountId ? 'selected' : ''}>
                                             ${acc.accountNumber} - ${acc.accountType} (Available: ₹<fmt:formatNumber value="${acc.balance}" minFractionDigits="2" maxFractionDigits="2"/>)
                                         </option>
                                     </c:forEach>
@@ -1412,7 +1412,7 @@
                                         <c:if test="${acc.accountType == 'Salary' or acc.accountType == 'SALARY' or acc.accountType == 'salary'}">
                                             <c:set var="cardTypeClass" value="type-salary" />
                                         </c:if>
-                                        <div class="account-select-card ${vs.first ? 'active' : ''} ${cardTypeClass}" data-value="${acc.accountId}">
+                                        <div class="account-select-card ${acc.accountId == selectedAccountId ? 'active' : ''} ${cardTypeClass}" data-value="${acc.accountId}">
                                             <div class="acc-card-top">
                                                 <div class="acc-chip-container">
                                                     <svg class="acc-card-chip" width="28" height="20" viewBox="0 0 32 24" fill="none">

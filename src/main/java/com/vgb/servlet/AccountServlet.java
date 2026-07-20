@@ -5,6 +5,7 @@ import com.vgb.model.Account;
 import com.vgb.model.Customer;
 import com.vgb.model.Transaction;
 import com.vgb.service.AccountService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -1100,7 +1101,12 @@ public class AccountServlet extends BaseServlet {
     // Customer and Statement helper actions
     private void listCustomerAccounts(HttpServletRequest request, HttpServletResponse response, Long customerId) throws Exception {
         List<Account> accounts = accountService.getCustomerAccounts(customerId);
+        Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+        Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
         request.setAttribute("accounts", accounts);
+        request.setAttribute("activeAccount", activeAccount);
+        request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
+        request.setAttribute("customer", customer);
         request.getRequestDispatcher("/customer/account.jsp").forward(request, response);
     }
 
@@ -1108,10 +1114,19 @@ public class AccountServlet extends BaseServlet {
         List<Account> accounts = accountService.getCustomerAccounts(customerId);
         List<com.vgb.model.Card> cards = new com.vgb.service.CardService().getCustomerCards(customerId);
         List<Account> beneficiaries = accountService.getSavedBeneficiaries(customerId);
+        Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+        if (activeAccount != null) {
+            long activeAccountId = activeAccount.getAccountId();
+            cards = cards.stream()
+                    .filter(card -> card.getAccountId() == activeAccountId)
+                    .toList();
+        }
 
         request.setAttribute("accounts", accounts);
         request.setAttribute("cards", cards);
         request.setAttribute("beneficiaries", beneficiaries);
+        request.setAttribute("activeAccount", activeAccount);
+        request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
         generateCSRFToken(request);
 
         request.getRequestDispatcher("/customer/transfer.jsp").forward(request, response);
@@ -1135,10 +1150,13 @@ public class AccountServlet extends BaseServlet {
                         break;
                     }
                 }
+                if (selectedAccount != null) {
+                    AccountContextUtil.storeActiveAccount(request.getSession(false), selectedAccount);
+                }
             }
             
             if (selectedAccount == null) {
-                selectedAccount = accounts.get(0);
+                selectedAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
                 selectedAccountId = selectedAccount.getAccountId();
             }
 
@@ -1147,6 +1165,7 @@ public class AccountServlet extends BaseServlet {
 
             request.setAttribute("selectedAccountId", selectedAccountId);
             request.setAttribute("selectedAccount", selectedAccount);
+            request.setAttribute("activeAccount", selectedAccount);
             request.setAttribute("transactions", transactions);
         }
         

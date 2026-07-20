@@ -12,6 +12,7 @@
 <%@ page import="com.vgb.model.ChequeBookRequest" %>
 <%@ page import="com.vgb.service.ChequeBookRequestService" %>
 <%@ page import="com.vgb.constants.AppConstants" %>
+<%@ page import="com.vgb.util.AccountContextUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.math.BigDecimal" %>
 <%
@@ -26,7 +27,12 @@
     List<Card> customerCards = null;
     List<Loan> customerLoans = null;
     List<ChequeBookRequest> customerChequeRequests = null;
-    BigDecimal totalBalance = BigDecimal.ZERO;
+    Account activeAccount = null;
+    List<Account> activeAccountList = java.util.Collections.emptyList();
+    BigDecimal activeBalance = BigDecimal.ZERO;
+    String avatarPath = "";
+    String avatarUrl = request.getContextPath() + "/assest/images/logo.png";
+    boolean hasCustomAvatar = false;
     
     if (customerId != null) {
         try {
@@ -35,13 +41,9 @@
             
             AccountService accountService = new AccountService();
             customerAccounts = accountService.getCustomerAccounts(customerId);
-            if (customerAccounts != null) {
-                for (Account acc : customerAccounts) {
-                    if (acc.getBalance() != null) {
-                        totalBalance = totalBalance.add(acc.getBalance());
-                    }
-                }
-            }
+            activeAccount = AccountContextUtil.resolveActiveAccount(session, customerAccounts);
+            activeAccountList = AccountContextUtil.onlyActiveAccount(customerAccounts, activeAccount);
+            activeBalance = AccountContextUtil.getBalance(activeAccount);
             
             CardService cardService = new CardService();
             customerCards = cardService.getCustomerCards(customerId);
@@ -60,13 +62,28 @@
         response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
+
+    if (customer.getAvatarPath() != null && !customer.getAvatarPath().trim().isEmpty()) {
+        avatarPath = customer.getAvatarPath().trim();
+        if (!avatarPath.startsWith("/")) {
+            avatarPath = "/" + avatarPath;
+        }
+        avatarUrl = request.getContextPath() + avatarPath;
+        hasCustomAvatar = true;
+    }
     
     request.setAttribute("customer", customer);
-    request.setAttribute("accounts", customerAccounts);
+    request.setAttribute("accounts", activeAccountList);
+    request.setAttribute("allAccounts", customerAccounts);
+    request.setAttribute("activeAccount", activeAccount);
+    request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
     request.setAttribute("cards", customerCards);
     request.setAttribute("loans", customerLoans);
     request.setAttribute("chequeRequests", customerChequeRequests);
-    request.setAttribute("totalBalance", totalBalance);
+    request.setAttribute("activeBalance", activeBalance);
+    request.setAttribute("totalBalance", activeBalance);
+    request.setAttribute("avatarUrl", avatarUrl);
+    request.setAttribute("hasCustomAvatar", hasCustomAvatar);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -235,8 +252,8 @@
 
         /* Profile banner/cover matching admin style */
         .profile-cover {
-            background-image: url('${pageContext.request.contextPath}/assest/images/cover page image.png');
-            background-size: 100% 100%;
+            background-image: url('${pageContext.request.contextPath}/assest/images/Extra/cover%20page%20image.png');
+            background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
             height: 120px;
@@ -535,13 +552,11 @@
                 <c:choose>
                     <c:when test="${not empty customer}">
                         <c:choose>
-                            <c:when test="${not empty customer.avatarPath}">
-                                <img src="${pageContext.request.contextPath}${customer.avatarPath}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                            <c:when test="${hasCustomAvatar}">
+                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/logo.png';" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             </c:when>
                             <c:otherwise>
-                                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; border: 2px solid white; box-shadow: var(--shadow-sm); text-transform: uppercase;">
-                                    ${customer.fullName.substring(0, 1)}
-                                </div>
+                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: contain; background: white; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             </c:otherwise>
                         </c:choose>
                         <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
@@ -619,19 +634,8 @@
                         <!-- Floating Avatar -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
                             <div style="position: relative; display: inline-block;">
-                                <c:set var="avatarUrl" value="" />
-                                <c:if test="${not empty customer.avatarPath}">
-                                    <c:set var="avatarUrl" value="${pageContext.request.contextPath}${customer.avatarPath}" />
-                                </c:if>
                                 <div class="avatar-holder" id="avatarClickContainer" style="cursor: pointer;" onclick="openLightbox('${avatarUrl}')" title="Click to View Profile Picture">
-                                    <c:choose>
-                                        <c:when test="${not empty customer.avatarPath}">
-                                            <img id="avatarImageRef" src="${avatarUrl}" alt="Profile Avatar">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="bx bxs-user-circle" style="font-size: 5.5rem; color: var(--gray-300);"></i>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <img id="avatarImageRef" class="customer-avatar-img" src="${avatarUrl}" alt="Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/logo.png';">
                                 </div>
                                 <div onclick="document.getElementById('avatarFileInput').click();" style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid white; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20;" title="Click to Change Profile Picture">
                                     <i class="bx bx-camera"></i>
@@ -666,16 +670,16 @@
                         </div>
                     </div>
 
-                    <!-- Net Worth Card matching admin System health layout -->
+                    <!-- Active Account Card matching admin System health layout -->
                     <div class="glass-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);">
                         <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Combined Net Worth
+                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Active Account Balance
                         </h4>
                         <div style="font-size: 1.8rem; font-weight: 800; color: var(--gray-900); margin-bottom: 8px;">
-                            ₹<fmt:formatNumber value="${totalBalance}" minFractionDigits="2" maxFractionDigits="2"/>
+                            ₹<fmt:formatNumber value="${activeBalance}" minFractionDigits="2" maxFractionDigits="2"/>
                         </div>
                         <div style="font-size: 0.82rem; color: var(--gray-500); line-height: 1.5; margin-bottom: 15px;">
-                            Combined balance across all savings, checking, and current accounts linked to your customer ID.
+                            Balance for ${not empty activeAccount ? activeAccount.accountNumber : 'the selected account'} currently active in your customer portal.
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">
                             <span>Audit Security Status</span>
@@ -849,9 +853,9 @@
                     <!-- Tab 3: Banking Signatory & Account details -->
                     <div id="tab-content-banking" style="display: none;">
                         <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Mapped Accounts &amp; Signatory Authorities
+                            <i class="bx bx-wallet" style="color: var(--primary-500);"></i> Active Account &amp; Signatory Authority
                         </h4>
-                        <p style="color: var(--gray-400); font-size: 0.82rem; margin-bottom: 25px;">Review ledger records, nominees, and joint holdings of your bank profiles.</p>
+                        <p style="color: var(--gray-400); font-size: 0.82rem; margin-bottom: 25px;">Review ledger records, nominees, and joint holdings for the account selected in your portal.</p>
                         
                         <div style="display: flex; flex-direction: column; gap: 20px;">
                             <c:choose>
@@ -1272,11 +1276,16 @@
                     
                     const clickContainer = document.getElementById('avatarClickContainer');
                     if (clickContainer) {
-                        clickContainer.innerHTML = `<img id="avatarImageRef" src="${absolutePath}" alt="Profile Avatar">`;
+                        clickContainer.innerHTML = `<img id="avatarImageRef" class="customer-avatar-img" src="${absolutePath}" alt="Profile Avatar">`;
                         clickContainer.onclick = function() {
                             openLightbox(absolutePath);
                         };
                     }
+
+                    document.querySelectorAll('.customer-avatar-img').forEach(img => {
+                        img.src = absolutePath;
+                        img.style.objectFit = 'cover';
+                    });
                     
                     fileInput.value = '';
                     showResponseToast('Profile picture uploaded successfully!', true);

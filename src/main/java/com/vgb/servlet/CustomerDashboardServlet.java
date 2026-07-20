@@ -6,6 +6,7 @@ import com.vgb.model.Customer;
 import com.vgb.service.AccountService;
 import com.vgb.service.LoanService;
 import com.vgb.service.CustomerService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,34 +44,16 @@ public class CustomerDashboardServlet extends BaseServlet {
             // Get customer accounts
             List<Account> accounts = accountService.getCustomerAccounts(customerId);
             
-            // Calculate total balance
-            BigDecimal totalBalance = BigDecimal.ZERO;
-            for (Account acc : accounts) {
-                totalBalance = totalBalance.add(acc.getBalance());
-            }
-            
-            // Determine active account from session
-            Long activeAccountId = (Long) session.getAttribute("accountId");
-            Account activeAccount = null;
-            if (activeAccountId != null) {
-                for (Account acc : accounts) {
-                    if (acc.getAccountId() == activeAccountId) {
-                        activeAccount = acc;
-                        break;
-                    }
-                }
-            }
-            if (activeAccount == null && !accounts.isEmpty()) {
-                activeAccount = accounts.get(0);
-                session.setAttribute("accountId", activeAccount.getAccountId());
-            }
+            Account activeAccount = AccountContextUtil.resolveActiveAccount(session, accounts);
+            BigDecimal activeBalance = AccountContextUtil.getBalance(activeAccount);
             
             // Get active loans
             List<com.vgb.model.Loan> activeLoans = loanService.getLoansByCustomerIdAndStatus(customerId, AppConstants.LOAN_STATUS_ACTIVE);
             
             request.setAttribute("accounts", accounts);
             request.setAttribute("activeAccount", activeAccount);
-            request.setAttribute("totalBalance", totalBalance);
+            request.setAttribute("activeBalance", activeBalance);
+            request.setAttribute("totalBalance", activeBalance);
             request.setAttribute("activeLoans", activeLoans);
             request.setAttribute("customer", customer);
             request.setAttribute("birthDate", birthDate);

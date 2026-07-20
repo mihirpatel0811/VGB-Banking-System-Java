@@ -12,6 +12,7 @@ import com.vgb.service.AccountService;
 import com.vgb.service.CardService;
 import com.vgb.service.LoanService;
 import com.vgb.service.AutoPayService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -139,11 +140,23 @@ public class AutoPayServlet extends BaseServlet {
 
         // Fetch user data for dropdown selection lists
         List<Account> accounts = accountService.getCustomerAccounts(customerId);
+        Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+        if (activeAccount != null) {
+            long activeAccountId = activeAccount.getAccountId();
+            instructions = instructions.stream()
+                    .filter(ins -> ins.getSourceAccountId() != null && ins.getSourceAccountId() == activeAccountId)
+                    .toList();
+        }
         // Filter only savings, checking, or current (not fixed deposits)
         accounts.removeIf(acc -> AppConstants.ACCOUNT_TYPE_FIXED_DEPOSIT.equalsIgnoreCase(acc.getAccountType()));
+        accounts = new java.util.ArrayList<>(AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
         
         List<Card> cards = cardService.getCardsByCustomerId(customerId);
         cards.removeIf(c -> !"credit".equalsIgnoreCase(c.getCardType()) || !"active".equalsIgnoreCase(c.getStatus()));
+        if (activeAccount != null) {
+            long activeAccountId = activeAccount.getAccountId();
+            cards.removeIf(c -> c.getAccountId() != activeAccountId);
+        }
         
         List<Loan> loans = loanService.getLoansByCustomerId(customerId);
         loans.removeIf(l -> "closed".equalsIgnoreCase(l.getStatus()) || "pending_approval".equalsIgnoreCase(l.getStatus()) || "rejected".equalsIgnoreCase(l.getStatus()));
@@ -153,6 +166,7 @@ public class AutoPayServlet extends BaseServlet {
 
         // CSRF Token
         String csrfToken = generateCSRFToken(request);
+        com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
 
         request.setAttribute("instructions", instructions);
         request.setAttribute("historyList", historyList);
@@ -160,6 +174,9 @@ public class AutoPayServlet extends BaseServlet {
         request.setAttribute("cards", cards);
         request.setAttribute("loans", loans);
         request.setAttribute("notifications", notifications);
+        request.setAttribute("customer", customer);
+        request.setAttribute("activeAccount", activeAccount);
+        request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("totalHistory", totalHistory);

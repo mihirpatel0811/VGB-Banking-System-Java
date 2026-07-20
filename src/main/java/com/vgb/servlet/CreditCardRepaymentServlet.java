@@ -7,6 +7,7 @@ import com.vgb.model.Card;
 import com.vgb.model.CreditCardRepayment;
 import com.vgb.service.AccountService;
 import com.vgb.service.CardService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -152,10 +153,12 @@ public class CreditCardRepaymentServlet extends BaseServlet {
 
         // Get customer accounts (savings/current only)
         List<Account> allAccounts = accountService.getCustomerAccounts(customerId);
+        Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), allAccounts);
         // Filter accounts to only include savings and current
         List<Account> activeAccounts = allAccounts.stream()
                 .filter(a -> "active".equalsIgnoreCase(a.getStatus()) && 
                             ("savings".equalsIgnoreCase(a.getAccountType()) || "current".equalsIgnoreCase(a.getAccountType())))
+                .filter(a -> activeAccount == null || a.getAccountId() == activeAccount.getAccountId())
                 .toList();
 
         // Dynamically compute statement details
@@ -186,6 +189,8 @@ public class CreditCardRepaymentServlet extends BaseServlet {
 
         request.setAttribute("card", card);
         request.setAttribute("accounts", activeAccounts);
+        request.setAttribute("activeAccount", activeAccount);
+        request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
         request.setAttribute("statementDate", statementDate);
         request.setAttribute("dueDate", dueDate);
         request.setAttribute("billingCycle", billingCycle);

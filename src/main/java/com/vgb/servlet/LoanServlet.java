@@ -2,6 +2,7 @@ package com.vgb.servlet;
 
 import com.vgb.model.Loan;
 import com.vgb.service.LoanService;
+import com.vgb.util.AccountContextUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -156,8 +157,12 @@ public class LoanServlet extends BaseServlet {
             request.setAttribute("loans", loanService.getLoansByCustomerId(customerId));
             try {
                 com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
+                java.util.List<com.vgb.model.Account> accounts = new com.vgb.service.AccountService().getCustomerAccounts(customerId);
+                com.vgb.model.Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
                 request.setAttribute("customer", customer);
-                request.setAttribute("accounts", new com.vgb.service.AccountService().getCustomerAccounts(customerId));
+                request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
+                request.setAttribute("activeAccount", activeAccount);
+                request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
             } catch (Exception e) {
                 logger.error("Failed to load customer profile or accounts in LoanServlet listLoans", e);
             }
