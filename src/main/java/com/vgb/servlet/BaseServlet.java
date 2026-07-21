@@ -19,6 +19,36 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseServlet extends HttpServlet {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    protected void ensureDefaultAvatar(HttpServletRequest request) {
+        try {
+            // Copy to source directory
+            String sourceWebappPath = "d:/InternShip Project/VGB-Banking-System-Java/src/main/webapp/assest/images/default-avatar.jpg";
+            java.io.File sourceDest = new java.io.File(sourceWebappPath);
+            java.io.File srcFile = new java.io.File(System.getProperty("user.home") + "/.gemini/antigravity-ide/brain/ec7af293-1440-4dc2-ae08-40fd1d10362d/media__1784639798852.jpg");
+            if (srcFile.exists()) {
+                if (!sourceDest.exists()) {
+                    sourceDest.getParentFile().mkdirs();
+                    java.nio.file.Files.copy(srcFile.toPath(), sourceDest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    logger.info("Successfully copied default avatar to source webapp assets: " + sourceDest.getAbsolutePath());
+                }
+                
+                // Copy to deployed context directory
+                String appPath = request.getServletContext().getRealPath("/assest/images/default-avatar.jpg");
+                if (appPath != null) {
+                    java.io.File destFile = new java.io.File(appPath);
+                    if (!destFile.exists()) {
+                        destFile.getParentFile().mkdirs();
+                        java.nio.file.Files.copy(srcFile.toPath(), destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                        logger.info("Successfully copied default avatar to deployed assets: " + destFile.getAbsolutePath());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Failed to copy default avatar image", e);
+        }
+    }
+
+
     protected String generateCSRFToken(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String token = (String) session.getAttribute(AppConstants.CSRF_TOKEN_SESSION);

@@ -1103,7 +1103,7 @@ public class AccountServlet extends BaseServlet {
         List<Account> accounts = accountService.getCustomerAccounts(customerId);
         Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
         Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
-        request.setAttribute("accounts", accounts);
+        request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
         request.setAttribute("activeAccount", activeAccount);
         request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
         request.setAttribute("customer", customer);
@@ -1122,7 +1122,7 @@ public class AccountServlet extends BaseServlet {
                     .toList();
         }
 
-        request.setAttribute("accounts", accounts);
+        request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
         request.setAttribute("cards", cards);
         request.setAttribute("beneficiaries", beneficiaries);
         request.setAttribute("activeAccount", activeAccount);
@@ -1137,7 +1137,8 @@ public class AccountServlet extends BaseServlet {
         request.setAttribute("customer", customer);
         
         List<Account> accounts = accountService.getCustomerAccounts(customerId);
-        request.setAttribute("accounts", accounts);
+        Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+        request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
 
         if (!accounts.isEmpty()) {
             long selectedAccountId = Long.parseLong(getParameter(request, "accountId", "0"));

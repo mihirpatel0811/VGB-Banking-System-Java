@@ -389,7 +389,7 @@
                 </div>
                 <div class="nav-actions" style="display: flex; align-items: center; gap: 20px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/logo.png"
+                        <img id="adminHeaderAvatar" src="${pageContext.request.contextPath}/assest/images/default-avatar.jpg"
                             alt="Admin Profile Avatar"
                             style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                         <script>
@@ -487,7 +487,7 @@
                                         <div class="avatar-holder" id="adminAvatarContainer" style="cursor:  pointer;"
                                             onclick="openAdminLightbox();">
                                             <img id="adminAvatarImage"
-                                                src="${pageContext.request.contextPath}/assest/images/logo.png"
+                                                src="${pageContext.request.contextPath}/assest/images/default-avatar.jpg"
                                                 alt="Admin Profile Logo">
                                         </div>
                                         <div onclick="document.getElementById('adminAvatarFileInput').click();"
@@ -1095,7 +1095,7 @@
                 /* --- Admin Avatar Upload & Lightbox Methods --- */
                 function openAdminLightbox() {
                     const adminAvatar = document.getElementById('adminAvatarImage');
-                    if (!adminAvatar || adminAvatar.src.includes('logo.png')) {
+                    if (!adminAvatar || adminAvatar.src.includes('default-avatar.jpg')) {
                         // If there's no custom avatar path, ignore preview request
                         return;
                     }

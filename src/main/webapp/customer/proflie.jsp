@@ -31,7 +31,7 @@
     List<Account> activeAccountList = java.util.Collections.emptyList();
     BigDecimal activeBalance = BigDecimal.ZERO;
     String avatarPath = "";
-    String avatarUrl = request.getContextPath() + "/assest/images/logo.png";
+    String avatarUrl = request.getContextPath() + "/assest/images/default-avatar.jpg";
     boolean hasCustomAvatar = false;
     
     if (customerId != null) {
@@ -553,10 +553,10 @@
                     <c:when test="${not empty customer}">
                         <c:choose>
                             <c:when test="${hasCustomAvatar}">
-                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/logo.png';" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/default-avatar.jpg';" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             </c:when>
                             <c:otherwise>
-                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: contain; background: white; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: white; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             </c:otherwise>
                         </c:choose>
                         <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
@@ -635,7 +635,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 25px 25px;">
                             <div style="position: relative; display: inline-block;">
                                 <div class="avatar-holder" id="avatarClickContainer" style="cursor: pointer;" onclick="openLightbox('${avatarUrl}')" title="Click to View Profile Picture">
-                                    <img id="avatarImageRef" class="customer-avatar-img" src="${avatarUrl}" alt="Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/logo.png';">
+                                    <img id="avatarImageRef" class="customer-avatar-img" src="${avatarUrl}" alt="Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/default-avatar.jpg';">
                                 </div>
                                 <div onclick="document.getElementById('avatarFileInput').click();" style="position: absolute; bottom: 0; right: 0; background: var(--primary-500); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid white; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20;" title="Click to Change Profile Picture">
                                     <i class="bx bx-camera"></i>

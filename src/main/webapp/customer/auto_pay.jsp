@@ -360,12 +360,10 @@
                             style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                     </c:when>
                     <c:otherwise>
-                        <div
-                            style="width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; border: 2px solid white; box-shadow: var(--shadow-sm); text-transform: uppercase;">
-                            ${customer.firstName.substring(0, 1)}
-                        </div>
+                        <img src="${pageContext.request.contextPath}/assest/images/default-avatar.jpg" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                     </c:otherwise>
                 </c:choose>
+
                 <div style="display: flex; flex-direction: column; text-align: left;"
                     class="mobile-hide">
                     <span

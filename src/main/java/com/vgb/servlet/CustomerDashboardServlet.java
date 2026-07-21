@@ -35,6 +35,7 @@ public class CustomerDashboardServlet extends BaseServlet {
         }
 
         Long customerId = getUserId(request);
+        ensureDefaultAvatar(request);
         
         try {
             // Get customer profile and mock birth date details

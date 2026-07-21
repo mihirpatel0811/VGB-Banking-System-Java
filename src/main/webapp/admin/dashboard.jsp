@@ -8,11 +8,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VGB | Admin Dashboard</title>
     <link rel="icon" href="${pageContext.request.contextPath}/assest/images/logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
     <style>
+        .system-time-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08), 0 8px 10px -6px rgba(99, 102, 241, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .system-time-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .system-time-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-500), var(--primary-400), var(--primary-600));
+            opacity: 0.8;
+        }
+
+        .system-time-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.12), 0 10px 15px -6px rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .system-time-icon-wrapper {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-500);
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .system-time-icon-wrapper {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .system-time-card:hover .system-time-icon-wrapper {
+            background: var(--primary-500);
+            color: white;
+            transform: rotate(15deg);
+        }
+
+        .time-icon-pulse {
+            animation: iconPulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .system-time-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .system-time-label {
+            font-size: 0.72rem;
+            color: var(--gray-400);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body.dark-mode .system-time-label {
+            color: var(--gray-500);
+        }
+
+        .system-time-display-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .system-time-value {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.05rem;
+            color: var(--gray-700);
+            font-weight: 700;
+            letter-spacing: 0.25px;
+        }
+
+        body.dark-mode .system-time-value {
+            color: var(--gray-200);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+        }
+
+        .status-pulse {
+            animation: statusPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+        }
+
         :root {
+
             --glass-bg: rgba(255, 255, 255, 0.45);
             --glass-border: rgba(99, 102, 241, 0.08);
             --card-glow: rgba(99, 102, 241, 0.04);
@@ -540,12 +672,25 @@
     <main class="main-content">
         <div class="container" style="max-width: 1200px; padding: 0;">
             <!-- Welcome Header -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;" class="mobile-grid-1">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;" class="mobile-grid-1">
                 <div>
                     <h2 style="font-size: 2rem; font-weight: 800; color: var(--gray-900);">Admin Dashboard</h2>
                     <p style="color: var(--gray-500); font-size: 0.95rem; margin-top: 5px;">Monitor and approve customer registrations, manage account activations, and process credit approvals.</p>
                 </div>
+                <div class="system-time-card">
+                    <div class="system-time-icon-wrapper">
+                        <i class="bx bx-time-five time-icon-pulse"></i>
+                    </div>
+                    <div class="system-time-content">
+                        <span class="system-time-label">System Time</span>
+                        <div class="system-time-display-wrapper">
+                            <span class="status-dot status-pulse"></span>
+                            <strong class="system-time-value" id="liveSystemTime">--:--:--</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
             <!-- Stats Rows (Action Alerts) -->
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-bottom: 40px;" class="mobile-grid-1">
@@ -774,6 +919,25 @@
                 glow.style.top = e.clientY + 'px';
             });
         }
+
+        // Dynamic live time update
+        function updateLiveTime() {
+            const timeEl = document.getElementById('liveSystemTime');
+            if (timeEl) {
+                const now = new Date();
+                const year = now.getFullYear();
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month = months[now.getMonth()];
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                timeEl.textContent = month + " " + day + ", " + year + " | " + hours + ":" + minutes + ":" + seconds;
+            }
+        }
+        setInterval(updateLiveTime, 1000);
+        updateLiveTime();
+
 
         // Mobile sidebar toggle handler
         const mobileToggle = document.getElementById('mobileNavToggle');
