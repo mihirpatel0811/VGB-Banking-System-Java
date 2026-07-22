@@ -62,7 +62,10 @@ public class Customer implements Serializable {
     // Senior RM details
     private String relationshipManager;
 
-    // Standard KYC proof paths
+    // Standard KYC proof paths and document numbers
+    private String passportNo;
+    private String drivingLicenseNo;
+    private String voterIdNo;
     private String aadhaarProofPath;
     private String panProofPath;
     private String passportCopyPath;
@@ -132,7 +135,18 @@ public class Customer implements Serializable {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public String getAvatarPath() { return avatarPath; }
+    public String getAvatarPath() { 
+        if (avatarPath != null) {
+            String trimmed = avatarPath.trim();
+            if (!trimmed.isEmpty() && !"null".equalsIgnoreCase(trimmed)) {
+                if (!trimmed.startsWith("/")) {
+                    return "/" + trimmed;
+                }
+                return trimmed;
+            }
+        }
+        return null; 
+    }
     public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
 
     public String getMiddleName() { return middleName; }
@@ -226,6 +240,15 @@ public class Customer implements Serializable {
 
     public String getPanProofPath() { return panProofPath; }
     public void setPanProofPath(String panProofPath) { this.panProofPath = panProofPath; }
+
+    public String getPassportNo() { return passportNo; }
+    public void setPassportNo(String passportNo) { this.passportNo = passportNo; }
+
+    public String getDrivingLicenseNo() { return drivingLicenseNo; }
+    public void setDrivingLicenseNo(String drivingLicenseNo) { this.drivingLicenseNo = drivingLicenseNo; }
+
+    public String getVoterIdNo() { return voterIdNo; }
+    public void setVoterIdNo(String voterIdNo) { this.voterIdNo = voterIdNo; }
 
     public String getPassportCopyPath() { return passportCopyPath; }
     public void setPassportCopyPath(String passportCopyPath) { this.passportCopyPath = passportCopyPath; }

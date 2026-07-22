@@ -11,6 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.5" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('vgb_theme') || localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <style>
         .system-time-card {
             background: rgba(255, 255, 255, 0.7);
@@ -641,6 +650,10 @@
                     </span>
                 </div>
             </div>
+            <!-- Theme Toggle Button -->
+            <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+            </button>
             <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
                 <i class="bx bx-log-out"></i>
                 <span>Logout</span>

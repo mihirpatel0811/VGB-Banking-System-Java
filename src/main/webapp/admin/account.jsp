@@ -924,7 +924,7 @@
                         backdrop-filter: blur(12px);
                         align-items: center;
                         justify-content: center;
-                        padding: 20px;
+                        padding: 30px 15px;
                         overflow-y: auto;
                     }
 
@@ -934,7 +934,8 @@
                         border-radius: var(--radius-lg);
                         width: 100%;
                         max-width: 900px;
-                        max-height: 90vh;
+                        max-height: 85vh;
+                        margin: auto;
                         overflow-y: auto;
                         border: 1px solid var(--glass-border);
                         box-shadow: var(--shadow-2xl);
@@ -2262,6 +2263,10 @@
                                 </span>
                             </div>
                         </div>
+                        <!-- Theme Toggle Button -->
+                        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                            <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+                        </button>
                         <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
                             <i class="bx bx-log-out"></i>
                             <span>Logout</span>
@@ -4320,41 +4325,82 @@
 
                                     <div class="a4-section-card">
                                         <div class="a4-section-title"><i class="bx bx-cloud-upload"></i> Section E2 –
-                                            KYC Documentation Proofs Upload</div>
-                                        <div class="a4-form-row">
-                                            <div class="a4-form-group">
-                                                <label>Aadhaar Card Copy (Front & Back) *</label>
-                                                <input type="file" name="aadhaarCopy" id="aadhaarCopyInput"
-                                                    accept="image/*,application/pdf" required>
+                                            KYC Documentation Proofs & Identification Numbers</div>
+                                        
+                                        <!-- Mandatory Identification & Document Proofs -->
+                                        <div style="background: rgba(99, 102, 241, 0.04); border: 1px dashed rgba(99, 102, 241, 0.25); border-radius: 8px; padding: 18px; margin-bottom: 20px;">
+                                            <h5 style="font-size: 0.85rem; font-weight: 700; color: var(--primary-600); margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
+                                                <i class="bx bx-shield-quarter" style="font-size: 1.1rem;"></i> Mandatory KYC Identifiers & Proof Uploads
+                                            </h5>
+                                            <div class="a4-form-row">
+                                                <div class="a4-form-group">
+                                                    <label>Aadhaar Card Number * (12 Digits)</label>
+                                                    <input type="text" name="aadhaar" id="a4Aadhaar" placeholder="e.g. 123456789012" maxlength="12" pattern="\d{12}" required onkeyup="validateAadhaarNumber(this)">
+                                                    <div class="validation-msg" id="aadhaarNumError" style="display:none; color: #ef4444; font-size: 0.75rem; margin-top: 4px;">Aadhaar number must be exactly 12 digits.</div>
+                                                </div>
+                                                <div class="a4-form-group">
+                                                    <label>Aadhaar Card Copy (Front & Back) *</label>
+                                                    <input type="file" name="aadhaarCopy" id="aadhaarCopyInput" accept="image/*,application/pdf" required>
+                                                </div>
                                             </div>
-                                            <div class="a4-form-group">
-                                                <label>PAN Card Copy *</label>
-                                                <input type="file" name="panCopy" id="panCopyInput"
-                                                    accept="image/*,application/pdf" required>
+                                            <div class="a4-form-row" style="margin-top: 12px;">
+                                                <div class="a4-form-group">
+                                                    <label>PAN Card Number * (10 Characters)</label>
+                                                    <input type="text" name="pan" id="a4Pan" placeholder="e.g. ABCDE1234F" maxlength="10" style="text-transform: uppercase;" required onkeyup="validatePanNumber(this)">
+                                                    <div class="validation-msg" id="panNumError" style="display:none; color: #ef4444; font-size: 0.75rem; margin-top: 4px;">PAN number must be 10 characters (e.g. ABCDE1234F).</div>
+                                                </div>
+                                                <div class="a4-form-group">
+                                                    <label>PAN Card Copy *</label>
+                                                    <input type="file" name="panCopy" id="panCopyInput" accept="image/*,application/pdf" required>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="a4-form-row">
-                                            <div class="a4-form-group">
-                                                <label>Passport Copy (Optional)</label>
-                                                <input type="file" name="passportCopy" accept="image/*,application/pdf">
+
+                                        <!-- Optional Identification & Document Proofs -->
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 20px;">
+                                            <h5 style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
+                                                <i class="bx bx-id-card" style="font-size: 1.1rem;"></i> Optional Identification Documents & Proof Copies
+                                            </h5>
+                                            <div class="a4-form-row">
+                                                <div class="a4-form-group">
+                                                    <label>Passport Number (Optional)</label>
+                                                    <input type="text" name="passportNo" id="a4PassportNo" placeholder="e.g. A1234567" style="text-transform: uppercase;">
+                                                </div>
+                                                <div class="a4-form-group">
+                                                    <label>Passport Copy (Optional)</label>
+                                                    <input type="file" name="passportCopy" accept="image/*,application/pdf">
+                                                </div>
                                             </div>
-                                            <div class="a4-form-group">
-                                                <label>Driving License Copy (Optional)</label>
-                                                <input type="file" name="dlCopy" accept="image/*,application/pdf">
+                                            <div class="a4-form-row" style="margin-top: 12px;">
+                                                <div class="a4-form-group">
+                                                    <label>Driving License Number (Optional)</label>
+                                                    <input type="text" name="dlNo" id="a4DlNo" placeholder="e.g. DL-1420110012345" style="text-transform: uppercase;">
+                                                </div>
+                                                <div class="a4-form-group">
+                                                    <label>Driving License Copy (Optional)</label>
+                                                    <input type="file" name="dlCopy" accept="image/*,application/pdf">
+                                                </div>
                                             </div>
-                                            <div class="a4-form-group">
-                                                <label>Voter ID Copy (Optional)</label>
-                                                <input type="file" name="voterIdCopy" accept="image/*,application/pdf">
+                                            <div class="a4-form-row" style="margin-top: 12px;">
+                                                <div class="a4-form-group">
+                                                    <label>Voter ID Card Number (Optional)</label>
+                                                    <input type="text" name="voterIdNo" id="a4VoterIdNo" placeholder="e.g. ABC1234567" style="text-transform: uppercase;">
+                                                </div>
+                                                <div class="a4-form-group">
+                                                    <label>Voter ID Copy (Optional)</label>
+                                                    <input type="file" name="voterIdCopy" accept="image/*,application/pdf">
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <!-- Applicant Signature -->
                                         <div class="a4-form-row">
                                             <div class="a4-form-group">
                                                 <label>Applicant Signature Copy *</label>
-                                                <input type="file" name="signatureCopy" id="signatureCopyInput"
-                                                    accept="image/*">
-                                                <div class="validation-msg" id="signatureError"
-                                                    style="display:none; color: #ef4444; font-size: 0.75rem; margin-top: 4px;">
-                                                    Please upload a signature copy before submitting.</div>
+                                                <input type="file" name="signatureCopy" id="signatureCopyInput" accept="image/*">
+                                                <div class="validation-msg" id="signatureError" style="display:none; color: #ef4444; font-size: 0.75rem; margin-top: 4px;">
+                                                    Please upload a signature copy before submitting.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -6430,6 +6476,41 @@
                             icon.classList.remove('bx-hide');
                             icon.classList.add('bx-show');
                             icon.style.color = 'var(--gray-400)';
+                        }
+                    }
+
+                    // Validate Aadhaar number (12 digits)
+                    function validateAadhaarNumber(input) {
+                        if (!input) return;
+                        input.value = input.value.replace(/\D/g, ''); // keep digits only
+                        var errorDiv = document.getElementById('aadhaarNumError');
+                        if (input.value.length === 12) {
+                            if (errorDiv) errorDiv.style.display = 'none';
+                            input.style.borderColor = '#10b981';
+                        } else if (input.value.length > 0) {
+                            if (errorDiv) errorDiv.style.display = 'block';
+                            input.style.borderColor = '#ef4444';
+                        } else {
+                            if (errorDiv) errorDiv.style.display = 'none';
+                            input.style.borderColor = '';
+                        }
+                    }
+
+                    // Validate PAN number (10 characters: 5 letters, 4 digits, 1 letter)
+                    function validatePanNumber(input) {
+                        if (!input) return;
+                        input.value = input.value.toUpperCase();
+                        var errorDiv = document.getElementById('panNumError');
+                        var panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+                        if (panRegex.test(input.value)) {
+                            if (errorDiv) errorDiv.style.display = 'none';
+                            input.style.borderColor = '#10b981';
+                        } else if (input.value.length > 0) {
+                            if (errorDiv) errorDiv.style.display = 'block';
+                            input.style.borderColor = '#ef4444';
+                        } else {
+                            if (errorDiv) errorDiv.style.display = 'none';
+                            input.style.borderColor = '';
                         }
                     }
 

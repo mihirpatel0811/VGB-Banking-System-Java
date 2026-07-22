@@ -2206,13 +2206,14 @@
                     .modal {
                         position: fixed;
                         inset: 0;
-                        background: rgba(15, 23, 42, 0.5);
+                        background: rgba(15, 23, 42, 0.6);
                         backdrop-filter: blur(8px);
                         display: none;
                         align-items: center;
                         justify-content: center;
                         z-index: 1100;
-                        padding: 20px;
+                        padding: 30px 15px;
+                        overflow-y: auto;
                     }
 
                     .modal-content {
@@ -2220,6 +2221,11 @@
                         border: 1px solid var(--glass-border);
                         backdrop-filter: blur(25px) saturate(180%);
                         box-shadow: var(--panel-shadow);
+                        max-height: 85vh;
+                        margin: auto;
+                        display: flex;
+                        flex-direction: column;
+                        overflow: hidden;
                     }
 
                     body.dark-mode .modal-content {
@@ -2533,6 +2539,10 @@
                                 </span>
                             </div>
                         </div>
+                        <!-- Theme Toggle Button -->
+                        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                            <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+                        </button>
                         <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
                             <i class="bx bx-log-out"></i>
                             <span>Logout</span>
@@ -3997,98 +4007,102 @@
 
                 <!-- Modal: Card Controls & Limits (Admin version) -->
                 <div id="controlsModal" class="modal">
-                    <div class="modal-content" style="max-width: 500px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
-                        <div class="modal-header-container">
-                            <h3 class="modal-title-text">
+                    <div class="modal-content" style="max-width: 520px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; margin: auto;">
+                        <div class="modal-header-container" style="padding: 18px 25px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                            <h3 class="modal-title-text" style="margin: 0;">
                                 <i class="bx bx-slider-alt" style="color: var(--primary-500);"></i> Card Controls & Auto Pay
                             </h3>
                             <button type="button" onclick="closeControlsModal()" class="modal-close-btn">&times;</button>
                         </div>
-                        <form action="${pageContext.request.contextPath}/card?action=updateLimits" method="post" style="padding: 25px; display: flex; flex-direction: column; gap: 20px; text-align: left;">
+                        <form action="${pageContext.request.contextPath}/card?action=updateLimits" method="post" style="display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; margin: 0;">
                             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" id="controlsCardId" name="cardId">
                             
-                            <!-- Daily Limit Slider -->
-                            <div class="form-group">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <label for="controlsDailyLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Daily Transaction Limit</label>
-                                    <span id="controlsDailyLimitVal" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                            <div class="modal-body" style="padding: 22px 25px; overflow-y: auto; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 18px; text-align: left;">
+                                <!-- Daily Limit Slider -->
+                                <div class="form-group" style="margin: 0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <label for="controlsDailyLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Daily Transaction Limit</label>
+                                        <span id="controlsDailyLimitVal" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-500); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                    </div>
+                                    <input type="range" id="controlsDailyLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsDailyLimit', this.value)">
+                                    <input type="hidden" id="controlsDailyLimitInput" name="dailyLimit">
+                                    <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily spend capacity across all transactions</small>
                                 </div>
-                                <input type="range" id="controlsDailyLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsDailyLimit', this.value)">
-                                <input type="hidden" id="controlsDailyLimitInput" name="dailyLimit">
-                                <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily spend capacity across all transactions</small>
-                            </div>
 
-                            <!-- ATM Limit Slider -->
-                            <div class="form-group">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <label for="controlsAtmLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">ATM Cash Withdrawal Limit</label>
-                                    <span id="controlsAtmLimitVal" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 25,000</span>
+                                <!-- ATM Limit Slider -->
+                                <div class="form-group" style="margin: 0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <label for="controlsAtmLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">ATM Cash Withdrawal Limit</label>
+                                        <span id="controlsAtmLimitVal" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 25,000</span>
+                                    </div>
+                                    <input type="range" id="controlsAtmLimitRange" min="1000" max="100000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsAtmLimit', this.value)">
+                                    <input type="hidden" id="controlsAtmLimitInput" name="atmLimit">
+                                    <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily withdrawal capacity at ATMs</small>
                                 </div>
-                                <input type="range" id="controlsAtmLimitRange" min="1000" max="100000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsAtmLimit', this.value)">
-                                <input type="hidden" id="controlsAtmLimitInput" name="atmLimit">
-                                <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily withdrawal capacity at ATMs</small>
-                            </div>
 
-                            <!-- Online Limit Slider -->
-                            <div class="form-group">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <label for="controlsOnlineLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Online & POS Shopping Limit</label>
-                                    <span id="controlsOnlineLimitVal" style="background: rgba(245, 158, 11, 0.1); color: #d97706; font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                <!-- Online Limit Slider -->
+                                <div class="form-group" style="margin: 0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <label for="controlsOnlineLimitRange" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700);">Online & POS Shopping Limit</label>
+                                        <span id="controlsOnlineLimitVal" style="background: rgba(245, 158, 11, 0.1); color: #d97706; font-weight: 700; font-size: 0.85rem; padding: 2px 8px; border-radius: var(--radius-sm);">₹ 50,000</span>
+                                    </div>
+                                    <input type="range" id="controlsOnlineLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsOnlineLimit', this.value)">
+                                    <input type="hidden" id="controlsOnlineLimitInput" name="onlineLimit">
+                                    <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily limit for E-Commerce, online, and POS store purchases</small>
                                 </div>
-                                <input type="range" id="controlsOnlineLimitRange" min="1000" max="200000" step="1000" class="limit-slider" style="width: 100%; cursor: pointer;" oninput="updateControlsLimitVal('controlsOnlineLimit', this.value)">
-                                <input type="hidden" id="controlsOnlineLimitInput" name="onlineLimit">
-                                <small style="color: var(--gray-450); font-size: 0.75rem;">Max daily limit for E-Commerce, online, and POS store purchases</small>
-                            </div>
 
-                            <!-- International Toggle -->
-                            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 5px;">
-                                <div style="display: flex; flex-direction: column; gap: 2px;">
-                                    <strong style="font-size: 0.9rem; color: var(--gray-800);">International Usage</strong>
-                                    <small style="color: var(--gray-450); font-size: 0.75rem;">Allow transactions outside India</small>
-                                </div>
-                                <label class="switch-toggle">
-                                    <input type="checkbox" id="controlsIntlEnabledCheckbox" onchange="updateControlsIntlInput(this.checked)">
-                                    <span class="slider-toggle-round"></span>
-                                </label>
-                                <input type="hidden" id="controlsIntlEnabledInput" name="internationalEnabled">
-                            </div>
-
-                            <!-- Auto Pay Section (Credit Cards only) -->
-                            <div id="controlsAutoPaySection" style="display: none; border-top: 1px dashed rgba(99, 102, 241, 0.15); padding-top: 15px; margin-top: 5px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 15px;">
+                                <!-- International Toggle -->
+                                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 5px;">
                                     <div style="display: flex; flex-direction: column; gap: 2px;">
-                                        <strong style="font-size: 0.9rem; color: var(--gray-800);">Auto Pay Bill Dues</strong>
-                                        <small style="color: var(--gray-450); font-size: 0.75rem;">Automatically pay credit card outstanding/minimum dues</small>
+                                        <strong style="font-size: 0.9rem; color: var(--gray-800);">International Usage</strong>
+                                        <small style="color: var(--gray-450); font-size: 0.75rem;">Allow transactions outside India</small>
                                     </div>
                                     <label class="switch-toggle">
-                                        <input type="checkbox" id="controlsAutoPayEnabledCheckbox" onchange="toggleControlsAutoPayFields(this.checked)">
+                                        <input type="checkbox" id="controlsIntlEnabledCheckbox" onchange="updateControlsIntlInput(this.checked)">
                                         <span class="slider-toggle-round"></span>
                                     </label>
-                                    <input type="hidden" id="controlsAutoPayEnabledInput" name="autoPayEnabled">
+                                    <input type="hidden" id="controlsIntlEnabledInput" name="internationalEnabled">
                                 </div>
 
-                                <!-- Auto Pay Configurations (shown when enabled) -->
-                                <div id="controlsAutoPayConfigFields" style="display: none; flex-direction: column; gap: 15px;">
-                                    <div class="form-group">
-                                        <label for="controlsAutoPaySourceAccount" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Source Bank Account</label>
-                                        <select id="controlsAutoPaySourceAccount" name="autoPaySourceAccountId" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none; color: black;">
-                                            <!-- Dynamically populated via AJAX fetch -->
-                                        </select>
+                                <!-- Auto Pay Section (Credit Cards only) -->
+                                <div id="controlsAutoPaySection" style="display: none; border-top: 1px dashed rgba(99, 102, 241, 0.15); padding-top: 15px; margin-top: 5px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.04); padding: 15px; border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.08); margin-bottom: 15px;">
+                                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                                            <strong style="font-size: 0.9rem; color: var(--gray-800);">Auto Pay Bill Dues</strong>
+                                            <small style="color: var(--gray-450); font-size: 0.75rem;">Automatically pay credit card outstanding/minimum dues</small>
+                                        </div>
+                                        <label class="switch-toggle">
+                                            <input type="checkbox" id="controlsAutoPayEnabledCheckbox" onchange="toggleControlsAutoPayFields(this.checked)">
+                                            <span class="slider-toggle-round"></span>
+                                        </label>
+                                        <input type="hidden" id="controlsAutoPayEnabledInput" name="autoPayEnabled">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="controlsAutoPayPaymentType" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Payment Type</label>
-                                        <select id="controlsAutoPayPaymentType" name="autoPayPaymentType" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none; color: black;">
-                                            <option value="full_amount_due">Full Outstanding Amount Due</option>
-                                            <option value="minimum_due">Minimum Amount Due (5%)</option>
-                                        </select>
+
+                                    <!-- Auto Pay Configurations (shown when enabled) -->
+                                    <div id="controlsAutoPayConfigFields" style="display: none; flex-direction: column; gap: 15px;">
+                                        <div class="form-group">
+                                            <label for="controlsAutoPaySourceAccount" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Source Bank Account</label>
+                                            <select id="controlsAutoPaySourceAccount" name="autoPaySourceAccountId" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none; color: black;">
+                                                <!-- Dynamically populated via AJAX fetch -->
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="controlsAutoPayPaymentType" style="font-size: 0.9rem; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px;">Payment Type</label>
+                                            <select id="controlsAutoPayPaymentType" name="autoPayPaymentType" class="form-select" style="margin-top: 0; width: 100%; padding: 8px 12px; border-radius: var(--radius-md); border: 1.5px solid var(--gray-200); background: white; outline: none; color: black;">
+                                                <option value="full_amount_due">Full Outstanding Amount Due</option>
+                                                <option value="minimum_due">Minimum Amount Due (5%)</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 5px;">
-                                Save Control Preferences
-                            </button>
+                            <div class="modal-footer" style="padding: 16px 25px; border-top: 1px solid var(--gray-200); flex-shrink: 0;">
+                                <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; padding: 12px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    Save Control Preferences
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

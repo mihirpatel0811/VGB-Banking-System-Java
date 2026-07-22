@@ -107,43 +107,66 @@ html.dark-mode {
     --emerald-900: rgba(16, 185, 129, 0.1);
 }
 
-/* Extra robust dark mode support for all form elements, tables, dialogs, cards and lines */
+/* High-specificity dark mode overrides for body, main, wrappers, containers */
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html.dark-mode,
+html.dark-mode body,
 body.dark-mode,
-html[data-theme="dark"] body {
-    color: var(--gray-700) !important;
-    background-color: var(--gray-50) !important;
+body.dark-mode main,
+body.dark-mode .app-container,
+body.dark-mode .dashboard-container,
+body.dark-mode .bank-home-page,
+body.dark-mode .main-content,
+body.dark-mode section {
+    color: #e2e8f0 !important;
+    background-color: #0f172a !important;
 }
 
-/* Headers and sidebar panel styling in dark mode */
+/* Headers, navbar and sidebars in dark mode */
 body.dark-mode .header,
-body.dark-mode .sidebar {
+body.dark-mode header.header,
+body.dark-mode .sidebar,
+body.dark-mode aside.sidebar {
     background: rgba(30, 41, 59, 0.95) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Sidebar links override */
-body.dark-mode .sidebar-menu a {
+body.dark-mode .sidebar-menu a,
+body.dark-mode .navbar a {
     color: #cbd5e1 !important;
 }
 
 body.dark-mode .sidebar-menu a.active,
-body.dark-mode .sidebar-menu a:hover {
+body.dark-mode .sidebar-menu a:hover,
+body.dark-mode .navbar a.active,
+body.dark-mode .navbar a:hover {
     color: #ffffff !important;
     background: var(--gradient-primary) !important;
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25) !important;
 }
 
-/* Cards (glass cards, panel cards, logs cards) */
+/* Cards & Panels in Dark Mode */
 body.dark-mode .glass-card,
 body.dark-mode .card,
 body.dark-mode .dashboard-card,
 body.dark-mode .profile-card,
 body.dark-mode .audit-card,
 body.dark-mode .modal-content,
-body.dark-mode .glass-panel {
-    background: rgba(30, 41, 59, 0.8) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    color: var(--gray-700) !important;
+body.dark-mode .glass-panel,
+body.dark-mode .auth-card-container,
+body.dark-mode .auth-form-side,
+body.dark-mode .sub-card,
+body.dark-mode .info-tile,
+body.dark-mode .banking-detail-card,
+body.dark-mode .stat-card,
+body.dark-mode .table-responsive,
+body.dark-mode .quick-amount-chip {
+    background: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Muted / Secondary Card Headers */
@@ -218,6 +241,12 @@ body.dark-mode .modal-content label {
 body.dark-mode #notificationDetailModal .btn,
 body.dark-mode .modal-content .btn {
     color: #ffffff !important;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 body.dark-mode #notificationDetailModal #modalDesc {

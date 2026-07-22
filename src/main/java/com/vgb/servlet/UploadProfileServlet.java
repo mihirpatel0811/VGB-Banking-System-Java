@@ -100,9 +100,28 @@ public class UploadProfileServlet extends BaseServlet {
             // Save file
             filePart.write(filePath);
             
+            // Also copy to workspace source directory so uploaded avatar persists across server restarts
+            try {
+                String sourceDirPath = "d:/InternShip Project/VGB-Banking-System-Java/src/main/webapp/assest/img/avatars/";
+                File sourceDir = new File(sourceDirPath);
+                if (!sourceDir.exists()) {
+                    sourceDir.mkdirs();
+                }
+                File sourceFile = new File(sourceDir, fileName);
+                java.nio.file.Files.copy(new File(filePath).toPath(), sourceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception ex) {
+                logger.warn("Could not copy uploaded avatar to source folder", ex);
+            }
+
             // Update in database
             String relativePath = "/assest/img/avatars/" + fileName;
             customerService.updateCustomerAvatar(customerId, relativePath);
+            
+            // Update session customer if present
+            Object customerObj = request.getAttribute("customer");
+            if (customerObj instanceof com.vgb.model.Customer) {
+                ((com.vgb.model.Customer) customerObj).setAvatarPath(relativePath);
+            }
             
             if (isAjax) {
                 java.util.Map<String, Object> data = new java.util.HashMap<>();

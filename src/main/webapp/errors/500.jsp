@@ -9,6 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('vgb_theme') || localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 <body class="bank-home-page" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;">
     <div class="cursor-glow"></div>

@@ -95,6 +95,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('vgb_theme') || localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.45);
@@ -556,7 +565,7 @@
                                 <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/default-avatar.jpg';" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             </c:when>
                             <c:otherwise>
-                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: white; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                                <img class="customer-avatar-img" src="${avatarUrl}" alt="Customer Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/default-avatar.jpg';" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: white; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                             </c:otherwise>
                         </c:choose>
                         <div style="display: flex; flex-direction: column; text-align: left;" class="mobile-hide">
@@ -575,6 +584,10 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+            <!-- Theme Toggle Button -->
+            <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+            </button>
             <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
                 <i class="bx bx-log-out"></i>
                 <span>Logout</span>

@@ -13,9 +13,10 @@ public class DatabaseConfig {
 
     // Database credentials
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/vgb_database?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "17193";
+    private static final String DB_URL = System.getenv("DB_URL") != null ? System.getenv("DB_URL")
+            : "jdbc:mysql://localhost:3306/vgb_database?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
+    private static final String DB_PASSWORD = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "17193";
 
     // Connection pool
     private static DatabaseConfig instance;
@@ -359,6 +360,17 @@ public class DatabaseConfig {
                 logger.info("Upgrading schema: Adding signature_path column to customer table");
                 stmt.execute("ALTER TABLE customer ADD COLUMN signature_path VARCHAR(255) NULL");
                 logger.info("Customer schema upgraded successfully with signature_path!");
+            }
+            rs.close();
+
+            // 3e3. Upgrade customer table to add passport_no, driving_license_no, voter_id_no if needed
+            rs = metaData.getColumns(null, null, "customer", "passport_no");
+            if (!rs.next()) {
+                logger.info("Upgrading schema: Adding passport_no, driving_license_no, voter_id_no columns to customer table");
+                stmt.execute("ALTER TABLE customer ADD COLUMN passport_no VARCHAR(50) NULL");
+                stmt.execute("ALTER TABLE customer ADD COLUMN driving_license_no VARCHAR(50) NULL");
+                stmt.execute("ALTER TABLE customer ADD COLUMN voter_id_no VARCHAR(50) NULL");
+                logger.info("Customer schema upgraded with passport_no, driving_license_no, voter_id_no!");
             }
             rs.close();
 

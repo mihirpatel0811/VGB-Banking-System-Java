@@ -27,21 +27,22 @@
 
 "use strict";
 
-// Enforce light mode globally to prevent dark mode rendering
+// Sync dark mode preference immediately from localStorage
 (function () {
-    const theme = 'light';
-
-    document.documentElement.classList.remove('dark-mode');
-    document.documentElement.classList.add('light-mode');
-    document.documentElement.setAttribute('data-theme', theme);
-    if (document.body) {
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
-    } else {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.remove('dark-mode');
-            document.body.classList.add('light-mode');
-        });
+    const savedTheme = localStorage.getItem('vgb_theme') || localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        document.documentElement.classList.remove('light-mode');
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (document.body) {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('light-mode');
+            });
+        }
     }
 })();
 
@@ -235,15 +236,60 @@ const App = {
        5. THEME & PERSISTENCE LOGIC
        ========================================================================== */
     initThemeSystem: function () {
-        const theme = 'light';
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
-        document.documentElement.classList.remove('dark-mode');
-        document.documentElement.classList.add('light-mode');
-        document.documentElement.setAttribute('data-theme', theme);
+        const savedTheme = localStorage.getItem('vgb_theme') || localStorage.getItem('theme') || 'light';
+        this.applyTheme(savedTheme);
+    },
 
-        // Clean up any previously stored theme preferences
-        localStorage.removeItem('theme');
+    toggleTheme: function () {
+        const isDark = document.body.classList.contains('dark-mode') || document.documentElement.classList.contains('dark-mode');
+        const newTheme = isDark ? 'light' : 'dark';
+        this.applyTheme(newTheme);
+        localStorage.setItem('vgb_theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    },
+
+    applyTheme: function (theme) {
+        const isDark = theme === 'dark';
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+            document.documentElement.classList.add('dark-mode');
+            document.documentElement.classList.remove('light-mode');
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+            document.documentElement.classList.remove('dark-mode');
+            document.documentElement.classList.add('light-mode');
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        // Update all toggle icons & buttons
+        const icons = document.querySelectorAll('#themeToggleIcon, .theme-toggle-icon, .bx-moon, .bx-sun');
+        icons.forEach(icon => {
+            if (icon.id === 'themeToggleIcon' || icon.classList.contains('theme-toggle-icon') || (icon.parentElement && (icon.parentElement.classList.contains('theme-toggle-btn') || icon.parentElement.id === 'themeToggleBtn'))) {
+                if (isDark) {
+                    icon.className = 'bx bx-sun theme-toggle-icon';
+                    icon.style.color = '#f59e0b';
+                } else {
+                    icon.className = 'bx bx-moon theme-toggle-icon';
+                    icon.style.color = 'var(--primary-600)';
+                }
+            }
+        });
+
+        const btns = document.querySelectorAll('.theme-toggle-btn, #themeToggleBtn');
+        btns.forEach(btn => {
+            if (isDark) {
+                btn.style.background = 'rgba(245, 158, 11, 0.15)';
+                btn.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+                btn.setAttribute('title', 'Switch to Light Mode');
+            } else {
+                btn.style.background = 'rgba(99, 102, 241, 0.08)';
+                btn.style.borderColor = 'rgba(99, 102, 241, 0.2)';
+                btn.setAttribute('title', 'Switch to Dark Mode');
+            }
+        });
     },
 
     /* ==========================================================================
@@ -2423,3 +2469,51 @@ window.flipWizServiceCard = vgbAdminManager.flipWizServiceCard;
 window.toggle3DCardCvv = vgbAdminManager.toggle3DCardCvv;
 window.toggleWizAtmSelection = vgbAdminManager.toggleWizAtmSelection;
 window.toggleWizChequeSelection = vgbAdminManager.toggleWizChequeSelection;
+window.toggleTheme = function() {
+    if (window.App && typeof window.App.toggleTheme === 'function') {
+        window.App.toggleTheme();
+    } else {
+        const isDark = document.body.classList.contains('dark-mode') || document.documentElement.classList.contains('dark-mode');
+        const newTheme = isDark ? 'light' : 'dark';
+        if (newTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+            document.documentElement.classList.add('dark-mode');
+            document.documentElement.classList.remove('light-mode');
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+            document.documentElement.classList.remove('dark-mode');
+            document.documentElement.classList.add('light-mode');
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+        localStorage.setItem('vgb_theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+
+        // Update icons and buttons
+        const icons = document.querySelectorAll('#themeToggleIcon, .theme-toggle-icon');
+        icons.forEach(icon => {
+            if (newTheme === 'dark') {
+                icon.className = 'bx bx-sun';
+                icon.style.color = '#f59e0b';
+            } else {
+                icon.className = 'bx bx-moon';
+                icon.style.color = 'var(--primary-600)';
+            }
+        });
+
+        const btns = document.querySelectorAll('.theme-toggle-btn, #themeToggleBtn');
+        btns.forEach(btn => {
+            if (newTheme === 'dark') {
+                btn.style.background = 'rgba(245, 158, 11, 0.15)';
+                btn.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+                btn.setAttribute('title', 'Switch to Light Mode');
+            } else {
+                btn.style.background = 'rgba(99, 102, 241, 0.08)';
+                btn.style.borderColor = 'rgba(99, 102, 241, 0.2)';
+                btn.setAttribute('title', 'Switch to Dark Mode');
+            }
+        });
+    }
+};

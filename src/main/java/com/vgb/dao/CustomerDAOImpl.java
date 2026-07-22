@@ -588,6 +588,9 @@ public class CustomerDAOImpl implements CustomerDAO {
             customer.setRelationshipManager(rs.getString("relationship_manager"));
             customer.setAadhaarProofPath(rs.getString("aadhaar_proof_path"));
             customer.setPanProofPath(rs.getString("pan_proof_path"));
+            customer.setPassportNo(rs.getString("passport_no"));
+            customer.setDrivingLicenseNo(rs.getString("driving_license_no"));
+            customer.setVoterIdNo(rs.getString("voter_id_no"));
             customer.setPassportCopyPath(rs.getString("passport_copy_path"));
             customer.setDrivingLicenseCopyPath(rs.getString("driving_license_copy_path"));
             customer.setVoterIdCopyPath(rs.getString("voter_id_copy_path"));

@@ -1334,7 +1334,8 @@
                             backdrop-filter: blur(8px);
                             align-items: center;
                             justify-content: center;
-                            padding: 20px;
+                            padding: 30px 15px;
+                            overflow-y: auto;
                         }
 
                         .modal-content {
@@ -1342,12 +1343,13 @@
                             backdrop-filter: blur(25px);
                             border: 1px solid rgba(99, 102, 241, 0.2);
                             width: 100%;
-                            max-width: 500px;
+                            max-width: 520px;
                             border-radius: var(--radius-lg);
                             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
                             animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
                             overflow: hidden;
-                            max-height: 90vh;
+                            max-height: 85vh;
+                            margin: auto;
                             display: flex;
                             flex-direction: column;
                         }
@@ -1357,6 +1359,8 @@
                             flex-direction: column;
                             overflow: hidden;
                             margin: 0;
+                            flex: 1;
+                            min-height: 0;
                         }
 
                         @keyframes modalScaleUp {
@@ -1372,18 +1376,27 @@
                         }
 
                         .modal-header {
-                            padding: 20px 25px;
+                            padding: 18px 25px;
                             border-bottom: 1px solid rgba(99, 102, 241, 0.1);
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
                             flex-shrink: 0;
+                            background: rgba(255, 255, 255, 0.95);
                         }
 
                         .modal-body {
-                            padding: 25px;
+                            padding: 22px 25px;
                             overflow-y: auto;
-                            max-height: calc(90vh - 80px);
+                            flex: 1;
+                            min-height: 0;
+                        }
+
+                        .modal-footer {
+                            padding: 16px 25px;
+                            border-top: 1px solid rgba(99, 102, 241, 0.1);
+                            background: rgba(255, 255, 255, 0.95);
+                            flex-shrink: 0;
                         }
 
                         /* Responsive Modal & Paper Form adjustments */
@@ -1550,10 +1563,11 @@
                                             <c:when test="${not empty customer.avatarPath}">
                                                 <img src="${pageContext.request.contextPath}${customer.avatarPath}"
                                                     alt="Customer Profile Avatar"
+                                                    onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/default-avatar.jpg';"
                                                     style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                                             </c:when>
                                             <c:otherwise>
-                                                <img src="${pageContext.request.contextPath}/assest/images/default-avatar.jpg" alt="Customer Profile Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
+                                                <img src="${pageContext.request.contextPath}/assest/images/default-avatar.jpg" alt="Customer Profile Avatar" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/assest/images/logo.png';" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-500); box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);">
                                             </c:otherwise>
                                         </c:choose>
                                         <div style="display: flex; flex-direction: column; text-align: left;"
@@ -1578,6 +1592,10 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
+                            <!-- Theme Toggle Button -->
+                            <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                                <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+                            </button>
                             <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
                                 <i class="bx bx-log-out"></i>
                                 <span>Logout</span>
@@ -2561,16 +2579,16 @@
 
                     <!-- 4. Modal: Manage Card Controls & Limits -->
                     <div id="limitsModal" class="modal">
-                        <div class="modal-content" style="max-width: 500px; width: 100%;">
+                        <div class="modal-content" style="max-width: 520px; width: 100%;">
                             <div class="modal-header">
-                                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px;"><i
+                                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--gray-800); display: flex; align-items: center; gap: 8px; margin: 0;"><i
                                         class="bx bx-slider-alt" style="color: var(--primary-500);"></i> Card Controls & Limits</h3>
                                 <button type="button" onclick="closeLimitsModal()" class="close-btn">&times;</button>
                             </div>
                             <form action="${pageContext.request.contextPath}/card?action=updateLimits" method="post">
                                 <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                                 <input type="hidden" id="limitsCardId" name="cardId">
-                                <div class="modal-body" style="padding: 25px; display: flex; flex-direction: column; gap: 20px;">
+                                <div class="modal-body">
                                     <!-- Daily Limit Slider -->
                                     <div class="form-group">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -2650,8 +2668,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 5px;">
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; padding: 12px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">
                                         Save Control Preferences
                                     </button>
                                 </div>

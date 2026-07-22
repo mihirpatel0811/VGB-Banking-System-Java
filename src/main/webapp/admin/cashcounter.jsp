@@ -590,6 +590,10 @@
                     </span>
                 </div>
             </div>
+            <!-- Theme Toggle Button -->
+            <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+            </button>
             <a href="${pageContext.request.contextPath}/logout" class="btn-logout" style="text-decoration: none;">
                 <i class="bx bx-log-out"></i>
                 <span>Logout</span>

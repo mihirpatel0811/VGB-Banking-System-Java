@@ -1,0 +1,45 @@
+services:
+  # ==============================================================================
+  # MySQL Database Service
+  # ==============================================================================
+  db:
+    image: mysql:8.0
+    container_name: vgb-mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "17193"
+      MYSQL_DATABASE: "vgb_database"
+    ports:
+      - "3306:3306"
+    volumes:
+      - vgb_mysql_data:/var/lib/mysql
+      - ./src/main/resources/vgb_database.sql:/docker-entrypoint-initdb.d/01_vgb_database.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p17193"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==============================================================================
+  # Java Web Application Service (Tomcat 10.1 + Java 17)
+  # ==============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vgb-banking-app:latest
+    container_name: vgb-banking-app
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: "jdbc:mysql://db:3306/vgb_database?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+      DB_USER: "root"
+      DB_PASSWORD: "17193"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  vgb_mysql_data:
+    driver: local

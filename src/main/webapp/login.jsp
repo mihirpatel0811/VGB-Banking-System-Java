@@ -15,6 +15,15 @@
                 rel="stylesheet">
             <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
             <link href="${pageContext.request.contextPath}/assest/css/styles.css?v=2.6" rel="stylesheet">
+            <script>
+                (function() {
+                    const savedTheme = localStorage.getItem('vgb_theme') || localStorage.getItem('theme');
+                    if (savedTheme === 'dark') {
+                        document.documentElement.classList.add('dark-mode');
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                })();
+            </script>
 
             <style>
                 :root {
@@ -569,6 +578,10 @@
                         Services</a>
                 </nav>
                 <div class="nav-actions">
+                    <!-- Theme Toggle Button -->
+                    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark / Light Theme" aria-label="Toggle Theme" style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(99, 102, 241, 0.08); border: 1.5px solid rgba(99, 102, 241, 0.2); color: var(--primary-600); cursor: pointer; transition: all 0.3s ease;">
+                        <i class="bx bx-moon" id="themeToggleIcon" style="font-size: 1.2rem;"></i>
+                    </button>
                 </div>
             </header>
 
