@@ -1,7 +1,7 @@
 # ==============================================================================
 # STAGE 1: Build the WAR application using Maven
 # ==============================================================================
-FROM maven:3.9-eclipse-temurin-17-alpine AS builder
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /build
 
@@ -15,7 +15,7 @@ RUN mvn clean package -DskipTests
 # ==============================================================================
 # STAGE 2: Run the WAR application on Tomcat 10.1 (Jakarta EE 10 / Servlet 6.0)
 # ==============================================================================
-FROM tomcat:10.1-jdk17-temurin-alpine
+FROM tomcat:10.1-jdk17-temurin
 
 LABEL maintainer="VGB Banking Team"
 LABEL description="Vertex Galaxy Bank Digital Banking Application"
