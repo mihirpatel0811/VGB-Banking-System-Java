@@ -2631,7 +2631,7 @@
                                                     <td style="text-align: center;">
                                                         <button type="button" class="btn btn-primary"
                                                             style="padding: 8px 14px; font-size: 0.75rem; border-radius: var(--radius-sm); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; border: none;"
-                                                            onclick="openStatementModal(Number('${acc.accountId}'), '${acc.customerName}', '${acc.accountNumber}', '${acc.accountType}', Number('${acc.balance}'), '${acc.status}')">
+                                                            onclick="openStatementModal(Number('${status.index}'))">
                                                             <i class="bx bx-receipt"></i> View Statement
                                                         </button>
                                                     </td>
@@ -6227,184 +6227,220 @@
                     var statementAccountId = 0;
                     var statementAccountBalance = 0;
 
-                    function openStatementModal(accountId, customerName, accountNumber, accountType, totalBalance, status) {
-                        statementAccountId = accountId;
-                        statementAccountBalance = totalBalance;
-
-                        var acc = accountsData.find(a => a.accountId === accountId);
-
-                        // Set customer detail labels in statement layout
-                        document.getElementById('lblStmtName').textContent = customerName.toUpperCase();
-                        document.getElementById('lblStmtCustId').textContent = "#VGB-CUST-" + acc.customerId;
-                        document.getElementById('lblStmtAccNum').textContent = "#" + accountNumber;
-                        document.getElementById('lblStmtAccType').textContent = accountType;
-
-                        var address = "";
-                        if (acc.accountType === 'savings') {
-                            address = (acc.primaryAddress || "") + ", " + (acc.primaryCity || "") + ", " + (acc.primaryState || "") + " - " + (acc.primaryZip || "");
-                        } else {
-                            address = acc.companyAddress || "";
-                        }
-                        document.getElementById('lblStmtAddress').textContent = address;
-                        document.getElementById('lblStmtBalance').textContent = "₹ " + totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-                        // Set print and screen labels
-                        document.getElementById('lblStmtRef').textContent = "ACC-REF: #ACC-" + accountId;
-                        if(document.getElementById('printLblStmtRef')) {
-                            document.getElementById('printLblStmtRef').textContent = "ACC-REF: #ACC-" + accountId;
-                        }
-                        var compiledDate = new Date();
-                        var options = { month: 'long', day: 'numeric', year: 'numeric' };
-                        var datePart = compiledDate.toLocaleDateString('en-US', options);
-                        var timePart = compiledDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                        document.getElementById('lblStmtDateGenerated').textContent = datePart + " at " + timePart;
-                        if(document.getElementById('printLblStmtDateGenerated')) {
-                            document.getElementById('printLblStmtDateGenerated').textContent = datePart + " at " + timePart;
-                        }
-
-                        // Reset filters
-                        document.getElementById('stmtDateFilter').value = 'all';
-                        document.getElementById('stmtTypeFilter').value = 'all';
-                        document.getElementById('stmtCustomDateGroup').style.display = 'none';
-
-                        // Show preloader
-                        document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--gray-400);"><i class="bx bx-loader-alt bx-spin" style="font-size:2rem; display:block; margin-bottom:10px;"></i> Fetching ledger entries...</td></tr>';
-
-                        openModal('statementModal');
-
-                        // Fetch transaction logs via AJAX
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', '${pageContext.request.contextPath}/account?action=getTransactionsJson&accountId=' + accountId, true);
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4) {
-                                if (xhr.status === 200) {
-                                    try {
-                                        statementTransactionsList = JSON.parse(xhr.responseText);
-                                        runStatementFilter();
-                                    } catch (e) {
-                                        console.error("Failed to parse JSON transaction log.", e);
-                                        document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:30px;">Error parsing transactions list.</td></tr>';
-                                    }
-                                } else {
-                                    document.getElementById('statementTxnTbody').innerHTML = '<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:30px;">Failed to fetch transactions from server.</td></tr>';
-                                }
+                    function openStatementModal(accOrIndex, customerName, accountNumber, accountType, totalBalance, status) {
+                        try {
+                            var acc = null;
+                            if (typeof accOrIndex === 'number' && accOrIndex >= 0 && accOrIndex < accountsData.length && accountsData[accOrIndex]) {
+                                acc = accountsData[accOrIndex];
+                            } else {
+                                acc = accountsData.find(function (a) { return String(a.accountId) === String(accOrIndex); }) || {};
                             }
-                        };
-                        xhr.send();
+
+                            var accountId = acc.accountId || Number(accOrIndex) || 0;
+                            var custName = acc.customerName || customerName || "Customer";
+                            var accNum = acc.accountNumber || accountNumber || "";
+                            var accType = acc.accountType || accountType || "";
+                            var bal = (acc.balance !== undefined && acc.balance !== null) ? acc.balance : (totalBalance || 0);
+
+                            statementAccountId = accountId;
+                            statementAccountBalance = bal;
+
+                            // Set customer detail labels in statement layout
+                            var elName = document.getElementById('lblStmtName');
+                            if (elName) elName.textContent = String(custName).toUpperCase();
+
+                            var elCustId = document.getElementById('lblStmtCustId');
+                            if (elCustId) elCustId.textContent = acc.customerId ? "#VGB-CUST-" + acc.customerId : "-";
+
+                            var elAccNum = document.getElementById('lblStmtAccNum');
+                            if (elAccNum) elAccNum.textContent = "#" + accNum;
+
+                            var elAccType = document.getElementById('lblStmtAccType');
+                            if (elAccType) elAccType.textContent = accType;
+
+                            var address = "";
+                            if (acc.accountType === 'savings') {
+                                address = (acc.primaryAddress || "") + (acc.primaryCity ? ", " + acc.primaryCity : "") + (acc.primaryState ? ", " + acc.primaryState : "") + (acc.primaryZip ? " - " + acc.primaryZip : "");
+                            } else {
+                                address = acc.companyAddress || (acc.primaryAddress ? acc.primaryAddress + (acc.primaryCity ? ", " + acc.primaryCity : "") : "");
+                            }
+                            var elAddr = document.getElementById('lblStmtAddress');
+                            if (elAddr) elAddr.textContent = address || "Main Branch Registered Address";
+
+                            var elBal = document.getElementById('lblStmtBalance');
+                            if (elBal) elBal.textContent = "₹ " + Number(bal).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                            var elRef = document.getElementById('lblStmtRef');
+                            if (elRef) elRef.textContent = "ACC-REF: #ACC-" + accountId;
+
+                            if (document.getElementById('printLblStmtRef')) {
+                                document.getElementById('printLblStmtRef').textContent = "ACC-REF: #ACC-" + accountId;
+                            }
+
+                            var compiledDate = new Date();
+                            var options = { month: 'long', day: 'numeric', year: 'numeric' };
+                            var datePart = compiledDate.toLocaleDateString('en-US', options);
+                            var timePart = compiledDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+                            var elGen = document.getElementById('lblStmtDateGenerated');
+                            if (elGen) elGen.textContent = datePart + " at " + timePart;
+
+                            if (document.getElementById('printLblStmtDateGenerated')) {
+                                document.getElementById('printLblStmtDateGenerated').textContent = datePart + " at " + timePart;
+                            }
+
+                            // Reset filters
+                            var dateF = document.getElementById('stmtDateFilter');
+                            if (dateF) dateF.value = 'all';
+
+                            var typeF = document.getElementById('stmtTypeFilter');
+                            if (typeF) typeF.value = 'all';
+
+                            var customGroup = document.getElementById('stmtCustomDateGroup');
+                            if (customGroup) customGroup.style.display = 'none';
+
+                            // Show preloader
+                            var tbody = document.getElementById('statementTxnTbody');
+                            if (tbody) {
+                                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--gray-400);"><i class="bx bx-loader-alt bx-spin" style="font-size:2rem; display:block; margin-bottom:10px;"></i> Fetching ledger entries...</td></tr>';
+                            }
+
+                            openModal('statementModal');
+
+                            // Fetch transaction logs via AJAX
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('GET', '${pageContext.request.contextPath}/account?action=getTransactionsJson&accountId=' + accountId, true);
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4) {
+                                    if (xhr.status === 200) {
+                                        try {
+                                            statementTransactionsList = JSON.parse(xhr.responseText);
+                                            runStatementFilter();
+                                        } catch (e) {
+                                            console.error("Failed to parse JSON transaction log.", e);
+                                            if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:30px;">Error parsing transactions list.</td></tr>';
+                                        }
+                                    } else {
+                                        if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:30px;">Failed to fetch transactions from server.</td></tr>';
+                                    }
+                                }
+                            };
+                            xhr.send();
+                        } catch (err) {
+                            console.error("Error in openStatementModal:", err);
+                            alert("Unable to open statement view: " + err.message);
+                        }
                     }
 
                     function runStatementFilter() {
-                        var dateVal = document.getElementById('stmtDateFilter').value;
-                        var typeVal = document.getElementById('stmtTypeFilter').value;
+                        try {
+                            var dateVal = document.getElementById('stmtDateFilter') ? document.getElementById('stmtDateFilter').value : 'all';
+                            var typeVal = document.getElementById('stmtTypeFilter') ? document.getElementById('stmtTypeFilter').value : 'all';
 
-                        var customGroup = document.getElementById('stmtCustomDateGroup');
-                        if (dateVal === 'custom') {
-                            customGroup.style.display = 'block';
-                        } else {
-                            customGroup.style.display = 'none';
-                        }
-
-                        var tbody = document.getElementById('statementTxnTbody');
-                        tbody.innerHTML = '';
-
-                        var now = new Date();
-                        var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-                        var startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-                        // Last month boundaries
-                        var startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-                        var endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
-
-                        var startOfCurrentYear = new Date(now.getFullYear(), 0, 1);
-
-                        let customStart = null;
-                        let customEnd = null;
-                        if (dateVal === 'custom') {
-                            var sVal = document.getElementById('stmtStartDate').value;
-                            var eVal = document.getElementById('stmtEndDate').value;
-                            if (sVal) {
-                                customStart = new Date(sVal);
-                                customStart.setHours(0, 0, 0, 0);
-                            }
-                            if (eVal) {
-                                customEnd = new Date(eVal);
-                                customEnd.setHours(23, 59, 59, 999);
-                            }
-                        }
-
-                        var filteredCount = 0;
-
-                        for (var i = 0; i < statementTransactionsList.length; i++) {
-                            var t = statementTransactionsList[i];
-
-                            // Parse date & time
-                            var dateStr = t.transactionDate.replace('T', ' ');
-                            var txnDate = new Date(dateStr);
-
-                            // 1. Filter Type check
-                            var isCredit = t.transactionType === 'deposit' || t.transactionType === 'interest' || (t.transactionType === 'transfer' && t.toAccountId === statementAccountId);
-                            var isDebit = t.transactionType === 'withdrawal' || t.transactionType === 'fee' || (t.transactionType === 'transfer' && t.fromAccountId === statementAccountId);
-
-                            var typeMatches = true;
-                            if (typeVal === 'received') {
-                                typeMatches = isCredit;
-                            } else if (typeVal === 'paid') {
-                                typeMatches = isDebit;
+                            var customGroup = document.getElementById('stmtCustomDateGroup');
+                            if (customGroup) {
+                                customGroup.style.display = (dateVal === 'custom') ? 'block' : 'none';
                             }
 
-                            // 2. Filter Date check
-                            var dateMatches = true;
-                            if (!isNaN(txnDate.getTime())) {
-                                if (dateVal === 'current_month') {
-                                    dateMatches = (txnDate >= startOfCurrentMonth);
-                                } else if (dateVal === 'last_month') {
-                                    dateMatches = (txnDate >= startOfLastMonth && txnDate <= endOfLastMonth);
-                                } else if (dateVal === 'year') {
-                                    dateMatches = (txnDate >= startOfCurrentYear);
-                                } else if (dateVal === 'custom') {
-                                    if (customStart && txnDate < customStart) dateMatches = false;
-                                    if (customEnd && txnDate > customEnd) dateMatches = false;
+                            var tbody = document.getElementById('statementTxnTbody');
+                            if (!tbody) return;
+                            tbody.innerHTML = '';
+
+                            var now = new Date();
+                            var startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                            var startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                            var endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+                            var startOfCurrentYear = new Date(now.getFullYear(), 0, 1);
+
+                            var customStart = null;
+                            var customEnd = null;
+                            if (dateVal === 'custom') {
+                                var sVal = document.getElementById('stmtStartDate') ? document.getElementById('stmtStartDate').value : '';
+                                var eVal = document.getElementById('stmtEndDate') ? document.getElementById('stmtEndDate').value : '';
+                                if (sVal) {
+                                    customStart = new Date(sVal);
+                                    customStart.setHours(0, 0, 0, 0);
+                                }
+                                if (eVal) {
+                                    customEnd = new Date(eVal);
+                                    customEnd.setHours(23, 59, 59, 999);
                                 }
                             }
 
-                            if (typeMatches && dateMatches) {
-                                filteredCount++;
+                            var filteredCount = 0;
 
-                                var dateFormatted = txnDate.toLocaleDateString('en-GB');
-                                var timeFormatted = txnDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                            for (var i = 0; i < statementTransactionsList.length; i++) {
+                                var t = statementTransactionsList[i];
+                                if (!t) continue;
 
-                                var amountClass = isCredit ? 'txn-deposit' : 'txn-withdrawal';
+                                var dateRaw = t.transactionDate ? String(t.transactionDate).replace('T', ' ') : '';
+                                var txnDate = dateRaw ? new Date(dateRaw) : new Date();
 
-                                var detailsString = t.description;
-                                if (t.referenceNumber) {
-                                    detailsString += ' <small style="display:block; color:var(--gray-400); font-family:monospace;">Ref: ' + t.referenceNumber + '</small>';
+                                var isCredit = t.transactionType === 'deposit' || t.transactionType === 'interest' || (t.transactionType === 'transfer' && String(t.toAccountId) === String(statementAccountId));
+                                var isDebit = t.transactionType === 'withdrawal' || t.transactionType === 'fee' || (t.transactionType === 'transfer' && String(t.fromAccountId) === String(statementAccountId));
+
+                                var typeMatches = true;
+                                if (typeVal === 'received') {
+                                    typeMatches = isCredit;
+                                } else if (typeVal === 'paid') {
+                                    typeMatches = isDebit;
                                 }
 
-                                var statusPill = '<span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">' + (t.status || 'COMPLETED').toUpperCase() + '</span>';
+                                var dateMatches = true;
+                                if (!isNaN(txnDate.getTime())) {
+                                    if (dateVal === 'current_month') {
+                                        dateMatches = (txnDate >= startOfCurrentMonth);
+                                    } else if (dateVal === 'last_month') {
+                                        dateMatches = (txnDate >= startOfLastMonth && txnDate <= endOfLastMonth);
+                                    } else if (dateVal === 'year') {
+                                        dateMatches = (txnDate >= startOfCurrentYear);
+                                    } else if (dateVal === 'custom') {
+                                        if (customStart && txnDate < customStart) dateMatches = false;
+                                        if (customEnd && txnDate > customEnd) dateMatches = false;
+                                    }
+                                }
 
-                                var creditVal = isCredit ? '+ ₹ ' + t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
-                                var debitVal = isDebit ? '- ₹ ' + t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
-                                var runningBalFormatted = t.runningBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                if (typeMatches && dateMatches) {
+                                    filteredCount++;
 
-                                var rowHtml = `
-                        <tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.85rem; color: var(--gray-700);">
-                            <td style="padding: 14px 16px; font-weight:600; color:var(--gray-400);"><span class="badge-id">#\${filteredCount}</span></td>
-                            <td style="padding: 14px 16px;">\${dateFormatted} \${timeFormatted}</td>
-                            <td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;"><span class="\${amountClass}">\${t.transactionType}</span></td>
-                            <td style="padding: 14px 16px;">\${detailsString}</td>
-                            <td style="padding: 14px 16px;">\${statusPill}</td>
-                            <td style="padding: 14px 16px; text-align:right; font-weight:700; color: #10b981;">\${creditVal}</td>
-                            <td style="padding: 14px 16px; text-align:right; font-weight:700; color: #ef4444;">\${debitVal}</td>
-                            <td style="padding: 14px 16px; text-align:right; font-weight:700; color: #1e3a8a; font-family: monospace;">₹ \${runningBalFormatted}</td>
-                        </tr>
-                    `;
-                                tbody.insertAdjacentHTML('beforeend', rowHtml);
+                                    var dateFormatted = !isNaN(txnDate.getTime()) ? txnDate.toLocaleDateString('en-GB') : '-';
+                                    var timeFormatted = !isNaN(txnDate.getTime()) ? txnDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '';
+
+                                    var amountClass = isCredit ? 'txn-deposit' : 'txn-withdrawal';
+                                    var detailsString = t.description || 'Transaction';
+                                    if (t.referenceNumber) {
+                                        detailsString += ' <small style="display:block; color:var(--gray-400); font-family:monospace;">Ref: ' + t.referenceNumber + '</small>';
+                                    }
+
+                                    var statusPill = '<span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">' + (t.status || 'COMPLETED').toUpperCase() + '</span>';
+
+                                    var numAmt = Number(t.amount || 0);
+                                    var creditVal = isCredit ? '+ ₹ ' + numAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                                    var debitVal = isDebit ? '- ₹ ' + numAmt.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+                                    
+                                    var numBal = Number(t.runningBalance || 0);
+                                    var runningBalFormatted = numBal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                                    var txnTypeLabel = t.transactionType || 'transfer';
+                                    var rowHtml = '<tr style="border-bottom: 1px solid var(--gray-100); font-size: 0.85rem; color: var(--gray-700);">' +
+                                        '<td style="padding: 14px 16px; font-weight:600; color:var(--gray-400);"><span class="badge-id">#' + filteredCount + '</span></td>' +
+                                        '<td style="padding: 14px 16px;">' + dateFormatted + ' ' + timeFormatted + '</td>' +
+                                        '<td style="padding: 14px 16px; text-transform: capitalize; font-weight: 600;"><span class="' + amountClass + '">' + txnTypeLabel + '</span></td>' +
+                                        '<td style="padding: 14px 16px;">' + detailsString + '</td>' +
+                                        '<td style="padding: 14px 16px;">' + statusPill + '</td>' +
+                                        '<td style="padding: 14px 16px; text-align:right; font-weight:700; color: #10b981;">' + creditVal + '</td>' +
+                                        '<td style="padding: 14px 16px; text-align:right; font-weight:700; color: #ef4444;">' + debitVal + '</td>' +
+                                        '<td style="padding: 14px 16px; text-align:right; font-weight:700; color: #1e3a8a; font-family: monospace;">₹ ' + runningBalFormatted + '</td>' +
+                                    '</tr>';
+                                    tbody.insertAdjacentHTML('beforeend', rowHtml);
+                                }
                             }
-                        }
 
-                        if (filteredCount === 0) {
-                            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--gray-400);">No transactions match selected filter queries.</td></tr>';
+                            if (filteredCount === 0) {
+                                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--gray-400);">No transactions match selected filter queries.</td></tr>';
+                            }
+                        } catch (err) {
+                            console.error("Error in runStatementFilter:", err);
                         }
                     }
 

@@ -91,7 +91,16 @@ public class LoginServlet extends BaseServlet {
 
         } catch (Exception e) {
             logger.error("Error during login", e);
-            sendErrorResponse(response, AppConstants.ERROR_DATABASE_ERROR, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            String requestedWith = request.getHeader("X-Requested-With");
+            boolean isAjax = "XMLHttpRequest".equalsIgnoreCase(requestedWith) || 
+                            (request.getHeader("Accept") != null && request.getHeader("Accept").contains("application/json"));
+            
+            if (isAjax) {
+                sendErrorResponse(response, AppConstants.ERROR_DATABASE_ERROR, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } else {
+                request.setAttribute("error", "Database error occurred. Please verify database service is running and try again.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
         }
     }
 }

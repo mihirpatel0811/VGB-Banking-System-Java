@@ -92,16 +92,11 @@ public class ChequeBookServlet extends BaseServlet {
             List<ChequeBookRequest> customerRequests = chequeBookService.getCustomerRequests(customerId);
             List<Account> accounts = accountService.getCustomerAccounts(customerId);
             Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
-            if (activeAccount != null) {
-                long activeAccountId = activeAccount.getAccountId();
-                customerRequests = customerRequests.stream()
-                        .filter(req -> req.getAccountId() == activeAccountId)
-                        .toList();
-            }
+
             com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
 
             request.setAttribute("requests", customerRequests);
-            request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
+            request.setAttribute("accounts", (accounts != null && !accounts.isEmpty()) ? accounts : AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
             request.setAttribute("activeAccount", activeAccount);
             request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
             request.setAttribute("customer", customer);
@@ -165,17 +160,19 @@ public class ChequeBookServlet extends BaseServlet {
         String accountNumber = getParameter(request, "accountNumber", "");
         int leavesCount = Integer.parseInt(getParameter(request, "leavesCount", "0"));
 
-        if (accountId == 0 && !accountNumber.isEmpty()) {
-            try {
-                Account account = accountService.getAccountByNumber(accountNumber);
-                if (account != null) {
-                    accountId = account.getAccountId();
-                    if (requestFromAdmin) {
-                        customerId = account.getCustomerId();
-                    }
-                }
-            } catch (Exception e) {
-                logger.error("Failed to find account by number: " + accountNumber, e);
+        Account targetAccount = null;
+        if (accountId > 0) {
+            targetAccount = accountService.getAccountById(accountId);
+        } else if (!accountNumber.isEmpty()) {
+            targetAccount = accountService.getAccountByNumber(accountNumber);
+            if (targetAccount != null) {
+                accountId = targetAccount.getAccountId();
+            }
+        }
+
+        if (targetAccount != null) {
+            if (requestFromAdmin || customerId == null) {
+                customerId = targetAccount.getCustomerId();
             }
         }
 
@@ -186,7 +183,8 @@ public class ChequeBookServlet extends BaseServlet {
         }
 
         if (customerId == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.getSession().setAttribute("error", "Could not determine target customer for cheque book request.");
+            response.sendRedirect(request.getContextPath() + "/chequebook");
             return;
         }
 

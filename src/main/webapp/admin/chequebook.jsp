@@ -1468,15 +1468,15 @@
        </script>
 
         <!-- Modal: View Cheque Book Details -->
-        <div id="chequeBookDetailsModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
-            <div class="modal-content" style="max-width: 1020px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
-                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
+        <div id="chequeBookDetailsModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 30px 20px;">
+            <div class="modal-content" style="max-width: 900px; width: 100%; max-height: 85vh; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; margin: auto;">
+                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 18px 25px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box; flex-shrink: 0;">
                     <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;">
                         <i class="bx bx-info-circle" style="color: var(--primary-500);"></i> Cheque Book Request Details
                     </h3>
                     <button type="button" onclick="closeDetailsModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
                 </div>
-                <div class="modal-body" style="padding: 25px; box-sizing: border-box; width: 100%; text-align: left;">
+                <div class="modal-body" style="padding: 25px; box-sizing: border-box; width: 100%; text-align: left; overflow-y: auto; flex: 1; min-height: 0;">
                     <div style="background: rgba(99, 102, 241, 0.03); border: 1.5px solid rgba(99, 102, 241, 0.1); border-radius: var(--radius-md); padding: 15px; margin-bottom: 20px;">
                         <h5 style="margin: 0 0 10px 0; font-size: 0.95rem; font-weight: 700; color: var(--primary-500);">Request Status Summary</h5>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
@@ -1528,24 +1528,22 @@
                             <td style="font-weight: 600; color: var(--gray-500);" id="detailRequestedDate">-</td>
                         </tr>
                     </table>
-
-
                 </div>
-                <div class="modal-footer" style="padding: 15px 20px; border-top: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); display: flex; justify-content: flex-end; gap: 10px;">
+                <div class="modal-footer" style="padding: 15px 20px; border-top: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0;">
                     <button type="button" onclick="closeDetailsModal()" class="btn btn-secondary" style="padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid var(--gray-200); background: white; color: var(--gray-700);">Close View</button>
                 </div>
             </div>
         </div>
 
         <!-- Modal: Apply Cheque Book -->
-       <div id="applyChequeBookModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
-           <div class="modal-content" style="max-width: 720px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
-               <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box;">
+       <div id="applyChequeBookModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1050; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 30px 20px;">
+           <div class="modal-content" style="max-width: 720px; width: 100%; max-height: 85vh; border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; margin: auto;">
+               <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 18px 25px; border-bottom: 1px solid rgba(99,102,241,0.1); background: rgba(99,102,241,0.02); width: 100%; box-sizing: border-box; flex-shrink: 0;">
                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0; display: flex; align-items: center; gap: 8px;"><i class="bx bx-plus-circle" style="color: var(--primary-500);"></i> Apply Customer Cheque Book</h3>
                    <button type="button" onclick="closeApplyModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gray-800)'" onmouseout="this.style.color='var(--gray-400)'">&times;</button>
                </div>
                
-               <div class="lookup-container">
+               <div class="lookup-container" style="flex-shrink: 0;">
                    <div class="lookup-input-wrapper">
                        <i class="bx bx-search-alt"></i>
                        <input type="text" id="lookupAccountNumber" class="lookup-input" placeholder="Enter Account Number, Customer ID or Name (e.g. 171931936244)" onkeypress="if(event.key === 'Enter') fetchCustomerDetails();">
@@ -1554,13 +1552,13 @@
                </div>
 
                <!-- Lookup Results Container -->
-               <div id="lookupResultsContainer" style="display: none; max-height: 200px; overflow-y: auto; padding: 15px 24px; border-bottom: 1px dashed rgba(99,102,241,0.1); box-sizing: border-box; width: 100%;">
+               <div id="lookupResultsContainer" style="display: none; max-height: 200px; overflow-y: auto; padding: 15px 24px; border-bottom: 1px dashed rgba(99,102,241,0.1); box-sizing: border-box; width: 100%; flex-shrink: 0;">
                    <h4 style="margin: 0 0 10px; font-size: 0.85rem; color: var(--gray-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; text-align: left;">Search Results</h4>
                    <div id="lookupResultsList" style="display: flex; flex-direction: column;"></div>
                </div>
 
                <!-- Beautiful Paper Form container (hidden by default until details loaded) -->
-               <form id="applyChequeBookForm" action="${pageContext.request.contextPath}/chequebook?action=apply" method="post" style="display: none; padding: 12px 20px; max-height: 70vh; overflow-y: auto; width: 100%; box-sizing: border-box; text-align: left;">
+               <form id="applyChequeBookForm" action="${pageContext.request.contextPath}/chequebook?action=apply" method="post" style="display: none; padding: 12px 20px; overflow-y: auto; flex: 1; min-height: 0; width: 100%; box-sizing: border-box; text-align: left;">
                    <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                    <input type="hidden" id="formAccountId" name="accountId" value="">
                    <input type="hidden" id="formAccountNumber" name="accountNumber" value="">
@@ -1665,7 +1663,7 @@
                        </div>
                    </div>
 
-                   <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                   <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 10px;">
                         <button type="button" onclick="closeApplyModal()" class="btn btn-danger">Cancel</button>
                         <button type="submit" class="btn btn-primary">Submit Application</button>
                    </div>
