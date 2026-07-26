@@ -606,25 +606,21 @@ body.dark-mode .navbar a {
     color: var(--gray-400);
 }
 
-.navbar a::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--gradient-primary);
-    transition: width var(--transition-normal);
+.navbar a::before,
+.navbar a::after,
+.navbar a:hover::before,
+.navbar a:hover::after,
+.navbar a.active::before,
+.navbar a.active::after {
+    display: none !important;
+    content: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .navbar a:hover,
 .navbar a.active {
     color: var(--primary-500);
-}
-
-.navbar a:hover::before,
-.navbar a.active::before {
-    width: 100%;
 }
 
 .navbar a i {
