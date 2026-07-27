@@ -22,7 +22,7 @@ public final class AccountContextUtil {
         Account fallback = null;
 
         for (Account account : accounts) {
-            if (account == null) {
+            if (account == null || "closed".equalsIgnoreCase(account.getStatus())) {
                 continue;
             }
             if (fallback == null) {
@@ -35,6 +35,19 @@ public final class AccountContextUtil {
 
         storeActiveAccount(session, fallback);
         return fallback;
+    }
+
+    public static List<Account> filterOpenAccounts(List<Account> accounts) {
+        if (accounts == null || accounts.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Account> openList = new ArrayList<>();
+        for (Account acc : accounts) {
+            if (acc != null && !"closed".equalsIgnoreCase(acc.getStatus())) {
+                openList.add(acc);
+            }
+        }
+        return openList;
     }
 
     public static Long getSessionAccountId(HttpSession session) {

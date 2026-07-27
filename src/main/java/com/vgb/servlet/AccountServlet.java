@@ -92,6 +92,9 @@ public class AccountServlet extends BaseServlet {
                     case "getFilteredTransactionsJson":
                         getFilteredTransactionsJsonAction(request, response);
                         break;
+                    case "getCustomerFacilitiesJson":
+                        getCustomerFacilitiesJsonAction(request, response);
+                        break;
                     case "list":
                     default:
                         listAccounts(request, response);
@@ -410,11 +413,28 @@ public class AccountServlet extends BaseServlet {
 
     private void closeAccountAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
         long accountId = Long.parseLong(getParameter(request, "id", "0"));
+        String payoutMode = getParameter(request, "payoutMode", "cash");
+        long targetAccountId = Long.parseLong(getParameter(request, "targetAccountId", "0"));
+        String extAccNo = getParameter(request, "extAccNo", "");
+        String extIfsc = getParameter(request, "extIfsc", "");
+        String extHolder = getParameter(request, "extHolder", "");
+        String extBank = getParameter(request, "extBank", "");
+        String cashReceiver = getParameter(request, "cashReceiver", "");
+        String ddPayee = getParameter(request, "ddPayee", "");
+        String ddBranch = getParameter(request, "ddBranch", "");
+
+        Integer adminId = (Integer) request.getSession().getAttribute("adminId");
+        Long performedById = adminId != null ? adminId.longValue() : null;
+
         if (accountId > 0) {
-            if (accountService.updateAccountStatus(accountId, "closed")) {
-                request.getSession().setAttribute("success", "Account closed successfully.");
-            } else {
-                request.getSession().setAttribute("error", "Failed to close account.");
+            try {
+                if (accountService.closeAccount(accountId, payoutMode, targetAccountId > 0 ? targetAccountId : null, extAccNo, extIfsc, extHolder, extBank, cashReceiver, ddPayee, ddBranch, performedById)) {
+                    request.getSession().setAttribute("success", "Account closed successfully. Remaining balance and linked services processed (" + payoutMode.toUpperCase() + " settlement).");
+                } else {
+                    request.getSession().setAttribute("error", "Failed to close account.");
+                }
+            } catch (Exception e) {
+                request.getSession().setAttribute("error", "Closure failed: " + e.getMessage());
             }
         } else {
             request.getSession().setAttribute("error", "Invalid Account ID.");
@@ -1175,7 +1195,7 @@ public class AccountServlet extends BaseServlet {
             request.setAttribute("activeAccount", selectedAccount);
             request.setAttribute("transactions", transactions);
         }
-        
+
         // Get customer loans for the loan statement tab
         List<com.vgb.model.Loan> customerLoans = new com.vgb.service.LoanService().getLoansByCustomerId(customerId);
         request.setAttribute("customerLoans", customerLoans);
@@ -1301,6 +1321,13 @@ public class AccountServlet extends BaseServlet {
         String toAccountIdStr = getParameter(request, "toAccountId", "");
         BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
         String description = getParameter(request, "description", "Fund Transfer");
+
+        if (fromAccountId > 0) {
+            Account srcCheck = accountService.getAccountById(fromAccountId);
+            if (srcCheck != null && !"active".equalsIgnoreCase(srcCheck.getStatus())) {
+                throw new Exception("Cannot process transfer. Source account #" + srcCheck.getAccountNumber() + " is closed or non-active.");
+            }
+        }
 
         boolean isCreditCard = false;
         long creditCardId = 0;
@@ -1501,6 +1528,13 @@ public class AccountServlet extends BaseServlet {
             }
         }
 
+        if (accountId > 0 && !isCreditCard) {
+            Account accCheck = accountService.getAccountById(accountId);
+            if (accCheck != null && !"active".equalsIgnoreCase(accCheck.getStatus())) {
+                throw new Exception("Cannot process withdrawal. Account #" + accCheck.getAccountNumber() + " is closed or non-active.");
+            }
+        }
+
         Long performedById = adminId != null ? adminId.longValue() : customerId;
         String paymentMode = adminId != null ? "cash" : getParameter(request, "paymentMode", "cash");
         boolean success = false;
@@ -1558,6 +1592,13 @@ public class AccountServlet extends BaseServlet {
                 throw new Exception("Invalid Card CVV security code.");
             }
             accountId = card.getAccountId();
+        }
+
+        if (accountId > 0) {
+            Account accCheck = accountService.getAccountById(accountId);
+            if (accCheck != null && !"active".equalsIgnoreCase(accCheck.getStatus())) {
+                throw new Exception("Cannot process deposit. Account #" + accCheck.getAccountNumber() + " is closed or non-active.");
+            }
         }
 
         Long performedById = adminId != null ? adminId.longValue() : customerId;
@@ -1649,7 +1690,7 @@ public class AccountServlet extends BaseServlet {
     }
 
     private void getUnusedChequesJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        long chequeBookId = Long.parseLong(getParameter(request, "chequeBookId", "0"));
+        long chequeBookId = Long.parseLong(getParameter(request, "chequeBookId", getParameter(request, "chequebookId", "0")));
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         java.io.PrintWriter out = response.getWriter();
@@ -1923,6 +1964,66 @@ public class AccountServlet extends BaseServlet {
         }
         response.sendRedirect(request.getContextPath() + "/customer-dashboard");
     }
+
+    private void getCustomerFacilitiesJsonAction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long customerId = Long.parseLong(getParameter(request, "customerId", "0"));
+        long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        java.io.PrintWriter out = response.getWriter();
+
+        if (customerId <= 0 && accountId > 0) {
+            Account acc = accountService.getAccountById(accountId);
+            if (acc != null) {
+                customerId = acc.getCustomerId();
+            }
+        }
+
+        Account acc = (accountId > 0) ? accountService.getAccountById(accountId) : null;
+        List<com.vgb.model.Card> cards = (customerId > 0) ? new com.vgb.service.CardService().getCustomerCards(customerId) : new ArrayList<>();
+        List<com.vgb.model.Loan> loans = (customerId > 0) ? new com.vgb.service.LoanService().getLoansByCustomerId(customerId) : new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+
+        sb.append("\"hasAtmCard\":").append(acc != null && acc.isHasAtmCard()).append(",");
+        sb.append("\"atmCardNumber\":\"").append(acc != null ? escapeJson(acc.getAtmCardNumber() != null ? acc.getAtmCardNumber() : "") : "").append("\",");
+        sb.append("\"hasChequeBook\":").append(acc != null && acc.isHasChequeBook()).append(",");
+        sb.append("\"hasPassbook\":").append(acc != null && acc.isHasPassbook()).append(",");
+        sb.append("\"passbookNumber\":\"").append(acc != null ? escapeJson(acc.getPassbookNumber() != null ? acc.getPassbookNumber() : "") : "").append("\",");
+
+        sb.append("\"cards\":[");
+        for (int i = 0; i < cards.size(); i++) {
+            com.vgb.model.Card c = cards.get(i);
+            if (i > 0) sb.append(",");
+            sb.append("{")
+              .append("\"cardId\":").append(c.getCardId()).append(",")
+              .append("\"cardNumber\":\"").append(escapeJson(c.getCardNumber() != null ? c.getCardNumber() : "")).append("\",")
+              .append("\"cardType\":\"").append(escapeJson(c.getCardType() != null ? c.getCardType() : "")).append("\",")
+              .append("\"cardProvider\":\"").append(escapeJson(c.getCardProvider() != null ? c.getCardProvider() : "")).append("\",")
+              .append("\"status\":\"").append(escapeJson(c.getStatus() != null ? c.getStatus() : "")).append("\",")
+              .append("\"outstandingBalance\":").append(c.getOutstandingBalance() != null ? c.getOutstandingBalance() : BigDecimal.ZERO)
+              .append("}");
+        }
+        sb.append("],");
+
+        sb.append("\"loans\":[");
+        for (int i = 0; i < loans.size(); i++) {
+            com.vgb.model.Loan l = loans.get(i);
+            if (i > 0) sb.append(",");
+            sb.append("{")
+              .append("\"loanId\":").append(l.getLoanId()).append(",")
+              .append("\"loanType\":\"").append(escapeJson(l.getLoanType() != null ? l.getLoanType() : "")).append("\",")
+              .append("\"principalAmount\":").append(l.getPrincipalAmount() != null ? l.getPrincipalAmount() : BigDecimal.ZERO).append(",")
+              .append("\"remainingBalance\":").append(l.getRemainingBalance() != null ? l.getRemainingBalance() : BigDecimal.ZERO).append(",")
+              .append("\"status\":\"").append(escapeJson(l.getStatus() != null ? l.getStatus() : ""))
+              .append("}");
+        }
+        sb.append("]");
+
+        sb.append("}");
+        out.print(sb.toString());
+        out.flush();
+    }
 }
-
-

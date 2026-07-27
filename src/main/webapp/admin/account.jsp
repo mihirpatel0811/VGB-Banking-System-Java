@@ -3499,55 +3499,310 @@
                 <!-- ==========================================
          CLOSE ACCOUNT MODAL
          ========================================== -->
+                <!-- ==========================================
+                     CLOSE ACCOUNT & SETTLEMENT MODAL
+                     ========================================== -->
                 <div class="modal" id="closeAccountModal">
+                    <div class="modal-content close-account-modal-content">
+                        <style>
+                            .close-account-modal-content {
+                                max-width: 680px !important;
+                                width: 92% !important;
+                                max-height: 88vh !important;
+                                background: #ffffff !important;
+                                border-radius: 16px !important;
+                                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+                                overflow: hidden !important;
+                                display: flex !important;
+                                flex-direction: column !important;
+                                margin: auto !important;
+                            }
+
+                            .close-account-modal-content .modal-header {
+                                flex-shrink: 0 !important;
+                                background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+                                color: white !important;
+                                padding: 18px 24px !important;
+                                display: flex !important;
+                                justify-content: space-between !important;
+                                align-items: center !important;
+                            }
+
+                            .close-account-modal-content .modal-body {
+                                flex: 1 !important;
+                                min-height: 0 !important;
+                                overflow-y: auto !important;
+                                padding: 20px 24px !important;
+                                background: #f8fafc !important;
+                            }
+
+                            .close-account-modal-content .modal-footer {
+                                flex-shrink: 0 !important;
+                                padding: 16px 24px !important;
+                                background: #ffffff !important;
+                                border-top: 1px solid #e2e8f0 !important;
+                                display: flex !important;
+                                justify-content: space-between !important;
+                                align-items: center !important;
+                                z-index: 10 !important;
+                                box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
+                            }
+                        </style>
+
+                        <!-- Header -->
+                        <div class="modal-header">
+                            <h3 style="font-weight: 800; font-size: 1.25rem; color: white; display: flex; align-items: center; gap: 10px; margin: 0;">
+                                <i class="bx bx-error-alt" style="font-size: 1.5rem;"></i> Close Account & Balance Settlement
+                            </h3>
+                            <button type="button" class="close-modal-btn" onclick="closeModal('closeAccountModal')" style="color: white; background: transparent; border: none; font-size: 1.5rem; cursor: pointer;">
+                                <i class="bx bx-x"></i>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <!-- Alert Header -->
+                            <div style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 14px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem; display: flex; gap: 12px; align-items: flex-start;">
+                                <i class="bx bx-error-circle" style="font-size: 1.4rem; color: #ef4444; flex-shrink: 0; margin-top: 2px;"></i>
+                                <div>
+                                    <strong style="font-size: 0.9rem; display: block; margin-bottom: 2px;">Permanent Ledger Closure Action</strong>
+                                    Are you sure you want to close this account? Closing this account will mark its status as <strong>CLOSED</strong>, zero out the balance, and restrict future operations.
+                                </div>
+                            </div>
+
+                            <!-- Account Details Overview Card -->
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                                <h4 style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                    <i class="bx bx-credit-card"></i> Account Information Summary
+                                </h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 0.88rem;">
+                                    <div>
+                                        <span style="color: #64748b; font-size: 0.78rem; display: block;">Account Number</span>
+                                        <strong id="closeAccNum" style="font-family: monospace; font-size: 1rem; color: #1e293b;">-</strong>
+                                    </div>
+                                    <div>
+                                        <span style="color: #64748b; font-size: 0.78rem; display: block;">Account Type</span>
+                                        <strong id="closeAccType" style="text-transform: uppercase; color: #1e293b;">-</strong>
+                                    </div>
+                                    <div>
+                                        <span style="color: #64748b; font-size: 0.78rem; display: block;">Primary Holder</span>
+                                        <strong id="closeHolderName" style="color: #1e293b;">-</strong>
+                                    </div>
+                                    <div>
+                                        <span style="color: #64748b; font-size: 0.78rem; display: block;">Ledger Status</span>
+                                        <strong id="closeStatus" style="text-transform: uppercase; color: #10b981;">-</strong>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: #475569; font-size: 0.85rem; font-weight: 600;">Current Balance to Settle:</span>
+                                    <strong id="closeBalance" style="font-size: 1.25rem; color: #dc2626; font-weight: 800;">₹ 0.00</strong>
+                                </div>
+                            </div>
+
+                            <!-- Subscribed Facilities & Active Customer Liabilities Card -->
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;">
+                                    <span><i class="bx bx-grid-alt" style="color: #4f46e5; font-size: 1.1rem;"></i> Bank Facilities & Active Customer Liabilities</span>
+                                    <span id="facilitiesLoadingBadge" style="font-size: 0.72rem; color: #64748b; font-weight: normal;"><i class="bx bx-loader-alt bx-spin"></i> Checking linked services...</span>
+                                </h4>
+
+                                <!-- Grid of Standard Account Facilities -->
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+                                        <i class="bx bx-credit-card" style="font-size: 1.4rem; color: #4f46e5; display: block; margin-bottom: 2px;"></i>
+                                        <span style="font-size: 0.72rem; color: #64748b; display: block; font-weight: 600;">ATM / Debit Card</span>
+                                        <strong id="closeFacAtm" style="font-size: 0.75rem; display: block; margin-top: 4px;">-</strong>
+                                    </div>
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+                                        <i class="bx bx-book-content" style="font-size: 1.4rem; color: #0284c7; display: block; margin-bottom: 2px;"></i>
+                                        <span style="font-size: 0.72rem; color: #64748b; display: block; font-weight: 600;">Cheque Book</span>
+                                        <strong id="closeFacCheque" style="font-size: 0.75rem; display: block; margin-top: 4px;">-</strong>
+                                    </div>
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center;">
+                                        <i class="bx bx-book-open" style="font-size: 1.4rem; color: #8b5cf6; display: block; margin-bottom: 2px;"></i>
+                                        <span style="font-size: 0.72rem; color: #64748b; display: block; font-weight: 600;">Passbook Booklet</span>
+                                        <strong id="closeFacPassbook" style="font-size: 0.75rem; display: block; margin-top: 4px;">-</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Active Credit Cards Section -->
+                                <div id="closeCreditCardsSection" style="margin-top: 10px; display: none; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; padding: 12px;">
+                                    <h5 style="font-size: 0.78rem; font-weight: 700; color: #9f1239; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                        <i class="bx bx-credit-card-front"></i> Active Credit Card Liabilities
+                                    </h5>
+                                    <div id="closeCreditCardsList" style="font-size: 0.78rem; color: #881337;"></div>
+                                </div>
+
+                                <!-- Active Customer Loans Section -->
+                                <div id="closeLoansSection" style="margin-top: 10px; display: none; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 12px;">
+                                    <h5 style="font-size: 0.78rem; font-weight: 700; color: #9a3412; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                        <i class="bx bx-building-house"></i> Customer Active Loan Liabilities & Outstanding Amounts
+                                    </h5>
+                                    <div id="closeLoansList" style="font-size: 0.78rem; color: #7c2d12;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Payout & Settlement Selection Section -->
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                                    <i class="bx bx-wallet" style="color: #4f46e5; font-size: 1.1rem;"></i> Select Payout / Collection Method
+                                </h4>
+
+                                <!-- Option Selector Cards -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                                    <label style="cursor: pointer; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; background: #ffffff;" id="labelPayoutInternal">
+                                        <input type="radio" name="closePayoutMode" value="internal" checked onchange="toggleClosePayoutFields('internal')">
+                                        <div>
+                                            <strong style="display: block; font-size: 0.82rem; color: #1e293b;">Same Bank (VGB)</strong>
+                                            <span style="font-size: 0.72rem; color: #64748b;">Internal Transfer</span>
+                                        </div>
+                                    </label>
+                                    <label style="cursor: pointer; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; background: #ffffff;" id="labelPayoutExternal">
+                                        <input type="radio" name="closePayoutMode" value="external" onchange="toggleClosePayoutFields('external')">
+                                        <div>
+                                            <strong style="display: block; font-size: 0.82rem; color: #1e293b;">Other Bank</strong>
+                                            <span style="font-size: 0.72rem; color: #64748b;">NEFT / RTGS Transfer</span>
+                                        </div>
+                                    </label>
+                                    <label style="cursor: pointer; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; background: #ffffff;" id="labelPayoutCash">
+                                        <input type="radio" name="closePayoutMode" value="cash" onchange="toggleClosePayoutFields('cash')">
+                                        <div>
+                                            <strong style="display: block; font-size: 0.82rem; color: #1e293b;">Cash Counter</strong>
+                                            <span style="font-size: 0.72rem; color: #64748b;">Over The Counter Cash</span>
+                                        </div>
+                                    </label>
+                                    <label style="cursor: pointer; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 10px; transition: all 0.2s; background: #ffffff;" id="labelPayoutDD">
+                                        <input type="radio" name="closePayoutMode" value="dd" onchange="toggleClosePayoutFields('dd')">
+                                        <div>
+                                            <strong style="display: block; font-size: 0.82rem; color: #1e293b;">Demand Draft</strong>
+                                            <span style="font-size: 0.72rem; color: #64748b;">DD / Manager Cheque</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <!-- Dynamic Field Panel 1: Same Bank Internal -->
+                                <div id="payoutPanelInternal" style="display: block; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
+                                        Select Target Active Account *
+                                    </label>
+                                    <select id="closeTargetAccountId" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.85rem; background: white;">
+                                        <option value="0">-- Select Target Account --</option>
+                                    </select>
+                                    <span style="font-size: 0.72rem; color: #64748b; margin-top: 4px; display: block;">
+                                        Remaining funds will be credited instantly to this account upon closure.
+                                    </span>
+                                </div>
+
+                                <!-- Dynamic Field Panel 2: Other Bank External -->
+                                <div id="payoutPanelExternal" style="display: none; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
+                                        <div>
+                                            <label style="font-size: 0.75rem; font-weight: 700; color: #334155;">Beneficiary Account Number *</label>
+                                            <input type="text" id="closeExtAccNo" class="form-control" placeholder="e.g. 987654321012" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem; margin-top:4px;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.75rem; font-weight: 700; color: #334155;">IFSC Code *</label>
+                                            <input type="text" id="closeExtIfsc" class="form-control" placeholder="e.g. SBIN0001234" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem; text-transform: uppercase; margin-top:4px;">
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                        <div>
+                                            <label style="font-size: 0.75rem; font-weight: 700; color: #334155;">Beneficiary Name *</label>
+                                            <input type="text" id="closeExtHolder" class="form-control" placeholder="Account holder name" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem; margin-top:4px;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.75rem; font-weight: 700; color: #334155;">Bank Name *</label>
+                                            <input type="text" id="closeExtBank" class="form-control" placeholder="e.g. State Bank of India" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem; margin-top:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Field Panel 3: Cash Counter -->
+                                <div id="payoutPanelCash" style="display: none; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Cash Receiver Name / Identity Proof *</label>
+                                    <input type="text" id="closeCashReceiver" class="form-control" placeholder="Primary Account Holder / Authorized Representative" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem;">
+                                    <span style="font-size: 0.72rem; color: #64748b; margin-top: 4px; display: block;">Over-the-counter cash withdrawal voucher will be logged on closure.</span>
+                                </div>
+
+                                <!-- Dynamic Field Panel 4: Demand Draft -->
+                                <div id="payoutPanelDD" style="display: none; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                        <div>
+                                            <label style="font-size: 0.75rem; font-weight: 700; color: #334155;">Payee Name (Favouring) *</label>
+                                            <input type="text" id="closeDdPayee" class="form-control" placeholder="Name on Demand Draft" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem; margin-top:4px;">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.75rem; font-weight: 700; color: #334155;">Payable Branch / City *</label>
+                                            <input type="text" id="closeDdBranch" class="form-control" placeholder="e.g. Rajkot Main Branch" style="width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; font-size:0.85rem; margin-top:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Automatic Deactivation Note -->
+                            <div style="padding: 12px 14px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.78rem; color: #0369a1; display: flex; gap: 8px; align-items: center;">
+                                <i class="bx bx-info-circle" style="font-size: 1.1rem; flex-shrink: 0;"></i>
+                                <span>Closing this account automatically revokes linked ATM cards, cheque books, and passbooks. Outstanding loans are routed to a Loan Servicing Ledger.</span>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('closeAccountModal')" style="padding: 10px 18px; font-weight: 600; border-radius: 8px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; cursor: pointer;">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="confirmCloseAccount()" style="padding: 10px 22px; font-weight: 700; border-radius: 8px; background: #dc2626; color: white; border: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <i class="bx bx-check-circle"></i> Confirm Close Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     REFUND & CLOSURE INFO MODAL
+                     ========================================== -->
+                <div class="modal" id="refundInfoModal">
                     <div class="modal-content" style="max-width: 600px;">
                         <div class="modal-header">
-                            <h3 style="font-weight: 700; color: #b91c1c; display: flex; align-items: center; gap: 8px;">
-                                <i class="bx bx-error-alt" style="color: #ef4444;"></i> Close Account Confirmation
+                            <h3 style="font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 8px;">
+                                <i class="bx bx-receipt" style="color: var(--primary-color);"></i> Account Refund & Closure Status
                             </h3>
-                            <button type="button" class="close-modal-btn" onclick="closeModal('closeAccountModal')">
+                            <button type="button" class="close-modal-btn" onclick="closeModal('refundInfoModal')">
                                 <i class="bx bx-x"></i>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div
-                                style="background: rgba(239, 68, 68, 0.08); border-left: 4px solid #ef4444; color: #b91c1c; padding: 15px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 0.9rem;">
-                                <h4 style="font-weight:700; margin-bottom:5px;"><i class="bx bx-error-circle"></i>
-                                    Warning</h4>
-                                <span>Are you sure you want to close this account? This will mark the ledger status as
-                                    closed and restrict future operations. This action cannot be undone.</span>
-                            </div>
-
-                            <table style="width:100%; font-size:0.9rem; line-height:2.0; border-collapse:collapse;">
+                            <table style="width:100%; font-size:0.9rem; line-height:2.2; border-collapse:collapse;">
                                 <tr>
-                                    <td style="color:var(--gray-500); width:40%; padding: 8px 0;">Account Number:</td>
-                                    <td style="font-weight:700; font-family:monospace; color:var(--gray-800);"
-                                        id="closeAccNum">-</td>
+                                    <td style="color:var(--gray-500); width:40%;">Account Number:</td>
+                                    <td style="font-weight:700; font-family:monospace;" id="infoAccNum">-</td>
                                 </tr>
                                 <tr>
-                                    <td style="color:var(--gray-500); padding: 8px 0;">Account Type:</td>
-                                    <td style="font-weight:700; text-transform:uppercase;" id="closeAccType">-</td>
+                                    <td style="color:var(--gray-500);">Primary Holder Name:</td>
+                                    <td style="font-weight:700;" id="infoHolderName">-</td>
                                 </tr>
                                 <tr>
-                                    <td style="color:var(--gray-500); padding: 8px 0;">Primary Holder Name:</td>
-                                    <td style="font-weight:700; color:var(--gray-800);" id="closeHolderName">-</td>
+                                    <td style="color:var(--gray-500);">Refund Status:</td>
+                                    <td style="font-weight:700;" id="infoRefundStatus">-</td>
                                 </tr>
                                 <tr>
-                                    <td style="color:var(--gray-500); padding: 8px 0;">Current Ledger Balance:</td>
-                                    <td style="font-weight:800; color:#ef4444; font-size:1.1rem;" id="closeBalance">-
-                                    </td>
+                                    <td style="color:var(--gray-500);">Refund Amount:</td>
+                                    <td style="font-weight:800; color:#16a34a; font-size:1.1rem;" id="infoRefundAmount">-</td>
                                 </tr>
                                 <tr>
-                                    <td style="color:var(--gray-500); padding: 8px 0;">Current Ledger Status:</td>
-                                    <td style="font-weight:700; text-transform:uppercase;" id="closeStatus">-</td>
+                                    <td style="color:var(--gray-500);">Target Account ID:</td>
+                                    <td style="font-weight:700;" id="infoTargetAccount">-</td>
+                                </tr>
+                                <tr>
+                                    <td style="color:var(--gray-500);">Refund Timestamp:</td>
+                                    <td style="font-weight:700;" id="infoRefundTime">-</td>
                                 </tr>
                             </table>
+                            <div style="margin-top:15px; padding:12px; background:#fef2f2; border:1px solid #fecaca; border-radius:6px; font-size:0.82rem; color:#991b1b;">
+                                <i class="bx bx-shield-quarter"></i> <strong>Access Restricted:</strong> This account is closed. No operational banking transactions (deposits, withdrawals, transfers, card issuance) can be performed on this account.
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                onclick="closeModal('closeAccountModal')">Cancel</button>
-                            <button type="button" class="btn btn-danger" onclick="confirmCloseAccount()">Confirm Close
-                                Account</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('refundInfoModal')">Close</button>
                         </div>
                     </div>
                 </div>
@@ -3560,35 +3815,56 @@
                         <style>
                             /* Premium Glassmorphic Wizard Styling */
                             .wizard-modal-content {
-                                max-width: 950px !important;
+                                max-width: 960px !important;
+                                width: 92% !important;
+                                height: 88vh !important;
+                                max-height: 88vh !important;
                                 background: #ffffff !important;
                                 border-radius: 16px !important;
-                                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-                                overflow: hidden;
+                                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+                                overflow: hidden !important;
+                                display: flex !important;
+                                flex-direction: column !important;
+                                margin: auto !important;
+                            }
+
+                            #createAccountForm {
+                                display: flex !important;
+                                flex-direction: column !important;
+                                height: 100% !important;
+                                min-height: 0 !important;
+                                flex: 1 !important;
+                                margin: 0 !important;
+                                overflow: hidden !important;
                             }
 
                             .wizard-header {
-                                padding: 20px 30px;
-                                background: linear-gradient(135deg, var(--primary-600), #4f46e5);
-                                color: white;
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
+                                padding: 18px 30px !important;
+                                background: linear-gradient(135deg, var(--primary-600), #4f46e5) !important;
+                                color: white !important;
+                                display: flex !important;
+                                justify-content: space-between !important;
+                                align-items: center !important;
+                                flex-shrink: 0 !important;
                             }
 
                             .wizard-body {
-                                padding: 30px;
-                                max-height: 70vh;
-                                overflow-y: auto;
+                                padding: 24px 30px !important;
+                                flex: 1 !important;
+                                min-height: 0 !important;
+                                overflow-y: auto !important;
                             }
 
                             .wizard-footer {
-                                padding: 20px 30px;
-                                background: var(--gray-50);
-                                border-top: 1px solid var(--gray-100);
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
+                                padding: 16px 30px !important;
+                                background: #f8fafc !important;
+                                border-top: 1px solid #e2e8f0 !important;
+                                display: flex !important;
+                                justify-content: space-between !important;
+                                align-items: center !important;
+                                flex-shrink: 0 !important;
+                                z-index: 10 !important;
+                                box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
                             }
 
                             /* Stepper Styling */
@@ -4494,16 +4770,25 @@
 
                             <!-- Wizard Navigation Footer -->
                             <div class="wizard-footer">
-                                <div>
-                                    <button type="button" class="btn btn-secondary no-print"
-                                        onclick="saveA4FormDraft()"><i class="bx bx-save"></i> Save Draft</button>
-                                    <button type="button" class="btn btn-warning no-print" onclick="resetA4Form()"><i
-                                            class="bx bx-refresh"></i> Reset</button>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <button type="button" class="btn btn-secondary no-print" onclick="saveA4FormDraft()"
+                                        style="padding: 10px 18px; font-weight: 600; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; transition: all 0.2s;">
+                                        <i class="bx bx-save" style="font-size: 1.1rem;"></i> Save Draft
+                                    </button>
+                                    <button type="button" class="btn btn-warning no-print" onclick="resetA4Form()"
+                                        style="padding: 10px 18px; font-weight: 600; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: #f59e0b; color: white; border: none; transition: all 0.2s;">
+                                        <i class="bx bx-refresh" style="font-size: 1.1rem;"></i> Reset
+                                    </button>
                                 </div>
-                                <div style="display:flex; gap:10px;">
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <button type="button" class="btn btn-secondary no-print" onclick="closeModal('createAccountModal')"
+                                        style="padding: 10px 18px; font-weight: 600; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: #ffffff; color: #64748b; border: 1px solid #cbd5e1; transition: all 0.2s;">
+                                        <i class="bx bx-x" style="font-size: 1.1rem;"></i> Cancel
+                                    </button>
                                     <button type="submit" class="btn btn-success no-print" id="btnSubmitForm"
-                                        style="background:#10b981; border:none; color:white; display:inline-block;"><i
-                                            class="bx bx-check-circle"></i> Submit Application</button>
+                                        style="padding: 10px 24px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: #10b981; color: white; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); transition: all 0.2s;">
+                                        <i class="bx bx-check-circle" style="font-size: 1.1rem;"></i> Submit Application
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -5431,24 +5716,222 @@
                         }
                     }
 
+                    function toggleClosePayoutFields(mode) {
+                        var modes = ['internal', 'external', 'cash', 'dd'];
+                        modes.forEach(function(m) {
+                            var panel = document.getElementById('payoutPanel' + m.charAt(0).toUpperCase() + m.slice(1));
+                            var label = document.getElementById('labelPayout' + m.charAt(0).toUpperCase() + m.slice(1));
+                            if (panel) panel.style.display = (m === mode) ? 'block' : 'none';
+                            if (label) {
+                                if (m === mode) {
+                                    label.style.borderColor = '#4f46e5';
+                                    label.style.background = 'rgba(79, 70, 229, 0.05)';
+                                } else {
+                                    label.style.borderColor = '#e2e8f0';
+                                    label.style.background = '#ffffff';
+                                }
+                            }
+                        });
+                    }
+
                     var closingAccountId = 0;
                     function openCloseModal(index) {
                         var acc = accountsData[index];
                         closingAccountId = acc.accountId;
 
-                        document.getElementById('closeAccNum').textContent = acc.accountNumber;
-                        document.getElementById('closeAccType').textContent = acc.accountType;
-                        document.getElementById('closeHolderName').textContent = acc.customerName;
-                        document.getElementById('closeBalance').textContent = "₹ " + acc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                        document.getElementById('closeStatus').textContent = acc.status;
+                        document.getElementById('closeAccNum').textContent = acc.accountNumber || '-';
+                        document.getElementById('closeAccType').textContent = acc.accountType || '-';
+                        document.getElementById('closeHolderName').textContent = acc.customerName || '-';
+                        document.getElementById('closeBalance').textContent = "₹ " + (acc.balance ? acc.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00');
+                        document.getElementById('closeStatus').textContent = acc.status || '-';
+
+                        var cashRec = document.getElementById('closeCashReceiver');
+                        if (cashRec) cashRec.value = acc.customerName || '';
+
+                        var ddPayee = document.getElementById('closeDdPayee');
+                        if (ddPayee) ddPayee.value = acc.customerName || '';
+
+                        // Set basic facilities indicators
+                        var facLoading = document.getElementById('facilitiesLoadingBadge');
+                        if (facLoading) facLoading.style.display = 'inline-block';
+
+                        var atmElem = document.getElementById('closeFacAtm');
+                        if (atmElem) {
+                            if (acc.hasAtmCard) {
+                                atmElem.innerHTML = '<span style="color:#10b981;"><i class="bx bx-check-circle"></i> Active</span>' +
+                                    (acc.atmCardNumber ? '<br><small style="color:#64748b; font-family:monospace;">' + acc.atmCardNumber + '</small>' : '');
+                            } else {
+                                atmElem.innerHTML = '<span style="color:#94a3b8;"><i class="bx bx-x-circle"></i> Not Issued</span>';
+                            }
+                        }
+
+                        var chqElem = document.getElementById('closeFacCheque');
+                        if (chqElem) {
+                            chqElem.innerHTML = acc.hasChequeBook ?
+                                '<span style="color:#10b981;"><i class="bx bx-check-circle"></i> Enabled</span>' :
+                                '<span style="color:#94a3b8;"><i class="bx bx-x-circle"></i> Disabled</span>';
+                        }
+
+                        var pbElem = document.getElementById('closeFacPassbook');
+                        if (pbElem) {
+                            if (acc.hasPassbook) {
+                                pbElem.innerHTML = '<span style="color:#10b981;"><i class="bx bx-check-circle"></i> Issued</span>' +
+                                    (acc.passbookNumber ? '<br><small style="color:#64748b; font-family:monospace;">' + acc.passbookNumber + '</small>' : '');
+                            } else {
+                                pbElem.innerHTML = '<span style="color:#94a3b8;"><i class="bx bx-x-circle"></i> Not Issued</span>';
+                            }
+                        }
+
+                        // Reset liabilities cards
+                        var ccSec = document.getElementById('closeCreditCardsSection');
+                        var ccList = document.getElementById('closeCreditCardsList');
+                        if (ccSec) ccSec.style.display = 'none';
+
+                        var loanSec = document.getElementById('closeLoansSection');
+                        var loanList = document.getElementById('closeLoansList');
+                        if (loanSec) loanSec.style.display = 'none';
+
+                        // Fetch facilities, credit cards, and loans via AJAX
+                        fetch(contextPath + '/account?action=getCustomerFacilitiesJson&customerId=' + acc.customerId + '&accountId=' + acc.accountId)
+                            .then(function(res) { return res.json(); })
+                            .then(function(data) {
+                                if (facLoading) facLoading.style.display = 'none';
+
+                                // Populate Credit Cards if any exist
+                                if (data.cards && data.cards.length > 0) {
+                                    var ccCards = data.cards.filter(function(c) { return c.cardType === 'credit'; });
+                                    if (ccCards.length > 0) {
+                                        var html = '<table style="width:100%; border-collapse:collapse;">';
+                                        ccCards.forEach(function(c) {
+                                            var outAmt = Number(c.outstandingBalance || 0);
+                                            html += '<tr style="border-bottom: 1px dashed #fecdd3;">' +
+                                                    '<td style="padding: 4px 0; font-weight: 600;">' + (c.cardProvider || 'Credit Card').toUpperCase() + ' (' + c.cardNumber + ')</td>' +
+                                                    '<td style="padding: 4px 0; text-align: right;">Status: <strong style="text-transform:uppercase;">' + c.status + '</strong></td>' +
+                                                    '<td style="padding: 4px 0; text-align: right; color: #dc2626; font-weight: 700;">Outstanding: ₹ ' + outAmt.toLocaleString('en-IN', {minimumFractionDigits:2}) + '</td>' +
+                                                    '</tr>';
+                                        });
+                                        html += '</table>';
+                                        if (ccList) ccList.innerHTML = html;
+                                        if (ccSec) ccSec.style.display = 'block';
+                                    }
+                                }
+
+                                // Populate Loans if any exist
+                                if (data.loans && data.loans.length > 0) {
+                                    var html = '<table style="width:100%; border-collapse:collapse;">';
+                                    data.loans.forEach(function(l) {
+                                        var rem = Number(l.remainingBalance || l.principalAmount || 0);
+                                        html += '<tr style="border-bottom: 1px dashed #fed7aa;">' +
+                                                '<td style="padding: 4px 0; font-weight: 600;">' + (l.loanType || 'Loan').toUpperCase() + ' #' + l.loanId + '</td>' +
+                                                '<td style="padding: 4px 0; text-align: center;">Status: <strong style="text-transform:uppercase;">' + l.status + '</strong></td>' +
+                                                '<td style="padding: 4px 0; text-align: right; color: #c2410c; font-weight: 700;">Outstanding to Pay: ₹ ' + rem.toLocaleString('en-IN', {minimumFractionDigits:2}) + '</td>' +
+                                                '</tr>';
+                                    });
+                                    html += '</table>';
+                                    if (loanList) loanList.innerHTML = html;
+                                    if (loanSec) loanSec.style.display = 'block';
+                                }
+                            })
+                            .catch(function(err) {
+                                if (facLoading) facLoading.style.display = 'none';
+                            });
+
+                        var select = document.getElementById('closeTargetAccountId');
+                        var hasOtherAccounts = false;
+                        if (select) {
+                            select.innerHTML = '<option value="0">-- Select Target Account --</option>';
+                            accountsData.forEach(function (a) {
+                                if (a.customerId === acc.customerId && a.accountId !== acc.accountId && a.status.toLowerCase() === 'active') {
+                                    var opt = document.createElement('option');
+                                    opt.value = a.accountId;
+                                    opt.textContent = a.accountNumber + ' (' + a.accountType.toUpperCase() + ' - Balance: ₹' + a.balance.toLocaleString('en-IN') + ')';
+                                    select.appendChild(opt);
+                                    hasOtherAccounts = true;
+                                }
+                            });
+                        }
+
+                        var defaultMode = hasOtherAccounts ? 'internal' : 'cash';
+                        var radios = document.getElementsByName('closePayoutMode');
+                        for (var r of radios) {
+                            if (r.value === defaultMode) r.checked = true;
+                        }
+                        toggleClosePayoutFields(defaultMode);
 
                         openModal('closeAccountModal');
                     }
 
                     function confirmCloseAccount() {
                         if (closingAccountId > 0) {
-                            window.location.href = "${pageContext.request.contextPath}/account?action=close&id=" + closingAccountId;
+                            var selectedMode = 'cash';
+                            var radios = document.getElementsByName('closePayoutMode');
+                            for (var r of radios) {
+                                if (r.checked) {
+                                    selectedMode = r.value;
+                                    break;
+                                }
+                            }
+
+                            var targetId = 0;
+                            var extAccNo = "";
+                            var extIfsc = "";
+                            var extHolder = "";
+                            var extBank = "";
+                            var cashReceiver = "";
+                            var ddPayee = "";
+                            var ddBranch = "";
+
+                            if (selectedMode === 'internal') {
+                                var select = document.getElementById('closeTargetAccountId');
+                                targetId = select ? select.value : 0;
+                                if (targetId <= 0) {
+                                    alert("Please select a target active account for internal balance transfer.");
+                                    return;
+                                }
+                            } else if (selectedMode === 'external') {
+                                extAccNo = (document.getElementById('closeExtAccNo') || {}).value || "";
+                                extIfsc = (document.getElementById('closeExtIfsc') || {}).value || "";
+                                extHolder = (document.getElementById('closeExtHolder') || {}).value || "";
+                                extBank = (document.getElementById('closeExtBank') || {}).value || "";
+
+                                if (!extAccNo || !extIfsc) {
+                                    alert("Please enter the beneficiary account number and IFSC code for other bank transfer.");
+                                    return;
+                                }
+                            } else if (selectedMode === 'cash') {
+                                cashReceiver = (document.getElementById('closeCashReceiver') || {}).value || "";
+                            } else if (selectedMode === 'dd') {
+                                ddPayee = (document.getElementById('closeDdPayee') || {}).value || "";
+                                ddBranch = (document.getElementById('closeDdBranch') || {}).value || "";
+                            }
+
+                            var url = "${pageContext.request.contextPath}/account?action=close&id=" + closingAccountId +
+                                      "&payoutMode=" + encodeURIComponent(selectedMode) +
+                                      "&targetAccountId=" + targetId +
+                                      "&extAccNo=" + encodeURIComponent(extAccNo) +
+                                      "&extIfsc=" + encodeURIComponent(extIfsc) +
+                                      "&extHolder=" + encodeURIComponent(extHolder) +
+                                      "&extBank=" + encodeURIComponent(extBank) +
+                                      "&cashReceiver=" + encodeURIComponent(cashReceiver) +
+                                      "&ddPayee=" + encodeURIComponent(ddPayee) +
+                                      "&ddBranch=" + encodeURIComponent(ddBranch);
+
+                            window.location.href = url;
                         }
+                    }
+
+                    function openRefundInfoModal(index) {
+                        var acc = accountsData[index];
+                        if (!acc) return;
+
+                        document.getElementById('infoAccNum').textContent = acc.accountNumber || '-';
+                        document.getElementById('infoHolderName').textContent = acc.customerName || '-';
+                        document.getElementById('infoRefundStatus').textContent = acc.refundStatus || 'NOT_APPLICABLE';
+                        document.getElementById('infoRefundAmount').textContent = "₹ " + (acc.refundAmount ? acc.refundAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00');
+                        document.getElementById('infoTargetAccount').textContent = acc.refundTargetAccountId ? ("Account #" + acc.refundTargetAccountId) : "N/A (External Payout / Cash Refund)";
+                        document.getElementById('infoRefundTime').textContent = acc.refundCompletedAt || 'N/A';
+
+                        openModal('refundInfoModal');
                     }
 
                     // ==========================================

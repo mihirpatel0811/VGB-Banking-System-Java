@@ -115,6 +115,9 @@ public class AccountService {
             if (account == null) {
                 throw new Exception("Account not found");
             }
+            if (!AppConstants.ACCOUNT_STATUS_ACTIVE.equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Cannot deposit funds into account #" + account.getAccountNumber() + ". Operational transactions are disabled for closed or non-active accounts.");
+            }
 
             // Update account balance
             BigDecimal newBalance = account.getBalance().add(amount);
@@ -180,6 +183,9 @@ public class AccountService {
             Account account = accountDAO.getById(conn, accountId);
             if (account == null) {
                 throw new Exception("Account not found");
+            }
+            if (!AppConstants.ACCOUNT_STATUS_ACTIVE.equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Cannot withdraw funds from account #" + account.getAccountNumber() + ". Operational transactions are disabled for closed or non-active accounts.");
             }
 
             if (account.getBalance().compareTo(amount) < 0) {
@@ -339,11 +345,291 @@ public class AccountService {
             throw new Exception("Invalid account status");
         }
 
+        if ("closed".equalsIgnoreCase(status)) {
+            return closeAccount(accountId, null, null);
+        }
+
         try {
             return accountDAO.updateStatus(accountId, status);
         } catch (Exception e) {
             logger.error("Error updating account status", e);
             throw new Exception("Failed to update account status", e);
+        }
+    }
+
+    /**
+     * Close account with optional refund target account, automatic service deactivation, and loan servicing account creation
+     */
+    public boolean closeAccount(long accountId, Long targetAccountId, Long performedById) throws Exception {
+        return closeAccount(accountId, (targetAccountId != null && targetAccountId > 0) ? "internal" : "cash", targetAccountId, null, null, null, null, null, null, null, performedById);
+    }
+
+    /**
+     * Close account with multi-option payout settlement (internal, external, cash counter, or demand draft)
+     */
+    public boolean closeAccount(long accountId, String payoutMode, Long targetAccountId, String extAccNo, String extIfsc, String extHolder, String extBank, String cashReceiver, String ddPayee, String ddBranch, Long performedById) throws Exception {
+        Connection conn = null;
+        try {
+            conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
+            conn.setAutoCommit(false); // Begin Transaction!
+
+            Account account = accountDAO.getById(conn, accountId);
+            if (account == null) {
+                throw new Exception("Account not found");
+            }
+            if ("closed".equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Account is already closed");
+            }
+
+            BigDecimal currentBalance = account.getBalance();
+            String refundStatus = "NOT_APPLICABLE";
+            BigDecimal refundAmount = BigDecimal.ZERO;
+            Long finalTargetAccountId = null;
+            java.sql.Timestamp refundCompletedAt = null;
+
+            if (payoutMode == null || payoutMode.trim().isEmpty()) {
+                payoutMode = (targetAccountId != null && targetAccountId > 0) ? "internal" : "cash";
+            }
+
+            if (currentBalance.compareTo(BigDecimal.ZERO) > 0) {
+                // Set closed account balance to zero
+                accountDAO.updateBalance(conn, accountId, BigDecimal.ZERO);
+
+                if ("internal".equalsIgnoreCase(payoutMode) && targetAccountId != null && targetAccountId > 0 && targetAccountId != accountId) {
+                    Account targetAccount = accountDAO.getById(conn, targetAccountId);
+                    if (targetAccount == null || !"active".equalsIgnoreCase(targetAccount.getStatus())) {
+                        throw new Exception("Selected refund target account is invalid or inactive");
+                    }
+
+                    // Credit target account
+                    BigDecimal targetNewBalance = targetAccount.getBalance().add(currentBalance);
+                    accountDAO.updateBalance(conn, targetAccountId, targetNewBalance);
+
+                    // Record internal transfer transaction
+                    Transaction txn = new Transaction();
+                    txn.setFromAccountId(accountId);
+                    txn.setToAccountId(targetAccountId);
+                    txn.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+                    txn.setAmount(currentBalance);
+                    txn.setReferenceNumber("TXN" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                    txn.setDescription("Account Closure Balance Transfer to Account #" + targetAccount.getAccountNumber());
+                    txn.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+                    txn.setTransferMode("internal");
+                    txn.setSenderAccountNumber(account.getAccountNumber());
+                    txn.setReceiverAccountNumber(targetAccount.getAccountNumber());
+                    txn.setPerformedById(performedById);
+
+                    transactionDAO.create(conn, txn);
+
+                    refundStatus = "COMPLETED";
+                    refundAmount = currentBalance;
+                    finalTargetAccountId = targetAccountId;
+                    refundCompletedAt = new java.sql.Timestamp(System.currentTimeMillis());
+                } else if ("external".equalsIgnoreCase(payoutMode)) {
+                    if (extAccNo == null || extAccNo.trim().isEmpty() || extIfsc == null || extIfsc.trim().isEmpty()) {
+                        throw new Exception("Beneficiary Account Number and IFSC Code are required for external bank transfer.");
+                    }
+
+                    Transaction txn = new Transaction();
+                    txn.setFromAccountId(accountId);
+                    txn.setToAccountId(null);
+                    txn.setTransactionType(AppConstants.TRANSACTION_TYPE_TRANSFER);
+                    txn.setAmount(currentBalance);
+                    txn.setReferenceNumber("NEFT" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                    txn.setDescription("Account Closure Outgoing Transfer to " + (extBank != null && !extBank.trim().isEmpty() ? extBank : "External Bank") + " Account #" + extAccNo + " (IFSC: " + extIfsc.toUpperCase() + ")");
+                    txn.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+                    txn.setTransferMode("external");
+                    txn.setSenderAccountNumber(account.getAccountNumber());
+                    txn.setReceiverAccountNumber(extAccNo);
+                    txn.setBeneficiaryName(extHolder);
+                    txn.setBeneficiaryIfsc(extIfsc.toUpperCase());
+                    txn.setBeneficiaryBank(extBank);
+                    txn.setPerformedById(performedById);
+
+                    transactionDAO.create(conn, txn);
+
+                    refundStatus = "COMPLETED";
+                    refundAmount = currentBalance;
+                    refundCompletedAt = new java.sql.Timestamp(System.currentTimeMillis());
+                } else if ("dd".equalsIgnoreCase(payoutMode)) {
+                    String payee = (ddPayee != null && !ddPayee.trim().isEmpty()) ? ddPayee.trim() : "Account Holder";
+                    String branch = (ddBranch != null && !ddBranch.trim().isEmpty()) ? ddBranch.trim() : "Main Branch";
+
+                    Transaction txn = new Transaction();
+                    txn.setFromAccountId(accountId);
+                    txn.setToAccountId(null);
+                    txn.setTransactionType(AppConstants.TRANSACTION_TYPE_WITHDRAWAL);
+                    txn.setAmount(currentBalance);
+                    txn.setReferenceNumber("DD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                    txn.setDescription("Account Closure Demand Draft Issue favoring " + payee + " (Payable at " + branch + ")");
+                    txn.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+                    txn.setTransferMode("dd");
+                    txn.setSenderAccountNumber(account.getAccountNumber());
+                    txn.setPerformedById(performedById);
+
+                    transactionDAO.create(conn, txn);
+
+                    refundStatus = "COMPLETED";
+                    refundAmount = currentBalance;
+                    refundCompletedAt = new java.sql.Timestamp(System.currentTimeMillis());
+                } else {
+                    // Default: Cash Counter Payout
+                    String receiver = (cashReceiver != null && !cashReceiver.trim().isEmpty()) ? cashReceiver.trim() : "Primary Account Holder";
+
+                    Transaction txn = new Transaction();
+                    txn.setFromAccountId(accountId);
+                    txn.setToAccountId(null);
+                    txn.setTransactionType(AppConstants.TRANSACTION_TYPE_WITHDRAWAL);
+                    txn.setAmount(currentBalance);
+                    txn.setReferenceNumber("CASH" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                    txn.setDescription("Account Closure Cash Counter Payout to " + receiver);
+                    txn.setStatus(AppConstants.TRANSACTION_STATUS_COMPLETED);
+                    txn.setTransferMode("cash");
+                    txn.setSenderAccountNumber(account.getAccountNumber());
+                    txn.setPerformedById(performedById);
+
+                    transactionDAO.create(conn, txn);
+
+                    refundStatus = "COMPLETED";
+                    refundAmount = currentBalance;
+                    refundCompletedAt = new java.sql.Timestamp(System.currentTimeMillis());
+                }
+            }
+
+            // 4. Update account status to 'closed' along with refund details
+            String updateAccountSql = "UPDATE account SET status = 'closed', balance = 0, refund_status = ?, refund_amount = ?, refund_target_account_id = ?, refund_completed_at = ? WHERE account_id = ?";
+            try (java.sql.PreparedStatement stmtUpd = conn.prepareStatement(updateAccountSql)) {
+                stmtUpd.setString(1, refundStatus);
+                stmtUpd.setBigDecimal(2, refundAmount);
+                if (finalTargetAccountId != null) {
+                    stmtUpd.setLong(3, finalTargetAccountId);
+                } else {
+                    stmtUpd.setNull(3, java.sql.Types.BIGINT);
+                }
+                stmtUpd.setTimestamp(4, refundCompletedAt);
+                stmtUpd.setLong(5, accountId);
+                stmtUpd.executeUpdate();
+            }
+
+            // 5. Automatically close/deactivate associated cards
+            String closeCardsSql = "UPDATE card SET status = 'closed' WHERE account_id = ? AND status != 'closed'";
+            try (java.sql.PreparedStatement stmtCards = conn.prepareStatement(closeCardsSql)) {
+                stmtCards.setLong(1, accountId);
+                stmtCards.executeUpdate();
+            }
+
+            // 6. Automatically close cheque books & cancel unused leaves
+            String closeChequeBooksSql = "UPDATE cheque_book SET status = 'closed' WHERE account_id = ?";
+            try (java.sql.PreparedStatement stmtCheques = conn.prepareStatement(closeChequeBooksSql)) {
+                stmtCheques.setLong(1, accountId);
+                stmtCheques.executeUpdate();
+            }
+
+            String cancelChequeLeavesSql = "UPDATE cheque_leaf SET status = 'cancelled' WHERE chequebook_id IN (SELECT chequebook_id FROM cheque_book WHERE account_id = ?) AND status = 'unused'";
+            try (java.sql.PreparedStatement stmtLeaves = conn.prepareStatement(cancelChequeLeavesSql)) {
+                stmtLeaves.setLong(1, accountId);
+                stmtLeaves.executeUpdate();
+            }
+
+            String rejectChequeRequestsSql = "UPDATE cheque_book_request SET status = 'rejected' WHERE account_id = ? AND status = 'pending'";
+            try (java.sql.PreparedStatement stmtChequeReq = conn.prepareStatement(rejectChequeRequestsSql)) {
+                stmtChequeReq.setLong(1, accountId);
+                stmtChequeReq.executeUpdate();
+            }
+
+            // 7. Automatically reject/close passbook requests
+            String rejectPassbookRequestsSql = "UPDATE passbook_request SET status = 'rejected' WHERE account_id = ? AND status IN ('pending', 'approved')";
+            try (java.sql.PreparedStatement stmtPass = conn.prepareStatement(rejectPassbookRequestsSql)) {
+                stmtPass.setLong(1, accountId);
+                stmtPass.executeUpdate();
+            }
+
+            // 8. Auto-Pay instructions deactivation
+            try {
+                String closeAutoPaySql = "UPDATE auto_pay_instruction SET status = 'closed' WHERE account_id = ?";
+                try (java.sql.PreparedStatement stmtAutoPay = conn.prepareStatement(closeAutoPaySql)) {
+                    stmtAutoPay.setLong(1, accountId);
+                    stmtAutoPay.executeUpdate();
+                }
+            } catch (Exception e) {
+                // Table might not exist or already cleaned up
+            }
+
+            // 9. Check if customer has active loans and needs a Loan Servicing Account
+            long customerId = account.getCustomerId();
+            if (customerId > 0) {
+                String checkLoansSql = "SELECT COUNT(*) FROM loan WHERE customer_id = ? AND status IN ('active', 'disbursed', 'approved')";
+                int activeLoansCount = 0;
+                try (java.sql.PreparedStatement stmtLoans = conn.prepareStatement(checkLoansSql)) {
+                    stmtLoans.setLong(1, customerId);
+                    try (java.sql.ResultSet rsLoans = stmtLoans.executeQuery()) {
+                        if (rsLoans.next()) {
+                            activeLoansCount = rsLoans.getInt(1);
+                        }
+                    }
+                }
+
+                if (activeLoansCount > 0) {
+                    // Check remaining active deposit accounts for this customer
+                    String checkAccountsSql = "SELECT COUNT(*) FROM account a JOIN account_signatory s ON a.account_id = s.account_id WHERE s.customer_id = ? AND a.account_id != ? AND a.status = 'active'";
+                    int otherAccountsCount = 0;
+                    try (java.sql.PreparedStatement stmtAccs = conn.prepareStatement(checkAccountsSql)) {
+                        stmtAccs.setLong(1, customerId);
+                        stmtAccs.setLong(2, accountId);
+                        try (java.sql.ResultSet rsAccs = stmtAccs.executeQuery()) {
+                            if (rsAccs.next()) {
+                                otherAccountsCount = rsAccs.getInt(1);
+                            }
+                        }
+                    }
+
+                    if (otherAccountsCount == 0) {
+                        // Customer has active loan(s) but zero remaining active accounts! Auto-create Loan Servicing Account.
+                        String loanAccNum = "LNK-" + (System.currentTimeMillis() % 10000000000L);
+                        String createLoanAccSql = "INSERT INTO account (account_type, balance, ifsc_code, account_number, status, has_atm_card, has_cheque_book, has_passbook, is_loan_servicing_account) VALUES ('savings', 0.0000, 'VGB0000001', ?, 'active', 0, 0, 0, 1)";
+                        long loanServicingAccountId = 0;
+                        try (java.sql.PreparedStatement stmtNewAcc = conn.prepareStatement(createLoanAccSql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+                            stmtNewAcc.setString(1, loanAccNum);
+                            stmtNewAcc.executeUpdate();
+                            try (java.sql.ResultSet gk = stmtNewAcc.getGeneratedKeys()) {
+                                if (gk.next()) {
+                                    loanServicingAccountId = gk.getLong(1);
+                                }
+                            }
+                        }
+
+                        if (loanServicingAccountId > 0) {
+                            String linkSigSql = "INSERT INTO account_signatory (account_id, customer_id, ownership_type) VALUES (?, ?, 'primary')";
+                            try (java.sql.PreparedStatement stmtLink = conn.prepareStatement(linkSigSql)) {
+                                stmtLink.setLong(1, loanServicingAccountId);
+                                stmtLink.setLong(2, customerId);
+                                stmtLink.executeUpdate();
+                            }
+
+                            String insertSavSql = "INSERT INTO account_savings (account_id, nominee_name, holding_type, daily_withdrawal_limit) VALUES (?, 'Loan Servicing Auto-Created', 'single', 50000.00)";
+                            try (java.sql.PreparedStatement stmtSav = conn.prepareStatement(insertSavSql)) {
+                                stmtSav.setLong(1, loanServicingAccountId);
+                                stmtSav.executeUpdate();
+                            }
+
+                            logger.info("Auto-created Loan Servicing Account #{} ({}) for customer {} due to open loans.", loanServicingAccountId, loanAccNum, customerId);
+                        }
+                    }
+                }
+            }
+
+            conn.commit(); // Commit Transaction!
+            logger.info("Account #{} closed successfully. Refund Status: {}", accountId, refundStatus);
+            return true;
+
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { logger.error("Rollback failed", ex); }
+            }
+            logger.error("Error closing account {}", accountId, e);
+            throw new Exception("Account closure failed: " + e.getMessage(), e);
+        } finally {
+            com.vgb.config.DatabaseConfig.closeConnection(conn);
         }
     }
 
@@ -844,6 +1130,9 @@ public class AccountService {
             Account account = accountDAO.getById(conn, accountId);
             if (account == null) {
                 throw new Exception("Account not found");
+            }
+            if (!AppConstants.ACCOUNT_STATUS_ACTIVE.equalsIgnoreCase(account.getStatus())) {
+                throw new Exception("Cannot process cheque deposit into account #" + account.getAccountNumber() + ". Operational transactions are disabled for closed or non-active accounts.");
             }
 
             // Update account balance

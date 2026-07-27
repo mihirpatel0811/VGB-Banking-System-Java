@@ -1161,6 +1161,15 @@ public class AccountDAOImpl implements AccountDAO {
             account.setPassbookNumber(rs.getString("passbook_number"));
             account.setAtmCardNumber(rs.getString("atm_card_number"));
             account.setPensionAccount(rs.getInt("is_pension_account") == 1);
+            
+            account.setRefundStatus(rs.getString("refund_status"));
+            account.setRefundAmount(rs.getBigDecimal("refund_amount"));
+            account.setRefundTargetAccountId(rs.getObject("refund_target_account_id") != null ? rs.getLong("refund_target_account_id") : null);
+            Timestamp rTime = rs.getTimestamp("refund_completed_at");
+            if (rTime != null) {
+                account.setRefundCompletedAt(rTime.toLocalDateTime());
+            }
+            account.setLoanServicingAccount(rs.getInt("is_loan_servicing_account") == 1);
         } catch (SQLException e) {
             // ignore
         }

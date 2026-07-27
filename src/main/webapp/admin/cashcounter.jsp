@@ -1422,14 +1422,25 @@
             document.getElementById('summaryAccType').innerText = account.accountType + ' account';
             document.getElementById('summaryAccBalance').innerText = '₹ ' + parseFloat(account.balance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
-            // Set account status badge style
+            // Set account status badge style & disable operational buttons for closed accounts
             const statusBadge = document.getElementById('summaryStatus');
+            const isClosed = account.status && account.status.toLowerCase() !== 'active';
             statusBadge.innerText = account.status || 'Active';
-            if (account.status && account.status.toLowerCase() !== 'active') {
+            if (isClosed) {
                 statusBadge.className = 'badge-status badge-status-suspended';
             } else {
                 statusBadge.className = 'badge-status badge-status-active';
             }
+
+            // Disable deposit, withdraw, and transfer submit buttons if account is closed
+            document.querySelectorAll('#depositForm .btn-submit, #withdrawForm .btn-submit, #transferForm .btn-submit').forEach(btn => {
+                btn.disabled = isClosed;
+                if (isClosed) {
+                    btn.setAttribute('title', 'Account is CLOSED. Operational transactions are disabled.');
+                } else {
+                    btn.removeAttribute('title');
+                }
+            });
 
             // Contact Info
             document.getElementById('customerDetailContact').innerHTML = 

@@ -42,8 +42,9 @@ public class CustomerDashboardServlet extends BaseServlet {
             Customer customer = customerService.getCustomerById(customerId);
             String birthDate = "08/08/2002"; // Standard high-tech dev profile birth date
             
-            // Get customer accounts
-            List<Account> accounts = accountService.getCustomerAccounts(customerId);
+            // Get customer accounts (only active/open accounts shown on customer side)
+            List<Account> allAccounts = accountService.getCustomerAccounts(customerId);
+            List<Account> accounts = AccountContextUtil.filterOpenAccounts(allAccounts);
             
             Account activeAccount = AccountContextUtil.resolveActiveAccount(session, accounts);
             BigDecimal activeBalance = AccountContextUtil.getBalance(activeAccount);

@@ -147,6 +147,11 @@ CREATE TABLE account (
                          passbook_number VARCHAR(50) NULL UNIQUE,
                          atm_card_number VARCHAR(19) NULL UNIQUE,
                          is_pension_account TINYINT(1) NOT NULL DEFAULT 0,
+                         refund_status ENUM('NOT_APPLICABLE', 'PENDING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'NOT_APPLICABLE',
+                         refund_amount DECIMAL(15, 4) NOT NULL DEFAULT 0.0000,
+                         refund_target_account_id BIGINT NULL,
+                         refund_completed_at TIMESTAMP NULL,
+                         is_loan_servicing_account TINYINT(1) NOT NULL DEFAULT 0,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

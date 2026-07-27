@@ -70,6 +70,28 @@ public class Account implements Serializable {
     private String atmCardNumber;
     private boolean isPensionAccount;
 
+    // Account Refund and Loan Servicing tracking fields
+    private String refundStatus = "NOT_APPLICABLE"; // NOT_APPLICABLE, PENDING, COMPLETED, FAILED
+    private BigDecimal refundAmount = BigDecimal.ZERO;
+    private Long refundTargetAccountId;
+    private LocalDateTime refundCompletedAt;
+    private boolean isLoanServicingAccount;
+
+    public String getRefundStatus() { return refundStatus; }
+    public void setRefundStatus(String refundStatus) { this.refundStatus = refundStatus; }
+
+    public BigDecimal getRefundAmount() { return refundAmount; }
+    public void setRefundAmount(BigDecimal refundAmount) { this.refundAmount = refundAmount; }
+
+    public Long getRefundTargetAccountId() { return refundTargetAccountId; }
+    public void setRefundTargetAccountId(Long refundTargetAccountId) { this.refundTargetAccountId = refundTargetAccountId; }
+
+    public LocalDateTime getRefundCompletedAt() { return refundCompletedAt; }
+    public void setRefundCompletedAt(LocalDateTime refundCompletedAt) { this.refundCompletedAt = refundCompletedAt; }
+
+    public boolean isLoanServicingAccount() { return isLoanServicingAccount; }
+    public void setLoanServicingAccount(boolean isLoanServicingAccount) { this.isLoanServicingAccount = isLoanServicingAccount; }
+
     // Primary Customer fields
     private String primaryFirstName;
     private String primaryMiddleName;

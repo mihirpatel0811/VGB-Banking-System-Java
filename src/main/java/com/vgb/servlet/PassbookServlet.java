@@ -184,6 +184,13 @@ public class PassbookServlet extends BaseServlet {
             return;
         }
 
+        Account accPass = accountService.getAccountById(accountId);
+        if (accPass == null || "closed".equalsIgnoreCase(accPass.getStatus())) {
+            request.getSession().setAttribute("error", "Cannot request a Passbook for a closed or invalid account.");
+            response.sendRedirect(request.getContextPath() + "/passbook");
+            return;
+        }
+
         if (customerId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;

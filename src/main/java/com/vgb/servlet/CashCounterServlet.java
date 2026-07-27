@@ -221,6 +221,12 @@ public class CashCounterServlet extends BaseServlet {
         String description = getParameter(request, "description", "Cash Counter Deposit");
         String method = getParameter(request, "method", "cash");
 
+        Account targetAcc = accountService.getAccountById(accountId);
+        if (targetAcc == null || !"active".equalsIgnoreCase(targetAcc.getStatus())) {
+            sendErrorResponse(response, "Operational transactions (deposit) are disabled for closed or non-active accounts.", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         boolean success = false;
         if ("cash".equalsIgnoreCase(method)) {
             success = accountService.deposit(accountId, amount, description, adminId);
@@ -253,6 +259,12 @@ public class CashCounterServlet extends BaseServlet {
         String description = getParameter(request, "description", "Cash Counter Withdrawal");
         String method = getParameter(request, "method", "cash");
 
+        Account srcAcc = accountService.getAccountById(accountId);
+        if (srcAcc == null || !"active".equalsIgnoreCase(srcAcc.getStatus())) {
+            sendErrorResponse(response, "Operational transactions (withdrawal) are disabled for closed or non-active accounts.", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         boolean success = false;
         if ("cash".equalsIgnoreCase(method)) {
             success = accountService.withdraw(accountId, amount, description, adminId);
@@ -277,6 +289,12 @@ public class CashCounterServlet extends BaseServlet {
         String description = getParameter(request, "description", "Cash Counter Transfer");
         String method = getParameter(request, "method", "cash");
         String targetType = getParameter(request, "targetType", "internal");
+
+        Account fromAcc = accountService.getAccountById(fromAccountId);
+        if (fromAcc == null || !"active".equalsIgnoreCase(fromAcc.getStatus())) {
+            sendErrorResponse(response, "Operational transactions (transfer) are disabled for closed or non-active source accounts.", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
         boolean success = false;
         String toAccountNumber = getParameter(request, "toAccountNumber", "");

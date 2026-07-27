@@ -170,20 +170,18 @@ public class ChequeBookServlet extends BaseServlet {
             }
         }
 
-        if (targetAccount != null) {
-            if (requestFromAdmin || customerId == null) {
-                customerId = targetAccount.getCustomerId();
-            }
-        }
-
-        if (accountId == 0 || leavesCount == 0) {
-            request.getSession().setAttribute("error", "Invalid account or leaves selection.");
+        if (targetAccount == null || "closed".equalsIgnoreCase(targetAccount.getStatus())) {
+            request.getSession().setAttribute("error", "Cannot request a Cheque Book for a closed or invalid account.");
             response.sendRedirect(request.getContextPath() + "/chequebook");
             return;
         }
 
-        if (customerId == null) {
-            request.getSession().setAttribute("error", "Could not determine target customer for cheque book request.");
+        if (requestFromAdmin || customerId == null) {
+            customerId = targetAccount.getCustomerId();
+        }
+
+        if (accountId == 0 || leavesCount == 0) {
+            request.getSession().setAttribute("error", "Invalid account or leaves selection.");
             response.sendRedirect(request.getContextPath() + "/chequebook");
             return;
         }

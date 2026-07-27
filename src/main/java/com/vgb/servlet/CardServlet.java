@@ -245,6 +245,13 @@ public class CardServlet extends BaseServlet {
             return;
         }
 
+        Account accCheck = accountService.getAccountById(accountId);
+        if (accCheck == null || "closed".equalsIgnoreCase(accCheck.getStatus())) {
+            request.getSession().setAttribute("error", "Cannot apply for a card on a closed or invalid account.");
+            response.sendRedirect(request.getContextPath() + "/card");
+            return;
+        }
+
         if (customerId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
