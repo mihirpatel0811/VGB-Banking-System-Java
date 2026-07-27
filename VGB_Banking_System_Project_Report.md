@@ -357,29 +357,29 @@ The system relies entirely on open-source technologies (Java OpenJDK, Apache Tom
 
 ```mermaid
 graph TD
-    Client[Web Browser / Client UI] -->|HTTP / HTTPS Request| WebServer[Apache Tomcat Web Server]
+    Client["Web Browser / Client UI"] -->|HTTP / HTTPS Request| WebServer["Apache Tomcat Web Server"]
     
-    subgraph Controller Layer
+    subgraph Controller_Layer["Controller Layer"]
         WebServer -->|Route Request| AccountServlet[AccountServlet]
         WebServer -->|Route Request| CardServlet[CardServlet]
         WebServer -->|Route Request| LoanServlet[LoanServlet]
     end
     
-    subgraph Service Layer
+    subgraph Service_Layer["Service Layer"]
         AccountServlet --> AccountService[AccountService]
         CardServlet --> CardService[CardService]
         LoanServlet --> LoanService[LoanService]
     end
     
-    subgraph Data Access Layer (DAO)
+    subgraph DAO_Layer["Data Access Layer (DAO)"]
         AccountService --> AccountDAO[AccountDAOImpl]
         CardService --> CardDAO[CardDAOImpl]
         LoanService --> LoanDAO[LoanDAOImpl]
         AccountService --> TransactionDAO[TransactionDAOImpl]
     end
     
-    subgraph Database Layer
-        AccountDAO -->|JDBC Connection Pool| MySQL[(MySQL Database - vgb_database)]
+    subgraph DB_Layer["Database Layer"]
+        AccountDAO -->|JDBC Connection Pool| MySQL[("MySQL Database - vgb_database")]
         CardDAO -->|JDBC Connection Pool| MySQL
         LoanDAO -->|JDBC Connection Pool| MySQL
         TransactionDAO -->|JDBC Connection Pool| MySQL
