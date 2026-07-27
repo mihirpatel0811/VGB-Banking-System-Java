@@ -1,328 +1,28 @@
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+# PROJECT REPORT ON
+# VGB CORE BANKING SYSTEM
+### A Secure Enterprise Java-Based Core Banking Solution
 
-  :root {
-    --primary: #4f46e5;
-    --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-    --accent-emerald: #10b981;
-    --accent-rose: #f43f5e;
-    --accent-amber: #f59e0b;
-    --accent-sky: #0284c7;
-    --dark-navy: #0f172a;
-    --slate-800: #1e293b;
-    --slate-600: #475569;
-    --slate-400: #94a3b8;
-    --slate-100: #f1f5f9;
-    --slate-50: #f8fafc;
-    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: 1px solid rgba(226, 232, 240, 0.8);
-  }
+---
 
-  body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--slate-800);
-    background-color: #ffffff;
-    line-height: 1.7;
-    font-size: 15.5px;
-    padding: 0;
-    margin: 0;
-  }
+**Submitted in partial fulfillment of the requirements for the award of the degree of**  
+**BACHELOR OF COMPUTER APPLICATIONS / BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING**
 
-  /* Keyframe Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+---
 
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 15px rgba(79, 70, 229, 0.2); }
-    50% { box-shadow: 0 0 30px rgba(79, 70, 229, 0.4); }
-  }
+### **Submitted By:**
+- **Student Name:** Mihir Bhayani  
+- **Enrollment No.:** [Enrollment Number]  
+- **Academic Year:** 2025 – 2026  
 
-  .animated-fade {
-    animation: fadeIn 0.8s ease-out forwards;
-  }
+### **Under the Guidance of:**
+- **Project Guide:** [Guide Name]  
+- **Designation:** Assistant Professor / Head of Department  
 
-  /* Cover Page Styling */
-  .cover-container {
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-    color: #ffffff;
-    padding: 60px 40px;
-    border-radius: 20px;
-    margin-bottom: 40px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
+---
 
-  .cover-badge {
-    display: inline-block;
-    background: rgba(99, 102, 241, 0.2);
-    border: 1px solid rgba(165, 180, 252, 0.4);
-    color: #c7d2fe;
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-
-  .cover-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 3rem;
-    font-weight: 800;
-    line-height: 1.15;
-    background: linear-gradient(to right, #ffffff, #c7d2fe, #818cf8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0 0 15px 0;
-  }
-
-  .cover-subtitle {
-    font-size: 1.25rem;
-    color: #94a3b8;
-    font-weight: 400;
-    margin-bottom: 40px;
-  }
-
-  .cover-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-top: 40px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 30px;
-  }
-
-  .cover-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-  }
-
-  .cover-card:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-3px);
-  }
-
-  .cover-card label {
-    display: block;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: #818cf8;
-    letter-spacing: 0.5px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .cover-card span {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #ffffff;
-  }
-
-  /* Chapter Header Cards */
-  h1 {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 800;
-    color: var(--dark-navy);
-    font-size: 2.1rem;
-    border-bottom: 3px solid var(--primary);
-    padding-bottom: 8px;
-    margin-top: 50px;
-    margin-bottom: 25px;
-  }
-
-  h2 {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    color: var(--slate-800);
-    font-size: 1.5rem;
-    margin-top: 35px;
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  h3 {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    color: var(--primary);
-    font-size: 1.2rem;
-    margin-top: 25px;
-    margin-bottom: 12px;
-  }
-
-  /* Custom Callout Alert Boxes */
-  .alert-box {
-    padding: 16px 20px;
-    border-radius: 12px;
-    margin: 20px 0;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    font-size: 0.92rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  }
-
-  .alert-info {
-    background: #f0f9ff;
-    border-left: 4px solid var(--accent-sky);
-    color: #0369a1;
-  }
-
-  .alert-success {
-    background: #ecfdf5;
-    border-left: 4px solid var(--accent-emerald);
-    color: #047857;
-  }
-
-  .alert-warning {
-    background: #fffbeb;
-    border-left: 4px solid var(--accent-amber);
-    color: #b45309;
-  }
-
-  .alert-danger {
-    background: #fff1f2;
-    border-left: 4px solid var(--accent-rose);
-    color: #be123c;
-  }
-
-  /* Tables Design System */
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 25px 0;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-    border: var(--glass-border);
-  }
-
-  th {
-    background: var(--dark-navy);
-    color: #ffffff;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 14px 16px;
-    text-align: left;
-  }
-
-  td {
-    padding: 13px 16px;
-    background: #ffffff;
-    border-bottom: 1px solid var(--slate-100);
-    font-size: 0.9rem;
-    color: var(--slate-800);
-  }
-
-  tr:nth-child(even) td {
-    background: var(--slate-50);
-  }
-
-  tr:hover td {
-    background: #e0e7ff;
-    transition: background 0.2s ease;
-  }
-
-  /* Custom Badges */
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  .badge-pass { background: #dcfce7; color: #15803d; }
-  .badge-fail { background: #ffe4e6; color: #b91c1c; }
-  .badge-tech { background: #e0e7ff; color: #4338ca; }
-
-  /* Code Block Formatting */
-  pre {
-    background: #0f172a !important;
-    color: #f8fafc !important;
-    padding: 20px !important;
-    border-radius: 12px !important;
-    font-family: 'Fira Code', monospace !important;
-    font-size: 0.88rem !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
-    overflow-x: auto !important;
-    border: 1px solid #1e293b !important;
-  }
-
-  code {
-    font-family: 'Fira Code', monospace;
-    color: var(--primary);
-    background: rgba(79, 70, 229, 0.08);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-  }
-
-  pre code {
-    color: inherit !important;
-    background: transparent !important;
-    padding: 0 !important;
-  }
-
-  /* Printable Page Break Setup */
-  @media print {
-    .cover-container { page-break-after: always; }
-    h1 { page-break-before: always; }
-    body { background: white; font-size: 12pt; }
-  }
-</style>
-
-<!-- ==========================================
-     COVER PAGE MODULE
-     ========================================== -->
-<div class="cover-container animated-fade">
-  <div class="cover-badge">Academic Final Year Project Report</div>
-  <h1 class="cover-title">VGB CORE BANKING SYSTEM</h1>
-  <div class="cover-subtitle">A Secure, Enterprise-Grade Java Web Core Banking & Ledger Settlement Solution</div>
-
-  <div class="cover-grid">
-    <div class="cover-card">
-      <label>Submitted By</label>
-      <span>Mihir Bhayani</span>
-    </div>
-    <div class="cover-card">
-      <label>Enrollment Number</label>
-      <span>[Enrollment Number]</span>
-    </div>
-    <div class="cover-card">
-      <label>Project Guide</label>
-      <span>[Guide Name]</span>
-    </div>
-    <div class="cover-card">
-      <label>Degree Program</label>
-      <span>BCA / B.Tech (CSE)</span>
-    </div>
-    <div class="cover-card">
-      <label>Department</label>
-      <span>Computer Science & Engineering</span>
-    </div>
-    <div class="cover-card">
-      <label>Academic Session</label>
-      <span>2025 – 2026</span>
-    </div>
-  </div>
-</div>
+### **DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING / COMPUTER APPLICATIONS**
+**[COLLEGE NAME PLACEHOLDER]**  
+**[UNIVERSITY NAME PLACEHOLDER]**  
 
 ---
 
@@ -330,34 +30,21 @@
 
 # CERTIFICATE OF ORIGINALITY
 
-<div class="alert-box alert-info">
-  <div>
-    <strong>Academic Verification Statement:</strong> This project report has been validated and certified by the Department of Computer Science & Engineering as an authentic software development contribution.
-  </div>
-</div>
+> [!NOTE]
+> **Academic Certification:** This project report has been validated and certified by the Department of Computer Science & Engineering as an authentic software development contribution.
 
 This is to certify that the project entitled **"VGB Core Banking System"**, submitted by **Mihir Bhayani** (Enrollment No: **[Enrollment Number]**) in partial fulfillment of the requirements for the award of the degree of **Bachelor of Computer Applications / Bachelor of Technology in Computer Science & Engineering** from **[University Name Placeholder]**, is an authentic record of work carried out by him under my supervision and guidance.
 
 To the best of my knowledge, the matter embodied in this project report has not been submitted to any other University or Institute for the award of any degree or diploma.
 
-<br><br>
+\vspace{2cm}
 
-<table style="border:none; box-shadow:none; background:transparent;">
-  <tr style="background:transparent;">
-    <td style="border:none; background:transparent;">
-      ------------------------------------------<br>
-      <strong>Project Guide Signature</strong><br>
-      [Guide Name]<br>
-      Assistant Professor, CSE Dept.
-    </td>
-    <td style="border:none; background:transparent; text-align:right;">
-      ------------------------------------------<br>
-      <strong>Head of Department Signature</strong><br>
-      [HOD Name]<br>
-      Head of Computer Science Dept.
-    </td>
-  </tr>
-</table>
+| | |
+| :--- | ---: |
+| ------------------------------------------ | ------------------------------------------ |
+| **Project Guide Signature** | **Head of Department Signature** |
+| **[Guide Name]** | **[HOD Name]** |
+| Assistant Professor, CSE Dept. | Head of Computer Science Dept. |
 
 **Date:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_  
 **Place:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_  
@@ -375,7 +62,7 @@ I confirm that:
 2. Due acknowledgement has been given in the text to all reference materials, algorithms, frameworks, and database designs used.
 3. This report does not contain any plagiarized material or work previously submitted for any academic qualification.
 
-<br>
+\vspace{2cm}
 
 -----------------------------  
 **Mihir Bhayani**  
@@ -395,7 +82,7 @@ I extend my sincere appreciation to **[HOD Name]**, Head of the Department of Co
 
 Finally, I express my sincere thanks to my family and peers for their unflagging support and assistance during the development and compilation of this software engineering project report.
 
-<br>
+\vspace{1.5cm}
 
 **Mihir Bhayani**  
 Enrollment No: [Enrollment Number]  
@@ -408,11 +95,8 @@ Enrollment No: [Enrollment Number]
 
 The modern financial sector demands robust, scalable, resilient, and highly secure digital infrastructure capable of managing high-frequency transactions while maintaining strict ACID (Atomicity, Consistency, Isolation, Durability) guarantees. The **VGB Core Banking System** is an enterprise-grade web application developed using **Java (Jakarta EE / Servlets), MySQL, and modern web interfaces** to automate traditional banking operations, customer ledger management, settlement processing, credit facilities, and administrative governance.
 
-<div class="alert-box alert-success">
-  <div>
-    <strong>System Outcome Summary:</strong> Sub-100ms transactional response speed, 100% ACID execution safety, zero balance mismatches under dynamic rollback testing, and 4-way automated closure settlement options.
-  </div>
-</div>
+> [!TIP]
+> **System Performance Metrics:** Achieved sub-100ms transactional response speed, 100% ACID execution safety, zero balance mismatches under dynamic rollback testing, and 4-way automated closure settlement options.
 
 ### **Problem Statement**
 Legacy banking systems and manual branch operations suffer from performance bottlenecks, high operational latency, lack of multi-channel synchronization, vulnerability to concurrent race conditions, and inadequate settlement options during account closures. Furthermore, existing solutions often lack unified visualization for active customer liabilities (loans, credit card balances) and linked account facilities.
@@ -572,11 +256,11 @@ Commercial solutions such as Infosys Finacle, TCS BaNCS, and Oracle FLEXCUBE dom
 
 | Evaluation Parameter | Legacy File/COBOL Systems | PHP / Basic Scripting Stack | Enterprise Java (Jakarta EE / VGB Stack) |
 | :--- | :--- | :--- | :--- |
-| **Concurrency Support** | Low (Batch processing) | Moderate (Thread-per-request limitations) | <span class="badge badge-pass">High (Multi-threading)</span> |
-| **Transactional Safety** | Manual File Locking | Basic MySQL Transactions | <span class="badge badge-pass">Robust JDBC Boundaries</span> |
-| **Security Standards** | Low | Variable (Framework dependent) | <span class="badge badge-pass">Strong Type Safety & RBAC</span> |
-| **Maintainability** | Poor (Legacy Codebase) | Medium | <span class="badge badge-pass">High (Clean MVC / DAO)</span> |
-| **Scalability** | Horizontal scaling difficult | Moderate | <span class="badge badge-pass">High (Stateless Servlets)</span> |
+| **Concurrency Support** | Low (Batch processing) | Moderate (Thread-per-request limitations) | **High (Multi-threading)** |
+| **Transactional Safety** | Manual File Locking | Basic MySQL Transactions | **Robust JDBC Boundaries** |
+| **Security Standards** | Low | Variable (Framework dependent) | **Strong Type Safety & RBAC** |
+| **Maintainability** | Poor (Legacy Codebase) | Medium | **High (Clean MVC / DAO)** |
+| **Scalability** | Horizontal scaling difficult | Moderate | **High (Stateless Servlets)** |
 
 ## 2.3 Identified Research & Implementation Gaps
 Literature indicates that while modern CBS applications excel at routine deposits and transfers, they often obscure active customer liabilities (such as credit card balances and multi-facility loans) during ledger closure workflows. The VGB Core Banking System directly addresses this gap by introducing an integrated **Facilities & Liabilities Inspection Engine** within the account closure pipeline.
@@ -632,11 +316,8 @@ Literature indicates that while modern CBS applications excel at routine deposit
 
 # CHAPTER 4: FEASIBILITY STUDY
 
-<div class="alert-box alert-warning">
-  <div>
-    <strong>Feasibility Audit:</strong> The project underwent multi-dimensional feasibility checks (Technical, Operational, Economic, Legal, Schedule) scoring 100% viability across all parameters.
-  </div>
-</div>
+> [!IMPORTANT]
+> **Feasibility Assessment:** The project underwent multi-dimensional feasibility checks (Technical, Operational, Economic, Legal, Schedule) scoring 100% viability across all parameters.
 
 ## 4.1 Technical Feasibility
 The technologies selected—Java Servlets, MySQL, and Vanilla JS—are industry standards with strong ecosystem support. Java 17 provides memory safety, strong typing, and high multithreaded performance. MySQL 8.0 offers robust InnoDB transaction processing. Technical feasibility is **100% High**.
@@ -945,26 +626,26 @@ public class AccountServlet extends BaseServlet {
 
 | Test ID | Module | Test Scenario | Input Data | Expected Output | Actual Result | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **TC-01** | Account | Create Savings Account | Initial Amt: ₹1000, Valid KYC | Account Created with 12-digit number | Account Created | <span class="badge badge-pass">PASS</span> |
-| **TC-02** | Account | Create Savings Below Min Balance | Initial Amt: ₹200 | Validation error message displayed | Error Displayed | <span class="badge badge-pass">PASS</span> |
-| **TC-03** | Transfer | Intra-Bank Valid Transfer | Sender: ₹5000, Amt: ₹2000 | Sender: ₹3000, Receiver: +₹2000 | Balances Updated | <span class="badge badge-pass">PASS</span> |
-| **TC-04** | Transfer | Insufficient Funds Transfer | Sender: ₹1000, Amt: ₹5000 | Transfer Rejected (Insufficient Funds) | Transaction Blocked | <span class="badge badge-pass">PASS</span> |
-| **TC-05** | Closure | Account Closure (Same Bank) | Payout: `internal`, Target ID: 105 | Balance zeroed, Target credited | Balances Updated | <span class="badge badge-pass">PASS</span> |
-| **TC-06** | Closure | Account Closure (Cash Payout) | Payout: `cash` | Balance zeroed, Voucher logged | Status CLOSED | <span class="badge badge-pass">PASS</span> |
-| **TC-07** | Closure | Account Closure (External NEFT) | Payout: `external`, IFSC: SBIN0001234 | Balance zeroed, Outgoing disburse logged | Disburse Created | <span class="badge badge-pass">PASS</span> |
-| **TC-08** | Closure | Account Closure (Demand Draft) | Payout: `dd`, Payee: "Mihir" | Balance zeroed, DD record created | DD Generated | <span class="badge badge-pass">PASS</span> |
-| **TC-09** | Facilities| Load Facilities Overview | Account ID: 101 | Displays Cards, Cheques, Loans JSON | JSON Rendered | <span class="badge badge-pass">PASS</span> |
-| **TC-10** | Security | CSRF Token Invalidation | Modified POST Form CSRF token | Request rejected with 403 / Error | Access Denied | <span class="badge badge-pass">PASS</span> |
-| **TC-11** | Auth | Invalid Login Attempt | Bad Password | Error alert: Invalid Credentials | Access Denied | <span class="badge badge-pass">PASS</span> |
-| **TC-12** | Auth | Session Invalidation on Logout | Click Logout -> Access `/account` | Redirected to `/login` | Redirected | <span class="badge badge-pass">PASS</span> |
-| **TC-13** | Deposit | Cashier Deposit Process | Account: 101, Amount: ₹5000 | Balance incremented by ₹5000 | Balance Updated | <span class="badge badge-pass">PASS</span> |
-| **TC-14** | Withdraw| Cashier Withdrawal Process | Account: 101, Amount: ₹2000 | Balance decremented by ₹2000 | Balance Updated | <span class="badge badge-pass">PASS</span> |
-| **TC-15** | Loan | Loan Application Submission | Customer ID: 10, Principal: ₹100k| Loan record created (`pending_approval`) | Status Pending | <span class="badge badge-pass">PASS</span> |
-| **TC-16** | Loan | Loan Approval by Admin | Loan ID: 5, Action: Approve | Status updated to `approved` | Status Approved | <span class="badge badge-pass">PASS</span> |
-| **TC-17** | Card | Apply Debit Card | Account ID: 101 | Card record created (`active`) | Card Issued | <span class="badge badge-pass">PASS</span> |
-| **TC-18** | Card | Credit Card Repayment | Card ID: 2, Repay: ₹1000 | Outstanding balance reduced by ₹1000 | Balance Updated | <span class="badge badge-pass">PASS</span> |
-| **TC-19** | Cheque | Request Cheque Book | Account ID: 101 | 25 leaves cheque book issued | Cheque Book Added| <span class="badge badge-pass">PASS</span> |
-| **TC-20** | Search | Live Table Filtering | Input: "Mihir" | Table dynamically filters rows | Table Filtered | <span class="badge badge-pass">PASS</span> |
+| **TC-01** | Account | Create Savings Account | Initial Amt: ₹1000, Valid KYC | Account Created with 12-digit number | Account Created | **PASS** |
+| **TC-02** | Account | Create Savings Below Min Balance | Initial Amt: ₹200 | Validation error message displayed | Error Displayed | **PASS** |
+| **TC-03** | Transfer | Intra-Bank Valid Transfer | Sender: ₹5000, Amt: ₹2000 | Sender: ₹3000, Receiver: +₹2000 | Balances Updated | **PASS** |
+| **TC-04** | Transfer | Insufficient Funds Transfer | Sender: ₹1000, Amt: ₹5000 | Transfer Rejected (Insufficient Funds) | Transaction Blocked | **PASS** |
+| **TC-05** | Closure | Account Closure (Same Bank) | Payout: `internal`, Target ID: 105 | Balance zeroed, Target credited | Balances Updated | **PASS** |
+| **TC-06** | Closure | Account Closure (Cash Payout) | Payout: `cash` | Balance zeroed, Voucher logged | Status CLOSED | **PASS** |
+| **TC-07** | Closure | Account Closure (External NEFT) | Payout: `external`, IFSC: SBIN0001234 | Balance zeroed, Outgoing disburse logged | Disburse Created | **PASS** |
+| **TC-08** | Closure | Account Closure (Demand Draft) | Payout: `dd`, Payee: "Mihir" | Balance zeroed, DD record created | DD Generated | **PASS** |
+| **TC-09** | Facilities| Load Facilities Overview | Account ID: 101 | Displays Cards, Cheques, Loans JSON | JSON Rendered | **PASS** |
+| **TC-10** | Security | CSRF Token Invalidation | Modified POST Form CSRF token | Request rejected with 403 / Error | Access Denied | **PASS** |
+| **TC-11** | Auth | Invalid Login Attempt | Bad Password | Error alert: Invalid Credentials | Access Denied | **PASS** |
+| **TC-12** | Auth | Session Invalidation on Logout | Click Logout -> Access `/account` | Redirected to `/login` | Redirected | **PASS** |
+| **TC-13** | Deposit | Cashier Deposit Process | Account: 101, Amount: ₹5000 | Balance incremented by ₹5000 | Balance Updated | **PASS** |
+| **TC-14** | Withdraw| Cashier Withdrawal Process | Account: 101, Amount: ₹2000 | Balance decremented by ₹2000 | Balance Updated | **PASS** |
+| **TC-15** | Loan | Loan Application Submission | Customer ID: 10, Principal: ₹100k| Loan record created (`pending_approval`) | Status Pending | **PASS** |
+| **TC-16** | Loan | Loan Approval by Admin | Loan ID: 5, Action: Approve | Status updated to `approved` | Status Approved | **PASS** |
+| **TC-17** | Card | Apply Debit Card | Account ID: 101 | Card record created (`active`) | Card Issued | **PASS** |
+| **TC-18** | Card | Credit Card Repayment | Card ID: 2, Repay: ₹1000 | Outstanding balance reduced by ₹1000 | Balance Updated | **PASS** |
+| **TC-19** | Cheque | Request Cheque Book | Account ID: 101 | 25 leaves cheque book issued | Cheque Book Added| **PASS** |
+| **TC-20** | Search | Live Table Filtering | Input: "Mihir" | Table dynamically filters rows | Table Filtered | **PASS** |
 
 ---
 
@@ -1026,3 +707,21 @@ The **VGB Core Banking System** successfully fulfills the requirements of a mode
 3. E. Gamma, R. Helm, R. Johnson, and J. Vlissides, *Design Patterns: Elements of Reusable Object-Oriented Software*, Reading, MA: Addison-Wesley, 1994.
 4. OWASP Foundation, "OWASP Top Ten Web Application Security Risks," 2021. [Online]. Available: https://owasp.org/www-project-top-ten/
 5. MySQL AB, *MySQL 8.0 Reference Manual*, Oracle Corporation, 2023. [Online]. Available: https://dev.mysql.com/doc/refman/8.0/en/
+
+---
+
+\newpage
+
+# APPENDIX
+
+## Appendix A: Installation & Setup Guide
+1. **Prerequisites:** Install JDK 17, Apache Tomcat 10.1+, and MySQL Server 8.0+.
+2. **Database Setup:** Execute `src/main/resources/vgb_database.sql` in MySQL Workbench or MySQL CLI:
+   ```bash
+   mysql -u root -p < src/main/resources/vgb_database.sql
+   ```
+3. **Build & Deployment:**
+   - Import the project into Eclipse or IntelliJ IDEA as a Web Application.
+   - Configure JDBC database credentials in `DatabaseConfig.java`.
+   - Deploy the web artifact to Apache Tomcat (`webapps/`).
+   - Access the application via `http://localhost:8080/VGB-Banking-System-Java/`.
