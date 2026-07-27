@@ -13,6 +13,7 @@
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-3.x-C71A36?style=for-the-badge&logo=apachemaven)
 [![Project Report](https://img.shields.io/badge/Academic%20Report-View%20Project%20Report%20.md-4f46e5?style=for-the-badge&logo=markdown&logoColor=white)](./VGB_Banking_System_Project_Report.md)
+[![Docker Guide](https://img.shields.io/badge/Docker%20Guide-View%20README__DOCKER.md-2496ED?style=for-the-badge&logo=docker&logoColor=white)](./README_DOCKER.md)
 
 ---
 
@@ -21,25 +22,28 @@
 ---
 
 ### 📄 **[👉 Click Here to Open Final-Year Software Project Report (VGB_Banking_System_Project_Report.md) 👈](./VGB_Banking_System_Project_Report.md)**
+### 🐳 **[👉 Click Here to Open Docker Deployment Guide (README_DOCKER.md) 👈](./README_DOCKER.md)**
 
 </div>
 
 ---
 
-# 📚 Final-Year Academic Project Report
+# 📚 Core Documentation & Guides
 
 > [!NOTE]
-> The full, university-standard Software Project Report for the **VGB Core Banking System** is available in standard Markdown format for academic submission (BCA / MCA / B.Tech / BE).
+> Key technical and academic documentation for the **VGB Core Banking System**:
 > 
-> 🔗 **[Open Project Report: VGB_Banking_System_Project_Report.md](./VGB_Banking_System_Project_Report.md)**
+> 📄 **[Academic Project Report: VGB_Banking_System_Project_Report.md](./VGB_Banking_System_Project_Report.md)** — Comprehensive final-year project report (BCA / MCA / B.Tech / BE standard).
+> 
+> 🐳 **[Docker Containerization Guide: README_DOCKER.md](./README_DOCKER.md)** — Step-by-step instructions for container building, multi-stage Tomcat/MySQL deployment, and Docker Compose execution.
 
-### Report Highlights & Chapter Structure:
-- 📜 **Certificate of Originality & Declaration**
-- 🏗️ **System Architecture & UML Diagrams** (Mermaid Architecture, Sequence, ER Diagrams)
+### Report & Docker Guide Highlights:
+- 📜 **Certificate of Originality & Academic Declaration**
+- 🏗️ **System Architecture & Mermaid UML Diagrams**
 - 📊 **Data Dictionary & Normalization Analysis (1NF, 2NF, 3NF)**
 - ⚡ **Algorithms, Data Structures & Complexity Summary Matrix**
 - 🧪 **20+ Comprehensive Unit & System Test Cases Matrix**
-- 📖 **IEEE References & Installation Appendix**
+- 🐳 **Docker Multi-Stage Build & Compose Workflow (`docker-compose up -d`)**
 
 ---
 
