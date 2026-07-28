@@ -198,7 +198,7 @@
             height: 40px;
             border-radius: 50%;
             background: rgba(99, 102, 241, 0.08);
-            border: 1.5px solid var(--glass-border);
+                border: 1.5px solid var(--glass-border);
             color: var(--primary-600);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -531,7 +531,8 @@
         /* --- LIVE MARKET RATES TICKER BAR --- */
         .market-ticker-section {
             background: var(--glass-bg);
-            border-y: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
             padding: 14px 0;
             position: relative;
             z-index: 3;
@@ -2010,7 +2011,7 @@
     </button>
 
     <!-- Global App JS -->
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assest/js/script.js?v=2.0.1"></script>
 
     <!-- Custom Landing Page Interactive Handlers -->
     <script>

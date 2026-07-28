@@ -479,7 +479,12 @@ const App = {
     },
 
     animateValue: function (obj) {
-        const target = parseInt(obj.getAttribute('data-target'));
+        const dataTargetAttr = obj.getAttribute('data-target');
+        if (!dataTargetAttr) return; // Preserve static stat text (e.g. 24/7, 100%, 99.9%)
+        
+        const target = parseInt(dataTargetAttr, 10);
+        if (isNaN(target)) return;
+
         let start = 0;
         const duration = 2000;
         const increment = target / (duration / 16);

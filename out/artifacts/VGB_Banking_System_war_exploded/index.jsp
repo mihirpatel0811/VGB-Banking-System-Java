@@ -296,7 +296,7 @@
         <i class="bx bx-up-arrow-alt"></i>
     </button>
 
-    <script src="${pageContext.request.contextPath}/assest/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assest/js/script.js?v=2.0.1"></script>
 </body>
 
 </html>
