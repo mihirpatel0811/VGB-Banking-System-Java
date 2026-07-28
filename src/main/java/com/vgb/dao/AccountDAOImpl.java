@@ -18,9 +18,9 @@ public class AccountDAOImpl implements AccountDAO {
 
     private static final String ACCOUNT_SELECT_FIELDS = 
         "SELECT a.*, " +
-        "COALESCE(GROUP_CONCAT(CONCAT(c.first_name, ' ', c.last_name) ORDER BY s.ownership_type DESC SEPARATOR ' & '), 'No Owner') as customer_name, " +
-        "COALESCE(MIN(CASE WHEN s.ownership_type = 'primary' THEN s.customer_id END), 0) as customer_id, " +
-        "MIN(CASE WHEN s.ownership_type = 'primary' THEN c.dob END) as customer_dob, " +
+        "COALESCE(NULLIF(GROUP_CONCAT(DISTINCT TRIM(CONCAT(IFNULL(c.first_name, ''), ' ', IFNULL(c.last_name, ''))) SEPARATOR ' & '), ''), 'Customer') as customer_name, " +
+        "COALESCE(MIN(s.customer_id), 0) as customer_id, " +
+        "MIN(c.dob) as customer_dob, " +
         
         // Primary Customer fields
         "MAX(CASE WHEN s.ownership_type = 'primary' THEN c.first_name END) as primary_first_name, " +

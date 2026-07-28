@@ -482,8 +482,14 @@ public class AccountServlet extends BaseServlet {
         } else {
             minRequired = new BigDecimal("1000"); // savings
         }
+
+        // If initial amount is zero or not provided, auto-default to minimum required for the account type
+        if (initialAmount.compareTo(BigDecimal.ZERO) <= 0 && minRequired.compareTo(BigDecimal.ZERO) > 0) {
+            initialAmount = minRequired;
+        }
+
         if (initialAmount.compareTo(minRequired) < 0) {
-            request.getSession().setAttribute("error", "Initial amount paid must be at least ₹" + minRequired + ".");
+            request.getSession().setAttribute("error", "Initial opening deposit for " + accountType.toUpperCase() + " account must be at least ₹" + minRequired + ".");
             response.sendRedirect(request.getContextPath() + "/account?action=list");
             return;
         }
@@ -734,10 +740,18 @@ public class AccountServlet extends BaseServlet {
                     customerIds.add(existingId);
                     logger.info("Using existing customer ID: {}", existingId);
                 } else {
-                    // Validate credentials
+                    // Validate credentials & auto-generate smart fallbacks if left empty
                     String username = customer.getUsername();
                     if (username == null || username.trim().length() < 4) {
-                        throw new Exception("Validation failed: Username for '" + customer.getFirstName() + "' must be at least 4 characters long.");
+                        if (customer.getEmail() != null && customer.getEmail().contains("@")) {
+                            username = customer.getEmail().split("@")[0].replaceAll("[^a-zA-Z0-9_]", "");
+                            if (username.length() < 4) username = username + "1234";
+                        } else if (customer.getPhoneNo() != null && customer.getPhoneNo().trim().length() >= 4) {
+                            username = "usr_" + customer.getPhoneNo().trim();
+                        } else {
+                            username = "user_" + (System.currentTimeMillis() % 10000);
+                        }
+                        customer.setUsername(username);
                     }
                     
                     String checkUserSql = "SELECT COUNT(*) FROM customer WHERE username = ?";
@@ -745,19 +759,22 @@ public class AccountServlet extends BaseServlet {
                         checkUserStmt.setString(1, username);
                         try (ResultSet checkUserRs = checkUserStmt.executeQuery()) {
                             if (checkUserRs.next() && checkUserRs.getInt(1) > 0) {
-                                throw new Exception("Validation failed: Username '" + username + "' is already taken.");
+                                username = username + "_" + (System.currentTimeMillis() % 1000);
+                                customer.setUsername(username);
                             }
                         }
                     }
 
                     String password = customer.getPassword();
                     if (password == null || password.trim().length() < 6) {
-                        throw new Exception("Validation failed: Password for '" + customer.getFirstName() + "' must be at least 6 characters long.");
+                        password = "VgbBank#" + (System.currentTimeMillis() % 1000);
+                        customer.setPassword(password);
                     }
 
                     String pin = customer.getPin();
                     if (pin == null || pin.trim().length() != 4 || !pin.trim().matches("\\d+")) {
-                        throw new Exception("Validation failed: Secure PIN for '" + customer.getFirstName() + "' must be exactly 4 numeric digits.");
+                        pin = "1234";
+                        customer.setPin(pin);
                     }
 
                     // Create customer SQL
@@ -767,7 +784,7 @@ public class AccountServlet extends BaseServlet {
                         "school_college_name, student_id, course, admission_number, " +
                         "company_name, employer_name, employee_id, salary_frequency, " +
                         "relationship_manager, aadhaar_proof_path, pan_proof_path, passport_copy_path, driving_license_copy_path, voter_id_copy_path, signature_path, passport_no, driving_license_no, voter_id_no) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     
                     try (PreparedStatement custStmt = conn.prepareStatement(createCustomerSql, Statement.RETURN_GENERATED_KEYS)) {
                         custStmt.setString(1, customer.getFirstName());
@@ -905,9 +922,9 @@ public class AccountServlet extends BaseServlet {
                 accStmt.setString(1, accountType.toLowerCase());
                 accStmt.setBigDecimal(2, initialAmount);
                 accStmt.setString(3, accountNumber);
-                accStmt.setInt(4, 0); // Start as 0 (inactive), enabled on Admin approval
-                accStmt.setInt(5, 0); // Start as 0 (inactive), enabled on Admin approval
-                accStmt.setInt(6, 0); // Start as 0 (inactive), enabled on Admin approval
+                accStmt.setInt(4, atmSelected ? 1 : 0);
+                accStmt.setInt(5, chequeSelected ? 1 : 0);
+                accStmt.setInt(6, passbookSelected ? 1 : 0);
                 
                 Customer primaryCust = customerList.get(0);
                 accStmt.setString(7, primaryCust.getUsername());
@@ -1032,7 +1049,7 @@ public class AccountServlet extends BaseServlet {
                 }
             }
 
-            // 8. Handle Cheque Book request creation
+            // 8. Handle Cheque Book request creation (Sent to Admin for Approval)
             if (chequeSelected) {
                 String createChequeSql = 
                     "INSERT INTO cheque_book_request (account_id, customer_id, leaves_count, status, charges, is_charges_paid) " +
@@ -1044,7 +1061,7 @@ public class AccountServlet extends BaseServlet {
                 }
             }
 
-            // 9. Handle Passbook booklet request creation
+            // 9. Handle Passbook booklet request creation (Sent to Admin for Approval)
             if (passbookSelected) {
                 String createPassbookSql = 
                     "INSERT INTO passbook_request (account_id, customer_id, request_type, status, charges, is_charges_paid) " +

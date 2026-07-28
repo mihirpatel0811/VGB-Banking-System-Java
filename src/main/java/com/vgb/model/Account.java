@@ -163,7 +163,24 @@ public class Account implements Serializable {
     // Constructors
     public Account() {}
 
-    public String getCustomerName() { return customerName; }
+    public String getCustomerName() {
+        if (customerName != null && !customerName.trim().isEmpty() && !"No Owner".equalsIgnoreCase(customerName.trim())) {
+            return customerName.trim();
+        }
+        StringBuilder sb = new StringBuilder();
+        if (primaryFirstName != null && !primaryFirstName.trim().isEmpty()) {
+            sb.append(primaryFirstName.trim());
+        }
+        if (primaryLastName != null && !primaryLastName.trim().isEmpty()) {
+            if (sb.length() > 0) sb.append(" ");
+            sb.append(primaryLastName.trim());
+        }
+        if (sb.length() > 0) return sb.toString();
+        if (businessName != null && !businessName.trim().isEmpty()) {
+            return businessName.trim();
+        }
+        return customerId > 0 ? "Customer #" + customerId : "Account Holder";
+    }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
 
     public java.time.LocalDate getCustomerDob() { return customerDob; }
