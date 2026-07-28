@@ -2,6 +2,7 @@ package com.vgb.service;
 
 import com.vgb.constants.AppConstants;
 import com.vgb.dao.*;
+import com.vgb.exception.BankingException;
 import com.vgb.model.Account;
 import com.vgb.model.Transaction;
 import com.vgb.util.ValidatorUtil;
@@ -307,6 +308,32 @@ public class AccountService {
         } finally {
             com.vgb.config.DatabaseConfig.closeConnection(conn);
         }
+    }
+
+    /**
+     * Transfer funds between accounts with validation and PIN check
+     */
+    public boolean transferFunds(long fromAccountId, long toAccountId, BigDecimal amount, String description, String transactionPin) throws BankingException {
+        if (fromAccountId == toAccountId) {
+            throw new BankingException("Cannot transfer funds to the same account");
+        }
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BankingException("Transfer amount must be greater than zero");
+        }
+        try {
+            return transfer(fromAccountId, toAccountId, amount, description);
+        } catch (BankingException be) {
+            throw be;
+        } catch (Exception e) {
+            throw new BankingException("Transfer failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Transfer funds between accounts with validation
+     */
+    public boolean transferFunds(long fromAccountId, long toAccountId, BigDecimal amount, String description) throws BankingException {
+        return transferFunds(fromAccountId, toAccountId, amount, description, null);
     }
 
     /**

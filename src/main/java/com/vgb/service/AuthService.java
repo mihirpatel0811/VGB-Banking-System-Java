@@ -76,6 +76,17 @@ public class AuthService {
     }
 
     /**
+     * Login customer user with credential validation
+     */
+    public Customer loginCustomer(String username, String password) throws Exception {
+        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username and password cannot be null or empty");
+        }
+        return authenticateCustomer(username, password);
+    }
+
+
+    /**
      * Authenticate admin user using PIN
      */
     public Admin authenticateAdminByPIN(String username, String pin) throws Exception {

@@ -50,9 +50,9 @@
    1. GLOBAL STATE & CONSTANTS
    ========================================================================== */
 const PortfolioConfig = {
-    typingSpeed: 100,
-    deletingSpeed: 50,
-    pauseDuration: 2000,
+    typingSpeed: 120,
+    deletingSpeed: 60,
+    pauseDuration: 2400,
     headerOffset: 80,
     emailJsKey: '9qGAudHB68JhaxLlk',
     emailJsService: 'service_rvdz6q6',
@@ -384,9 +384,16 @@ const App = {
 
     initTypewriter: function () {
         const target = document.querySelector('.typed-text');
-        if (!target) return;
+        if (!target || target.dataset.typewriterRunning) return;
+        target.dataset.typewriterRunning = "true";
 
-        const words = ['Convenience', 'Secure Transactions', 'Smarter Investing', 'Digital Freedom'];
+        const words = [
+            'Digital Security',
+            'Instant Wire Transfers',
+            'Real-Time Ledger Audits',
+            'Smart Card Controls',
+            'Instant Loan Approvals'
+        ];
         let wordIdx = 0;
         let charIdx = 0;
         let isDeleting = false;
@@ -398,22 +405,21 @@ const App = {
             target.textContent = currentWord.substring(0, shouldDelete ? charIdx - 1 : charIdx + 1);
             charIdx = shouldDelete ? charIdx - 1 : charIdx + 1;
 
-            let speed = PortfolioConfig.typingSpeed;
-            if (shouldDelete) speed /= 2;
+            let speed = shouldDelete ? (PortfolioConfig.deletingSpeed || 60) : (PortfolioConfig.typingSpeed || 120);
 
             if (!shouldDelete && charIdx === currentWord.length) {
                 isDeleting = true;
-                speed = PortfolioConfig.pauseDuration;
+                speed = PortfolioConfig.pauseDuration || 2400; // Pause at end for reading
             } else if (shouldDelete && charIdx === 0) {
                 isDeleting = false;
                 wordIdx = (wordIdx + 1) % words.length;
-                speed = 500;
+                speed = 450;
             }
 
             setTimeout(type, speed);
         };
 
-        setTimeout(type, 1000);
+        setTimeout(type, 500);
     },
 
     /* ==========================================================================

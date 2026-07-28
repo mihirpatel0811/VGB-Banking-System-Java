@@ -2,6 +2,7 @@ package com.vgb.service;
 
 import com.vgb.constants.AppConstants;
 import com.vgb.dao.*;
+import com.vgb.exception.BankingException;
 import com.vgb.model.Account;
 import com.vgb.model.Loan;
 import com.vgb.model.Repayment;
@@ -34,12 +35,12 @@ public class LoanService {
     }
 
     public Loan requestLoan(Loan loan) throws Exception {
-        if (!ValidatorUtil.isValidLoanType(loan.getLoanType())) {
-            throw new Exception("Invalid loan type");
+        if (loan == null || !ValidatorUtil.isValidLoanType(loan.getLoanType())) {
+            throw new BankingException("Invalid loan type");
         }
 
         if (!ValidatorUtil.isValidAmount(loan.getPrincipalAmount(), AppConstants.MIN_LOAN_AMOUNT)) {
-            throw new Exception("Loan amount is below minimum");
+            throw new BankingException("Loan amount is below minimum");
         }
 
         try {
