@@ -217,7 +217,7 @@ public class CashCounterServlet extends BaseServlet {
 
     private void handleDeposit(HttpServletRequest request, HttpServletResponse response, Long adminId) throws Exception {
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String description = getParameter(request, "description", "Cash Counter Deposit");
         String method = getParameter(request, "method", "cash");
 
@@ -255,7 +255,7 @@ public class CashCounterServlet extends BaseServlet {
 
     private void handleWithdraw(HttpServletRequest request, HttpServletResponse response, Long adminId) throws Exception {
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String description = getParameter(request, "description", "Cash Counter Withdrawal");
         String method = getParameter(request, "method", "cash");
 
@@ -285,7 +285,7 @@ public class CashCounterServlet extends BaseServlet {
 
     private void handleTransfer(HttpServletRequest request, HttpServletResponse response, Long adminId) throws Exception {
         long fromAccountId = Long.parseLong(getParameter(request, "fromAccountId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String description = getParameter(request, "description", "Cash Counter Transfer");
         String method = getParameter(request, "method", "cash");
         String targetType = getParameter(request, "targetType", "internal");
@@ -340,7 +340,7 @@ public class CashCounterServlet extends BaseServlet {
     private void handleLoanPayment(HttpServletRequest request, HttpServletResponse response, Long adminId) throws Exception {
         long loanId = Long.parseLong(getParameter(request, "loanId", "0"));
         long customerId = Long.parseLong(getParameter(request, "customerId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String method = getParameter(request, "method", "cash");
 
         boolean success = false;
@@ -367,7 +367,7 @@ public class CashCounterServlet extends BaseServlet {
 
     private void handleCardPayment(HttpServletRequest request, HttpServletResponse response, Long adminId) throws Exception {
         long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String method = getParameter(request, "method", "cash");
 
         boolean success = false;

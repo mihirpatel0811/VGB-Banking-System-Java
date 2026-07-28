@@ -465,7 +465,7 @@ public class AccountServlet extends BaseServlet {
 
         String accountType = getParameter(request, "accountType", "savings"); // savings, current, salary, student, fd, rd
         String holdingType = getParameter(request, "holdingType", "single"); // single, joint
-        BigDecimal initialAmount = new BigDecimal(getParameter(request, "initialAmount", "0"));
+        BigDecimal initialAmount = getBigDecimalParameter(request, "initialAmount", BigDecimal.ZERO);
 
         // Validate Minimum Balances
         BigDecimal minRequired;
@@ -557,7 +557,7 @@ public class AccountServlet extends BaseServlet {
                 cust.setPassword(getParameter(request, "partner_password_" + i, ""));
                 cust.setPin(getParameter(request, "partner_pin_" + i, "1234"));
                 cust.setOccupation(getParameter(request, "partner_occupation_" + i, "Business"));
-                cust.setAnnualIncome(new BigDecimal(getParameter(request, "partner_income_" + i, "500000")));
+                cust.setAnnualIncome(getBigDecimalParameter(request, "partner_income_" + i, new BigDecimal("500000")));
                 cust.setStatus("active");
                 
                 // standard documents
@@ -599,7 +599,7 @@ public class AccountServlet extends BaseServlet {
             primary.setPassword(getParameter(request, "password", ""));
             primary.setPin(getParameter(request, "pin", "1234"));
             primary.setOccupation(getParameter(request, "occupation", "Salaried"));
-            primary.setAnnualIncome(new BigDecimal(getParameter(request, "income", "300000")));
+            primary.setAnnualIncome(getBigDecimalParameter(request, "income", new BigDecimal("300000")));
             primary.setStatus("active");
 
             // Profile photo & files
@@ -665,7 +665,7 @@ public class AccountServlet extends BaseServlet {
                 joint.setPassword(getParameter(request, "joint_password", ""));
                 joint.setPin(getParameter(request, "joint_pin", "1234"));
                 joint.setOccupation(getParameter(request, "joint_occupation", "Salaried"));
-                joint.setAnnualIncome(new BigDecimal(getParameter(request, "joint_income", "300000")));
+                joint.setAnnualIncome(getBigDecimalParameter(request, "joint_income", new BigDecimal("300000")));
                 joint.setStatus("active");
                 joint.setAvatarPath(processProfilePhoto(request, "jointAvatar", "joint"));
                 
@@ -1319,7 +1319,7 @@ public class AccountServlet extends BaseServlet {
         long fromAccountId = Long.parseLong(getParameter(request, "fromAccountId", "0"));
         String destType = getParameter(request, "destType", "own");
         String toAccountIdStr = getParameter(request, "toAccountId", "");
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String description = getParameter(request, "description", "Fund Transfer");
 
         if (fromAccountId > 0) {
@@ -1481,7 +1481,7 @@ public class AccountServlet extends BaseServlet {
         }
 
         long accountId = 0;
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String description = getParameter(request, "description", "Cash Withdrawal");
 
         boolean isCreditCard = false;
@@ -1575,7 +1575,7 @@ public class AccountServlet extends BaseServlet {
         }
 
         long accountId = 0;
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         String description = getParameter(request, "description", "Deposit");
 
         if (adminId != null) {

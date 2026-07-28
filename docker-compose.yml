@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: "17193"
       MYSQL_DATABASE: "vgb_database"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - vgb_mysql_data:/var/lib/mysql
       - ./src/main/resources/vgb_database.sql:/docker-entrypoint-initdb.d/01_vgb_database.sql:ro

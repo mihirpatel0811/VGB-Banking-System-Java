@@ -339,7 +339,7 @@ public class CardServlet extends BaseServlet {
 
         long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
 
         if (cardId == 0 || accountId == 0 || amount.compareTo(BigDecimal.ZERO) <= 0) {
             request.getSession().setAttribute("error", "Invalid inputs for paying card dues.");
@@ -374,9 +374,9 @@ public class CardServlet extends BaseServlet {
         }
 
         long cardId = Long.parseLong(getParameter(request, "cardId", "0"));
-        BigDecimal dailyLimit = new BigDecimal(getParameter(request, "dailyLimit", "0"));
-        BigDecimal atmLimit = new BigDecimal(getParameter(request, "atmLimit", "0"));
-        BigDecimal onlineLimit = new BigDecimal(getParameter(request, "onlineLimit", "0"));
+        BigDecimal dailyLimit = getBigDecimalParameter(request, "dailyLimit", BigDecimal.ZERO);
+        BigDecimal atmLimit = getBigDecimalParameter(request, "atmLimit", BigDecimal.ZERO);
+        BigDecimal onlineLimit = getBigDecimalParameter(request, "onlineLimit", BigDecimal.ZERO);
         boolean internationalEnabled = "true".equals(getParameter(request, "internationalEnabled", "false"));
 
         if (cardId == 0) {

@@ -117,6 +117,23 @@ public abstract class BaseServlet extends HttpServlet {
         return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
 
+    protected java.math.BigDecimal getBigDecimalParameter(HttpServletRequest request, String name, java.math.BigDecimal defaultValue) {
+        String val = getParameter(request, name, null);
+        if (val == null || val.trim().isEmpty()) {
+            return defaultValue;
+        }
+        try {
+            String cleanVal = val.replaceAll("[^0-9.-]", "").trim();
+            if (cleanVal.isEmpty()) {
+                return defaultValue;
+            }
+            return new java.math.BigDecimal(cleanVal);
+        } catch (Exception e) {
+            logger.warn("Error parsing BigDecimal parameter '{}' from value '{}', falling back to {}", name, val, defaultValue);
+            return defaultValue;
+        }
+    }
+
     protected Long getUserId(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) return null;

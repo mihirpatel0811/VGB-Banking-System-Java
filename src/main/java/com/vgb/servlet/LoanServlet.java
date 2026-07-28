@@ -117,9 +117,9 @@ public class LoanServlet extends BaseServlet {
             throw new IllegalArgumentException("Loan not found for ID: " + loanId);
         }
 
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         int termMonths = Integer.parseInt(getParameter(request, "termMonths", "120"));
-        BigDecimal interestRate = new BigDecimal(getParameter(request, "interestRate", "7.5"));
+        BigDecimal interestRate = getBigDecimalParameter(request, "interestRate", new BigDecimal("7.5"));
         String formDetails = getParameter(request, "formDetails", "");
         String loanType = getParameter(request, "loanType", loan.getLoanType());
 
@@ -202,40 +202,75 @@ public class LoanServlet extends BaseServlet {
             }
         }
         
-        // Populate standard list attributes for loan.jsp display
-        request.setAttribute("loans", loanService.getAllLoans());
-        request.setAttribute("repayments", loanService.getAllRepayments());
-        populateCustomerNames(request);
-        try {
-            request.setAttribute("accounts", new com.vgb.service.AccountService().getAllAccounts());
-        } catch (Exception e) {
-            logger.error("Failed to load accounts in showStatement", e);
+        Integer adminId = getAdminId(request);
+        Long customerId = getUserId(request);
+        if (adminId != null) {
+            request.setAttribute("loans", loanService.getAllLoans());
+            request.setAttribute("repayments", loanService.getAllRepayments());
+            populateCustomerNames(request);
+            try {
+                request.setAttribute("accounts", new com.vgb.service.AccountService().getAllAccounts());
+            } catch (Exception e) {
+                logger.error("Failed to load accounts in showStatement", e);
+            }
+            request.getRequestDispatcher("/admin/loan.jsp").forward(request, response);
+        } else {
+            request.setAttribute("loans", loanService.getLoansByCustomerId(customerId));
+            try {
+                com.vgb.model.Customer customer = new com.vgb.service.CustomerService().getCustomerById(customerId);
+                java.util.List<com.vgb.model.Account> accounts = new com.vgb.service.AccountService().getCustomerAccounts(customerId);
+                com.vgb.model.Account activeAccount = AccountContextUtil.resolveActiveAccount(request.getSession(false), accounts);
+                request.setAttribute("customer", customer);
+                request.setAttribute("accounts", AccountContextUtil.onlyActiveAccount(accounts, activeAccount));
+                request.setAttribute("activeAccount", activeAccount);
+                request.setAttribute("selectedAccountId", activeAccount != null ? activeAccount.getAccountId() : 0L);
+            } catch (Exception e) {
+                logger.error("Failed to load customer profile or accounts in showStatement", e);
+            }
+            request.getRequestDispatcher("/customer/loan.jsp").forward(request, response);
         }
-        
-        request.getRequestDispatcher("/admin/loan.jsp").forward(request, response);
     }
 
-    private void populateCustomerNames(HttpServletRequest request) {
-        try {
-            java.util.List<com.vgb.model.Customer> customersList = new com.vgb.service.CustomerService().getAllCustomers();
-            java.util.Map<Long, String> customerNames = new java.util.HashMap<>();
-            java.util.Map<Long, String> customerPhones = new java.util.HashMap<>();
-            java.util.Map<Long, String> customerAadhaars = new java.util.HashMap<>();
-            java.util.Map<Long, String> customerPans = new java.util.HashMap<>();
-            for (com.vgb.model.Customer c : customersList) {
-                customerNames.put(c.getCustomerId(), c.getFullName());
-                customerPhones.put(c.getCustomerId(), c.getPhoneNo());
-                customerAadhaars.put(c.getCustomerId(), c.getAadhaarCard());
-                customerPans.put(c.getCustomerId(), c.getPanCard());
-            }
-            request.setAttribute("customerNames", customerNames);
-            request.setAttribute("customerPhones", customerPhones);
-            request.setAttribute("customerAadhaars", customerAadhaars);
-            request.setAttribute("customerPans", customerPans);
-            request.setAttribute("customers", customersList);
-        } catch (Exception e) {
-            logger.error("Failed to load customer metadata maps in LoanServlet", e);
+    private void rejectLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Integer adminId = getAdminId(request);
+        if (adminId == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
+            return;
         }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/loan");
+            return;
+        }
+
+        long loanId = Long.parseLong(getParameter(request, "id", "0"));
+        if (loanService.rejectLoan(loanId)) {
+            request.getSession().setAttribute("success", "Loan rejected successfully");
+        } else {
+            request.getSession().setAttribute("error", "Failed to reject loan");
+        }
+        response.sendRedirect(request.getContextPath() + "/loan");
+    }
+
+    private void approveLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Integer adminId = getAdminId(request);
+        if (adminId == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
+            return;
+        }
+        if (!validateCSRFToken(request)) {
+            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
+            response.sendRedirect(request.getContextPath() + "/loan");
+            return;
+        }
+
+        long loanId = Long.parseLong(getParameter(request, "id", "0"));
+        if (loanService.approveLoan(loanId)) {
+            request.getSession().setAttribute("success", "Loan approved successfully");
+        } else {
+            request.getSession().setAttribute("error", "Failed to approve loan");
+        }
+        response.sendRedirect(request.getContextPath() + "/loan");
     }
 
     private void showApplyForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -256,9 +291,9 @@ public class LoanServlet extends BaseServlet {
         }
 
         String loanType = getParameter(request, "loanType", "");
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         int termMonths = Integer.parseInt(getParameter(request, "termMonths", "120"));
-        BigDecimal interestRate = new BigDecimal(getParameter(request, "interestRate", "7.5"));
+        BigDecimal interestRate = getBigDecimalParameter(request, "interestRate", new BigDecimal("7.5"));
         String formDetails = getParameter(request, "formDetails", "");
 
         Loan loan = new Loan();
@@ -285,48 +320,6 @@ public class LoanServlet extends BaseServlet {
         request.getRequestDispatcher("/" + (adminId != null ? "admin" : "customer") + "/loan.jsp").forward(request, response);
     }
 
-    private void approveLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Integer adminId = getAdminId(request);
-        if (adminId == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
-            return;
-        }
-        if (!validateCSRFToken(request)) {
-            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
-            response.sendRedirect(request.getContextPath() + "/loan");
-            return;
-        }
-
-        long loanId = Long.parseLong(getParameter(request, "id", "0"));
-        if (loanService.approveLoan(loanId)) {
-            request.getSession().setAttribute("success", "Loan approved successfully");
-        } else {
-            request.getSession().setAttribute("error", "Failed to approve loan");
-        }
-        response.sendRedirect(request.getContextPath() + "/loan");
-    }
-
-    private void rejectLoan(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Integer adminId = getAdminId(request);
-        if (adminId == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized Access");
-            return;
-        }
-        if (!validateCSRFToken(request)) {
-            request.getSession().setAttribute("error", "Security validation check failed: Invalid CSRF Token.");
-            response.sendRedirect(request.getContextPath() + "/loan");
-            return;
-        }
-
-        long loanId = Long.parseLong(getParameter(request, "id", "0"));
-        if (loanService.rejectLoan(loanId)) {
-            request.getSession().setAttribute("success", "Loan rejected successfully");
-        } else {
-            request.getSession().setAttribute("error", "Failed to reject loan");
-        }
-        response.sendRedirect(request.getContextPath() + "/loan");
-    }
-
     private void showRepayment(HttpServletRequest request, HttpServletResponse response) throws Exception {
         long loanId = Long.parseLong(getParameter(request, "id", "0"));
         request.setAttribute("loan", loanService.getLoanById(loanId));
@@ -336,7 +329,7 @@ public class LoanServlet extends BaseServlet {
     private void processRepayment(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Long customerId = getUserId(request);
         long loanId = Long.parseLong(getParameter(request, "loanId", "0"));
-        BigDecimal amount = new BigDecimal(getParameter(request, "amount", "0"));
+        BigDecimal amount = getBigDecimalParameter(request, "amount", BigDecimal.ZERO);
         long accountId = Long.parseLong(getParameter(request, "accountId", "0"));
 
         if (customerId == null) {
@@ -363,5 +356,28 @@ public class LoanServlet extends BaseServlet {
         }
         String redirectUrl = getParameter(request, "redirectUrl", "/loan");
         response.sendRedirect(request.getContextPath() + redirectUrl);
+    }
+
+    private void populateCustomerNames(HttpServletRequest request) {
+        try {
+            java.util.List<com.vgb.model.Customer> customersList = new com.vgb.service.CustomerService().getAllCustomers();
+            java.util.Map<Long, String> customerNames = new java.util.HashMap<>();
+            java.util.Map<Long, String> customerPhones = new java.util.HashMap<>();
+            java.util.Map<Long, String> customerAadhaars = new java.util.HashMap<>();
+            java.util.Map<Long, String> customerPans = new java.util.HashMap<>();
+            for (com.vgb.model.Customer c : customersList) {
+                customerNames.put(c.getCustomerId(), c.getFullName());
+                customerPhones.put(c.getCustomerId(), c.getPhoneNo());
+                customerAadhaars.put(c.getCustomerId(), c.getAadhaarCard());
+                customerPans.put(c.getCustomerId(), c.getPanCard());
+            }
+            request.setAttribute("customerNames", customerNames);
+            request.setAttribute("customerPhones", customerPhones);
+            request.setAttribute("customerAadhaars", customerAadhaars);
+            request.setAttribute("customerPans", customerPans);
+            request.setAttribute("customers", customersList);
+        } catch (Exception e) {
+            logger.error("Failed to load customer metadata maps in LoanServlet", e);
+        }
     }
 }
