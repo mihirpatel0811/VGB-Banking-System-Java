@@ -178,12 +178,13 @@ public class CashCounterServlet extends BaseServlet {
                      "FROM account a " +
                      "JOIN account_signatory sig ON a.account_id = sig.account_id " +
                      "JOIN customer c ON sig.customer_id = c.customer_id " +
-                     "WHERE a.account_number = ? " +
+                     "WHERE (a.account_number = ? " +
                      "   OR c.phone_no = ? " +
                      "   OR c.email = ? " +
                      "   OR c.pan_card = ? " +
                      "   OR c.aadhaar_card = ? " +
-                     "   OR CONCAT(c.first_name, ' ', c.last_name) LIKE ?";
+                     "   OR CONCAT(c.first_name, ' ', c.last_name) LIKE ?) " +
+                     "  AND LOWER(a.status) != 'closed'";
 
         try (Connection conn = com.vgb.config.DatabaseConfig.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

@@ -1364,13 +1364,14 @@
                 safeFetchJson('${pageContext.request.contextPath}/cash-counter?action=search&query=' + encodeURIComponent(query))
                     .then(data => {
                         resultsPanel.innerHTML = '';
-                        if (data.length === 0) {
-                            resultsPanel.innerHTML = '<div style="padding: 15px; color: var(--gray-400); font-weight: 500; text-align: center;">No accounts or customers found matching the search.</div>';
+                        const activeAccounts = data.filter(item => !item.status || item.status.toLowerCase() !== 'closed');
+                        if (activeAccounts.length === 0) {
+                            resultsPanel.innerHTML = '<div style="padding: 15px; color: var(--gray-400); font-weight: 500; text-align: center;">No active accounts or customers found matching the search.</div>';
                             resultsPanel.style.display = 'block';
                             return;
                         }
 
-                        data.forEach(item => {
+                        activeAccounts.forEach(item => {
                             const div = document.createElement('div');
                             div.style.cssText = 'padding: 12px 18px; border-bottom: 1px solid rgba(99, 102, 241, 0.05); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s;';
                             
